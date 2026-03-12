@@ -32,6 +32,8 @@
       --hist-subtle:   rgba(251,146,60,0.10);
       --gen-color:     var(--gold-bright);
       --gen-subtle:    var(--gold-subtle);
+      --xp-color:      #22d3ee;
+      --xp-subtle:     rgba(34,211,238,0.10);
       --font-ui:       'Inter', system-ui, sans-serif;
       --font-display:  'Cinzel', Georgia, serif;
       --radius-sm:  8px;
@@ -63,7 +65,6 @@
       );
       pointer-events: none; z-index: 0;
     }
-
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--black-border); border-radius: 99px; }
@@ -93,6 +94,25 @@
     }
     .nav-logo-svg { width: 34px; height: 34px; flex-shrink: 0; }
     .nav-logo-text { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: 0.1em; }
+    .nav-tabs {
+      display: flex; align-items: center; gap: 2px;
+      list-style: none;
+    }
+    .nav-tab {
+      text-decoration: none; color: #7a7060;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
+      padding: 5px 13px; border-radius: var(--radius-sm);
+      transition: var(--transition); cursor: pointer;
+      border: none; background: none; font-family: var(--font-ui);
+      position: relative;
+    }
+    .nav-tab:hover { color: #c8b88a; }
+    .nav-tab.active { color: var(--gold-bright); }
+    .nav-tab.active::after {
+      content: ''; position: absolute; bottom: -19px; left: 20%; right: 20%;
+      height: 2px; border-radius: 1px;
+      background: var(--gold-bright);
+    }
     .nav-right { display: flex; align-items: center; gap: 10px; }
     .btn-ghost {
       font-family: var(--font-ui); font-size: 13px; font-weight: 500;
@@ -110,6 +130,98 @@
     }
     .btn-gold:hover { box-shadow: 0 0 16px var(--gold-glow); transform: translateY(-1px); }
 
+    /* ─── QUICK SNAP BUTTON ────────────────────────────────── */
+    .quick-snap-btn {
+      width: 36px; height: 36px;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: var(--transition);
+      color: #7a7060; flex-shrink: 0;
+    }
+    .quick-snap-btn:hover {
+      border-color: var(--gold-muted);
+      color: var(--gold-bright);
+      background: var(--gold-subtle);
+      box-shadow: 0 0 12px rgba(201,168,76,0.1);
+    }
+
+    /* ─── HAMBURGER MENU (mobile) ──────────────────────────── */
+    .hamburger {
+      display: none; width: 36px; height: 36px;
+      background: none; border: none; cursor: pointer;
+      flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 20px; height: 2px;
+      background: #7a7060; border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--gold-bright); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--gold-bright); }
+
+    /* ─── MOBILE DRAWER ────────────────────────────────────── */
+    .mobile-drawer-overlay {
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .mobile-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 151;
+      width: 280px; max-width: 80vw;
+      background: var(--black-panel);
+      border-left: 1px solid var(--black-border);
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+    }
+    .mobile-drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 20px; border-bottom: 1px solid var(--black-border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .drawer-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #0a0a0a;
+    }
+    .drawer-user-name { font-weight: 600; font-size: 14px; color: #e8e0cc; }
+    .drawer-user-sub { font-size: 11px; color: #5a5040; }
+    .drawer-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: #3a342a;
+      padding: 16px 20px 6px;
+    }
+    .drawer-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 20px; cursor: pointer;
+      color: #8a8070; font-size: 13px; font-weight: 500;
+      transition: var(--transition);
+      border: none; background: none; width: 100%;
+      text-align: left; font-family: var(--font-ui);
+    }
+    .drawer-item:hover { background: var(--gold-subtle); color: var(--gold-bright); }
+    .drawer-item svg { flex-shrink: 0; opacity: 0.6; }
+    .drawer-item:hover svg { opacity: 1; }
+    .drawer-streak {
+      margin: 12px 20px; padding: 14px;
+      background: var(--black-card); border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .drawer-streak-flame { font-size: 24px; line-height: 1; }
+    .drawer-streak-info { flex: 1; }
+    .drawer-streak-days { font-weight: 600; font-size: 15px; color: var(--gold-bright); }
+    .drawer-streak-label { font-size: 10px; color: #5a5040; }
+
     /* ─── PAGE ROUTER ──────────────────────────────────────── */
     main { position: relative; z-index: 1; padding-top: 62px; }
     .page {
@@ -120,9 +232,6 @@
     .page.active {
       display: block; opacity: 1; transform: translateX(0);
     }
-    .page.exit-left {
-      opacity: 0; transform: translateX(-20px);
-    }
 
     /* ─── BREATHING LOGO ───────────────────────────────────── */
     @keyframes breathe {
@@ -130,6 +239,34 @@
       50% { transform: scale(1.05); filter: drop-shadow(0 0 10px rgba(201,168,76,0.25)); }
     }
     .logo-breathe { animation: breathe 4s cubic-bezier(0.4,0,0.6,1) infinite; }
+
+    /* ─── STAGGERED ENTRANCE ANIMATIONS ────────────────────── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes countUp {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .anim-stagger { opacity: 0; animation: fadeSlideUp 0.5s ease forwards; }
+    .anim-stagger:nth-child(1) { animation-delay: 0.05s; }
+    .anim-stagger:nth-child(2) { animation-delay: 0.1s; }
+    .anim-stagger:nth-child(3) { animation-delay: 0.15s; }
+    .anim-stagger:nth-child(4) { animation-delay: 0.2s; }
+    .anim-stagger:nth-child(5) { animation-delay: 0.25s; }
+    .anim-stagger:nth-child(6) { animation-delay: 0.3s; }
+    .anim-stagger:nth-child(7) { animation-delay: 0.35s; }
+    .anim-stagger:nth-child(8) { animation-delay: 0.4s; }
+    .anim-stagger:nth-child(9) { animation-delay: 0.45s; }
+    .anim-stagger:nth-child(10) { animation-delay: 0.5s; }
+    .anim-stagger:nth-child(11) { animation-delay: 0.55s; }
+    .anim-stagger:nth-child(12) { animation-delay: 0.6s; }
+    .anim-stagger:nth-child(13) { animation-delay: 0.65s; }
 
     /* ─── HOME: HERO ───────────────────────────────────────── */
     .hero {
@@ -167,16 +304,141 @@
     }
     .gold-rule.hero-rule { width: 100px; margin: 16px auto 0; }
 
-    /* ─── HOME: WORKSPACE ──────────────────────────────────── */
-    .workspace {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 14px;
-      max-width: 1080px; margin: 0 auto;
-      padding: 20px 18px 40px;
-      align-items: start;
+    /* ─── STATS BAR (NEW) ──────────────────────────────────── */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; max-width: 1080px;
+      margin: 0 auto; padding: 0 18px 16px;
+    }
+    .stat-card {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      transition: var(--transition);
+    }
+    .stat-card:hover { border-color: rgba(201,168,76,0.25); }
+    .stat-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .stat-info { flex: 1; min-width: 0; }
+    .stat-value {
+      font-family: var(--font-display); font-size: 22px; font-weight: 700;
+      line-height: 1.1; letter-spacing: 0.03em;
+    }
+    .stat-label { font-size: 10px; color: #5a5040; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+    /* ── Progress Ring ── */
+    .progress-ring { width: 40px; height: 40px; flex-shrink: 0; }
+    .progress-ring-bg { fill: none; stroke: var(--black-border); stroke-width: 4; }
+    .progress-ring-fill {
+      fill: none; stroke-width: 4; stroke-linecap: round;
+      transform: rotate(-90deg); transform-origin: center;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1);
     }
 
+    /* ── Streak Flame ── */
+    @keyframes flameDance {
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      25% { transform: scaleY(1.06) scaleX(0.96); }
+      50% { transform: scaleY(0.96) scaleX(1.04); }
+      75% { transform: scaleY(1.04) scaleX(0.98); }
+    }
+    .streak-flame {
+      font-size: 22px; line-height: 1;
+      animation: flameDance 2s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    /* ── XP Bar ── */
+    .xp-bar-wrap {
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 18px 14px;
+    }
+    .xp-bar-container {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .xp-bar-info { display: flex; align-items: baseline; gap: 6px; flex-shrink: 0; }
+    .xp-level {
+      font-family: var(--font-display); font-size: 13px; font-weight: 700;
+      color: var(--xp-color); letter-spacing: 0.08em;
+    }
+    .xp-label { font-size: 10px; color: #5a5040; }
+    .xp-track {
+      flex: 1; height: 6px;
+      background: var(--black-card); border-radius: 99px;
+      overflow: hidden;
+    }
+    .xp-fill {
+      height: 100%; border-radius: 99px;
+      background: linear-gradient(90deg, var(--xp-color), #06b6d4);
+      width: 0%; transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .xp-amount { font-size: 11px; color: #5a5040; flex-shrink: 0; font-weight: 500; }
+
+    /* ─── HOME: FEATURE CARDS ──────────────────────────────── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px; max-width: 1080px;
+      margin: 0 auto; padding: 24px 18px 20px;
+    }
+    .feature-card {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      cursor: pointer; transition: var(--transition);
+      text-align: left; display: flex; flex-direction: column; gap: 8px;
+      font-family: var(--font-ui);
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      border-color: var(--fc-color, var(--gold-muted));
+    }
+    .feature-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; border: 1px solid transparent;
+      transition: var(--transition);
+    }
+    .feature-card:hover .feature-icon { border-color: currentColor; }
+    .feature-name {
+      font-size: 13px; font-weight: 600; color: #d0c8b0;
+      letter-spacing: 0.01em;
+    }
+    .feature-desc { font-size: 11px; color: #5a5040; line-height: 1.45; }
+    .feature-arrow {
+      font-size: 11px; color: var(--fc-color, var(--gold-muted));
+      font-weight: 600; letter-spacing: 0.06em; margin-top: auto;
+      opacity: 0; transition: var(--transition);
+    }
+    .feature-card:hover .feature-arrow { opacity: 1; }
+
+    /* Section labels for feature grid */
+    .features-section {
+      grid-column: 1 / -1;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: #3a342a;
+      padding: 8px 0 0;
+    }
+    .features-section:first-child { padding-top: 0; }
+
+    /* ─── HOME: DASHBOARD ──────────────────────────────────── */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px; max-width: 1080px;
+      margin: 0 auto; padding: 0 18px 20px;
+    }
     .panel {
       background: var(--black-panel);
       border: 1px solid var(--black-border);
@@ -195,54 +457,31 @@
       color: var(--gold-bright);
     }
 
-    /* ─── TOOLS PANEL (RIGHT) ──────────────────────────────── */
-    .tools-panel { grid-column: 2; }
-    .tp-list { padding: 6px 0 14px; overflow-y: auto; max-height: 72vh; }
-    .tp-list::-webkit-scrollbar { width: 3px; }
-    .tp-list::-webkit-scrollbar-thumb { background: var(--black-border); border-radius: 99px; }
-    .tp-section-label {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
-      text-transform: uppercase; color: #3a342a;
-      padding: 10px 18px 4px;
+    /* ─── ACTIVITY FEED (NEW) ──────────────────────────────── */
+    .activity-panel { display: flex; flex-direction: column; min-height: 340px; }
+    .activity-list { flex: 1; padding: 14px 16px; overflow-y: auto; max-height: 280px; display: flex; flex-direction: column; gap: 8px; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      cursor: pointer;
     }
-    .tp-section-divider { height: 1px; background: var(--black-border); margin: 5px 14px; opacity: 0.5; }
-    .tp-card {
-      display: flex; align-items: center; gap: 11px;
-      padding: 10px 16px 10px 14px;
-      cursor: pointer; transition: var(--transition);
-      border-left: 2px solid transparent;
-      user-select: none;
+    .activity-item:hover { border-color: rgba(201,168,76,0.2); }
+    .activity-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      margin-top: 4px; flex-shrink: 0;
     }
-    .tp-card:hover {
-      background: var(--black-hover);
-      border-left-color: var(--card-accent, var(--gold-muted));
-    }
-    .tp-icon-badge {
-      width: 33px; height: 33px; border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: var(--transition);
-      font-size: 13px; border: 1px solid transparent;
-    }
-    .tp-card:hover .tp-icon-badge { border-color: currentColor; opacity: 0.9; }
-    .tp-body { flex: 1; min-width: 0; }
-    .tp-name {
-      font-size: 12px; font-weight: 600; color: #c8b88a;
-      letter-spacing: 0.01em; line-height: 1.3;
-    }
-    .tp-desc { font-size: 10px; color: #4a4438; margin-top: 2px; line-height: 1.35; }
-    .tp-right { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-    .tp-badge {
-      font-size: 8px; font-weight: 800; letter-spacing: 0.1em;
-      text-transform: uppercase; padding: 2px 6px; border-radius: 99px;
-    }
-    .tp-badge-gold { background: var(--gold-subtle); color: var(--gold-bright); border: 1px solid rgba(201,168,76,0.25); }
-    .tp-badge-blue { background: var(--math-subtle); color: var(--math-color); border: 1px solid rgba(91,156,246,0.25); }
-    .tp-badge-red  { background: rgba(244,63,94,0.10); color: #f43f5e; border: 1px solid rgba(244,63,94,0.25); }
-    .tp-badge-new  { background: rgba(52,211,153,0.10); color: var(--sci-color); border: 1px solid rgba(52,211,153,0.25); }
-    .tp-badge-purple { background: rgba(99,102,241,0.12); color: #6366f1; border: 1px solid rgba(99,102,241,0.25); }
-    .tp-chevron {
-      width: 14px; height: 14px; color: #3a342a;
-      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;
+    .activity-info { flex: 1; min-width: 0; }
+    .activity-title { font-size: 12px; font-weight: 500; color: #c8b88a; }
+    .activity-desc { font-size: 11px; color: #5a5040; margin-top: 2px; }
+    .activity-time { font-size: 10px; color: #3a342a; margin-top: 3px; }
+    .activity-empty {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; flex: 1; gap: 8px;
+      color: #3a342a; font-size: 12px; text-align: center; padding: 24px;
     }
 
     /* ─── DRAG & DROP ZONE ─────────────────────────────────── */
@@ -427,6 +666,49 @@
     .chat-footer-hint { font-size: 10px; color: #3a342a; }
     .chat-model-tag { font-size: 10px; color: #5a5040; letter-spacing: 0.07em; }
 
+    /* ─── KEYBOARD SHORTCUTS OVERLAY ───────────────────────── */
+    .kb-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .kb-overlay.open { opacity: 1; pointer-events: auto; }
+    .kb-panel {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      max-width: 440px; width: 90%;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+      transform: scale(0.95); transition: transform 0.25s ease;
+    }
+    .kb-overlay.open .kb-panel { transform: scale(1); }
+    .kb-title {
+      font-family: var(--font-display);
+      font-size: 18px; font-weight: 700; letter-spacing: 0.06em;
+      margin-bottom: 20px;
+    }
+    .kb-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(39,39,39,0.5);
+    }
+    .kb-row:last-child { border-bottom: none; }
+    .kb-action { font-size: 13px; color: #8a8070; }
+    .kb-key {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 28px; height: 26px; padding: 0 8px;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: 6px;
+      font-size: 11px; font-weight: 600; color: #c8b88a;
+      font-family: var(--font-ui);
+    }
+    .kb-keys { display: flex; gap: 4px; }
+
     /* ─── SPECIALIZED PAGE LAYOUT ──────────────────────────── */
     .sp-layout {
       max-width: 960px; margin: 0 auto;
@@ -470,8 +752,6 @@
       display: flex; flex-direction: column;
       min-height: 480px;
     }
-
-    /* Toolbar row inside specialized pages */
     .sp-toolbar {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 18px;
@@ -545,21 +825,110 @@
     .method-name { font-size: 12px; font-weight: 600; color: #c8b88a; }
     .method-hint { font-size: 10px; color: #5a5040; margin-top: 3px; }
 
-    /* ─── RESPONSIVE ───────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .method-grid { grid-template-columns: repeat(2, 1fr); }
+    /* ─── SETTINGS PAGE (NEW) ──────────────────────────────── */
+    .settings-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 20px;
     }
-    @media (max-width: 840px) {
-      .workspace { grid-template-columns: 1fr; }
-      .tools-panel { grid-column: 1; }
+    .settings-card {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+    }
+    .settings-card-title {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold-bright); margin-bottom: 16px;
+    }
+    .settings-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(39,39,39,0.5);
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-label { font-size: 13px; color: #c8b88a; }
+    .settings-sublabel { font-size: 11px; color: #5a5040; margin-top: 2px; }
+    .settings-input {
+      font-family: var(--font-ui); font-size: 12px;
+      background: var(--black-card); color: #c8b88a;
+      border: 1px solid var(--black-border); border-radius: 6px;
+      padding: 6px 10px; outline: none; width: 140px;
+      transition: var(--transition);
+    }
+    .settings-input:focus { border-color: var(--gold-muted); }
+    .settings-profile-header {
+      display: flex; align-items: center; gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--black-border);
+      margin-bottom: 12px;
+    }
+    .settings-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-size: 20px;
+      font-weight: 700; color: #0a0a0a;
+    }
+    .settings-username { font-weight: 600; font-size: 16px; color: #e8e0cc; }
+    .settings-email { font-size: 12px; color: #5a5040; margin-top: 2px; }
+    .settings-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 99px;
+      font-size: 10px; font-weight: 600;
+      background: var(--gold-subtle); border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold-bright); margin-top: 6px;
+    }
+    .goal-ring-wrap { display: flex; align-items: center; gap: 12px; }
+    .goal-ring-label { text-align: right; }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .features { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .features { grid-template-columns: repeat(3, 1fr); }
+      .method-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .settings-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 740px) {
       nav { padding: 0 14px; }
+      .nav-tabs { display: none; }
+      .hamburger { display: flex; }
+      .dashboard { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr 1fr; padding: 16px 12px; }
       .hero { padding: 28px 16px 20px; }
       .sp-layout { padding: 16px 12px 32px; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .nav-right .btn-ghost,
+      .nav-right .btn-gold { display: none; }
     }
     @media (max-width: 460px) {
+      .features { grid-template-columns: 1fr; }
       .method-grid { grid-template-columns: 1fr 1fr; }
+      .stats-bar { grid-template-columns: 1fr; }
+    }
+
+    /* ─── FOOTER (NEW) ─────────────────────────────────────── */
+    .site-footer {
+      max-width: 1080px; margin: 0 auto;
+      padding: 20px 18px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--black-border);
+    }
+    .footer-left { font-size: 11px; color: #3a342a; }
+    .footer-kbd-hint {
+      font-size: 11px; color: #3a342a;
+      display: flex; align-items: center; gap: 6px;
+      cursor: pointer; transition: var(--transition);
+    }
+    .footer-kbd-hint:hover { color: #5a5040; }
+    .footer-kbd {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px;
+      background: var(--black-card); border: 1px solid var(--black-border);
+      border-radius: 4px; font-size: 10px; font-weight: 600; color: #5a5040;
     }
   </style>
 </head>
@@ -567,6 +936,75 @@
 
 <!-- Hidden file inputs -->
 <input type="file" id="dropzoneFileInput" accept="image/jpeg,image/png,image/webp,application/pdf" style="display:none" aria-hidden="true" />
+<input type="file" id="quickSnapInput" accept="image/*" capture="environment" style="display:none" aria-hidden="true" />
+
+<!-- ══════════════════════════════════════════════════
+     KEYBOARD SHORTCUTS OVERLAY
+══════════════════════════════════════════════════ -->
+<div class="kb-overlay" id="kbOverlay" onclick="if(event.target===this)toggleKB()">
+  <div class="kb-panel">
+    <div class="kb-title"><span class="gold-text">Keyboard</span> Shortcuts</div>
+    <div class="kb-row"><span class="kb-action">Go to Home</span><div class="kb-keys"><span class="kb-key">G</span><span class="kb-key">H</span></div></div>
+    <div class="kb-row"><span class="kb-action">Go to Math AI</span><div class="kb-keys"><span class="kb-key">G</span><span class="kb-key">M</span></div></div>
+    <div class="kb-row"><span class="kb-action">Go to Essay Writer</span><div class="kb-keys"><span class="kb-key">G</span><span class="kb-key">E</span></div></div>
+    <div class="kb-row"><span class="kb-action">Go to Study Guide</span><div class="kb-keys"><span class="kb-key">G</span><span class="kb-key">S</span></div></div>
+    <div class="kb-row"><span class="kb-action">Go to Settings</span><div class="kb-keys"><span class="kb-key">G</span><span class="kb-key">,</span></div></div>
+    <div class="kb-row"><span class="kb-action">Focus Chat Input</span><div class="kb-keys"><span class="kb-key">/</span></div></div>
+    <div class="kb-row"><span class="kb-action">Quick Snap</span><div class="kb-keys"><span class="kb-key">Q</span></div></div>
+    <div class="kb-row"><span class="kb-action">Show Shortcuts</span><div class="kb-keys"><span class="kb-key">?</span></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     MOBILE DRAWER
+══════════════════════════════════════════════════ -->
+<div class="mobile-drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <div class="drawer-avatar">S</div>
+    <div>
+      <div class="drawer-user-name">Student</div>
+      <div class="drawer-user-sub">Beta Access</div>
+    </div>
+  </div>
+  <div class="drawer-streak">
+    <span class="streak-flame" aria-hidden="true">&#x1F525;</span>
+    <div class="drawer-streak-info">
+      <div class="drawer-streak-days">7 Day Streak</div>
+      <div class="drawer-streak-label">Keep it going!</div>
+    </div>
+  </div>
+  <div class="drawer-section-label">AI Tools</div>
+  <button class="drawer-item" onclick="navigate('math');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+    Advanced Math
+  </button>
+  <button class="drawer-item" onclick="navigate('essay');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    Essay Writer
+  </button>
+  <button class="drawer-item" onclick="navigate('study');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+    Study Guide
+  </button>
+  <button class="drawer-item" onclick="navigate('notes');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>
+    Lecture Notes
+  </button>
+  <div class="drawer-section-label">More</div>
+  <button class="drawer-item" onclick="navigate('doublecheck');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    Double Check
+  </button>
+  <button class="drawer-item" onclick="navigate('testprep');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+    ACT / SAT Prep
+  </button>
+  <button class="drawer-item" onclick="navigate('settings');toggleDrawer()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    Settings
+  </button>
+</div>
 
 <!-- ══════════════════════════════════════════════════
      NAVIGATION
@@ -575,21 +1013,9 @@
   <a class="nav-logo" onclick="navigate('home')" aria-label="Obsidia AI — Home">
     <svg class="nav-logo-svg" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <radialGradient id="nSphere" cx="37%" cy="31%" r="62%">
-          <stop offset="0%" stop-color="#525252"/>
-          <stop offset="38%" stop-color="#1a1a1a"/>
-          <stop offset="100%" stop-color="#050505"/>
-        </radialGradient>
-        <radialGradient id="nShine" cx="33%" cy="27%" r="38%">
-          <stop offset="0%" stop-color="rgba(255,255,255,0.20)"/>
-          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-        </radialGradient>
-        <linearGradient id="nRing" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%"   stop-color="#e8c96a"/>
-          <stop offset="42%"  stop-color="#c9a84c"/>
-          <stop offset="72%"  stop-color="#7a5e20"/>
-          <stop offset="100%" stop-color="#c9a84c"/>
-        </linearGradient>
+        <radialGradient id="nSphere" cx="37%" cy="31%" r="62%"><stop offset="0%" stop-color="#525252"/><stop offset="38%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#050505"/></radialGradient>
+        <radialGradient id="nShine" cx="33%" cy="27%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.20)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+        <linearGradient id="nRing" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="42%" stop-color="#c9a84c"/><stop offset="72%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
         <clipPath id="nTop"><rect x="0" y="0" width="34" height="16.5"/></clipPath>
         <clipPath id="nBot"><rect x="0" y="16.5" width="34" height="17.5"/></clipPath>
       </defs>
@@ -601,9 +1027,26 @@
     <span class="nav-logo-text gold-text">OBSIDIA AI</span>
   </a>
 
+  <div class="nav-tabs" role="tablist">
+    <button class="nav-tab active" data-page="home" onclick="navigate('home')">Home</button>
+    <button class="nav-tab" data-page="math" onclick="navigate('math')">Math AI</button>
+    <button class="nav-tab" data-page="essay" onclick="navigate('essay')">Essay Writer</button>
+    <button class="nav-tab" data-page="study" onclick="navigate('study')">Study Guide</button>
+    <button class="nav-tab" data-page="notes" onclick="navigate('notes')">Notes</button>
+  </div>
+
   <div class="nav-right">
-    <button class="btn-ghost">Sign In</button>
+    <button class="quick-snap-btn" onclick="document.getElementById('quickSnapInput').click()" title="Quick Snap — Upload a photo" aria-label="Quick Snap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+    </button>
+    <button class="btn-ghost" onclick="navigate('settings')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </button>
     <button class="btn-gold">Get Started</button>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleDrawer()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -618,7 +1061,7 @@
 <div class="page active" id="page-home">
 
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-badge"><div class="hero-badge-dot" aria-hidden="true"></div> Now in Beta</div>
+    <div class="hero-badge"><div class="hero-badge-dot" aria-hidden="true"></div> Version 2.0 Beta</div>
     <svg class="logo-breathe" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom:12px">
       <defs>
         <radialGradient id="hS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
@@ -637,865 +1080,578 @@
     <div class="gold-rule hero-rule" aria-hidden="true"></div>
   </section>
 
-  <!-- Workspace: Chat Center + Tools Right -->
-  <div class="workspace">
-
-    <!-- CENTER: Chat + Upload -->
-    <div style="display:flex;flex-direction:column;gap:14px;">
-
-      <!-- Drag & Drop Upload -->
-      <div class="panel dropzone-panel">
-        <div class="panel-header">
-          <span class="panel-title">Upload Image</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#4a4438"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        </div>
-        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drag and drop an image or click to upload">
-          <div class="dz-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-          </div>
-          <div class="dz-title gold-text">Drop files or click to upload</div>
-          <div class="dz-hint">Drag an image of your assignment here,<br>or click to browse from your device</div>
-          <div class="dz-formats">
-            <span class="dz-format-tag">JPEG</span>
-            <span class="dz-format-tag">PNG</span>
-            <span class="dz-format-tag">WebP</span>
-            <span class="dz-format-tag">PDF</span>
-          </div>
-          <div class="dz-status">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Release to upload
-          </div>
-          <div class="dz-error" id="dzError"></div>
+  <!-- ── Stats Bar (NEW) ── -->
+  <div class="stats-bar">
+    <div class="stat-card anim-stagger">
+      <div class="stat-icon" style="background:var(--math-subtle);color:var(--math-color);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value gold-text" data-count="142">0</div>
+        <div class="stat-label">Sessions</div>
+      </div>
+    </div>
+    <div class="stat-card anim-stagger">
+      <div class="stat-icon" style="background:rgba(249,115,22,0.10);color:#fb923c;">
+        <span class="streak-flame" aria-hidden="true">&#x1F525;</span>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value" style="color:#fb923c" data-count="7">0</div>
+        <div class="stat-label">Day Streak</div>
+      </div>
+    </div>
+    <div class="stat-card anim-stagger">
+      <div class="stat-icon" style="background:var(--xp-subtle);color:var(--xp-color);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value" style="color:var(--xp-color)" data-count="2840">0</div>
+        <div class="stat-label">Total XP</div>
+      </div>
+    </div>
+    <div class="stat-card anim-stagger">
+      <div class="stat-info" style="display:flex;align-items:center;gap:12px;width:100%">
+        <svg class="progress-ring" viewBox="0 0 40 40">
+          <circle class="progress-ring-bg" cx="20" cy="20" r="16"/>
+          <circle class="progress-ring-fill" cx="20" cy="20" r="16"
+            stroke="var(--sci-color)"
+            stroke-dasharray="100.53"
+            stroke-dashoffset="100.53"
+            data-target="32"/>
+        </svg>
+        <div>
+          <div class="stat-value" style="color:var(--sci-color);font-size:18px" data-count="68">0</div>
+          <div class="stat-label">Weekly Goal %</div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Basic Chat -->
-      <div class="panel home-chat">
-        <div class="panel-header">
-          <span class="panel-title">General AI Chat</span>
-          <span class="chat-model-tag">OBSIDIA AI · BETA</span>
-        </div>
-        <div class="home-chat-messages" id="homeChatMessages" role="log" aria-live="polite">
-          <div class="chat-welcome" id="homeWelcome">
-            <h2 class="welcome-title">How can I help?</h2>
-            <p class="welcome-sub">Ask about any subject, get study tips, or explore a topic. Use the tools on the right for specialized help.</p>
-            <div class="suggestion-chips">
-              <button class="chip" onclick="homeUseSuggestion(this)">Build a study schedule</button>
-              <button class="chip" onclick="homeUseSuggestion(this)">Summarize my notes</button>
-              <button class="chip" onclick="homeUseSuggestion(this)">Explain a concept</button>
-            </div>
-          </div>
-        </div>
-        <div class="chat-input-wrap">
-          <div class="chat-input-box">
-            <textarea class="chat-textarea" id="homeChatInput" placeholder="Ask anything..." rows="1" aria-label="Type your message"></textarea>
-            <button class="chat-send" id="homeSendBtn" aria-label="Send message" disabled>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            </button>
-          </div>
-          <div class="chat-footer">
-            <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          </div>
-        </div>
+  <!-- ── XP Progress Bar (NEW) ── -->
+  <div class="xp-bar-wrap anim-stagger">
+    <div class="xp-bar-container">
+      <div class="xp-bar-info">
+        <span class="xp-level">LVL 12</span>
+        <span class="xp-label">Scholar</span>
       </div>
+      <div class="xp-track">
+        <div class="xp-fill" id="xpFill"></div>
+      </div>
+      <span class="xp-amount">2,840 / 3,500 XP</span>
+    </div>
+  </div>
 
+  <!-- Feature Navigation Cards -->
+  <div class="features">
+    <div class="features-section">AI Tools</div>
+    <div class="feature-card anim-stagger" style="--fc-color:var(--math-color)" onclick="navigate('math')">
+      <div class="feature-icon" style="background:var(--math-subtle);color:var(--math-color);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+      </div>
+      <div class="feature-name">Advanced Math</div>
+      <div class="feature-desc">Algebra through calculus, step-by-step solutions with explanations</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:var(--ela-color)" onclick="navigate('essay')">
+      <div class="feature-icon" style="background:var(--ela-subtle);color:var(--ela-color);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <div class="feature-name">Essay Writer</div>
+      <div class="feature-desc">AI drafting with humanizer toggle and grade-level calibration</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:var(--sci-color)" onclick="navigate('study')">
+      <div class="feature-icon" style="background:var(--sci-subtle);color:var(--sci-color);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      </div>
+      <div class="feature-name">Study Guide</div>
+      <div class="feature-desc">Flashcards, Cornell notes, mind maps and spaced review</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:#fbbf24" onclick="navigate('notes')">
+      <div class="feature-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <div class="feature-name">Lecture Notes</div>
+      <div class="feature-desc">Record or upload lectures for AI transcription and summaries</div>
+      <div class="feature-arrow">Open &#8594;</div>
     </div>
 
-    <!-- RIGHT: TOOLS PANEL -->
-    <aside class="panel tools-panel">
+    <div class="features-section">Capture &amp; Verify</div>
+    <div class="feature-card anim-stagger" style="--fc-color:#22d3ee" onclick="navigate('doublecheck')">
+      <div class="feature-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
+      </div>
+      <div class="feature-name">Double Check</div>
+      <div class="feature-desc">Verify facts and cross-reference AI responses</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:var(--gold-bright)" onclick="navigate('grading')">
+      <div class="feature-icon" style="background:var(--gold-subtle);color:var(--gold-bright);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="feature-name">Grading</div>
+      <div class="feature-desc">Upload work for AI-powered grading with custom scales</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:#f43f5e" onclick="navigate('testprep')">
+      <div class="feature-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+      </div>
+      <div class="feature-name">ACT / SAT Prep</div>
+      <div class="feature-desc">Practice problems, strategy guides &amp; score analysis</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:#6366f1" onclick="navigate('teacher')">
+      <div class="feature-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="feature-name">Teacher Tools</div>
+      <div class="feature-desc">Lesson plans, rubrics, quizzes &amp; assessments</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+
+    <div class="features-section">Account</div>
+    <div class="feature-card anim-stagger" style="--fc-color:#64748b" onclick="navigate('history')">
+      <div class="feature-icon" style="background:rgba(100,116,139,0.12);color:#64748b;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feature-name">History</div>
+      <div class="feature-desc">Browse and revisit past conversations</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+    <div class="feature-card anim-stagger" style="--fc-color:#f97316" onclick="navigate('feedback')">
+      <div class="feature-icon" style="background:rgba(249,115,22,0.10);color:#f97316;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="feature-name">Feedback</div>
+      <div class="feature-desc">Rate responses and report issues</div>
+      <div class="feature-arrow">Open &#8594;</div>
+    </div>
+  </div>
+
+  <!-- Dashboard: Activity Feed + Drop Zone + Basic Chat -->
+  <div class="dashboard" style="grid-template-columns:1fr 1fr 1fr">
+
+    <!-- Activity Feed (NEW) -->
+    <div class="panel activity-panel">
       <div class="panel-header">
-        <span class="panel-title">Tools</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#4a4438;cursor:pointer"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span class="panel-title">Recent Activity</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#4a4438"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
-      <div class="tp-list">
-
-        <div class="tp-section-label">Academics</div>
-
-        <div class="tp-card" style="--card-accent:var(--math-color)" onclick="navigate('math')">
-          <div class="tp-icon-badge" style="background:var(--math-subtle);color:var(--math-color);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Advanced Math</div>
-            <div class="tp-desc">Algebra through calculus, step-by-step</div>
-          </div>
-          <div class="tp-right">
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <div class="activity-list" id="activityList">
+        <div class="activity-item" onclick="navigate('math')">
+          <div class="activity-dot" style="background:var(--math-color)"></div>
+          <div class="activity-info">
+            <div class="activity-title">Calculus Integration</div>
+            <div class="activity-desc">Solved 3 integration by parts problems</div>
+            <div class="activity-time">2 hours ago &middot; +15 XP</div>
           </div>
         </div>
-
-        <div class="tp-card" style="--card-accent:var(--ela-color)" onclick="navigate('essay')">
-          <div class="tp-icon-badge" style="background:var(--ela-subtle);color:var(--ela-color);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Essay Writer</div>
-            <div class="tp-desc">Drafts, outlines, thesis & humanizer</div>
-          </div>
-          <div class="tp-right">
-            <span class="tp-badge tp-badge-purple">AI</span>
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <div class="activity-item" onclick="navigate('essay')">
+          <div class="activity-dot" style="background:var(--ela-color)"></div>
+          <div class="activity-info">
+            <div class="activity-title">History Essay Draft</div>
+            <div class="activity-desc">Completed outline for Cold War essay</div>
+            <div class="activity-time">5 hours ago &middot; +25 XP</div>
           </div>
         </div>
-
-        <div class="tp-card" style="--card-accent:var(--sci-color)" onclick="navigate('study')">
-          <div class="tp-icon-badge" style="background:var(--sci-subtle);color:var(--sci-color);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Study Guide Creator</div>
-            <div class="tp-desc">Custom guides, cards & mind maps</div>
-          </div>
-          <div class="tp-right">
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <div class="activity-item" onclick="navigate('study')">
+          <div class="activity-dot" style="background:var(--sci-color)"></div>
+          <div class="activity-info">
+            <div class="activity-title">Bio Flashcards</div>
+            <div class="activity-desc">Generated 24 flashcards on cell division</div>
+            <div class="activity-time">Yesterday &middot; +20 XP</div>
           </div>
         </div>
-
-        <div class="tp-section-divider"></div>
-        <div class="tp-section-label">Capture & Verify</div>
-
-        <div class="tp-card" style="--card-accent:#fbbf24" onclick="navigate('notes')">
-          <div class="tp-icon-badge" style="background:rgba(251,191,36,0.12);color:#fbbf24;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Lecture Notes</div>
-            <div class="tp-desc">Record or upload for AI transcription</div>
-          </div>
-          <div class="tp-right">
-            <span class="tp-badge tp-badge-gold">AI</span>
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <div class="activity-item" onclick="navigate('testprep')">
+          <div class="activity-dot" style="background:#f43f5e"></div>
+          <div class="activity-info">
+            <div class="activity-title">SAT Math Practice</div>
+            <div class="activity-desc">Scored 7/10 on algebra section</div>
+            <div class="activity-time">Yesterday &middot; +30 XP</div>
           </div>
         </div>
-
-        <div class="tp-card" style="--card-accent:#22d3ee" onclick="navigate('doublecheck')">
-          <div class="tp-icon-badge" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Double Check</div>
-            <div class="tp-desc">Verify facts from previous responses</div>
-          </div>
-          <div class="tp-right">
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <div class="activity-item" onclick="navigate('notes')">
+          <div class="activity-dot" style="background:#fbbf24"></div>
+          <div class="activity-info">
+            <div class="activity-title">Chemistry Lecture</div>
+            <div class="activity-desc">Transcribed and summarized 45-min lecture</div>
+            <div class="activity-time">2 days ago &middot; +35 XP</div>
           </div>
         </div>
-
-        <div class="tp-card" style="--card-accent:var(--gold-bright)" onclick="navigate('grading')">
-          <div class="tp-icon-badge" style="background:var(--gold-subtle);color:var(--gold-bright);">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Grading</div>
-            <div class="tp-desc">Upload work for AI-powered grading</div>
-          </div>
-          <div class="tp-right">
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-
-        <div class="tp-section-divider"></div>
-        <div class="tp-section-label">Test Prep</div>
-
-        <div class="tp-card" style="--card-accent:#f43f5e" onclick="navigate('testprep')">
-          <div class="tp-icon-badge" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">ACT / SAT Prep</div>
-            <div class="tp-desc">Practice, strategy & score analysis</div>
-          </div>
-          <div class="tp-right">
-            <span class="tp-badge tp-badge-red">PREP</span>
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-
-        <div class="tp-section-divider"></div>
-        <div class="tp-section-label">Account</div>
-
-        <div class="tp-card" style="--card-accent:#64748b" onclick="navigate('history')">
-          <div class="tp-icon-badge" style="background:rgba(100,116,139,0.12);color:#64748b;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">History</div>
-            <div class="tp-desc">Browse past conversations</div>
-          </div>
-          <div class="tp-right">
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-
-        <div class="tp-card" style="--card-accent:#f97316" onclick="navigate('feedback')">
-          <div class="tp-icon-badge" style="background:rgba(249,115,22,0.10);color:#f97316;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Feedback</div>
-            <div class="tp-desc">Rate responses, report issues</div>
-          </div>
-          <div class="tp-right">
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-
-        <div class="tp-card" style="--card-accent:#6366f1" onclick="navigate('teacher')">
-          <div class="tp-icon-badge" style="background:rgba(99,102,241,0.12);color:#6366f1;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-          </div>
-          <div class="tp-body">
-            <div class="tp-name">Teacher Tools</div>
-            <div class="tp-desc">Lessons, rubrics & assessments</div>
-          </div>
-          <div class="tp-right">
-            <span class="tp-badge tp-badge-purple">EDU</span>
-            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-
       </div>
-    </aside>
+    </div>
 
+    <!-- Drag & Drop Upload -->
+    <div class="panel dropzone-panel">
+      <div class="panel-header">
+        <span class="panel-title">Upload Image</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#4a4438"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drag and drop an image or click to upload">
+        <div class="dz-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="dz-title gold-text">Drop files or click to upload</div>
+        <div class="dz-hint">Drag an image of your assignment here,<br>or click to browse from your device</div>
+        <div class="dz-formats">
+          <span class="dz-format-tag">JPEG</span>
+          <span class="dz-format-tag">PNG</span>
+          <span class="dz-format-tag">WebP</span>
+          <span class="dz-format-tag">PDF</span>
+        </div>
+        <div class="dz-status">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Release to upload
+        </div>
+        <div class="dz-error" id="dzError"></div>
+      </div>
+    </div>
+
+    <!-- Basic Chat -->
+    <div class="panel home-chat">
+      <div class="panel-header">
+        <span class="panel-title">General AI Chat</span>
+        <span class="chat-model-tag">OBSIDIA AI &middot; V2</span>
+      </div>
+      <div class="home-chat-messages" id="homeChatMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="homeWelcome">
+          <h2 class="welcome-title">How can I help?</h2>
+          <p class="welcome-sub">Ask about any subject, get study tips, or explore a topic. Use the tools above for specialized help.</p>
+          <div class="suggestion-chips">
+            <button class="chip" onclick="homeUseSuggestion(this)">Build a study schedule</button>
+            <button class="chip" onclick="homeUseSuggestion(this)">Summarize my notes</button>
+            <button class="chip" onclick="homeUseSuggestion(this)">Explain a concept</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="homeChatInput" placeholder="Ask anything..." rows="1" aria-label="Type your message"></textarea>
+          <button class="chat-send" id="homeSendBtn" aria-label="Send message" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="site-footer">
+    <span class="footer-left">Obsidia AI v2.0 &middot; Built by students, for students</span>
+    <span class="footer-kbd-hint" onclick="toggleKB()">
+      Keyboard shortcuts <span class="footer-kbd">?</span>
+    </span>
   </div>
 </div>
 
 
 <!-- ═══════════════════════════════════════════════════
-     PAGE: ADVANCED MATH
+     PAGE: ADVANCED MATH (kept from original)
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:var(--math-subtle);color:var(--math-color);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-      </div>
+      <div class="sp-icon" style="background:var(--math-subtle);color:var(--math-color);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
       <div class="sp-info">
         <h2 class="sp-title"><span class="gold-text">Advanced</span> Math</h2>
-        <p class="sp-subtitle">Algebra · Calculus · Linear Algebra · Statistics · Proofs</p>
+        <p class="sp-subtitle">Algebra through calculus with step-by-step solutions</p>
       </div>
-      <span class="sp-model-badge" style="background:var(--math-subtle);color:var(--math-color);border:1px solid rgba(91,156,246,0.25);">Claude Opus · Math</span>
+      <span class="sp-model-badge" style="background:var(--math-subtle);color:var(--math-color);border:1px solid rgba(91,156,246,0.25);">Claude Sonnet &middot; Math</span>
     </div>
     <div class="sp-chat-panel">
       <div class="sp-toolbar">
-        <button class="sp-tool-btn active" onclick="mathMode(this,'solve')">Step-by-Step</button>
-        <button class="sp-tool-btn" onclick="mathMode(this,'explain')">Explain Concept</button>
-        <button class="sp-tool-btn" onclick="mathMode(this,'graph')">Graph Helper</button>
-        <button class="sp-tool-btn" onclick="mathMode(this,'practice')">Practice Problems</button>
+        <button class="sp-tool-btn active" onclick="mathMode(this,'solve')">Solve</button>
+        <button class="sp-tool-btn" onclick="mathMode(this,'explain')">Explain</button>
+        <button class="sp-tool-btn" onclick="mathMode(this,'graph')">Graph</button>
+        <button class="sp-tool-btn" onclick="mathMode(this,'practice')">Practice</button>
       </div>
       <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
         <div class="chat-welcome" id="mathWelcome">
-          <svg class="logo-breathe" width="48" height="48" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <radialGradient id="mS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
-              <radialGradient id="mH2" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
-              <linearGradient id="mR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
-              <clipPath id="mRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
-              <clipPath id="mRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
-            </defs>
-            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#mR)" stroke-width="2.8" fill="none" clip-path="url(#mRB)" opacity="0.5"/>
-            <circle cx="27" cy="25" r="19" fill="url(#mS)"/>
-            <circle cx="27" cy="25" r="19" fill="url(#mH2)"/>
-            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#mR)" stroke-width="2.8" fill="none" clip-path="url(#mRT)"/>
-          </svg>
-          <h2 class="welcome-title">Advanced Mathematics</h2>
-          <p class="welcome-sub">From pre-algebra through college calculus, linear algebra, and beyond — with clear, step-by-step solutions.</p>
-          <div class="suggestion-chips" style="--chip-color:var(--math-color);--chip-subtle:var(--math-subtle)">
-            <button class="chip" onclick="spUseSuggestion('math',this)">Solve a calculus problem</button>
-            <button class="chip" onclick="spUseSuggestion('math',this)">Explain linear algebra</button>
-            <button class="chip" onclick="spUseSuggestion('math',this)">Help with statistics</button>
-          </div>
+          <h2 class="welcome-title">Math AI</h2>
+          <p class="welcome-sub">Enter a math problem, equation, or concept. I'll provide detailed step-by-step solutions with explanations.</p>
+          <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('math',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion('math',this)">Explain derivatives</button></div>
         </div>
       </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea>
-          <button class="chat-send" id="mathSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">MATH AI · CLAUDE OPUS</span>
-        </div>
-      </div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag">MATH AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: ESSAY WRITER
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: ESSAY ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-essay">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:var(--ela-subtle);color:var(--ela-color);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Essay</span> Writer</h2>
-        <p class="sp-subtitle">Drafts, outlines, thesis building, analysis & humanized writing</p>
-      </div>
-      <span class="sp-model-badge" style="background:var(--ela-subtle);color:var(--ela-color);border:1px solid rgba(167,139,250,0.25);">Claude Sonnet · ELA</span>
+      <div class="sp-icon" style="background:var(--ela-subtle);color:var(--ela-color);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Essay</span> Writer</h2><p class="sp-subtitle">AI-powered drafting with tone and grade calibration</p></div>
+      <span class="sp-model-badge" style="background:var(--ela-subtle);color:var(--ela-color);border:1px solid rgba(167,139,250,0.25);">Claude Sonnet &middot; Essay</span>
     </div>
     <div class="sp-chat-panel">
       <div class="sp-toolbar">
-        <button class="sp-tool-btn active" onclick="essayMode(this,'draft')">Full Draft</button>
+        <button class="sp-tool-btn active" onclick="essayMode(this,'draft')">Draft</button>
         <button class="sp-tool-btn" onclick="essayMode(this,'outline')">Outline</button>
-        <button class="sp-tool-btn" onclick="essayMode(this,'thesis')">Thesis Help</button>
+        <button class="sp-tool-btn" onclick="essayMode(this,'thesis')">Thesis</button>
         <button class="sp-tool-btn" onclick="essayMode(this,'proofread')">Proofread</button>
-        <div class="sp-toggle-row">
-          <span class="sp-toggle-label">Humanizer</span>
-          <label class="sp-toggle">
-            <input type="checkbox" id="humanizerToggle" />
-            <span class="sp-slider"></span>
-          </label>
-        </div>
-        <select class="sp-select" id="essayGradeSelect">
-          <option>Middle School</option>
-          <option>High School</option>
-          <option selected>College</option>
-          <option>Graduate</option>
-        </select>
+        <div class="sp-toggle-row"><span class="sp-toggle-label">Humanizer</span><label class="sp-toggle"><input type="checkbox" id="humanizerToggle" checked /><span class="sp-slider"></span></label></div>
+        <select class="sp-select" id="essayGradeSelect"><option>High School</option><option>Undergraduate</option><option>Graduate</option><option>Professional</option></select>
       </div>
       <div class="sp-messages" id="essayMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="essayWelcome">
-          <svg class="logo-breathe" width="48" height="48" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <radialGradient id="eS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
-              <radialGradient id="eH2" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
-              <linearGradient id="eR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
-              <clipPath id="eRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
-              <clipPath id="eRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
-            </defs>
-            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#eR)" stroke-width="2.8" fill="none" clip-path="url(#eRB)" opacity="0.5"/>
-            <circle cx="27" cy="25" r="19" fill="url(#eS)"/>
-            <circle cx="27" cy="25" r="19" fill="url(#eH2)"/>
-            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#eR)" stroke-width="2.8" fill="none" clip-path="url(#eRT)"/>
-          </svg>
-          <h2 class="welcome-title">Essay Writer with Humanizer</h2>
-          <p class="welcome-sub">Full essay creation, literary analysis, and grade-calibrated writing — toggle humanizer for natural-sounding output.</p>
-          <div class="suggestion-chips" style="--chip-color:var(--ela-color);--chip-subtle:var(--ela-subtle)">
-            <button class="chip" onclick="spUseSuggestion('essay',this)">Write a 5-paragraph essay</button>
-            <button class="chip" onclick="spUseSuggestion('essay',this)">Analyze a passage</button>
-            <button class="chip" onclick="spUseSuggestion('essay',this)">Improve my writing</button>
-          </div>
-        </div>
+        <div class="chat-welcome" id="essayWelcome"><h2 class="welcome-title">Essay Writer AI</h2><p class="welcome-sub">Describe your essay topic or paste existing text. I'll help you draft, outline, or proofread.</p></div>
       </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="essayChatInput" placeholder="Describe your essay topic or paste text to improve..." rows="1"></textarea>
-          <button class="chat-send" id="essaySendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">ESSAY AI · CLAUDE SONNET</span>
-        </div>
-      </div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="essayChatInput" placeholder="Describe your essay topic or paste text..." rows="1"></textarea><button class="chat-send" id="essaySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">ESSAY AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: STUDY GUIDE
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: STUDY GUIDE ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-study">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:var(--sci-subtle);color:var(--sci-color);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Study Guide</span> Creator</h2>
-        <p class="sp-subtitle">Choose a study method and paste your material — AI does the rest</p>
-      </div>
-      <span class="sp-model-badge" style="background:var(--sci-subtle);color:var(--sci-color);border:1px solid rgba(52,211,153,0.25);">Claude Sonnet · Study</span>
+      <div class="sp-icon" style="background:var(--sci-subtle);color:var(--sci-color);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Study Guide</span> Creator</h2><p class="sp-subtitle">Choose a study method and paste your material</p></div>
+      <span class="sp-model-badge" style="background:var(--sci-subtle);color:var(--sci-color);border:1px solid rgba(52,211,153,0.25);">Claude Sonnet &middot; Study</span>
     </div>
-
     <div class="method-grid">
-      <div class="method-card" onclick="selectStudyMethod('flashcards')">
-        <div class="method-emoji">🃏</div>
-        <div class="method-name">Flashcards</div>
-        <div class="method-hint">AI-generated Q&A cards</div>
-      </div>
-      <div class="method-card" onclick="selectStudyMethod('cornell')">
-        <div class="method-emoji">📝</div>
-        <div class="method-name">Cornell Notes</div>
-        <div class="method-hint">Structured note format</div>
-      </div>
-      <div class="method-card" onclick="selectStudyMethod('mindmap')">
-        <div class="method-emoji">🕸️</div>
-        <div class="method-name">Mind Map</div>
-        <div class="method-hint">Visual concept mapping</div>
-      </div>
-      <div class="method-card" onclick="selectStudyMethod('spaced')">
-        <div class="method-emoji">🔁</div>
-        <div class="method-name">Spaced Review</div>
-        <div class="method-hint">Optimized repetition schedule</div>
-      </div>
-      <div class="method-card" onclick="selectStudyMethod('outline')">
-        <div class="method-emoji">📋</div>
-        <div class="method-name">Outline</div>
-        <div class="method-hint">Hierarchical study outline</div>
-      </div>
-      <div class="method-card" onclick="selectStudyMethod('quiz')">
-        <div class="method-emoji">❓</div>
-        <div class="method-name">Self-Quiz</div>
-        <div class="method-hint">Practice test with answers</div>
-      </div>
+      <div class="method-card" onclick="selectStudyMethod('flashcards')"><div class="method-emoji">&#x1F0CF;</div><div class="method-name">Flashcards</div><div class="method-hint">AI-generated Q&amp;A cards</div></div>
+      <div class="method-card" onclick="selectStudyMethod('cornell')"><div class="method-emoji">&#x1F4DD;</div><div class="method-name">Cornell Notes</div><div class="method-hint">Structured note format</div></div>
+      <div class="method-card" onclick="selectStudyMethod('mindmap')"><div class="method-emoji">&#x1F578;&#xFE0F;</div><div class="method-name">Mind Map</div><div class="method-hint">Visual concept mapping</div></div>
+      <div class="method-card" onclick="selectStudyMethod('spaced')"><div class="method-emoji">&#x1F501;</div><div class="method-name">Spaced Review</div><div class="method-hint">Optimized repetition</div></div>
+      <div class="method-card" onclick="selectStudyMethod('outline')"><div class="method-emoji">&#x1F4CB;</div><div class="method-name">Outline</div><div class="method-hint">Hierarchical study outline</div></div>
+      <div class="method-card" onclick="selectStudyMethod('quiz')"><div class="method-emoji">&#x2753;</div><div class="method-name">Self-Quiz</div><div class="method-hint">Practice test with answers</div></div>
     </div>
-
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="studyMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="studyWelcome">
-          <h2 class="welcome-title">Select a study method above</h2>
-          <p class="welcome-sub">Choose your preferred format, then paste your notes or describe the topic. I'll generate a complete study guide.</p>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="studyChatInput" placeholder="Paste your notes or describe the topic..." rows="1"></textarea>
-          <button class="chat-send" id="studySendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">STUDY AI · CLAUDE SONNET</span>
-        </div>
-      </div>
+      <div class="sp-messages" id="studyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="studyWelcome"><h2 class="welcome-title">Select a study method above</h2><p class="welcome-sub">Choose your format, then paste your notes or describe the topic.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="studyChatInput" placeholder="Paste your notes or describe the topic..." rows="1"></textarea><button class="chat-send" id="studySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">STUDY AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: LECTURE NOTES
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: LECTURE NOTES ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-notes">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Lecture</span> Notes</h2>
-        <p class="sp-subtitle">Record or upload lectures — AI transcribes and generates structured notes</p>
-      </div>
-      <span class="sp-model-badge" style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);">Claude Sonnet · Notes</span>
+      <div class="sp-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Lecture</span> Notes</h2><p class="sp-subtitle">Record or upload lectures for AI-generated notes</p></div>
+      <span class="sp-model-badge" style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);">Claude Sonnet &middot; Notes</span>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-toolbar">
-        <button class="sp-tool-btn active" onclick="notesMode(this,'transcribe')">Transcribe</button>
-        <button class="sp-tool-btn" onclick="notesMode(this,'summarize')">Summarize</button>
-        <button class="sp-tool-btn" onclick="notesMode(this,'keypoints')">Key Points</button>
-        <button class="sp-tool-btn" onclick="notesMode(this,'questions')">Generate Questions</button>
-      </div>
-      <div class="sp-messages" id="notesMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="notesWelcome">
-          <h2 class="welcome-title">Lecture Notes AI</h2>
-          <p class="welcome-sub">Upload an audio/video file or describe what was discussed in your lecture. I'll transcribe it and generate structured, organized notes.</p>
-          <div class="suggestion-chips" style="--chip-color:#fbbf24;--chip-subtle:rgba(251,191,36,0.12)">
-            <button class="chip" onclick="spUseSuggestion('notes',this)">Summarize today's lecture</button>
-            <button class="chip" onclick="spUseSuggestion('notes',this)">Generate review questions</button>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="notesChatInput" placeholder="Describe what was covered in the lecture..." rows="1"></textarea>
-          <button class="chat-send" id="notesSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">NOTES AI · CLAUDE SONNET</span>
-        </div>
-      </div>
+      <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="notesMode(this,'transcribe')">Transcribe</button><button class="sp-tool-btn" onclick="notesMode(this,'summarize')">Summarize</button><button class="sp-tool-btn" onclick="notesMode(this,'keypoints')">Key Points</button><button class="sp-tool-btn" onclick="notesMode(this,'questions')">Generate Questions</button></div>
+      <div class="sp-messages" id="notesMessages" role="log" aria-live="polite"><div class="chat-welcome" id="notesWelcome"><h2 class="welcome-title">Lecture Notes AI</h2><p class="welcome-sub">Upload audio/video or describe what was discussed.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="notesChatInput" placeholder="Describe the lecture content..." rows="1"></textarea><button class="chat-send" id="notesSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">NOTES AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════
-     PAGE: DOUBLE CHECK
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: DOUBLE CHECK ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-doublecheck">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Double</span> Check</h2>
-        <p class="sp-subtitle">Fact verification, cross-referencing & accuracy validation</p>
-      </div>
-      <span class="sp-model-badge" style="background:rgba(34,211,238,0.10);color:#22d3ee;border:1px solid rgba(34,211,238,0.25);">Claude Opus · Verify</span>
+      <div class="sp-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Double</span> Check</h2><p class="sp-subtitle">Fact verification &amp; accuracy validation</p></div>
+      <span class="sp-model-badge" style="background:rgba(34,211,238,0.10);color:#22d3ee;border:1px solid rgba(34,211,238,0.25);">Claude Opus &middot; Verify</span>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-toolbar">
-        <button class="sp-tool-btn active" onclick="dcMode(this,'verify')">Fact Check</button>
-        <button class="sp-tool-btn" onclick="dcMode(this,'sources')">Find Sources</button>
-        <button class="sp-tool-btn" onclick="dcMode(this,'compare')">Compare Answers</button>
-        <button class="sp-tool-btn" onclick="dcMode(this,'bias')">Check for Bias</button>
-      </div>
-      <div class="sp-messages" id="doublecheckMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="doublecheckWelcome">
-          <h2 class="welcome-title">Double Check AI</h2>
-          <p class="welcome-sub">Paste any claim, answer, or AI response and I'll verify its accuracy, find supporting sources, and flag potential errors.</p>
-          <div class="suggestion-chips" style="--chip-color:#22d3ee;--chip-subtle:rgba(34,211,238,0.10)">
-            <button class="chip" onclick="spUseSuggestion('doublecheck',this)">Verify this answer</button>
-            <button class="chip" onclick="spUseSuggestion('doublecheck',this)">Find sources for a claim</button>
-            <button class="chip" onclick="spUseSuggestion('doublecheck',this)">Check this for accuracy</button>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="doublecheckChatInput" placeholder="Paste a claim or answer to verify..." rows="1"></textarea>
-          <button class="chat-send" id="doublecheckSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">VERIFY AI · CLAUDE OPUS</span>
-        </div>
-      </div>
+      <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="dcMode(this,'verify')">Fact Check</button><button class="sp-tool-btn" onclick="dcMode(this,'sources')">Find Sources</button><button class="sp-tool-btn" onclick="dcMode(this,'compare')">Compare</button><button class="sp-tool-btn" onclick="dcMode(this,'bias')">Check Bias</button></div>
+      <div class="sp-messages" id="doublecheckMessages" role="log" aria-live="polite"><div class="chat-welcome" id="doublecheckWelcome"><h2 class="welcome-title">Double Check AI</h2><p class="welcome-sub">Paste any claim or AI response to verify its accuracy.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="doublecheckChatInput" placeholder="Paste a claim to verify..." rows="1"></textarea><button class="chat-send" id="doublecheckSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">VERIFY AI &middot; CLAUDE OPUS</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: GRADING
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: GRADING ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-grading">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:var(--gold-subtle);color:var(--gold-bright);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Grading</span> Assistant</h2>
-        <p class="sp-subtitle">Upload work for AI-powered grading with customizable scales</p>
-      </div>
-      <span class="sp-model-badge" style="background:var(--gold-subtle);color:var(--gold-bright);border:1px solid rgba(201,168,76,0.25);">Claude Sonnet · Grade</span>
+      <div class="sp-icon" style="background:var(--gold-subtle);color:var(--gold-bright);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Grading</span> Assistant</h2><p class="sp-subtitle">AI-powered grading with customizable scales</p></div>
+      <span class="sp-model-badge" style="background:var(--gold-subtle);color:var(--gold-bright);border:1px solid rgba(201,168,76,0.25);">Claude Sonnet &middot; Grade</span>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-toolbar">
-        <button class="sp-tool-btn active" onclick="gradingMode(this,'grade')">Grade Work</button>
-        <button class="sp-tool-btn" onclick="gradingMode(this,'rubric')">Apply Rubric</button>
-        <button class="sp-tool-btn" onclick="gradingMode(this,'feedback')">Detailed Feedback</button>
-        <div class="sp-toggle-row">
-          <span class="sp-toggle-label">Scale</span>
-          <select class="sp-select" id="gradingScaleSelect">
-            <option>A–F (100 pt)</option>
-            <option>A–F (GPA 4.0)</option>
-            <option>Pass / Fail</option>
-            <option>1–10 scale</option>
-            <option>Rubric-based</option>
-          </select>
-        </div>
-      </div>
-      <div class="sp-messages" id="gradingMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="gradingWelcome">
-          <h2 class="welcome-title">Grading Assistant</h2>
-          <p class="welcome-sub">Upload an image or paste your work. I'll evaluate it using your selected grading scale — assessing content, structure, and clarity.</p>
-          <div class="suggestion-chips" style="--chip-color:var(--gold-bright);--chip-subtle:var(--gold-subtle)">
-            <button class="chip" onclick="spUseSuggestion('grading',this)">Grade this essay</button>
-            <button class="chip" onclick="spUseSuggestion('grading',this)">Evaluate my lab report</button>
-            <button class="chip" onclick="spUseSuggestion('grading',this)">Score this assignment</button>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="gradingChatInput" placeholder="Paste work to grade, or describe the assignment..." rows="1"></textarea>
-          <button class="chat-send" id="gradingSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">GRADING AI · CLAUDE SONNET</span>
-        </div>
-      </div>
+      <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="gradingMode(this,'grade')">Grade Work</button><button class="sp-tool-btn" onclick="gradingMode(this,'rubric')">Apply Rubric</button><button class="sp-tool-btn" onclick="gradingMode(this,'feedback')">Feedback</button><div class="sp-toggle-row"><span class="sp-toggle-label">Scale</span><select class="sp-select" id="gradingScaleSelect"><option>A&#8211;F (100 pt)</option><option>A&#8211;F (GPA 4.0)</option><option>Pass / Fail</option><option>1&#8211;10 scale</option><option>Rubric-based</option></select></div></div>
+      <div class="sp-messages" id="gradingMessages" role="log" aria-live="polite"><div class="chat-welcome" id="gradingWelcome"><h2 class="welcome-title">Grading Assistant</h2><p class="welcome-sub">Upload an image or paste work for evaluation.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="gradingChatInput" placeholder="Paste work to grade..." rows="1"></textarea><button class="chat-send" id="gradingSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">GRADING AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: ACT / SAT PREP
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: TEST PREP ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-testprep">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">ACT / SAT</span> Prep</h2>
-        <p class="sp-subtitle">Section-specific practice, strategy guides & score improvement</p>
-      </div>
-      <span class="sp-model-badge" style="background:rgba(244,63,94,0.10);color:#f43f5e;border:1px solid rgba(244,63,94,0.25);">Claude Opus · Prep</span>
+      <div class="sp-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">ACT / SAT</span> Prep</h2><p class="sp-subtitle">Section-specific practice &amp; strategy</p></div>
+      <span class="sp-model-badge" style="background:rgba(244,63,94,0.10);color:#f43f5e;border:1px solid rgba(244,63,94,0.25);">Claude Opus &middot; Prep</span>
     </div>
-
-    <div class="method-grid">
-      <div class="method-card" onclick="selectTestSection('act-math')" style="--hover-color:#f43f5e">
-        <div class="method-emoji">🔢</div>
-        <div class="method-name">ACT Math</div>
-        <div class="method-hint">60 questions, 60 minutes</div>
-      </div>
-      <div class="method-card" onclick="selectTestSection('act-english')">
-        <div class="method-emoji">📖</div>
-        <div class="method-name">ACT English</div>
-        <div class="method-hint">75 questions, 45 minutes</div>
-      </div>
-      <div class="method-card" onclick="selectTestSection('act-science')">
-        <div class="method-emoji">⚗️</div>
-        <div class="method-name">ACT Science</div>
-        <div class="method-hint">40 questions, 35 minutes</div>
-      </div>
-      <div class="method-card" onclick="selectTestSection('sat-math')">
-        <div class="method-emoji">Σ</div>
-        <div class="method-name">SAT Math</div>
-        <div class="method-hint">44 questions, 80 minutes</div>
-      </div>
-      <div class="method-card" onclick="selectTestSection('sat-rw')">
-        <div class="method-emoji">📚</div>
-        <div class="method-name">SAT Reading & Writing</div>
-        <div class="method-hint">54 questions, 64 minutes</div>
-      </div>
-      <div class="method-card" onclick="selectTestSection('strategy')">
-        <div class="method-emoji">🎯</div>
-        <div class="method-name">Test Strategy</div>
-        <div class="method-hint">Timing, guessing & mindset</div>
-      </div>
+    <div class="method-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="method-card" onclick="selectTestSection('act-math')"><div class="method-emoji">&#x1F4D0;</div><div class="method-name">ACT Math</div><div class="method-hint">Algebra, geometry, trig</div></div>
+      <div class="method-card" onclick="selectTestSection('act-english')"><div class="method-emoji">&#x1F4D6;</div><div class="method-name">ACT English</div><div class="method-hint">Grammar &amp; rhetoric</div></div>
+      <div class="method-card" onclick="selectTestSection('act-science')"><div class="method-emoji">&#x1F52C;</div><div class="method-name">ACT Science</div><div class="method-hint">Data &amp; reasoning</div></div>
+      <div class="method-card" onclick="selectTestSection('sat-math')"><div class="method-emoji">&#x1F9EE;</div><div class="method-name">SAT Math</div><div class="method-hint">Problem solving</div></div>
+      <div class="method-card" onclick="selectTestSection('sat-rw')"><div class="method-emoji">&#x1F4D1;</div><div class="method-name">SAT R&amp;W</div><div class="method-hint">Reading &amp; writing</div></div>
+      <div class="method-card" onclick="selectTestSection('strategy')"><div class="method-emoji">&#x1F3AF;</div><div class="method-name">Strategy</div><div class="method-hint">Test-taking tips</div></div>
     </div>
-
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="testprepMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="testprepWelcome">
-          <h2 class="welcome-title">Select a test section above</h2>
-          <p class="welcome-sub">Choose ACT or SAT section to get targeted practice problems, timing strategies, and score analysis.</p>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="testprepChatInput" placeholder="Ask a test prep question or request practice problems..." rows="1"></textarea>
-          <button class="chat-send" id="testprepSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">TEST PREP · CLAUDE OPUS</span>
-        </div>
-      </div>
+      <div class="sp-messages" id="testprepMessages" role="log" aria-live="polite"><div class="chat-welcome" id="testprepWelcome"><h2 class="welcome-title">ACT / SAT Prep</h2><p class="welcome-sub">Select a section above to start practicing.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="testprepChatInput" placeholder="Ask a question or request practice problems..." rows="1"></textarea><button class="chat-send" id="testprepSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">PREP AI &middot; CLAUDE OPUS</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: TEACHER TOOLS
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: TEACHER TOOLS ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-teacher">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Teacher</span> Tools</h2>
-        <p class="sp-subtitle">Lesson plans, rubrics, quizzes, feedback & differentiation</p>
-      </div>
-      <span class="sp-model-badge" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid rgba(99,102,241,0.25);">Claude Sonnet · Edu</span>
+      <div class="sp-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Teacher</span> Tools</h2><p class="sp-subtitle">Lesson plans, rubrics, quizzes &amp; assessments</p></div>
+      <span class="sp-model-badge" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid rgba(99,102,241,0.25);">Claude Sonnet &middot; Teach</span>
     </div>
-
-    <div class="method-grid">
-      <div class="method-card" onclick="selectTeacherTool('lesson')">
-        <div class="method-emoji">🏗️</div>
-        <div class="method-name">Lesson Plan</div>
-        <div class="method-hint">Complete lesson builder</div>
-      </div>
-      <div class="method-card" onclick="selectTeacherTool('rubric')">
-        <div class="method-emoji">📋</div>
-        <div class="method-name">Rubric Creator</div>
-        <div class="method-hint">Custom grading rubrics</div>
-      </div>
-      <div class="method-card" onclick="selectTeacherTool('quizgen')">
-        <div class="method-emoji">🧪</div>
-        <div class="method-name">Quiz Generator</div>
-        <div class="method-hint">Auto-generate assessments</div>
-      </div>
-      <div class="method-card" onclick="selectTeacherTool('stfeedback')">
-        <div class="method-emoji">💬</div>
-        <div class="method-name">Student Feedback</div>
-        <div class="method-hint">Constructive feedback writer</div>
-      </div>
-      <div class="method-card" onclick="selectTeacherTool('differentiate')">
-        <div class="method-emoji">🎯</div>
-        <div class="method-name">Differentiate</div>
-        <div class="method-hint">Adapt for mixed levels</div>
-      </div>
-      <div class="method-card" onclick="selectTeacherTool('parentemail')">
-        <div class="method-emoji">✉️</div>
-        <div class="method-name">Parent Email</div>
-        <div class="method-hint">Professional communication</div>
-      </div>
+    <div class="method-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="method-card" onclick="selectTeacherTool('lesson')"><div class="method-emoji">&#x1F4D3;</div><div class="method-name">Lesson Plan</div><div class="method-hint">Standards-aligned plans</div></div>
+      <div class="method-card" onclick="selectTeacherTool('rubric')"><div class="method-emoji">&#x1F4CA;</div><div class="method-name">Rubric</div><div class="method-hint">Custom grading criteria</div></div>
+      <div class="method-card" onclick="selectTeacherTool('quizgen')"><div class="method-emoji">&#x1F4DD;</div><div class="method-name">Quiz Gen</div><div class="method-hint">Auto-generate quizzes</div></div>
+      <div class="method-card" onclick="selectTeacherTool('stfeedback')"><div class="method-emoji">&#x1F4AC;</div><div class="method-name">Feedback</div><div class="method-hint">Constructive responses</div></div>
+      <div class="method-card" onclick="selectTeacherTool('differentiate')"><div class="method-emoji">&#x1F4A1;</div><div class="method-name">Differentiate</div><div class="method-hint">Mixed-level adaptation</div></div>
+      <div class="method-card" onclick="selectTeacherTool('parentemail')"><div class="method-emoji">&#x2709;&#xFE0F;</div><div class="method-name">Parent Email</div><div class="method-hint">Professional comms</div></div>
     </div>
-
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="teacherMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="teacherWelcome">
-          <h2 class="welcome-title">Select a tool above</h2>
-          <p class="welcome-sub">Choose a teacher tool to get started. Each generates professional, ready-to-use educational materials.</p>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="teacherChatInput" placeholder="Describe what you need..." rows="1"></textarea>
-          <button class="chat-send" id="teacherSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-tag">TEACHER AI · CLAUDE SONNET</span>
-        </div>
-      </div>
+      <div class="sp-messages" id="teacherMessages" role="log" aria-live="polite"><div class="chat-welcome" id="teacherWelcome"><h2 class="welcome-title">Teacher Tools</h2><p class="welcome-sub">Select a tool above or describe what you need.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="teacherChatInput" placeholder="Describe what you need..." rows="1"></textarea><button class="chat-send" id="teacherSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">TEACHER AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: HISTORY
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: HISTORY ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-history">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:rgba(100,116,139,0.12);color:#64748b;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">Conversation</span> History</h2>
-        <p class="sp-subtitle">Browse, search & revisit past conversations across all tools</p>
-      </div>
+      <div class="sp-icon" style="background:rgba(100,116,139,0.12);color:#64748b;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Conversation</span> History</h2><p class="sp-subtitle">Browse &amp; revisit past conversations</p></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="historyMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="historyWelcome">
-          <h2 class="welcome-title">Conversation History</h2>
-          <p class="welcome-sub">Your past conversations will appear here once you start using Obsidia AI. All chats across Math, Essay, Study Guide, and other tools are saved automatically.</p>
-          <div class="suggestion-chips" style="--chip-color:#64748b;--chip-subtle:rgba(100,116,139,0.12)">
-            <button class="chip" onclick="spUseSuggestion('history',this)">Show recent conversations</button>
-            <button class="chip" onclick="spUseSuggestion('history',this)">Search my history</button>
-          </div>
-        </div>
-      </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="historyChatInput" placeholder="Search your conversation history..." rows="1"></textarea>
-          <button class="chat-send" id="historySendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to search</span>
-          <span class="chat-model-tag">HISTORY</span>
-        </div>
-      </div>
+      <div class="sp-messages" id="historyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="historyWelcome"><h2 class="welcome-title">Conversation History</h2><p class="welcome-sub">Your past conversations will appear here once you start using Obsidia AI.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="historyChatInput" placeholder="Search your conversation history..." rows="1"></textarea><button class="chat-send" id="historySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to search</span><span class="chat-model-tag">HISTORY</span></div></div>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: FEEDBACK
-═══════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════ PAGE: FEEDBACK ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-feedback">
   <div class="sp-layout">
-    <button class="sp-back" onclick="navigate('home')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      Back to Home
-    </button>
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
-      <div class="sp-icon" style="background:rgba(249,115,22,0.10);color:#f97316;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      </div>
-      <div class="sp-info">
-        <h2 class="sp-title"><span class="gold-text">User</span> Feedback</h2>
-        <p class="sp-subtitle">Rate responses, report issues & help us improve Obsidia AI</p>
-      </div>
+      <div class="sp-icon" style="background:rgba(249,115,22,0.10);color:#f97316;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">User</span> Feedback</h2><p class="sp-subtitle">Help us improve Obsidia AI</p></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="feedbackMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="feedbackWelcome">
-          <h2 class="welcome-title">We'd love your feedback</h2>
-          <p class="welcome-sub">Tell us what's working, what isn't, and what you'd like to see. Your feedback directly shapes Obsidia AI's development.</p>
-          <div class="suggestion-chips" style="--chip-color:#f97316;--chip-subtle:rgba(249,115,22,0.10)">
-            <button class="chip" onclick="spUseSuggestion('feedback',this)">Report a problem</button>
-            <button class="chip" onclick="spUseSuggestion('feedback',this)">Suggest a feature</button>
-            <button class="chip" onclick="spUseSuggestion('feedback',this)">Share what I like</button>
+      <div class="sp-messages" id="feedbackMessages" role="log" aria-live="polite"><div class="chat-welcome" id="feedbackWelcome"><h2 class="welcome-title">We'd love your feedback</h2><p class="welcome-sub">Tell us what's working and what isn't.</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="feedbackChatInput" placeholder="Share your feedback..." rows="1"></textarea><button class="chat-send" id="feedbackSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">FEEDBACK</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: SETTINGS (NEW)
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-settings">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:var(--gold-subtle);color:var(--gold-bright);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Settings</span></h2><p class="sp-subtitle">Customize your Obsidia AI experience</p></div>
+    </div>
+
+    <div class="settings-grid">
+      <!-- Profile Card -->
+      <div class="settings-card">
+        <div class="settings-card-title">Profile</div>
+        <div class="settings-profile-header">
+          <div class="settings-avatar">S</div>
+          <div>
+            <div class="settings-username">Student</div>
+            <div class="settings-email">student@school.edu</div>
+            <div class="settings-badge">&#x1F525; 7 Day Streak &middot; Level 12</div>
           </div>
         </div>
+        <div class="settings-row"><div><div class="settings-label">Display Name</div></div><input class="settings-input" value="Student" /></div>
+        <div class="settings-row"><div><div class="settings-label">Email</div></div><input class="settings-input" value="student@school.edu" /></div>
+        <div class="settings-row"><div><div class="settings-label">Grade Level</div></div><select class="settings-input" style="width:140px"><option>9th Grade</option><option>10th Grade</option><option selected>11th Grade</option><option>12th Grade</option><option>College Freshman</option><option>College Sophomore</option></select></div>
       </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="feedbackChatInput" placeholder="Share your feedback about Obsidia AI..." rows="1"></textarea>
-          <button class="chat-send" id="feedbackSendBtn" aria-label="Send" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
+
+      <!-- Study Goals -->
+      <div class="settings-card">
+        <div class="settings-card-title">Study Goals</div>
+        <div class="settings-row">
+          <div><div class="settings-label">Daily Sessions Goal</div><div class="settings-sublabel">How many AI sessions per day</div></div>
+          <select class="settings-input" style="width:80px"><option>3</option><option selected>5</option><option>7</option><option>10</option></select>
         </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send</span>
-          <span class="chat-model-tag">FEEDBACK</span>
+        <div class="settings-row">
+          <div><div class="settings-label">Weekly XP Target</div><div class="settings-sublabel">Experience points to earn per week</div></div>
+          <select class="settings-input" style="width:80px"><option>500</option><option selected>1000</option><option>2000</option><option>3000</option></select>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Focus Subjects</div><div class="settings-sublabel">Prioritized in your dashboard</div></div>
+          <select class="settings-input"><option>Math &amp; Science</option><option>English &amp; History</option><option selected>All Subjects</option></select>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Test Prep Mode</div><div class="settings-sublabel">Optimize for upcoming exam</div></div>
+          <select class="settings-input"><option>None</option><option>ACT</option><option selected>SAT</option><option>AP Exams</option></select>
+        </div>
+      </div>
+
+      <!-- Preferences -->
+      <div class="settings-card">
+        <div class="settings-card-title">Preferences</div>
+        <div class="settings-row">
+          <div><div class="settings-label">AI Response Style</div><div class="settings-sublabel">How detailed AI answers should be</div></div>
+          <select class="settings-input"><option>Concise</option><option selected>Balanced</option><option>Detailed</option></select>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Auto-Humanizer</div><div class="settings-sublabel">Default essays to human-like tone</div></div>
+          <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" checked /><span class="sp-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Sound Effects</div><div class="settings-sublabel">Play sounds on XP and achievements</div></div>
+          <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" checked /><span class="sp-slider"></span></label>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-label">Streak Reminders</div><div class="settings-sublabel">Get notified to keep your streak</div></div>
+          <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" checked /><span class="sp-slider"></span></label>
+        </div>
+      </div>
+
+      <!-- Achievements Preview -->
+      <div class="settings-card">
+        <div class="settings-card-title">Achievements</div>
+        <div class="settings-row">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">&#x1F31F;</span><div><div class="settings-label">First Session</div><div class="settings-sublabel">Complete your first AI session</div></div></div>
+          <span style="font-size:11px;color:var(--sci-color);font-weight:600">Earned</span>
+        </div>
+        <div class="settings-row">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">&#x1F525;</span><div><div class="settings-label">Week Warrior</div><div class="settings-sublabel">Maintain a 7-day streak</div></div></div>
+          <span style="font-size:11px;color:var(--sci-color);font-weight:600">Earned</span>
+        </div>
+        <div class="settings-row">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">&#x1F3AF;</span><div><div class="settings-label">Century Club</div><div class="settings-sublabel">Complete 100 sessions</div></div></div>
+          <span style="font-size:11px;color:var(--gold-bright);font-weight:600">92%</span>
+        </div>
+        <div class="settings-row">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">&#x1F48E;</span><div><div class="settings-label">Diamond Scholar</div><div class="settings-sublabel">Reach Level 20</div></div></div>
+          <span style="font-size:11px;color:#5a5040;font-weight:600">Locked</span>
         </div>
       </div>
     </div>
@@ -1509,60 +1665,106 @@
    PAGE ROUTER
 ══════════════════════════════════════════════════════ */
 let currentPage = 'home';
-const inputStates = { home: '', math: '', essay: '', study: '', notes: '', doublecheck: '', grading: '', testprep: '', teacher: '', history: '', feedback: '' };
+const inputStates = {};
+const allPages = ['home','math','essay','study','notes','doublecheck','grading','testprep','teacher','history','feedback','settings'];
+allPages.forEach(p => inputStates[p] = '');
 
 function navigate(pageId) {
   if (pageId === currentPage) return;
-
-  // Save current input state
   const curInput = document.getElementById(currentPage + 'ChatInput') || document.getElementById('homeChatInput');
   if (curInput) inputStates[currentPage] = curInput.value;
-
-  // Transition out
   const currentEl = document.getElementById('page-' + currentPage);
   const nextEl = document.getElementById('page-' + pageId);
   if (!nextEl) return;
-
   currentEl.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-  currentEl.style.opacity = '0';
-  currentEl.style.transform = 'translateX(-20px)';
-
+  currentEl.style.opacity = '0'; currentEl.style.transform = 'translateX(-20px)';
   setTimeout(() => {
     currentEl.classList.remove('active');
-    currentEl.style.opacity = '';
-    currentEl.style.transform = '';
-    currentEl.style.transition = '';
-
-    nextEl.style.opacity = '0';
-    nextEl.style.transform = 'translateX(20px)';
+    currentEl.style.opacity = ''; currentEl.style.transform = ''; currentEl.style.transition = '';
+    nextEl.style.opacity = '0'; nextEl.style.transform = 'translateX(20px)';
     nextEl.classList.add('active');
-
-    // Force reflow
     nextEl.offsetHeight;
-
     nextEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    nextEl.style.opacity = '1';
-    nextEl.style.transform = 'translateX(0)';
-
-    setTimeout(() => {
-      nextEl.style.transition = '';
-      nextEl.style.opacity = '';
-      nextEl.style.transform = '';
-    }, 310);
-
+    nextEl.style.opacity = '1'; nextEl.style.transform = 'translateX(0)';
+    setTimeout(() => { nextEl.style.transition = ''; nextEl.style.opacity = ''; nextEl.style.transform = ''; }, 310);
     currentPage = pageId;
-
-    // Restore input state
     const nextInput = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
-    if (nextInput) {
-      nextInput.value = inputStates[pageId] || '';
-      nextInput.dispatchEvent(new Event('input'));
-    }
-
-    // Scroll to top
+    if (nextInput) { nextInput.value = inputStates[pageId] || ''; nextInput.dispatchEvent(new Event('input')); }
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.page === pageId));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, 210);
 }
+
+/* ══════════════════════════════════════════════════════
+   MOBILE DRAWER
+══════════════════════════════════════════════════════ */
+function toggleDrawer() {
+  const overlay = document.getElementById('drawerOverlay');
+  const drawer = document.getElementById('mobileDrawer');
+  const btn = document.getElementById('hamburgerBtn');
+  const isOpen = drawer.classList.contains('open');
+  overlay.classList.toggle('open', !isOpen);
+  drawer.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
+
+/* ══════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════════════════════ */
+function toggleKB() { document.getElementById('kbOverlay').classList.toggle('open'); }
+
+let gPressed = false;
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+  if (e.key === '?' || (e.shiftKey && e.key === '/')) { e.preventDefault(); toggleKB(); return; }
+  if (e.key === 'Escape') { toggleKB(); return; }
+  if (e.key === '/') { e.preventDefault(); const ci = document.getElementById(currentPage+'ChatInput')||document.getElementById('homeChatInput'); if(ci) ci.focus(); return; }
+  if (e.key.toLowerCase() === 'q') { document.getElementById('quickSnapInput').click(); return; }
+  if (e.key.toLowerCase() === 'g') { gPressed = true; setTimeout(()=>{gPressed=false},800); return; }
+  if (gPressed) {
+    gPressed = false;
+    const map = { h:'home', m:'math', e:'essay', s:'study', ',':'settings' };
+    if (map[e.key.toLowerCase()]) navigate(map[e.key.toLowerCase()]);
+  }
+});
+
+/* ══════════════════════════════════════════════════════
+   ANIMATED COUNTERS
+══════════════════════════════════════════════════════ */
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+  // Progress ring
+  document.querySelectorAll('.progress-ring-fill').forEach(el => {
+    const circumference = 2 * Math.PI * 16;
+    const target = parseFloat(el.dataset.target);
+    setTimeout(() => { el.style.strokeDashoffset = circumference - (target / 100) * circumference; }, 300);
+  });
+  // XP bar
+  setTimeout(() => { document.getElementById('xpFill').style.width = '81%'; }, 500);
+}
+setTimeout(animateCounters, 200);
+
+/* ══════════════════════════════════════════════════════
+   QUICK SNAP
+══════════════════════════════════════════════════════ */
+document.getElementById('quickSnapInput').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  navigate('home');
+  setTimeout(() => handleDroppedFile(file), 300);
+  this.value = '';
+});
 
 /* ══════════════════════════════════════════════════════
    DRAG & DROP ZONE
@@ -1570,90 +1772,35 @@ function navigate(pageId) {
 const dropzone = document.getElementById('dropzone');
 const dzFileInput = document.getElementById('dropzoneFileInput');
 const dzError = document.getElementById('dzError');
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
+const ALLOWED_TYPES = ['image/jpeg','image/png','image/webp','application/pdf'];
+const MAX_SIZE = 10 * 1024 * 1024;
 let dragCounter = 0;
-
 dropzone.addEventListener('click', () => dzFileInput.click());
-dropzone.addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dzFileInput.click(); }
-});
-
-dropzone.addEventListener('dragenter', e => {
-  e.preventDefault();
-  dragCounter++;
-  dropzone.classList.add('drag-over');
-});
-
-dropzone.addEventListener('dragleave', e => {
-  e.preventDefault();
-  dragCounter--;
-  if (dragCounter <= 0) {
-    dragCounter = 0;
-    dropzone.classList.remove('drag-over');
-  }
-});
-
-dropzone.addEventListener('dragover', e => { e.preventDefault(); });
-
-dropzone.addEventListener('drop', e => {
-  e.preventDefault();
-  dragCounter = 0;
-  dropzone.classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if (file) handleDroppedFile(file);
-});
-
-dzFileInput.addEventListener('change', () => {
-  const file = dzFileInput.files[0];
-  if (file) handleDroppedFile(file);
-  dzFileInput.value = '';
-});
-
-// Also support paste (Ctrl+V) for screenshots
+dropzone.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); dzFileInput.click(); } });
+dropzone.addEventListener('dragenter', e => { e.preventDefault(); dragCounter++; dropzone.classList.add('drag-over'); });
+dropzone.addEventListener('dragleave', e => { e.preventDefault(); dragCounter--; if(dragCounter<=0){dragCounter=0;dropzone.classList.remove('drag-over');} });
+dropzone.addEventListener('dragover', e => e.preventDefault());
+dropzone.addEventListener('drop', e => { e.preventDefault(); dragCounter=0; dropzone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) handleDroppedFile(e.dataTransfer.files[0]); });
+dzFileInput.addEventListener('change', () => { if(dzFileInput.files[0]) handleDroppedFile(dzFileInput.files[0]); dzFileInput.value=''; });
 document.addEventListener('paste', e => {
   if (currentPage !== 'home') return;
   const items = e.clipboardData?.items;
   if (!items) return;
-  for (const item of items) {
-    if (item.type.startsWith('image/')) {
-      const file = item.getAsFile();
-      if (file) handleDroppedFile(file);
-      break;
-    }
-  }
+  for (const item of items) { if (item.type.startsWith('image/')) { const file = item.getAsFile(); if(file) handleDroppedFile(file); break; } }
 });
 
 function handleDroppedFile(file) {
   dzError.textContent = '';
-
-  if (!ALLOWED_TYPES.includes(file.type)) {
-    dzError.textContent = 'Unsupported format. Use JPEG, PNG, WebP, or PDF.';
-    return;
-  }
-  if (file.size > MAX_SIZE) {
-    dzError.textContent = 'File too large. Maximum size is 10 MB.';
-    return;
-  }
-
-  // Read and show in home chat
+  if (!ALLOWED_TYPES.includes(file.type)) { dzError.textContent = 'Unsupported format. Use JPEG, PNG, WebP, or PDF.'; return; }
+  if (file.size > MAX_SIZE) { dzError.textContent = 'File too large. Maximum size is 10 MB.'; return; }
   const reader = new FileReader();
   reader.onload = ev => {
     const welcome = document.getElementById('homeWelcome');
     if (welcome) welcome.classList.add('hidden');
-
-    if (file.type.startsWith('image/')) {
-      appendImageMsg('homeChatMessages', ev.target.result, file.name);
-    } else {
-      appendMsg('homeChatMessages', 'user', `Uploaded: ${file.name}`);
-    }
-
+    if (file.type.startsWith('image/')) appendImageMsg('homeChatMessages', ev.target.result, file.name);
+    else appendMsg('homeChatMessages','user','Uploaded: '+file.name);
     const typingEl = appendTypingTo('homeChatMessages');
-    setTimeout(() => {
-      typingEl.remove();
-      appendMsg('homeChatMessages', 'ai', `I can see your uploaded file "${file.name}". What subject is this for, and how would you like me to help? I can solve problems, analyze content, or explain concepts.`);
-    }, 1100 + Math.random() * 500);
+    setTimeout(() => { typingEl.remove(); typeMsg('homeChatMessages','ai','I can see your uploaded file "'+file.name+'". What subject is this for, and how would you like me to help? I can solve problems, analyze content, or explain concepts.'); }, 1100+Math.random()*500);
   };
   reader.readAsDataURL(file);
 }
@@ -1663,314 +1810,121 @@ function handleDroppedFile(file) {
 ══════════════════════════════════════════════════════ */
 const homeChatInput = document.getElementById('homeChatInput');
 const homeSendBtn = document.getElementById('homeSendBtn');
-
-homeChatInput.addEventListener('input', () => {
-  homeChatInput.style.height = 'auto';
-  homeChatInput.style.height = Math.min(homeChatInput.scrollHeight, 100) + 'px';
-  homeSendBtn.disabled = homeChatInput.value.trim() === '';
-});
-
-homeChatInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    if (!homeSendBtn.disabled) sendHomeMsg();
-  }
-});
+homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; homeSendBtn.disabled=homeChatInput.value.trim()===''; });
+homeChatInput.addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); if(!homeSendBtn.disabled) sendHomeMsg(); } });
 homeSendBtn.addEventListener('click', sendHomeMsg);
 
 function sendHomeMsg() {
-  const text = homeChatInput.value.trim();
-  if (!text) return;
-
-  const welcome = document.getElementById('homeWelcome');
-  if (welcome) welcome.classList.add('hidden');
-
-  appendMsg('homeChatMessages', 'user', text);
-  homeChatInput.value = '';
-  homeChatInput.style.height = 'auto';
-  homeSendBtn.disabled = true;
-
+  const text = homeChatInput.value.trim(); if (!text) return;
+  const welcome = document.getElementById('homeWelcome'); if (welcome) welcome.classList.add('hidden');
+  appendMsg('homeChatMessages','user',text);
+  homeChatInput.value=''; homeChatInput.style.height='auto'; homeSendBtn.disabled=true;
   const typingEl = appendTypingTo('homeChatMessages');
-  setTimeout(() => {
-    typingEl.remove();
-    appendMsg('homeChatMessages', 'ai', getGeneralResponse(text));
-  }, 900 + Math.random() * 600);
+  setTimeout(() => { typingEl.remove(); typeMsg('homeChatMessages','ai',getGeneralResponse(text)); }, 900+Math.random()*600);
 }
-
-function homeUseSuggestion(el) {
-  homeChatInput.value = el.textContent;
-  homeChatInput.dispatchEvent(new Event('input'));
-  homeChatInput.focus();
-}
+function homeUseSuggestion(el) { homeChatInput.value=el.textContent; homeChatInput.dispatchEvent(new Event('input')); homeChatInput.focus(); }
 
 /* ══════════════════════════════════════════════════════
-   SPECIALIZED PAGE CHATS — Generic wiring
+   SPECIALIZED PAGE CHATS
 ══════════════════════════════════════════════════════ */
-const pages = ['math', 'essay', 'study', 'notes', 'doublecheck', 'grading', 'testprep', 'teacher', 'history', 'feedback'];
-
+const pages = ['math','essay','study','notes','doublecheck','grading','testprep','teacher','history','feedback'];
 pages.forEach(pg => {
-  const input = document.getElementById(pg + 'ChatInput');
-  const btn = document.getElementById(pg + 'SendBtn');
-  if (!input || !btn) return;
-
-  input.addEventListener('input', () => {
-    input.style.height = 'auto';
-    input.style.height = Math.min(input.scrollHeight, 100) + 'px';
-    btn.disabled = input.value.trim() === '';
-  });
-
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (!btn.disabled) sendPageMsg(pg);
-    }
-  });
-
+  const input = document.getElementById(pg+'ChatInput');
+  const btn = document.getElementById(pg+'SendBtn');
+  if (!input||!btn) return;
+  input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; btn.disabled=input.value.trim()===''; });
+  input.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!btn.disabled)sendPageMsg(pg);} });
   btn.addEventListener('click', () => sendPageMsg(pg));
 });
 
 function sendPageMsg(pg) {
-  const input = document.getElementById(pg + 'ChatInput');
-  const msgContainer = pg + 'Messages';
-  const text = input.value.trim();
-  if (!text) return;
-
-  const welcome = document.getElementById(pg + 'Welcome');
-  if (welcome) welcome.classList.add('hidden');
-
-  appendMsg(msgContainer, 'user', text);
-  input.value = '';
-  input.style.height = 'auto';
-  document.getElementById(pg + 'SendBtn').disabled = true;
-
+  const input = document.getElementById(pg+'ChatInput');
+  const msgContainer = pg+'Messages';
+  const text = input.value.trim(); if (!text) return;
+  const welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
+  appendMsg(msgContainer,'user',text);
+  input.value=''; input.style.height='auto'; document.getElementById(pg+'SendBtn').disabled=true;
   const typingEl = appendTypingTo(msgContainer);
-  setTimeout(() => {
-    typingEl.remove();
-    appendMsg(msgContainer, 'ai', getPageResponse(pg, text));
-  }, 900 + Math.random() * 700);
+  setTimeout(() => { typingEl.remove(); typeMsg(msgContainer,'ai',getPageResponse(pg,text)); }, 900+Math.random()*700);
 }
-
-function spUseSuggestion(pg, el) {
-  const input = document.getElementById(pg + 'ChatInput');
-  input.value = el.textContent;
-  input.dispatchEvent(new Event('input'));
-  input.focus();
-}
+function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
 
 /* ══════════════════════════════════════════════════════
    TOOLBAR MODES
 ══════════════════════════════════════════════════════ */
-let mathModeState = 'solve';
-let essayModeState = 'draft';
-let notesModeState = 'transcribe';
+let mathModeState='solve', essayModeState='draft', notesModeState='transcribe';
+function mathMode(btn,mode) { mathModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={solve:'Enter a math problem...',explain:'What concept to explain?',graph:'Describe the function...',practice:'What topic for practice?'}; document.getElementById('mathChatInput').placeholder=p[mode]||''; }
+function essayMode(btn,mode) { essayModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={draft:'Describe your essay topic...',outline:'What topic to outline?',thesis:'What needs a thesis?',proofread:'Paste text to proofread...'}; document.getElementById('essayChatInput').placeholder=p[mode]||''; }
+function notesMode(btn,mode) { notesModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={transcribe:'Describe the lecture...',summarize:'Paste or describe to summarize...',keypoints:'What to extract key points from?',questions:'What to generate questions for?'}; document.getElementById('notesChatInput').placeholder=p[mode]||''; }
 
-function mathMode(btn, mode) {
-  mathModeState = mode;
-  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const placeholders = {
-    solve: 'Enter a math problem or equation...',
-    explain: 'What math concept should I explain?',
-    graph: 'Describe the function to graph...',
-    practice: 'What topic do you want practice problems for?'
-  };
-  document.getElementById('mathChatInput').placeholder = placeholders[mode] || '';
-}
+let studyMethod=null;
+function selectStudyMethod(method) { studyMethod=method; document.querySelectorAll('#page-study .method-card').forEach(c=>{c.style.borderColor='';c.style.background='';}); event.currentTarget.style.borderColor='var(--sci-color)'; event.currentTarget.style.background='var(--sci-subtle)'; const prompts={flashcards:'Create flashcards from:\n\n',cornell:'Convert to Cornell Notes:\n\n',mindmap:'Create a mind map for: ',spaced:'Build spaced repetition for: ',outline:'Create study outline for: ',quiz:'Create self-quiz for: '}; const input=document.getElementById('studyChatInput'); input.value=prompts[method]||''; input.dispatchEvent(new Event('input')); input.focus(); }
 
-function essayMode(btn, mode) {
-  essayModeState = mode;
-  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const placeholders = {
-    draft: 'Describe your essay topic or paste text...',
-    outline: 'What topic should I outline?',
-    thesis: 'What argument or topic needs a thesis?',
-    proofread: 'Paste your text to proofread...'
-  };
-  document.getElementById('essayChatInput').placeholder = placeholders[mode] || '';
-}
+let dcModeState='verify';
+function dcMode(btn,mode) { dcModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={verify:'Paste a claim to verify...',sources:'What needs sources?',compare:'Paste two answers...',bias:'Paste text to check...'}; document.getElementById('doublecheckChatInput').placeholder=p[mode]||''; }
 
-function notesMode(btn, mode) {
-  notesModeState = mode;
-  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const placeholders = {
-    transcribe: 'Describe the lecture content to transcribe...',
-    summarize: 'Paste or describe the lecture to summarize...',
-    keypoints: 'What lecture should I extract key points from?',
-    questions: 'What topic should I generate questions for?'
-  };
-  document.getElementById('notesChatInput').placeholder = placeholders[mode] || '';
-}
+let gradingModeState='grade';
+function gradingMode(btn,mode) { gradingModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={grade:'Paste work to grade...',rubric:'Describe rubric criteria...',feedback:'Paste work for feedback...'}; document.getElementById('gradingChatInput').placeholder=p[mode]||''; }
 
-/* ══════════════════════════════════════════════════════
-   STUDY GUIDE — METHOD SELECTION
-══════════════════════════════════════════════════════ */
-let studyMethod = null;
+let testSection=null;
+function selectTestSection(section) { testSection=section; document.querySelectorAll('#page-testprep .method-card').forEach(c=>{c.style.borderColor='';c.style.background='';}); event.currentTarget.style.borderColor='#f43f5e'; event.currentTarget.style.background='rgba(244,63,94,0.10)'; const prompts={'act-math':'Give me an ACT Math problem: ','act-english':'Give me ACT English questions: ','act-science':'Give me ACT Science reasoning: ','sat-math':'Give me a SAT Math problem: ','sat-rw':'Give me SAT R&W passage: ','strategy':'Give me strategies for: '}; const input=document.getElementById('testprepChatInput'); input.value=prompts[section]||''; input.dispatchEvent(new Event('input')); input.focus(); }
 
-function selectStudyMethod(method) {
-  studyMethod = method;
-  // Highlight selected card
-  document.querySelectorAll('.method-card').forEach(c => {
-    c.style.borderColor = '';
-    c.style.background = '';
-  });
-  event.currentTarget.style.borderColor = 'var(--sci-color)';
-  event.currentTarget.style.background = 'var(--sci-subtle)';
-
-  const prompts = {
-    flashcards: 'Create AI-generated flashcards from these notes:\n\n',
-    cornell: 'Convert these notes into Cornell Notes format:\n\n',
-    mindmap: 'Create a mind map outline for: ',
-    spaced: 'Build a spaced repetition review schedule for: ',
-    outline: 'Create a detailed study outline for: ',
-    quiz: 'Create a self-quiz with answers for: '
-  };
-
-  const input = document.getElementById('studyChatInput');
-  input.value = prompts[method] || '';
-  input.dispatchEvent(new Event('input'));
-  input.focus();
-}
-
-/* ══════════════════════════════════════════════════════
-   DOUBLE CHECK — MODES
-══════════════════════════════════════════════════════ */
-let dcModeState = 'verify';
-function dcMode(btn, mode) {
-  dcModeState = mode;
-  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const placeholders = {
-    verify: 'Paste a claim or answer to verify...',
-    sources: 'What claim do you need sources for?',
-    compare: 'Paste two answers to compare...',
-    bias: 'Paste text to check for bias...'
-  };
-  document.getElementById('doublecheckChatInput').placeholder = placeholders[mode] || '';
-}
-
-/* ══════════════════════════════════════════════════════
-   GRADING — MODES
-══════════════════════════════════════════════════════ */
-let gradingModeState = 'grade';
-function gradingMode(btn, mode) {
-  gradingModeState = mode;
-  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const placeholders = {
-    grade: 'Paste work to grade...',
-    rubric: 'Describe the rubric criteria to apply...',
-    feedback: 'Paste student work for detailed feedback...'
-  };
-  document.getElementById('gradingChatInput').placeholder = placeholders[mode] || '';
-}
-
-/* ══════════════════════════════════════════════════════
-   ACT/SAT — SECTION SELECTION
-══════════════════════════════════════════════════════ */
-let testSection = null;
-function selectTestSection(section) {
-  testSection = section;
-  // Highlight within testprep page only
-  document.querySelectorAll('#page-testprep .method-card').forEach(c => {
-    c.style.borderColor = '';
-    c.style.background = '';
-  });
-  event.currentTarget.style.borderColor = '#f43f5e';
-  event.currentTarget.style.background = 'rgba(244,63,94,0.10)';
-
-  const prompts = {
-    'act-math': 'Give me an ACT Math practice problem: ',
-    'act-english': 'Give me an ACT English passage and questions: ',
-    'act-science': 'Give me an ACT Science reasoning passage: ',
-    'sat-math': 'Give me a SAT Math practice problem: ',
-    'sat-rw': 'Give me a SAT Reading & Writing passage: ',
-    'strategy': 'Give me test-taking strategies for: '
-  };
-
-  const input = document.getElementById('testprepChatInput');
-  input.value = prompts[section] || '';
-  input.dispatchEvent(new Event('input'));
-  input.focus();
-}
-
-/* ══════════════════════════════════════════════════════
-   TEACHER TOOLS — SELECTION
-══════════════════════════════════════════════════════ */
-let teacherTool = null;
-function selectTeacherTool(tool) {
-  teacherTool = tool;
-  document.querySelectorAll('#page-teacher .method-card').forEach(c => {
-    c.style.borderColor = '';
-    c.style.background = '';
-  });
-  event.currentTarget.style.borderColor = '#6366f1';
-  event.currentTarget.style.background = 'rgba(99,102,241,0.12)';
-
-  const prompts = {
-    lesson: 'Create a complete lesson plan for: ',
-    rubric: 'Create a grading rubric for: ',
-    quizgen: 'Generate a 10-question quiz about: ',
-    stfeedback: 'Write constructive student feedback for: ',
-    differentiate: 'Adapt this lesson for mixed learning levels: ',
-    parentemail: 'Write a professional parent communication about: '
-  };
-
-  const input = document.getElementById('teacherChatInput');
-  input.value = prompts[tool] || '';
-  input.dispatchEvent(new Event('input'));
-  input.focus();
-}
+let teacherTool=null;
+function selectTeacherTool(tool) { teacherTool=tool; document.querySelectorAll('#page-teacher .method-card').forEach(c=>{c.style.borderColor='';c.style.background='';}); event.currentTarget.style.borderColor='#6366f1'; event.currentTarget.style.background='rgba(99,102,241,0.12)'; const prompts={lesson:'Create lesson plan for: ',rubric:'Create rubric for: ',quizgen:'Generate quiz about: ',stfeedback:'Write feedback for: ',differentiate:'Adapt lesson for: ',parentemail:'Write parent email about: '}; const input=document.getElementById('teacherChatInput'); input.value=prompts[tool]||''; input.dispatchEvent(new Event('input')); input.focus(); }
 
 /* ══════════════════════════════════════════════════════
    SHARED MESSAGING FUNCTIONS
 ══════════════════════════════════════════════════════ */
 function appendMsg(containerId, role, text) {
   const container = document.getElementById(containerId);
-  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  const msg = document.createElement('div');
-  msg.className = `msg ${role}`;
-
-  const av = document.createElement('div');
-  av.className = `msg-avatar msg-avatar-${role}`;
-  av.setAttribute('aria-hidden', 'true');
-  av.textContent = role === 'ai' ? 'O' : 'You';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  bubble.textContent = text;
-
-  const time = document.createElement('div');
-  time.className = 'msg-time';
-  time.textContent = timeStr;
-
-  const wrap = document.createElement('div');
-  wrap.style.cssText = `display:flex;flex-direction:column;${role === 'user' ? 'align-items:flex-end' : ''}`;
-  wrap.appendChild(bubble);
-  wrap.appendChild(time);
-
-  msg.appendChild(av);
-  msg.appendChild(wrap);
-  container.appendChild(msg);
-  container.scrollTop = container.scrollHeight;
+  const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const msg = document.createElement('div'); msg.className = 'msg '+role;
+  const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-'+role; av.setAttribute('aria-hidden','true'); av.textContent = role==='ai'?'O':'You';
+  const bubble = document.createElement('div'); bubble.className = 'msg-bubble'; bubble.textContent = text;
+  const time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+  const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;'+(role==='user'?'align-items:flex-end':'');
+  wrap.appendChild(bubble); wrap.appendChild(time);
+  msg.appendChild(av); msg.appendChild(wrap);
+  container.appendChild(msg); container.scrollTop = container.scrollHeight;
   return msg;
+}
+
+/* Word-by-word typing animation (NEW) */
+function typeMsg(containerId, role, text) {
+  const container = document.getElementById(containerId);
+  const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  const msg = document.createElement('div'); msg.className = 'msg '+role;
+  const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-'+role; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
+  const bubble = document.createElement('div'); bubble.className = 'msg-bubble';
+  const time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+  const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;';
+  wrap.appendChild(bubble); wrap.appendChild(time);
+  msg.appendChild(av); msg.appendChild(wrap);
+  container.appendChild(msg); container.scrollTop = container.scrollHeight;
+  const words = text.split(' ');
+  let i = 0;
+  function addWord() {
+    if (i < words.length) {
+      bubble.textContent += (i > 0 ? ' ' : '') + words[i];
+      container.scrollTop = container.scrollHeight;
+      i++;
+      setTimeout(addWord, 30 + Math.random() * 40);
+    }
+  }
+  addWord();
 }
 
 function appendImageMsg(containerId, src, name) {
   const container = document.getElementById(containerId);
-  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
   const msg = document.createElement('div'); msg.className = 'msg user';
   const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-user'; av.setAttribute('aria-hidden','true'); av.textContent = 'You';
-  const img = document.createElement('img'); img.src = src; img.className = 'msg-img'; img.alt = `Uploaded: ${name}`;
+  const img = document.createElement('img'); img.src = src; img.className = 'msg-img'; img.alt = 'Uploaded: '+name;
   const time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
-  const wrap = document.createElement('div');
-  wrap.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end';
+  const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end';
   wrap.appendChild(img); wrap.appendChild(time);
   msg.appendChild(av); msg.appendChild(wrap);
-  container.appendChild(msg);
-  container.scrollTop = container.scrollHeight;
+  container.appendChild(msg); container.scrollTop = container.scrollHeight;
 }
 
 function appendTypingTo(containerId) {
@@ -1978,10 +1932,9 @@ function appendTypingTo(containerId) {
   const wrap = document.createElement('div'); wrap.className = 'typing-indicator';
   const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
   const dots = document.createElement('div'); dots.className = 'typing-dots'; dots.setAttribute('role','status'); dots.setAttribute('aria-label','AI is typing');
-  for (let i = 0; i < 3; i++) { const d = document.createElement('div'); d.className = 'typing-dot'; dots.appendChild(d); }
+  for (let i=0;i<3;i++) { const d = document.createElement('div'); d.className = 'typing-dot'; dots.appendChild(d); }
   wrap.appendChild(av); wrap.appendChild(dots);
-  container.appendChild(wrap);
-  container.scrollTop = container.scrollHeight;
+  container.appendChild(wrap); container.scrollTop = container.scrollHeight;
   return wrap;
 }
 
@@ -1990,83 +1943,37 @@ function appendTypingTo(containerId) {
 ══════════════════════════════════════════════════════ */
 function getGeneralResponse(input) {
   const lc = input.toLowerCase();
-  if (/study|schedule|plan/i.test(lc)) return "I can help you build an effective study schedule. What subjects are you studying, and when are your next exams? For specialized study tools, try Study Guide Creator in the tools panel.";
-  if (/summarize|notes|summary/i.test(lc)) return "I'd be happy to summarize your notes. Paste them here and I'll create a concise breakdown. For more advanced note tools, check out Lecture Notes in the tools panel.";
-  return "I'm here to help with any subject. Share your question and I'll guide you through it. For specialized tools, use the tools panel on the right.";
+  if (/study|schedule|plan/i.test(lc)) return "I can help you build an effective study schedule. What subjects are you studying, and when are your next exams? For specialized study tools, try the Study Guide page from the navigation above.";
+  if (/summarize|notes|summary/i.test(lc)) return "I'd be happy to summarize your notes. Paste them here and I'll create a concise breakdown. For more advanced note tools, check out the Lecture Notes page.";
+  return "I'm here to help with any subject. Share your question and I'll guide you through it. For specialized tools, use the navigation cards above — Math AI, Essay Writer, Study Guide, or Lecture Notes.";
 }
 
 function getPageResponse(pg, input) {
   const lc = input.toLowerCase();
-
-  if (pg === 'math') {
-    if (mathModeState === 'explain') return "Great question. Let me break that concept down from the fundamentals, building up step by step so you understand the underlying principles — not just the formula.";
-    if (mathModeState === 'graph') return "I'll help you visualize that function. Let me describe the key features: domain, range, intercepts, asymptotes, and overall shape, with a clear graph outline.";
-    if (mathModeState === 'practice') return "Here's a set of practice problems, organized from easier to more challenging. Try the first one and I'll walk you through it if you get stuck.";
+  if (pg==='math') {
+    if (mathModeState==='explain') return "Great question. Let me break that concept down from the fundamentals, building up step by step so you understand the underlying principles — not just the formula.";
+    if (mathModeState==='graph') return "I'll help you visualize that function. Let me describe the key features: domain, range, intercepts, asymptotes, and overall shape.";
+    if (mathModeState==='practice') return "Here's a set of practice problems, organized from easier to more challenging. Try the first one and I'll walk you through it if you get stuck.";
     if (/integral|calculus|derivative|limit/i.test(lc)) return "Let's work through that calculus problem together. I'll show you the technique at each step — identifying the method, applying it, and verifying the result.";
-    if (/equation|solve|algebra|x\s*=/i.test(lc)) return "I'll solve this step by step, explaining the reasoning at each stage. Share the full equation and let's work through it.";
     return "I'm ready to help with your math problem. Share the full question — including any given values or constraints — and I'll provide a detailed, step-by-step solution.";
   }
-
-  if (pg === 'essay') {
+  if (pg==='essay') {
     const humanize = document.getElementById('humanizerToggle').checked;
     const grade = document.getElementById('essayGradeSelect').value;
-    const humanNote = humanize ? ` I'll write this at a ${grade.toLowerCase()} level with a natural, human tone.` : ` I'll calibrate this for ${grade.toLowerCase()} level.`;
-
-    if (essayModeState === 'proofread') return "I'll review your text for grammar, clarity, sentence structure, and style — providing specific suggestions for improvement." + humanNote;
-    if (essayModeState === 'outline') return "I'll create a structured outline with a clear thesis, supporting arguments, and evidence placeholders." + humanNote;
-    if (essayModeState === 'thesis') return "Let me help you craft a strong, arguable thesis statement that anchors your entire essay." + humanNote;
-    if (/essay|write|paragraph/i.test(lc)) return "I'll help build a strong essay. Let me develop a thesis, structure the argument, and draft each section." + humanNote;
-    return "I'm ready to help with your writing. Tell me more about the assignment and I'll get started." + humanNote;
+    const note = humanize ? ' I\'ll write this at a '+grade.toLowerCase()+' level with a natural, human tone.' : ' I\'ll calibrate for '+grade.toLowerCase()+' level.';
+    if (essayModeState==='proofread') return "I'll review your text for grammar, clarity, and style — providing specific suggestions."+note;
+    if (essayModeState==='outline') return "I'll create a structured outline with a clear thesis and supporting arguments."+note;
+    return "I'll help build a strong essay. Let me develop a thesis and draft each section."+note;
   }
-
-  if (pg === 'study') {
-    const methodNames = { flashcards: 'flashcards', cornell: 'Cornell Notes', mindmap: 'a mind map', spaced: 'a spaced repetition schedule', outline: 'a study outline', quiz: 'a self-quiz' };
-    if (studyMethod) return `I'll create ${methodNames[studyMethod] || 'a study guide'} from your material. Let me organize the key concepts, identify important relationships, and structure everything for effective review.`;
-    return "I'll generate a comprehensive study guide from your material. Select a method above for the best results, or I'll choose the optimal format based on your content.";
-  }
-
-  if (pg === 'notes') {
-    if (notesModeState === 'summarize') return "I'll condense that lecture into a clear, structured summary — highlighting the main arguments, key definitions, and important examples.";
-    if (notesModeState === 'keypoints') return "Here are the key points extracted from your lecture material, organized by topic with the most important takeaways highlighted.";
-    if (notesModeState === 'questions') return "I'll generate review questions covering the main topics from your lecture — including both factual recall and deeper comprehension questions.";
-    return "I'll process your lecture content and generate structured notes. Share the material or describe what was covered.";
-  }
-
-  if (pg === 'doublecheck') {
-    if (dcModeState === 'sources') return "I'll search for credible sources to support or refute that claim. Let me cross-reference academic databases, reputable publications, and verified information.";
-    if (dcModeState === 'compare') return "I'll compare these answers side by side, identifying where they agree, where they differ, and which is more accurate based on the evidence.";
-    if (dcModeState === 'bias') return "I'll analyze this text for potential bias — looking at language choices, framing, missing perspectives, and logical fallacies.";
-    return "I'll fact-check that claim by cross-referencing multiple reliable sources. Here's what I found regarding accuracy, context, and any nuances to be aware of.";
-  }
-
-  if (pg === 'grading') {
-    const scale = document.getElementById('gradingScaleSelect').value;
-    if (gradingModeState === 'rubric') return `I'll apply a structured rubric to evaluate this work on the ${scale} scale — breaking down scores by criteria including content, organization, evidence, and mechanics.`;
-    if (gradingModeState === 'feedback') return `Here's detailed feedback on this work. I've evaluated each section and provided specific, actionable suggestions for improvement using the ${scale} scale.`;
-    return `I'll evaluate this work using the ${scale} scale — assessing content quality, structure, argumentation, evidence use, and mechanics. Here's my assessment:`;
-  }
-
-  if (pg === 'testprep') {
-    const sectionNames = { 'act-math': 'ACT Math', 'act-english': 'ACT English', 'act-science': 'ACT Science', 'sat-math': 'SAT Math', 'sat-rw': 'SAT Reading & Writing', 'strategy': 'test-taking strategy' };
-    if (testSection) return `Here's a ${sectionNames[testSection] || 'practice'} problem for you. Take your time, then share your answer and I'll walk you through the solution and explain the key concepts tested.`;
-    return "I'll help you prepare for your standardized test. Select a section above, or tell me what you'd like to practice and I'll create targeted problems.";
-  }
-
-  if (pg === 'teacher') {
-    const toolNames = { lesson: 'lesson plan', rubric: 'grading rubric', quizgen: 'quiz', stfeedback: 'student feedback', differentiate: 'differentiated lesson', parentemail: 'parent communication' };
-    if (teacherTool) return `I'll create a professional ${toolNames[teacherTool] || 'resource'} based on your specifications. Let me structure this with clear objectives, standards alignment, and practical implementation details.`;
-    return "I'm ready to help with your teaching materials. Select a tool above or describe what you need and I'll generate professional, classroom-ready content.";
-  }
-
-  if (pg === 'history') {
-    return "Conversation history is coming soon! Once available, all your chats across Math, Essay, Study Guide, and other tools will be searchable and organized by date.";
-  }
-
-  if (pg === 'feedback') {
-    return "Thank you for your feedback! This has been recorded and will help us improve Obsidia AI. We read every submission and use it to prioritize features and fix issues.";
-  }
-
-  return "I'm here to help. Could you give me more detail about what you're working on?";
+  if (pg==='study') { return studyMethod ? "I'll create a study guide using your selected method. Let me organize the key concepts and structure everything for effective review." : "Select a study method above, then paste your notes or describe the topic."; }
+  if (pg==='notes') { return "I'll process your lecture content and generate structured notes. Share the material or describe what was covered."; }
+  if (pg==='doublecheck') { return "I'll fact-check that by cross-referencing multiple reliable sources. Here's what I found regarding accuracy and context."; }
+  if (pg==='grading') { const scale = document.getElementById('gradingScaleSelect').value; return "I'll evaluate this work using the "+scale+" — assessing content, structure, and mechanics."; }
+  if (pg==='testprep') { return testSection ? "Here's a practice problem. Take your time, then share your answer and I'll walk you through the solution." : "Select a section above to start practicing."; }
+  if (pg==='teacher') { return teacherTool ? "I'll create professional teaching materials based on your specifications with clear objectives and standards alignment." : "Select a tool above or describe what you need."; }
+  if (pg==='history') { return "Conversation history is coming soon! All your chats will be searchable and organized."; }
+  if (pg==='feedback') { return "Thank you for your feedback! This has been recorded and helps us improve Obsidia AI."; }
+  return "I'm here to help. Could you give me more detail?";
 }
 
 /* Init */
