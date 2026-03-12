@@ -189,8 +189,8 @@
     /* ─── HOME: FEATURE CARDS ──────────────────────────────── */
     .features {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px; max-width: 880px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px; max-width: 1080px;
       margin: 0 auto; padding: 24px 18px 20px;
     }
     .feature-card {
@@ -230,7 +230,7 @@
     .dashboard {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px; max-width: 880px;
+      gap: 14px; max-width: 1080px;
       margin: 0 auto; padding: 0 18px 40px;
     }
 
@@ -553,8 +553,20 @@
     .method-hint { font-size: 10px; color: #5a5040; margin-top: 3px; }
 
     /* ─── RESPONSIVE ───────────────────────────────────────── */
+    /* Section labels for feature grid */
+    .features-section {
+      grid-column: 1 / -1;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: #3a342a;
+      padding: 8px 0 0;
+    }
+    .features-section:first-child { padding-top: 0; }
+
+    @media (max-width: 1100px) {
+      .features { grid-template-columns: repeat(4, 1fr); }
+    }
     @media (max-width: 900px) {
-      .features { grid-template-columns: repeat(2, 1fr); }
+      .features { grid-template-columns: repeat(3, 1fr); }
       .method-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 740px) {
@@ -655,6 +667,7 @@
 
   <!-- Feature Navigation Cards -->
   <div class="features">
+    <div class="features-section">AI Tools</div>
     <div class="feature-card" style="--fc-color:var(--math-color)" onclick="navigate('math')">
       <div class="feature-icon" style="background:var(--math-subtle);color:var(--math-color);">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
@@ -688,6 +701,64 @@
       </div>
       <div class="feature-name">Lecture Notes</div>
       <div class="feature-desc">Record or upload lectures for AI transcription and summaries</div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+
+    <div class="features-section">Capture & Verify</div>
+
+    <div class="feature-card" style="--fc-color:#22d3ee" onclick="navigate('doublecheck')">
+      <div class="feature-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
+      </div>
+      <div class="feature-name">Double Check</div>
+      <div class="feature-desc">Verify facts and cross-reference AI responses</div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+
+    <div class="feature-card" style="--fc-color:var(--gold-bright)" onclick="navigate('grading')">
+      <div class="feature-icon" style="background:var(--gold-subtle);color:var(--gold-bright);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="feature-name">Grading</div>
+      <div class="feature-desc">Upload work for AI-powered grading with custom scales</div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+
+    <div class="feature-card" style="--fc-color:#f43f5e" onclick="navigate('testprep')">
+      <div class="feature-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+      </div>
+      <div class="feature-name">ACT / SAT Prep</div>
+      <div class="feature-desc">Practice problems, strategy guides & score analysis</div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+
+    <div class="feature-card" style="--fc-color:#6366f1" onclick="navigate('teacher')">
+      <div class="feature-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="feature-name">Teacher Tools</div>
+      <div class="feature-desc">Lesson plans, rubrics, quizzes & assessments</div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+
+    <div class="features-section">Account</div>
+
+    <div class="feature-card" style="--fc-color:#64748b" onclick="navigate('history')">
+      <div class="feature-icon" style="background:rgba(100,116,139,0.12);color:#64748b;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feature-name">History</div>
+      <div class="feature-desc">Browse and revisit past conversations</div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+
+    <div class="feature-card" style="--fc-color:#f97316" onclick="navigate('feedback')">
+      <div class="feature-icon" style="background:rgba(249,115,22,0.10);color:#f97316;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="feature-name">Feedback</div>
+      <div class="feature-desc">Rate responses and report issues</div>
       <div class="feature-arrow">Open →</div>
     </div>
   </div>
@@ -1033,6 +1104,369 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════
+     PAGE: DOUBLE CHECK
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-doublecheck">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
+      </div>
+      <div class="sp-info">
+        <h2 class="sp-title"><span class="gold-text">Double</span> Check</h2>
+        <p class="sp-subtitle">Fact verification, cross-referencing & accuracy validation</p>
+      </div>
+      <span class="sp-model-badge" style="background:rgba(34,211,238,0.10);color:#22d3ee;border:1px solid rgba(34,211,238,0.25);">Claude Opus · Verify</span>
+    </div>
+    <div class="sp-chat-panel">
+      <div class="sp-toolbar">
+        <button class="sp-tool-btn active" onclick="dcMode(this,'verify')">Fact Check</button>
+        <button class="sp-tool-btn" onclick="dcMode(this,'sources')">Find Sources</button>
+        <button class="sp-tool-btn" onclick="dcMode(this,'compare')">Compare Answers</button>
+        <button class="sp-tool-btn" onclick="dcMode(this,'bias')">Check for Bias</button>
+      </div>
+      <div class="sp-messages" id="doublecheckMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="doublecheckWelcome">
+          <h2 class="welcome-title">Double Check AI</h2>
+          <p class="welcome-sub">Paste any claim, answer, or AI response and I'll verify its accuracy, find supporting sources, and flag potential errors.</p>
+          <div class="suggestion-chips" style="--chip-color:#22d3ee;--chip-subtle:rgba(34,211,238,0.10)">
+            <button class="chip" onclick="spUseSuggestion('doublecheck',this)">Verify this answer</button>
+            <button class="chip" onclick="spUseSuggestion('doublecheck',this)">Find sources for a claim</button>
+            <button class="chip" onclick="spUseSuggestion('doublecheck',this)">Check this for accuracy</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="doublecheckChatInput" placeholder="Paste a claim or answer to verify..." rows="1"></textarea>
+          <button class="chat-send" id="doublecheckSendBtn" aria-label="Send" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
+          <span class="chat-model-tag">VERIFY AI · CLAUDE OPUS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: GRADING
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-grading">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:var(--gold-subtle);color:var(--gold-bright);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="sp-info">
+        <h2 class="sp-title"><span class="gold-text">Grading</span> Assistant</h2>
+        <p class="sp-subtitle">Upload work for AI-powered grading with customizable scales</p>
+      </div>
+      <span class="sp-model-badge" style="background:var(--gold-subtle);color:var(--gold-bright);border:1px solid rgba(201,168,76,0.25);">Claude Sonnet · Grade</span>
+    </div>
+    <div class="sp-chat-panel">
+      <div class="sp-toolbar">
+        <button class="sp-tool-btn active" onclick="gradingMode(this,'grade')">Grade Work</button>
+        <button class="sp-tool-btn" onclick="gradingMode(this,'rubric')">Apply Rubric</button>
+        <button class="sp-tool-btn" onclick="gradingMode(this,'feedback')">Detailed Feedback</button>
+        <div class="sp-toggle-row">
+          <span class="sp-toggle-label">Scale</span>
+          <select class="sp-select" id="gradingScaleSelect">
+            <option>A–F (100 pt)</option>
+            <option>A–F (GPA 4.0)</option>
+            <option>Pass / Fail</option>
+            <option>1–10 scale</option>
+            <option>Rubric-based</option>
+          </select>
+        </div>
+      </div>
+      <div class="sp-messages" id="gradingMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="gradingWelcome">
+          <h2 class="welcome-title">Grading Assistant</h2>
+          <p class="welcome-sub">Upload an image or paste your work. I'll evaluate it using your selected grading scale — assessing content, structure, and clarity.</p>
+          <div class="suggestion-chips" style="--chip-color:var(--gold-bright);--chip-subtle:var(--gold-subtle)">
+            <button class="chip" onclick="spUseSuggestion('grading',this)">Grade this essay</button>
+            <button class="chip" onclick="spUseSuggestion('grading',this)">Evaluate my lab report</button>
+            <button class="chip" onclick="spUseSuggestion('grading',this)">Score this assignment</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="gradingChatInput" placeholder="Paste work to grade, or describe the assignment..." rows="1"></textarea>
+          <button class="chat-send" id="gradingSendBtn" aria-label="Send" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
+          <span class="chat-model-tag">GRADING AI · CLAUDE SONNET</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: ACT / SAT PREP
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-testprep">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+      </div>
+      <div class="sp-info">
+        <h2 class="sp-title"><span class="gold-text">ACT / SAT</span> Prep</h2>
+        <p class="sp-subtitle">Section-specific practice, strategy guides & score improvement</p>
+      </div>
+      <span class="sp-model-badge" style="background:rgba(244,63,94,0.10);color:#f43f5e;border:1px solid rgba(244,63,94,0.25);">Claude Opus · Prep</span>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-card" onclick="selectTestSection('act-math')" style="--hover-color:#f43f5e">
+        <div class="method-emoji">🔢</div>
+        <div class="method-name">ACT Math</div>
+        <div class="method-hint">60 questions, 60 minutes</div>
+      </div>
+      <div class="method-card" onclick="selectTestSection('act-english')">
+        <div class="method-emoji">📖</div>
+        <div class="method-name">ACT English</div>
+        <div class="method-hint">75 questions, 45 minutes</div>
+      </div>
+      <div class="method-card" onclick="selectTestSection('act-science')">
+        <div class="method-emoji">⚗️</div>
+        <div class="method-name">ACT Science</div>
+        <div class="method-hint">40 questions, 35 minutes</div>
+      </div>
+      <div class="method-card" onclick="selectTestSection('sat-math')">
+        <div class="method-emoji">Σ</div>
+        <div class="method-name">SAT Math</div>
+        <div class="method-hint">44 questions, 80 minutes</div>
+      </div>
+      <div class="method-card" onclick="selectTestSection('sat-rw')">
+        <div class="method-emoji">📚</div>
+        <div class="method-name">SAT Reading & Writing</div>
+        <div class="method-hint">54 questions, 64 minutes</div>
+      </div>
+      <div class="method-card" onclick="selectTestSection('strategy')">
+        <div class="method-emoji">🎯</div>
+        <div class="method-name">Test Strategy</div>
+        <div class="method-hint">Timing, guessing & mindset</div>
+      </div>
+    </div>
+
+    <div class="sp-chat-panel">
+      <div class="sp-messages" id="testprepMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="testprepWelcome">
+          <h2 class="welcome-title">Select a test section above</h2>
+          <p class="welcome-sub">Choose ACT or SAT section to get targeted practice problems, timing strategies, and score analysis.</p>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="testprepChatInput" placeholder="Ask a test prep question or request practice problems..." rows="1"></textarea>
+          <button class="chat-send" id="testprepSendBtn" aria-label="Send" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
+          <span class="chat-model-tag">TEST PREP · CLAUDE OPUS</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: TEACHER TOOLS
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-teacher">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="sp-info">
+        <h2 class="sp-title"><span class="gold-text">Teacher</span> Tools</h2>
+        <p class="sp-subtitle">Lesson plans, rubrics, quizzes, feedback & differentiation</p>
+      </div>
+      <span class="sp-model-badge" style="background:rgba(99,102,241,0.12);color:#6366f1;border:1px solid rgba(99,102,241,0.25);">Claude Sonnet · Edu</span>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-card" onclick="selectTeacherTool('lesson')">
+        <div class="method-emoji">🏗️</div>
+        <div class="method-name">Lesson Plan</div>
+        <div class="method-hint">Complete lesson builder</div>
+      </div>
+      <div class="method-card" onclick="selectTeacherTool('rubric')">
+        <div class="method-emoji">📋</div>
+        <div class="method-name">Rubric Creator</div>
+        <div class="method-hint">Custom grading rubrics</div>
+      </div>
+      <div class="method-card" onclick="selectTeacherTool('quizgen')">
+        <div class="method-emoji">🧪</div>
+        <div class="method-name">Quiz Generator</div>
+        <div class="method-hint">Auto-generate assessments</div>
+      </div>
+      <div class="method-card" onclick="selectTeacherTool('stfeedback')">
+        <div class="method-emoji">💬</div>
+        <div class="method-name">Student Feedback</div>
+        <div class="method-hint">Constructive feedback writer</div>
+      </div>
+      <div class="method-card" onclick="selectTeacherTool('differentiate')">
+        <div class="method-emoji">🎯</div>
+        <div class="method-name">Differentiate</div>
+        <div class="method-hint">Adapt for mixed levels</div>
+      </div>
+      <div class="method-card" onclick="selectTeacherTool('parentemail')">
+        <div class="method-emoji">✉️</div>
+        <div class="method-name">Parent Email</div>
+        <div class="method-hint">Professional communication</div>
+      </div>
+    </div>
+
+    <div class="sp-chat-panel">
+      <div class="sp-messages" id="teacherMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="teacherWelcome">
+          <h2 class="welcome-title">Select a tool above</h2>
+          <p class="welcome-sub">Choose a teacher tool to get started. Each generates professional, ready-to-use educational materials.</p>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="teacherChatInput" placeholder="Describe what you need..." rows="1"></textarea>
+          <button class="chat-send" id="teacherSendBtn" aria-label="Send" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
+          <span class="chat-model-tag">TEACHER AI · CLAUDE SONNET</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: HISTORY
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-history">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(100,116,139,0.12);color:#64748b;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="sp-info">
+        <h2 class="sp-title"><span class="gold-text">Conversation</span> History</h2>
+        <p class="sp-subtitle">Browse, search & revisit past conversations across all tools</p>
+      </div>
+    </div>
+    <div class="sp-chat-panel">
+      <div class="sp-messages" id="historyMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="historyWelcome">
+          <h2 class="welcome-title">Conversation History</h2>
+          <p class="welcome-sub">Your past conversations will appear here once you start using Obsidia AI. All chats across Math, Essay, Study Guide, and other tools are saved automatically.</p>
+          <div class="suggestion-chips" style="--chip-color:#64748b;--chip-subtle:rgba(100,116,139,0.12)">
+            <button class="chip" onclick="spUseSuggestion('history',this)">Show recent conversations</button>
+            <button class="chip" onclick="spUseSuggestion('history',this)">Search my history</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="historyChatInput" placeholder="Search your conversation history..." rows="1"></textarea>
+          <button class="chat-send" id="historySendBtn" aria-label="Send" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to search</span>
+          <span class="chat-model-tag">HISTORY</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: FEEDBACK
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-feedback">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(249,115,22,0.10);color:#f97316;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="sp-info">
+        <h2 class="sp-title"><span class="gold-text">User</span> Feedback</h2>
+        <p class="sp-subtitle">Rate responses, report issues & help us improve Obsidia AI</p>
+      </div>
+    </div>
+    <div class="sp-chat-panel">
+      <div class="sp-messages" id="feedbackMessages" role="log" aria-live="polite">
+        <div class="chat-welcome" id="feedbackWelcome">
+          <h2 class="welcome-title">We'd love your feedback</h2>
+          <p class="welcome-sub">Tell us what's working, what isn't, and what you'd like to see. Your feedback directly shapes Obsidia AI's development.</p>
+          <div class="suggestion-chips" style="--chip-color:#f97316;--chip-subtle:rgba(249,115,22,0.10)">
+            <button class="chip" onclick="spUseSuggestion('feedback',this)">Report a problem</button>
+            <button class="chip" onclick="spUseSuggestion('feedback',this)">Suggest a feature</button>
+            <button class="chip" onclick="spUseSuggestion('feedback',this)">Share what I like</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <textarea class="chat-textarea" id="feedbackChatInput" placeholder="Share your feedback about Obsidia AI..." rows="1"></textarea>
+          <button class="chat-send" id="feedbackSendBtn" aria-label="Send" disabled>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="chat-footer">
+          <span class="chat-footer-hint">Enter to send</span>
+          <span class="chat-model-tag">FEEDBACK</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -1040,7 +1474,7 @@
    PAGE ROUTER
 ══════════════════════════════════════════════════════ */
 let currentPage = 'home';
-const inputStates = { home: '', math: '', essay: '', study: '', notes: '' };
+const inputStates = { home: '', math: '', essay: '', study: '', notes: '', doublecheck: '', grading: '', testprep: '', teacher: '', history: '', feedback: '' };
 
 function navigate(pageId) {
   if (pageId === currentPage) return;
@@ -1242,7 +1676,7 @@ function homeUseSuggestion(el) {
 /* ══════════════════════════════════════════════════════
    SPECIALIZED PAGE CHATS — Generic wiring
 ══════════════════════════════════════════════════════ */
-const pages = ['math', 'essay', 'study', 'notes'];
+const pages = ['math', 'essay', 'study', 'notes', 'doublecheck', 'grading', 'testprep', 'teacher', 'history', 'feedback'];
 
 pages.forEach(pg => {
   const input = document.getElementById(pg + 'ChatInput');
@@ -1370,6 +1804,96 @@ function selectStudyMethod(method) {
 }
 
 /* ══════════════════════════════════════════════════════
+   DOUBLE CHECK — MODES
+══════════════════════════════════════════════════════ */
+let dcModeState = 'verify';
+function dcMode(btn, mode) {
+  dcModeState = mode;
+  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const placeholders = {
+    verify: 'Paste a claim or answer to verify...',
+    sources: 'What claim do you need sources for?',
+    compare: 'Paste two answers to compare...',
+    bias: 'Paste text to check for bias...'
+  };
+  document.getElementById('doublecheckChatInput').placeholder = placeholders[mode] || '';
+}
+
+/* ══════════════════════════════════════════════════════
+   GRADING — MODES
+══════════════════════════════════════════════════════ */
+let gradingModeState = 'grade';
+function gradingMode(btn, mode) {
+  gradingModeState = mode;
+  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const placeholders = {
+    grade: 'Paste work to grade...',
+    rubric: 'Describe the rubric criteria to apply...',
+    feedback: 'Paste student work for detailed feedback...'
+  };
+  document.getElementById('gradingChatInput').placeholder = placeholders[mode] || '';
+}
+
+/* ══════════════════════════════════════════════════════
+   ACT/SAT — SECTION SELECTION
+══════════════════════════════════════════════════════ */
+let testSection = null;
+function selectTestSection(section) {
+  testSection = section;
+  // Highlight within testprep page only
+  document.querySelectorAll('#page-testprep .method-card').forEach(c => {
+    c.style.borderColor = '';
+    c.style.background = '';
+  });
+  event.currentTarget.style.borderColor = '#f43f5e';
+  event.currentTarget.style.background = 'rgba(244,63,94,0.10)';
+
+  const prompts = {
+    'act-math': 'Give me an ACT Math practice problem: ',
+    'act-english': 'Give me an ACT English passage and questions: ',
+    'act-science': 'Give me an ACT Science reasoning passage: ',
+    'sat-math': 'Give me a SAT Math practice problem: ',
+    'sat-rw': 'Give me a SAT Reading & Writing passage: ',
+    'strategy': 'Give me test-taking strategies for: '
+  };
+
+  const input = document.getElementById('testprepChatInput');
+  input.value = prompts[section] || '';
+  input.dispatchEvent(new Event('input'));
+  input.focus();
+}
+
+/* ══════════════════════════════════════════════════════
+   TEACHER TOOLS — SELECTION
+══════════════════════════════════════════════════════ */
+let teacherTool = null;
+function selectTeacherTool(tool) {
+  teacherTool = tool;
+  document.querySelectorAll('#page-teacher .method-card').forEach(c => {
+    c.style.borderColor = '';
+    c.style.background = '';
+  });
+  event.currentTarget.style.borderColor = '#6366f1';
+  event.currentTarget.style.background = 'rgba(99,102,241,0.12)';
+
+  const prompts = {
+    lesson: 'Create a complete lesson plan for: ',
+    rubric: 'Create a grading rubric for: ',
+    quizgen: 'Generate a 10-question quiz about: ',
+    stfeedback: 'Write constructive student feedback for: ',
+    differentiate: 'Adapt this lesson for mixed learning levels: ',
+    parentemail: 'Write a professional parent communication about: '
+  };
+
+  const input = document.getElementById('teacherChatInput');
+  input.value = prompts[tool] || '';
+  input.dispatchEvent(new Event('input'));
+  input.focus();
+}
+
+/* ══════════════════════════════════════════════════════
    SHARED MESSAGING FUNCTIONS
 ══════════════════════════════════════════════════════ */
 function appendMsg(containerId, role, text) {
@@ -1476,6 +2000,40 @@ function getPageResponse(pg, input) {
     if (notesModeState === 'keypoints') return "Here are the key points extracted from your lecture material, organized by topic with the most important takeaways highlighted.";
     if (notesModeState === 'questions') return "I'll generate review questions covering the main topics from your lecture — including both factual recall and deeper comprehension questions.";
     return "I'll process your lecture content and generate structured notes. Share the material or describe what was covered.";
+  }
+
+  if (pg === 'doublecheck') {
+    if (dcModeState === 'sources') return "I'll search for credible sources to support or refute that claim. Let me cross-reference academic databases, reputable publications, and verified information.";
+    if (dcModeState === 'compare') return "I'll compare these answers side by side, identifying where they agree, where they differ, and which is more accurate based on the evidence.";
+    if (dcModeState === 'bias') return "I'll analyze this text for potential bias — looking at language choices, framing, missing perspectives, and logical fallacies.";
+    return "I'll fact-check that claim by cross-referencing multiple reliable sources. Here's what I found regarding accuracy, context, and any nuances to be aware of.";
+  }
+
+  if (pg === 'grading') {
+    const scale = document.getElementById('gradingScaleSelect').value;
+    if (gradingModeState === 'rubric') return `I'll apply a structured rubric to evaluate this work on the ${scale} scale — breaking down scores by criteria including content, organization, evidence, and mechanics.`;
+    if (gradingModeState === 'feedback') return `Here's detailed feedback on this work. I've evaluated each section and provided specific, actionable suggestions for improvement using the ${scale} scale.`;
+    return `I'll evaluate this work using the ${scale} scale — assessing content quality, structure, argumentation, evidence use, and mechanics. Here's my assessment:`;
+  }
+
+  if (pg === 'testprep') {
+    const sectionNames = { 'act-math': 'ACT Math', 'act-english': 'ACT English', 'act-science': 'ACT Science', 'sat-math': 'SAT Math', 'sat-rw': 'SAT Reading & Writing', 'strategy': 'test-taking strategy' };
+    if (testSection) return `Here's a ${sectionNames[testSection] || 'practice'} problem for you. Take your time, then share your answer and I'll walk you through the solution and explain the key concepts tested.`;
+    return "I'll help you prepare for your standardized test. Select a section above, or tell me what you'd like to practice and I'll create targeted problems.";
+  }
+
+  if (pg === 'teacher') {
+    const toolNames = { lesson: 'lesson plan', rubric: 'grading rubric', quizgen: 'quiz', stfeedback: 'student feedback', differentiate: 'differentiated lesson', parentemail: 'parent communication' };
+    if (teacherTool) return `I'll create a professional ${toolNames[teacherTool] || 'resource'} based on your specifications. Let me structure this with clear objectives, standards alignment, and practical implementation details.`;
+    return "I'm ready to help with your teaching materials. Select a tool above or describe what you need and I'll generate professional, classroom-ready content.";
+  }
+
+  if (pg === 'history') {
+    return "Conversation history is coming soon! Once available, all your chats across Math, Essay, Study Guide, and other tools will be searchable and organized by date.";
+  }
+
+  if (pg === 'feedback') {
+    return "Thank you for your feedback! This has been recorded and will help us improve Obsidia AI. We read every submission and use it to prioritize features and fix issues.";
   }
 
   return "I'm here to help. Could you give me more detail about what you're working on?";
