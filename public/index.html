@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ─── DESIGN TOKENS ─────────────────────────────────────── */
     :root {
@@ -2493,6 +2493,15 @@
 </div>
 
 <script>
+/* Error handler — shows JS errors on screen for debugging */
+window.onerror = function(msg, url, line) {
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:#1a0505;border:1px solid #f43f5e;color:#f43f5e;padding:12px 16px;border-radius:8px;font-size:12px;z-index:9999;font-family:monospace';
+  d.textContent = 'JS Error: ' + msg + ' (line ' + line + ')';
+  document.body.appendChild(d);
+  setTimeout(function(){ d.remove(); }, 10000);
+};
+
 /* ══════════════════════════════════════════════════════
    PAGE ROUTER
 ══════════════════════════════════════════════════════ */
@@ -3347,7 +3356,7 @@ document.addEventListener('click', e => {
 });
 
 /* Init */
-initSupabase();
+try { initSupabase(); } catch(e) { console.error('Supabase init failed:', e); }
 
 // Track message counts per page for session recording
 const msgCounts = {};
@@ -3356,14 +3365,16 @@ allPages.forEach(p => msgCounts[p] = 0);
 // Override navigate to render achievements when visiting that page
 const _origNavigate = navigate;
 navigate = function(pageId) {
-  // Record session if leaving a page with messages
-  const leavingPage = currentPage;
-  if (msgCounts[leavingPage] > 0) {
-    recordSession(leavingPage, msgCounts[leavingPage]);
-    msgCounts[leavingPage] = 0;
-  }
+  try {
+    // Record session if leaving a page with messages
+    const leavingPage = currentPage;
+    if (msgCounts[leavingPage] > 0) {
+      recordSession(leavingPage, msgCounts[leavingPage]);
+      msgCounts[leavingPage] = 0;
+    }
+  } catch(e) { console.error('Session recording failed:', e); }
   _origNavigate(pageId);
-  if (pageId === 'achievements') renderAchievements();
+  try { if (pageId === 'achievements') renderAchievements(); } catch(e) {}
 };
 
 navigate('home');
