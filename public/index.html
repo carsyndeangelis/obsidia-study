@@ -862,6 +862,14 @@
       display: flex; align-items: center; justify-content: space-between;
       margin-top: 6px; padding: 0 3px;
     }
+    .chat-attach {
+      width: 30px; height: 30px;
+      background: none; border: none; border-radius: 8px;
+      color: #5a5040; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; align-self: flex-end; transition: var(--transition);
+    }
+    .chat-attach:hover { color: var(--gold-bright); background: var(--gold-subtle); }
     .chat-footer-hint { font-size: 10px; color: #3a342a; }
     .chat-model-tag { font-size: 10px; color: #5a5040; letter-spacing: 0.07em; }
 
@@ -1555,6 +1563,8 @@
       </div>
       <div class="chat-input-wrap">
         <div class="chat-input-box">
+          <button class="chat-attach" onclick="document.getElementById('homeFileInput').click()" title="Attach image"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+          <input type="file" id="homeFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('home',this)" />
           <textarea class="chat-textarea" id="homeChatInput" placeholder="Ask anything..." rows="1" aria-label="Type your message"></textarea>
           <button class="chat-send" id="homeSendBtn" aria-label="Send message" disabled>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -1605,7 +1615,7 @@
           <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('math',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion('math',this)">Explain derivatives</button></div>
         </div>
       </div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag">MATH AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag">MATH AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -1629,9 +1639,11 @@
         <select class="sp-select" id="essayGradeSelect"><option>High School</option><option>Undergraduate</option><option>Graduate</option><option>Professional</option></select>
       </div>
       <div class="sp-messages" id="essayMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="essayWelcome"><h2 class="welcome-title">Essay Writer AI</h2><p class="welcome-sub">Describe your essay topic or paste existing text. I'll help you draft, outline, or proofread.</p></div>
+        <div class="chat-welcome" id="essayWelcome"><h2 class="welcome-title">Essay Writer AI</h2><p class="welcome-sub">Describe your essay topic or paste existing text. I'll help you draft, outline, or proofread.</p>
+          <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('essay',this)">Write about climate change</button><button class="chip" onclick="spUseSuggestion('essay',this)">Outline a persuasive essay</button><button class="chip" onclick="spUseSuggestion('essay',this)">Proofread my paragraph</button></div>
+        </div>
       </div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="essayChatInput" placeholder="Describe your essay topic or paste text..." rows="1"></textarea><button class="chat-send" id="essaySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">ESSAY AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('essayFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="essayFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('essay',this)" /><textarea class="chat-textarea" id="essayChatInput" placeholder="Describe your essay topic or paste text..." rows="1"></textarea><button class="chat-send" id="essaySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">ESSAY AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -1654,8 +1666,10 @@
       <div class="method-card" onclick="selectStudyMethod('quiz')"><div class="method-emoji">&#x2753;</div><div class="method-name">Self-Quiz</div><div class="method-hint">Practice test with answers</div></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="studyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="studyWelcome"><h2 class="welcome-title">Select a study method above</h2><p class="welcome-sub">Choose your format, then paste your notes or describe the topic.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="studyChatInput" placeholder="Paste your notes or describe the topic..." rows="1"></textarea><button class="chat-send" id="studySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">STUDY AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="sp-messages" id="studyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="studyWelcome"><h2 class="welcome-title">Select a study method above</h2><p class="welcome-sub">Choose your format, then paste your notes or describe the topic.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('study',this)">Make flashcards for biology</button><button class="chip" onclick="spUseSuggestion('study',this)">Create a mind map for WWII</button><button class="chip" onclick="spUseSuggestion('study',this)">Quiz me on chemistry</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('studyFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="studyFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('study',this)" /><textarea class="chat-textarea" id="studyChatInput" placeholder="Paste your notes or describe the topic..." rows="1"></textarea><button class="chat-send" id="studySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">STUDY AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -1671,8 +1685,10 @@
     </div>
     <div class="sp-chat-panel">
       <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="notesMode(this,'transcribe')">Transcribe</button><button class="sp-tool-btn" onclick="notesMode(this,'summarize')">Summarize</button><button class="sp-tool-btn" onclick="notesMode(this,'keypoints')">Key Points</button><button class="sp-tool-btn" onclick="notesMode(this,'questions')">Generate Questions</button></div>
-      <div class="sp-messages" id="notesMessages" role="log" aria-live="polite"><div class="chat-welcome" id="notesWelcome"><h2 class="welcome-title">Lecture Notes AI</h2><p class="welcome-sub">Upload audio/video or describe what was discussed.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="notesChatInput" placeholder="Describe the lecture content..." rows="1"></textarea><button class="chat-send" id="notesSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">NOTES AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="sp-messages" id="notesMessages" role="log" aria-live="polite"><div class="chat-welcome" id="notesWelcome"><h2 class="welcome-title">Lecture Notes AI</h2><p class="welcome-sub">Upload audio/video or describe what was discussed.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('notes',this)">Summarize today's lecture</button><button class="chip" onclick="spUseSuggestion('notes',this)">Extract key points</button><button class="chip" onclick="spUseSuggestion('notes',this)">Generate review questions</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('notesFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="notesFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('notes',this)" /><textarea class="chat-textarea" id="notesChatInput" placeholder="Describe the lecture content..." rows="1"></textarea><button class="chat-send" id="notesSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">NOTES AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -1688,8 +1704,10 @@
     </div>
     <div class="sp-chat-panel">
       <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="dcMode(this,'verify')">Fact Check</button><button class="sp-tool-btn" onclick="dcMode(this,'sources')">Find Sources</button><button class="sp-tool-btn" onclick="dcMode(this,'compare')">Compare</button><button class="sp-tool-btn" onclick="dcMode(this,'bias')">Check Bias</button></div>
-      <div class="sp-messages" id="doublecheckMessages" role="log" aria-live="polite"><div class="chat-welcome" id="doublecheckWelcome"><h2 class="welcome-title">Double Check AI</h2><p class="welcome-sub">Paste any claim or AI response to verify its accuracy.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="doublecheckChatInput" placeholder="Paste a claim to verify..." rows="1"></textarea><button class="chat-send" id="doublecheckSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">VERIFY AI &middot; CLAUDE OPUS</span></div></div>
+      <div class="sp-messages" id="doublecheckMessages" role="log" aria-live="polite"><div class="chat-welcome" id="doublecheckWelcome"><h2 class="welcome-title">Double Check AI</h2><p class="welcome-sub">Paste any claim or AI response to verify its accuracy.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('doublecheck',this)">Verify this answer</button><button class="chip" onclick="spUseSuggestion('doublecheck',this)">Find sources for my claim</button><button class="chip" onclick="spUseSuggestion('doublecheck',this)">Check this for bias</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('doublecheckFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="doublecheckFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('doublecheck',this)" /><textarea class="chat-textarea" id="doublecheckChatInput" placeholder="Paste a claim to verify..." rows="1"></textarea><button class="chat-send" id="doublecheckSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">VERIFY AI &middot; CLAUDE OPUS</span></div></div>
     </div>
   </div>
 </div>
@@ -1705,8 +1723,10 @@
     </div>
     <div class="sp-chat-panel">
       <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="gradingMode(this,'grade')">Grade Work</button><button class="sp-tool-btn" onclick="gradingMode(this,'rubric')">Apply Rubric</button><button class="sp-tool-btn" onclick="gradingMode(this,'feedback')">Feedback</button><div class="sp-toggle-row"><span class="sp-toggle-label">Scale</span><select class="sp-select" id="gradingScaleSelect"><option>A&#8211;F (100 pt)</option><option>A&#8211;F (GPA 4.0)</option><option>Pass / Fail</option><option>1&#8211;10 scale</option><option>Rubric-based</option></select></div></div>
-      <div class="sp-messages" id="gradingMessages" role="log" aria-live="polite"><div class="chat-welcome" id="gradingWelcome"><h2 class="welcome-title">Grading Assistant</h2><p class="welcome-sub">Upload an image or paste work for evaluation.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="gradingChatInput" placeholder="Paste work to grade..." rows="1"></textarea><button class="chat-send" id="gradingSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">GRADING AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="sp-messages" id="gradingMessages" role="log" aria-live="polite"><div class="chat-welcome" id="gradingWelcome"><h2 class="welcome-title">Grading Assistant</h2><p class="welcome-sub">Upload an image or paste work for evaluation.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('grading',this)">Grade this essay</button><button class="chip" onclick="spUseSuggestion('grading',this)">Evaluate my lab report</button><button class="chip" onclick="spUseSuggestion('grading',this)">Give detailed feedback</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('gradingFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="gradingFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('grading',this)" /><textarea class="chat-textarea" id="gradingChatInput" placeholder="Paste work to grade..." rows="1"></textarea><button class="chat-send" id="gradingSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">GRADING AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -1729,8 +1749,10 @@
       <div class="method-card" onclick="selectTestSection('strategy')"><div class="method-emoji">&#x1F3AF;</div><div class="method-name">Strategy</div><div class="method-hint">Test-taking tips</div></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="testprepMessages" role="log" aria-live="polite"><div class="chat-welcome" id="testprepWelcome"><h2 class="welcome-title">ACT / SAT Prep</h2><p class="welcome-sub">Select a section above to start practicing.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="testprepChatInput" placeholder="Ask a question or request practice problems..." rows="1"></textarea><button class="chat-send" id="testprepSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">PREP AI &middot; CLAUDE OPUS</span></div></div>
+      <div class="sp-messages" id="testprepMessages" role="log" aria-live="polite"><div class="chat-welcome" id="testprepWelcome"><h2 class="welcome-title">ACT / SAT Prep</h2><p class="welcome-sub">Select a section above to start practicing.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('testprep',this)">Give me a practice problem</button><button class="chip" onclick="spUseSuggestion('testprep',this)">Test-taking strategies</button><button class="chip" onclick="spUseSuggestion('testprep',this)">Time management tips</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('testprepFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="testprepFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('testprep',this)" /><textarea class="chat-textarea" id="testprepChatInput" placeholder="Ask a question or request practice problems..." rows="1"></textarea><button class="chat-send" id="testprepSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">PREP AI &middot; CLAUDE OPUS</span></div></div>
     </div>
   </div>
 </div>
@@ -1753,8 +1775,10 @@
       <div class="method-card" onclick="selectTeacherTool('parentemail')"><div class="method-emoji">&#x2709;&#xFE0F;</div><div class="method-name">Parent Email</div><div class="method-hint">Professional comms</div></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="teacherMessages" role="log" aria-live="polite"><div class="chat-welcome" id="teacherWelcome"><h2 class="welcome-title">Teacher Tools</h2><p class="welcome-sub">Select a tool above or describe what you need.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="teacherChatInput" placeholder="Describe what you need..." rows="1"></textarea><button class="chat-send" id="teacherSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">TEACHER AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="sp-messages" id="teacherMessages" role="log" aria-live="polite"><div class="chat-welcome" id="teacherWelcome"><h2 class="welcome-title">Teacher Tools</h2><p class="welcome-sub">Select a tool above or describe what you need.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('teacher',this)">Create a lesson plan</button><button class="chip" onclick="spUseSuggestion('teacher',this)">Generate a 10-question quiz</button><button class="chip" onclick="spUseSuggestion('teacher',this)">Write parent email</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('teacherFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="teacherFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('teacher',this)" /><textarea class="chat-textarea" id="teacherChatInput" placeholder="Describe what you need..." rows="1"></textarea><button class="chat-send" id="teacherSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">TEACHER AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -1768,8 +1792,10 @@
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Conversation</span> History</h2><p class="sp-subtitle">Browse &amp; revisit past conversations</p></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="historyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="historyWelcome"><h2 class="welcome-title">Conversation History</h2><p class="welcome-sub">Your past conversations will appear here once you start using Obsidia AI.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="historyChatInput" placeholder="Search your conversation history..." rows="1"></textarea><button class="chat-send" id="historySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to search</span><span class="chat-model-tag">HISTORY</span></div></div>
+      <div class="sp-messages" id="historyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="historyWelcome"><h2 class="welcome-title">Conversation History</h2><p class="welcome-sub">Your past conversations will appear here once you start using Obsidia AI.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('history',this)">Show recent conversations</button><button class="chip" onclick="spUseSuggestion('history',this)">Search my math sessions</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('historyFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="historyFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('history',this)" /><textarea class="chat-textarea" id="historyChatInput" placeholder="Search your conversation history..." rows="1"></textarea><button class="chat-send" id="historySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to search</span><span class="chat-model-tag">HISTORY</span></div></div>
     </div>
   </div>
 </div>
@@ -1783,8 +1809,10 @@
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">User</span> Feedback</h2><p class="sp-subtitle">Help us improve Obsidia AI</p></div>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-messages" id="feedbackMessages" role="log" aria-live="polite"><div class="chat-welcome" id="feedbackWelcome"><h2 class="welcome-title">We'd love your feedback</h2><p class="welcome-sub">Tell us what's working and what isn't.</p></div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><textarea class="chat-textarea" id="feedbackChatInput" placeholder="Share your feedback..." rows="1"></textarea><button class="chat-send" id="feedbackSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">FEEDBACK</span></div></div>
+      <div class="sp-messages" id="feedbackMessages" role="log" aria-live="polite"><div class="chat-welcome" id="feedbackWelcome"><h2 class="welcome-title">We'd love your feedback</h2><p class="welcome-sub">Tell us what's working and what isn't.</p>
+        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('feedback',this)">Report a problem</button><button class="chip" onclick="spUseSuggestion('feedback',this)">Suggest a feature</button><button class="chip" onclick="spUseSuggestion('feedback',this)">Share what I like</button></div>
+      </div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('feedbackFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="feedbackFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('feedback',this)" /><textarea class="chat-textarea" id="feedbackChatInput" placeholder="Share your feedback..." rows="1"></textarea><button class="chat-send" id="feedbackSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">FEEDBACK</span></div></div>
     </div>
   </div>
 </div>
@@ -2155,6 +2183,51 @@ function sendPageMsg(pg) {
   streamAIResponse(msgContainer, text, pg, vars, pg);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
+
+/* ══════════════════════════════════════════════════════
+   PER-PAGE FILE ATTACHMENT
+══════════════════════════════════════════════════════ */
+function handlePageAttach(pg, inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+
+  const ALLOWED = ['image/jpeg','image/png','image/webp','image/gif','application/pdf'];
+  if (!ALLOWED.includes(file.type)) {
+    alert('Unsupported format. Use JPEG, PNG, WebP, GIF, or PDF.');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    alert('File too large. Maximum size is 10 MB.');
+    return;
+  }
+
+  const msgContainer = pg === 'home' ? 'homeChatMessages' : pg + 'Messages';
+  const welcome = document.getElementById(pg === 'home' ? 'homeWelcome' : pg + 'Welcome');
+  if (welcome) welcome.classList.add('hidden');
+
+  const reader = new FileReader();
+  reader.onload = ev => {
+    if (file.type.startsWith('image/')) {
+      appendImageMsg(msgContainer, ev.target.result, file.name);
+    } else {
+      appendMsg(msgContainer, 'user', 'Uploaded: ' + file.name);
+    }
+
+    const typingEl = appendTypingTo(msgContainer);
+    setTimeout(() => {
+      typingEl.remove();
+      const vars = {};
+      if (pg === 'math') vars.mode = mathModeState;
+      if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle').checked; vars.grade = document.getElementById('essayGradeSelect').value; }
+      if (pg === 'grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect').value; }
+
+      const prompt = 'I uploaded an image of my work: "' + file.name + '". Please analyze it and help me with it.';
+      streamAIResponse(msgContainer, prompt, pg === 'home' ? 'general' : pg, vars, pg === 'home' ? 'home' : pg);
+    }, 800);
+  };
+  reader.readAsDataURL(file);
+}
 
 /* ══════════════════════════════════════════════════════
    TOOLBAR MODES
