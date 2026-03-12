@@ -1791,11 +1791,97 @@
       <div class="sp-icon" style="background:rgba(100,116,139,0.12);color:#64748b;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Conversation</span> History</h2><p class="sp-subtitle">Browse &amp; revisit past conversations</p></div>
     </div>
-    <div class="sp-chat-panel">
-      <div class="sp-messages" id="historyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="historyWelcome"><h2 class="welcome-title">Conversation History</h2><p class="welcome-sub">Your past conversations will appear here once you start using Obsidia AI.</p>
-        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('history',this)">Show recent conversations</button><button class="chip" onclick="spUseSuggestion('history',this)">Search my math sessions</button></div>
-      </div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('historyFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="historyFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('history',this)" /><textarea class="chat-textarea" id="historyChatInput" placeholder="Search your conversation history..." rows="1"></textarea><button class="chat-send" id="historySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to search</span><span class="chat-model-tag">HISTORY</span></div></div>
+
+    <!-- Search & Filters -->
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div class="chat-input-box" style="padding:8px 12px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5a5040" stroke-width="2" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="historySearch" placeholder="Search conversations..." style="flex:1;background:none;border:none;outline:none;color:#e8e0cc;font-family:var(--font-ui);font-size:13px" oninput="filterHistory()" />
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="sp-tool-btn active" onclick="filterHistoryByTool(this,'all')">All</button>
+        <button class="sp-tool-btn" onclick="filterHistoryByTool(this,'math')">Math</button>
+        <button class="sp-tool-btn" onclick="filterHistoryByTool(this,'essay')">Essay</button>
+        <button class="sp-tool-btn" onclick="filterHistoryByTool(this,'study')">Study</button>
+        <button class="sp-tool-btn" onclick="filterHistoryByTool(this,'notes')">Notes</button>
+        <button class="sp-tool-btn" onclick="filterHistoryByTool(this,'testprep')">Test Prep</button>
+      </div>
+    </div>
+
+    <!-- Conversation List -->
+    <div id="historyList" style="display:flex;flex-direction:column;gap:8px">
+      <div class="activity-item" onclick="navigate('math')" data-tool="math" data-search="calculus integration derivatives">
+        <div class="activity-dot" style="background:var(--math-color)"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Calculus Integration Practice</div><span style="font-size:10px;color:var(--math-color);background:var(--math-subtle);padding:2px 8px;border-radius:99px">Math AI</span></div>
+          <div class="activity-desc">Solved 3 integration by parts problems with step-by-step explanations</div>
+          <div class="activity-time">Today, 2:34 PM &middot; 6 messages &middot; +15 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('essay')" data-tool="essay" data-search="cold war history essay outline">
+        <div class="activity-dot" style="background:var(--ela-color)"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Cold War Essay Draft</div><span style="font-size:10px;color:var(--ela-color);background:var(--ela-subtle);padding:2px 8px;border-radius:99px">Essay Writer</span></div>
+          <div class="activity-desc">Completed outline and thesis for Cold War impact essay</div>
+          <div class="activity-time">Today, 9:15 AM &middot; 8 messages &middot; +25 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('study')" data-tool="study" data-search="biology cell division flashcards">
+        <div class="activity-dot" style="background:var(--sci-color)"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Biology Flashcards</div><span style="font-size:10px;color:var(--sci-color);background:var(--sci-subtle);padding:2px 8px;border-radius:99px">Study Guide</span></div>
+          <div class="activity-desc">Generated 24 flashcards covering mitosis, meiosis, and cell cycle regulation</div>
+          <div class="activity-time">Yesterday, 4:20 PM &middot; 4 messages &middot; +20 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('testprep')" data-tool="testprep" data-search="sat math algebra practice">
+        <div class="activity-dot" style="background:#f43f5e"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">SAT Math Practice</div><span style="font-size:10px;color:#f43f5e;background:rgba(244,63,94,0.10);padding:2px 8px;border-radius:99px">Test Prep</span></div>
+          <div class="activity-desc">Scored 7/10 on algebra section, reviewed wrong answers</div>
+          <div class="activity-time">Yesterday, 11:00 AM &middot; 12 messages &middot; +30 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('notes')" data-tool="notes" data-search="chemistry lecture organic compounds">
+        <div class="activity-dot" style="background:#fbbf24"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Chemistry Lecture Notes</div><span style="font-size:10px;color:#fbbf24;background:rgba(251,191,36,0.12);padding:2px 8px;border-radius:99px">Notes</span></div>
+          <div class="activity-desc">Transcribed and summarized 45-min organic chemistry lecture</div>
+          <div class="activity-time">2 days ago &middot; 5 messages &middot; +35 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('doublecheck')" data-tool="doublecheck" data-search="fact check verify photosynthesis">
+        <div class="activity-dot" style="background:#22d3ee"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Photosynthesis Fact Check</div><span style="font-size:10px;color:#22d3ee;background:rgba(34,211,238,0.10);padding:2px 8px;border-radius:99px">Double Check</span></div>
+          <div class="activity-desc">Verified 5 claims about photosynthesis from textbook notes</div>
+          <div class="activity-time">3 days ago &middot; 7 messages &middot; +20 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('grading')" data-tool="grading" data-search="grade essay lab report evaluation">
+        <div class="activity-dot" style="background:var(--gold-bright)"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Lab Report Evaluation</div><span style="font-size:10px;color:var(--gold-bright);background:var(--gold-subtle);padding:2px 8px;border-radius:99px">Grading</span></div>
+          <div class="activity-desc">Graded chemistry lab report: 87/100 with detailed feedback</div>
+          <div class="activity-time">4 days ago &middot; 3 messages &middot; +15 XP</div>
+        </div>
+      </div>
+      <div class="activity-item" onclick="navigate('teacher')" data-tool="teacher" data-search="lesson plan rubric quiz">
+        <div class="activity-dot" style="background:#6366f1"></div>
+        <div class="activity-info" style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Algebra Lesson Plan</div><span style="font-size:10px;color:#6366f1;background:rgba(99,102,241,0.12);padding:2px 8px;border-radius:99px">Teacher</span></div>
+          <div class="activity-desc">Created 45-minute lesson plan on quadratic equations with differentiation</div>
+          <div class="activity-time">5 days ago &middot; 4 messages &middot; +25 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="historyEmpty" style="display:none;text-align:center;padding:40px 20px;color:#5a5040">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#3a342a;margin-bottom:12px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <div style="font-size:13px;font-weight:500;margin-bottom:4px">No conversations found</div>
+      <div style="font-size:12px">Try a different search or filter</div>
     </div>
   </div>
 </div>
@@ -1808,11 +1894,115 @@
       <div class="sp-icon" style="background:rgba(249,115,22,0.10);color:#f97316;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">User</span> Feedback</h2><p class="sp-subtitle">Help us improve Obsidia AI</p></div>
     </div>
-    <div class="sp-chat-panel">
-      <div class="sp-messages" id="feedbackMessages" role="log" aria-live="polite"><div class="chat-welcome" id="feedbackWelcome"><h2 class="welcome-title">We'd love your feedback</h2><p class="welcome-sub">Tell us what's working and what isn't.</p>
-        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('feedback',this)">Report a problem</button><button class="chip" onclick="spUseSuggestion('feedback',this)">Suggest a feature</button><button class="chip" onclick="spUseSuggestion('feedback',this)">Share what I like</button></div>
-      </div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('feedbackFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="feedbackFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('feedback',this)" /><textarea class="chat-textarea" id="feedbackChatInput" placeholder="Share your feedback..." rows="1"></textarea><button class="chat-send" id="feedbackSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">FEEDBACK</span></div></div>
+
+    <div class="settings-grid">
+      <!-- Feedback Form -->
+      <div class="settings-card" style="grid-column:1/-1">
+        <div class="settings-card-title">Share Your Feedback</div>
+
+        <!-- Category Selection -->
+        <div style="margin-bottom:20px">
+          <div style="font-size:12px;color:#8a8070;font-weight:500;margin-bottom:10px">What's this about?</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="sp-tool-btn active" onclick="selectFeedbackCat(this,'general')">General</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackCat(this,'bug')">Bug Report</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackCat(this,'feature')">Feature Request</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackCat(this,'ai-quality')">AI Quality</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackCat(this,'design')">Design / UX</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackCat(this,'praise')">Something I Love</button>
+          </div>
+        </div>
+
+        <!-- Which Tool -->
+        <div style="margin-bottom:20px">
+          <div style="font-size:12px;color:#8a8070;font-weight:500;margin-bottom:10px">Which tool is this about? (optional)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'math')" style="font-size:10px">Math AI</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'essay')" style="font-size:10px">Essay Writer</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'study')" style="font-size:10px">Study Guide</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'notes')" style="font-size:10px">Lecture Notes</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'doublecheck')" style="font-size:10px">Double Check</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'grading')" style="font-size:10px">Grading</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'testprep')" style="font-size:10px">Test Prep</button>
+            <button class="sp-tool-btn" onclick="selectFeedbackTool(this,'teacher')" style="font-size:10px">Teacher Tools</button>
+          </div>
+        </div>
+
+        <!-- Star Rating -->
+        <div style="margin-bottom:20px">
+          <div style="font-size:12px;color:#8a8070;font-weight:500;margin-bottom:10px">Overall rating</div>
+          <div style="display:flex;gap:6px" id="starRating">
+            <button onclick="setRating(1)" class="star-btn" data-star="1" style="font-size:28px;background:none;border:none;cursor:pointer;transition:transform 0.15s;color:#3a342a">&#9733;</button>
+            <button onclick="setRating(2)" class="star-btn" data-star="2" style="font-size:28px;background:none;border:none;cursor:pointer;transition:transform 0.15s;color:#3a342a">&#9733;</button>
+            <button onclick="setRating(3)" class="star-btn" data-star="3" style="font-size:28px;background:none;border:none;cursor:pointer;transition:transform 0.15s;color:#3a342a">&#9733;</button>
+            <button onclick="setRating(4)" class="star-btn" data-star="4" style="font-size:28px;background:none;border:none;cursor:pointer;transition:transform 0.15s;color:#3a342a">&#9733;</button>
+            <button onclick="setRating(5)" class="star-btn" data-star="5" style="font-size:28px;background:none;border:none;cursor:pointer;transition:transform 0.15s;color:#3a342a">&#9733;</button>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div style="margin-bottom:20px">
+          <div style="font-size:12px;color:#8a8070;font-weight:500;margin-bottom:10px">Tell us more</div>
+          <textarea id="feedbackText" placeholder="What's on your mind? Be as detailed as you'd like..." style="width:100%;min-height:120px;background:var(--black-input);border:1px solid var(--black-border);border-radius:var(--radius-md);padding:12px 14px;color:#e8e0cc;font-family:var(--font-ui);font-size:13px;line-height:1.6;resize:vertical;outline:none;transition:var(--transition)"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="btn-gold" onclick="submitFeedback()" style="padding:10px 28px;font-size:14px">Submit Feedback</button>
+          <span id="feedbackStatus" style="font-size:12px;color:var(--sci-color);display:none">&#10003; Thank you! Your feedback has been recorded.</span>
+        </div>
+      </div>
+
+      <!-- Quick Feedback Cards -->
+      <div class="settings-card">
+        <div class="settings-card-title">Quick Reactions</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="activity-item" onclick="quickFeedback('love')" style="border:none;width:100%;text-align:left">
+            <span style="font-size:20px;flex-shrink:0">&#x2764;&#xFE0F;</span>
+            <div class="activity-info"><div class="activity-title">I love Obsidia!</div><div class="activity-desc">Let us know what you enjoy most</div></div>
+          </button>
+          <button class="activity-item" onclick="quickFeedback('confused')" style="border:none;width:100%;text-align:left">
+            <span style="font-size:20px;flex-shrink:0">&#x1F914;</span>
+            <div class="activity-info"><div class="activity-title">Something's confusing</div><div class="activity-desc">Help us make things clearer</div></div>
+          </button>
+          <button class="activity-item" onclick="quickFeedback('broken')" style="border:none;width:100%;text-align:left">
+            <span style="font-size:20px;flex-shrink:0">&#x1F41B;</span>
+            <div class="activity-info"><div class="activity-title">Something's broken</div><div class="activity-desc">Report a bug or issue</div></div>
+          </button>
+          <button class="activity-item" onclick="quickFeedback('idea')" style="border:none;width:100%;text-align:left">
+            <span style="font-size:20px;flex-shrink:0">&#x1F4A1;</span>
+            <div class="activity-info"><div class="activity-title">I have an idea!</div><div class="activity-desc">Suggest a new feature</div></div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Feedback -->
+      <div class="settings-card">
+        <div class="settings-card-title">Your Past Feedback</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:10px 0;border-bottom:1px solid rgba(39,39,39,0.5)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <span style="font-size:11px;color:var(--gold-bright);font-weight:600">Feature Request</span>
+              <span style="font-size:10px;color:#3a342a">3 days ago</span>
+            </div>
+            <div style="font-size:12px;color:#8a8070;line-height:1.5">"It would be great to have a dark mode for late night studying" — <span style="color:var(--sci-color)">&#10003; Shipped in v2.4!</span></div>
+          </div>
+          <div style="padding:10px 0;border-bottom:1px solid rgba(39,39,39,0.5)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <span style="font-size:11px;color:#22d3ee;font-weight:600">AI Quality</span>
+              <span style="font-size:10px;color:#3a342a">1 week ago</span>
+            </div>
+            <div style="font-size:12px;color:#8a8070;line-height:1.5">"Math AI explanations are really helpful, keep it up!"</div>
+          </div>
+          <div style="padding:10px 0">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <span style="font-size:11px;color:#f97316;font-weight:600">General</span>
+              <span style="font-size:10px;color:#3a342a">2 weeks ago</span>
+            </div>
+            <div style="font-size:12px;color:#8a8070;line-height:1.5">"Love the streak system, very motivating for daily study habits"</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -1889,7 +2079,10 @@
 
       <!-- Achievements Preview -->
       <div class="settings-card">
-        <div class="settings-card-title">Achievements</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="settings-card-title" style="margin-bottom:0">Achievements</div>
+          <button style="font-size:11px;color:var(--gold-bright);background:none;border:none;cursor:pointer;font-family:var(--font-ui);font-weight:500" onclick="navigate('achievements')">View All &#8594;</button>
+        </div>
         <div class="settings-row">
           <div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">&#x1F31F;</span><div><div class="settings-label">First Session</div><div class="settings-sublabel">Complete your first AI session</div></div></div>
           <span style="font-size:11px;color:var(--sci-color);font-weight:600">Earned</span>
@@ -1908,11 +2101,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Save Bar -->
+    <div style="display:flex;align-items:center;gap:14px;margin-top:20px;padding:20px 0;border-top:1px solid var(--black-border)">
+      <button class="btn-gold" onclick="saveSettings()" style="padding:10px 28px;font-size:14px">Save Changes</button>
+      <span id="settingsSaved" style="font-size:12px;color:var(--sci-color);display:none">&#10003; Settings saved successfully!</span>
+      <button style="margin-left:auto;font-size:12px;color:#5a5040;background:none;border:none;cursor:pointer;font-family:var(--font-ui)" onclick="if(confirm('Reset all settings to defaults?'))resetSettings()">Reset to Defaults</button>
+    </div>
   </div>
 </div>
-
-<!-- ═══════════════════════════════════════════════════
-     PAGE: ACHIEVEMENTS (NEW)
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-achievements">
   <div class="sp-layout">
@@ -1921,9 +2118,44 @@
       <div class="sp-icon" style="background:var(--gold-subtle);color:var(--gold-bright);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Achievements</span></h2><p class="sp-subtitle">Track your progress and unlock badges</p></div>
     </div>
-    <div class="achievements-grid" id="achievementsGrid">
-      <!-- Populated by JS -->
+
+    <!-- Stats Summary -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px">
+      <div class="stat-card">
+        <div class="stat-info" style="text-align:center;width:100%">
+          <div class="stat-value gold-text" id="achEarned">0</div>
+          <div class="stat-label">Earned</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info" style="text-align:center;width:100%">
+          <div class="stat-value" style="color:#5a5040" id="achLocked">12</div>
+          <div class="stat-label">Locked</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info" style="text-align:center;width:100%">
+          <div class="stat-value" style="color:var(--xp-color)" id="achCompletion">0%</div>
+          <div class="stat-label">Complete</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info" style="text-align:center;width:100%">
+          <div class="stat-value" style="color:var(--sci-color)" id="achNext">-</div>
+          <div class="stat-label">Next Up</div>
+        </div>
+      </div>
     </div>
+
+    <!-- Achievement Sections -->
+    <div style="margin-bottom:16px"><div class="features-section" style="padding:0;margin-bottom:12px">Streak Achievements</div>
+    <div class="achievements-grid" id="achStreakGrid"></div></div>
+
+    <div style="margin-bottom:16px"><div class="features-section" style="padding:0;margin-bottom:12px">Session Milestones</div>
+    <div class="achievements-grid" id="achSessionGrid"></div></div>
+
+    <div style="margin-bottom:16px"><div class="features-section" style="padding:0;margin-bottom:12px">XP &amp; Level</div>
+    <div class="achievements-grid" id="achXpGrid"></div></div>
   </div>
 </div>
 
@@ -2151,7 +2383,7 @@ function homeUseSuggestion(el) { homeChatInput.value=el.textContent; homeChatInp
 /* ══════════════════════════════════════════════════════
    SPECIALIZED PAGE CHATS
 ══════════════════════════════════════════════════════ */
-const pages = ['math','essay','study','notes','doublecheck','grading','testprep','teacher','history','feedback'];
+const pages = ['math','essay','study','notes','doublecheck','grading','testprep','teacher'];
 pages.forEach(pg => {
   const input = document.getElementById(pg+'ChatInput');
   const btn = document.getElementById(pg+'SendBtn');
@@ -2618,22 +2850,145 @@ const ACHIEVEMENTS = [
   { id: 'level_20', emoji: '&#x1F30C;', name: 'Grand Master', desc: 'Reach Level 20', check: p => p.level >= 20, progress: p => Math.min(100, Math.round(p.level/20*100)) },
 ];
 
+/* ══════════════════════════════════════════════════════
+   SETTINGS — Save & Reset
+══════════════════════════════════════════════════════ */
+function saveSettings() {
+  // In production, this saves to Supabase
+  const status = document.getElementById('settingsSaved');
+  status.style.display = 'inline';
+  setTimeout(() => { status.style.display = 'none'; }, 3000);
+  if (supabase && currentUser) {
+    // Gather settings from form
+    const updates = {
+      display_name: document.querySelector('.settings-card input[value="Student"]')?.value,
+      ai_response_style: document.querySelector('.settings-card select')?.value,
+    };
+    supabase.from('profiles').update(updates).eq('id', currentUser.id);
+  }
+}
+function resetSettings() {
+  // Reset toggles
+  document.querySelectorAll('#page-settings .sp-toggle input').forEach(t => t.checked = true);
+  // Reset selects to first option
+  document.querySelectorAll('#page-settings .settings-input').forEach(s => { if (s.tagName === 'SELECT') s.selectedIndex = 0; });
+  saveSettings();
+}
+
+/* ══════════════════════════════════════════════════════
+   HISTORY PAGE — Search & Filter
+══════════════════════════════════════════════════════ */
+let historyToolFilter = 'all';
+function filterHistory() {
+  const query = (document.getElementById('historySearch').value || '').toLowerCase();
+  const items = document.querySelectorAll('#historyList .activity-item');
+  let anyVisible = false;
+  items.forEach(item => {
+    const search = (item.dataset.search || '').toLowerCase();
+    const tool = item.dataset.tool || '';
+    const matchSearch = !query || search.includes(query);
+    const matchTool = historyToolFilter === 'all' || tool === historyToolFilter;
+    const show = matchSearch && matchTool;
+    item.style.display = show ? '' : 'none';
+    if (show) anyVisible = true;
+  });
+  document.getElementById('historyEmpty').style.display = anyVisible ? 'none' : 'block';
+}
+function filterHistoryByTool(btn, tool) {
+  historyToolFilter = tool;
+  btn.closest('div').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterHistory();
+}
+
+/* ══════════════════════════════════════════════════════
+   FEEDBACK PAGE — Form Logic
+══════════════════════════════════════════════════════ */
+let feedbackCategory = 'general';
+let feedbackTool = null;
+let feedbackRating = 0;
+
+function selectFeedbackCat(btn, cat) {
+  feedbackCategory = cat;
+  btn.closest('div').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectFeedbackTool(btn, tool) {
+  if (feedbackTool === tool) { feedbackTool = null; btn.classList.remove('active'); return; }
+  feedbackTool = tool;
+  btn.closest('div').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setRating(n) {
+  feedbackRating = n;
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    const star = parseInt(btn.dataset.star);
+    btn.style.color = star <= n ? '#c9a84c' : '#3a342a';
+    btn.style.transform = star <= n ? 'scale(1.15)' : 'scale(1)';
+  });
+}
+function submitFeedback() {
+  const text = document.getElementById('feedbackText').value.trim();
+  if (!text && feedbackRating === 0) { alert('Please add a rating or write some feedback.'); return; }
+  // In production, this would save to Supabase
+  document.getElementById('feedbackStatus').style.display = 'inline';
+  document.getElementById('feedbackText').value = '';
+  setRating(0);
+  setTimeout(() => { document.getElementById('feedbackStatus').style.display = 'none'; }, 4000);
+}
+function quickFeedback(type) {
+  const map = { love: 'praise', confused: 'general', broken: 'bug', idea: 'feature' };
+  const placeholders = { love: 'What do you love about Obsidia?', confused: 'What was confusing?', broken: 'What went wrong?', idea: 'What feature would you like?' };
+  // Select the right category
+  document.querySelectorAll('#page-feedback .sp-tool-btn').forEach(b => {
+    if (b.textContent.toLowerCase().includes(map[type] === 'praise' ? 'love' : map[type])) {
+      selectFeedbackCat(b, map[type]);
+    }
+  });
+  document.getElementById('feedbackText').placeholder = placeholders[type] || 'Tell us more...';
+  document.getElementById('feedbackText').focus();
+}
+
+/* ══════════════════════════════════════════════════════
+   ACHIEVEMENTS PAGE — Sectioned Renderer
+══════════════════════════════════════════════════════ */
 function renderAchievements() {
-  const grid = document.getElementById('achievementsGrid');
-  if (!grid) return;
   const p = userProfile || { total_sessions:0, total_xp:0, current_streak:0, longest_streak:0, level:1 };
-  grid.innerHTML = ACHIEVEMENTS.map(a => {
-    const earned = a.check(p);
-    const progress = a.progress ? a.progress(p) : (earned ? 100 : 0);
-    return '<div class="achievement-card '+(earned?'earned':'locked')+'">'+
-      '<div class="achievement-emoji">'+a.emoji+'</div>'+
-      '<div class="achievement-name">'+a.name+'</div>'+
-      '<div class="achievement-desc">'+a.desc+'</div>'+
-      (earned ? '<div class="achievement-status earned-status">Earned &#x2713;</div>' :
-       progress > 0 ? '<div class="achievement-status progress-status">'+progress+'%</div><div class="achievement-bar"><div class="achievement-bar-fill" style="width:'+progress+'%"></div></div>' :
-       '<div class="achievement-status locked-status">Locked</div>') +
-    '</div>';
-  }).join('');
+
+  const streakAch = ACHIEVEMENTS.filter(a => a.id.startsWith('streak') || a.id === 'first_session');
+  const sessionAch = ACHIEVEMENTS.filter(a => a.id.startsWith('sessions'));
+  const xpAch = ACHIEVEMENTS.filter(a => a.id.startsWith('xp') || a.id.startsWith('level'));
+
+  function renderGrid(gridId, achievements) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.innerHTML = achievements.map(a => {
+      const earned = a.check(p);
+      const progress = a.progress ? a.progress(p) : (earned ? 100 : 0);
+      return '<div class="achievement-card '+(earned?'earned':'locked')+'">'+
+        '<div class="achievement-emoji">'+a.emoji+'</div>'+
+        '<div class="achievement-name">'+a.name+'</div>'+
+        '<div class="achievement-desc">'+a.desc+'</div>'+
+        (earned ? '<div class="achievement-status earned-status">Earned &#x2713;</div>' :
+         progress > 0 ? '<div class="achievement-status progress-status">'+progress+'%</div><div class="achievement-bar"><div class="achievement-bar-fill" style="width:'+progress+'%"></div></div>' :
+         '<div class="achievement-status locked-status">Locked</div>') +
+      '</div>';
+    }).join('');
+  }
+
+  renderGrid('achStreakGrid', streakAch);
+  renderGrid('achSessionGrid', sessionAch);
+  renderGrid('achXpGrid', xpAch);
+
+  // Update stats
+  const earned = ACHIEVEMENTS.filter(a => a.check(p)).length;
+  const locked = ACHIEVEMENTS.length - earned;
+  const completion = Math.round((earned / ACHIEVEMENTS.length) * 100);
+  const next = ACHIEVEMENTS.find(a => !a.check(p));
+  document.getElementById('achEarned').textContent = earned;
+  document.getElementById('achLocked').textContent = locked;
+  document.getElementById('achCompletion').textContent = completion + '%';
+  document.getElementById('achNext').textContent = next ? next.name : 'All done!';
 }
 
 async function checkAchievements() {

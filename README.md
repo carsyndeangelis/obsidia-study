@@ -1,154 +1,119 @@
-# Obsidia Study v2.1
+# Obsidia Study v2.4
 
-> AI made by a student, for students — now with real AI integration, streaming responses, and Vercel deployment.
+> AI-powered academic tools built by a student, for students. Real AI chat, gamification, mobile-ready.
 
-## Quick Start (Deploy in 5 minutes)
+**Live:** [obsidia-study.vercel.app](https://obsidia-study.vercel.app)
 
-### 1. Get an API Key
-- Go to [console.anthropic.com](https://console.anthropic.com/)
-- Create an account and add a payment method (Claude API has pay-as-you-go pricing)
-- Go to **API Keys** → **Create Key** → copy it
+## Features
 
-### 2. Deploy to Vercel
-- Push this repo to your GitHub
-- Go to [vercel.com](https://vercel.com) → **New Project** → import your repo
-- In **Environment Variables**, add:
-  - `ANTHROPIC_API_KEY` = your key from step 1
-- Hit **Deploy**
+### AI Tools (10 specialized pages)
+| Tool | What it does |
+|------|-------------|
+| **Advanced Math** | Step-by-step solver with 4 modes: solve, explain, graph, practice |
+| **Essay Writer** | Drafting with humanizer toggle, grade calibration, 4 modes |
+| **Study Guide** | 6 methods: flashcards, Cornell notes, mind map, spaced review, outline, quiz |
+| **Lecture Notes** | Transcription, summarization, key points, question generation |
+| **Double Check** | Fact verification, source finding, answer comparison, bias analysis |
+| **Grading** | Multi-scale evaluation (A-F, GPA, Pass/Fail, rubric) with feedback |
+| **ACT/SAT Prep** | 6 sections: ACT Math/English/Science, SAT Math/R&W, Strategy |
+| **Teacher Tools** | Lesson plans, rubrics, quiz gen, feedback, differentiation, parent email |
 
-### 3. You're live
-Your site will be at `your-project.vercel.app`. Every chat tool now uses real Claude AI.
+### Every tool page includes
+- Suggestion chips (3 contextual quick-start prompts)
+- File attachment button (paperclip icon for image/PDF uploads)
+- Mode toolbar (switches AI behavior per sub-task)
+- Streaming AI responses with markdown rendering
+- Conversation history (last 10 messages for context)
 
-### Local Development
+### Dashboard & Gamification
+- Animated stats bar: sessions, streak, XP, weekly goal ring
+- XP progress bar with level system (500 XP per level)
+- Activity feed showing recent sessions with XP earned
+- 12 unlockable achievements with progress tracking
+
+### Full Pages
+- **Home** — hero, stats, XP bar, feature grid, 3-column dashboard (activity + upload + chat)
+- **Settings** — profile, study goals, preferences, achievements preview
+- **Achievements** — full grid of 12 badges with earned/locked/progress states
+- **History** — searchable conversation log with filters
+- **Feedback** — structured form with categories, star rating, and text
+
+### Auth & Persistence
+- Google sign-in via Supabase OAuth
+- Postgres database: profiles, sessions, achievements
+- Real streak tracking (consecutive day detection)
+- Row-level security (users only see own data)
+
+### UI & Navigation
+- Dark/light theme toggle (system preference detection)
+- Mobile hamburger drawer with profile and streak
+- Keyboard shortcuts (press `?` to view all)
+- Quick Snap camera button for instant homework photos
+- Staggered entrance animations
+- 3-step onboarding flow for new users
+
+### PWA
+- Installable on phone home screen
+- Service worker for offline caching
+- Auto-update prompt on new versions
+
+## Quick Start
+
+### 1. Deploy to Vercel
 ```bash
-npm install
-# Copy .env.example to .env and add your key
-cp .env.example .env
-# Edit .env with your actual API key
-npx vercel dev
+git clone https://github.com/carsyndeangelis/obsidia-study.git
+cd obsidia-study && npm install
+vercel
 ```
 
----
+### 2. Add API key
+In Vercel dashboard → Settings → Environment Variables:
+- `ANTHROPIC_API_KEY` = your key from [console.anthropic.com](https://console.anthropic.com)
+
+### 3. (Optional) Enable auth
+Create a free [Supabase](https://supabase.com) project, run `supabase-schema.sql` in the SQL editor, enable Google OAuth, and add your Supabase URL + anon key to the code.
+
+### 4. Local dev
+```bash
+cp .env.example .env.local   # add your API key
+npx vercel dev               # http://localhost:3000
+```
 
 ## Architecture
 
 ```
 obsidia-study/
-├── api/
-│   ├── chat.js          # Serverless API endpoint (streams Claude responses)
-│   └── prompts.js       # Per-tool system prompts with template variables
 ├── public/
-│   ├── index.html       # Frontend SPA (all UI + streaming client)
-│   └── Images/
-├── .env.example         # Environment variable template
-├── .gitignore
-├── package.json         # Anthropic SDK dependency
-├── vercel.json          # Routing: /api/* → serverless, /* → static
-└── README.md
+│   ├── index.html            # Frontend SPA (all pages)
+│   ├── sw.js                 # Service worker
+│   ├── manifest.json         # PWA manifest
+│   └── icons/                # App icons
+├── api/
+│   ├── chat.js               # Serverless AI proxy (streaming)
+│   └── prompts.js            # 12 system prompts
+├── vercel.json               # Routing
+├── package.json              # Anthropic SDK
+├── supabase-schema.sql       # Database schema
+└── .env.example              # API key template
 ```
-
-### How it works
-
-1. Student types a message on any page (Math AI, Essay Writer, etc.)
-2. Frontend sends POST to `/api/chat` with the message, page name, mode settings, and conversation history
-3. Serverless function builds a specialized system prompt for that tool using template variables
-4. Streams the response back via Server-Sent Events (SSE)
-5. Frontend renders tokens as they arrive with lightweight markdown formatting
-6. If the API is unavailable, falls back to demo mode automatically
-
-### Security
-- API key is **never** in the frontend code — it lives in Vercel environment variables
-- Rate limited: 15 requests/minute per IP
-- Messages capped at 4,000 characters
-- Conversation history limited to last 10 messages
-
----
-
-## What's New
-
-### v2.1 — Real AI Integration
-- **Streaming responses** — words appear in real-time via SSE, not all at once
-- **Specialized system prompts** — each tool (Math, Essay, Study Guide, etc.) has a tuned prompt with mode-specific behavior
-- **Conversation history** — the AI remembers context within a session (last 10 messages)
-- **Markdown rendering** — AI responses display with bold, italic, code blocks, headers, and lists
-- **Demo mode fallback** — if the API key isn't set, the app still works with placeholder responses
-- **Rate limiting** — built-in protection against abuse (15 req/min per IP)
-- **Vercel-ready architecture** — serverless functions + static frontend, zero-config deploy
-
-### v2.0 — UX & Gamification
-- Mobile hamburger drawer with profile and streak display
-- Quick Snap camera button in nav bar
-- Keyboard shortcuts overlay (press ?)
-- Stats bar with animated counters (sessions, streak, XP, weekly goal)
-- XP progress bar with level system
-- SVG progress ring for weekly goal completion
-- Activity feed panel showing recent study sessions
-- Full Settings & Profile page
-- Staggered entrance animations
-- Achievements system
-
-### v1.0 — Foundation
-- 10-page SPA with page routing and transitions
-- Feature cards with subject-specific color coding
-- Drag-and-drop file upload with paste support
-- Chat interface with typing indicators
-- Per-tool toolbar modes
-
----
-
-## System Prompts
-
-Each tool gets a specialized prompt. Variables like `{{mode}}`, `{{grade}}`, `{{method}}` are filled in from the UI state:
-
-| Tool | Key Variables | Behavior |
-|------|--------------|----------|
-| Math AI | `mode` (solve/explain/graph/practice) | Step-by-step solutions, verification |
-| Essay Writer | `mode`, `humanizer`, `grade` | Tone calibration, grade-level writing |
-| Study Guide | `method` (flashcards/cornell/mindmap/etc.) | Format-specific output |
-| Lecture Notes | `mode` (transcribe/summarize/keypoints/questions) | Structured note generation |
-| Double Check | `mode` (verify/sources/compare/bias) | Fact-checking with reasoning |
-| Grading | `mode`, `scale` | Rubric-based evaluation |
-| ACT/SAT Prep | `section` (act-math/sat-rw/strategy/etc.) | Test-format practice problems |
-| Teacher Tools | `tool` (lesson/rubric/quizgen/etc.) | Standards-aligned materials |
-
----
-
-## Cost Estimate
-
-Claude Sonnet pricing (as of 2025):
-- ~$3 per 1M input tokens, ~$15 per 1M output tokens
-- Average student message: ~100 tokens in, ~500 tokens out
-- **~$0.008 per message** (~1.2 cents per message)
-- 100 students × 20 messages/day = **~$1.60/day**
-
-Set a monthly budget alert in the Anthropic console to avoid surprises.
-
----
 
 ## Keyboard Shortcuts
 
-| Action | Shortcut |
-|--------|----------|
-| Home | `G` then `H` |
-| Math AI | `G` then `M` |
-| Essay Writer | `G` then `E` |
-| Study Guide | `G` then `S` |
-| Settings | `G` then `,` |
-| Focus Chat | `/` |
+| Action | Keys |
+|--------|------|
+| Home | `G` `H` |
+| Math AI | `G` `M` |
+| Essay Writer | `G` `E` |
+| Study Guide | `G` `S` |
+| Settings | `G` `,` |
+| Focus chat | `/` |
 | Quick Snap | `Q` |
-| Show Shortcuts | `?` |
+| Show shortcuts | `?` |
 
----
+## Cost
+Claude Sonnet: ~$0.01-0.03 per 10-message session. Free Anthropic credits cover ~200-500 sessions.
 
-## Next Up (v2.2 Roadmap)
-
-- **Persistence & Auth** — Supabase for user accounts, saved conversations, real streak/XP tracking
-- **Dark/Light Theme Toggle**
-- **Onboarding Flow** — first-time walkthrough
-- **PWA Support** — installable app with offline mode
-
----
-
-## Browser Support
-
-Chrome, Firefox, Safari, Edge (latest). Mobile-optimized for iOS Safari and Android Chrome.
+## Roadmap
+- **v2.5** — Real conversation history persistence, search across sessions
+- **v2.6** — Collaborative study rooms, shared flashcards
+- **v3.0** — Native mobile apps (React Native)
