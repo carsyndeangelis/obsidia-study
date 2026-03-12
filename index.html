@@ -3,236 +3,192 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Obsidia AI — Home</title>
+  <title>Obsidia AI — Academic Assistance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     /* ─── DESIGN TOKENS ─────────────────────────────────────── */
     :root {
-      --black-deep:   #080808;
-      --black-panel:  #111111;
-      --black-card:   #181818;
-      --black-input:  #1f1f1f;
-      --black-border: #2a2a2a;
-      --gold-bright:  #c9a84c;
-      --gold-mid:     #b8923e;
-      --gold-muted:   #8a6a28;
-      --gold-shine:   #e8c96a;
-      --gold-subtle:  rgba(201,168,76,0.12);
-      --gold-glow:    rgba(201,168,76,0.25);
-      --text-primary: #f0ead6;
-      --text-secondary: #9e9070;
-      --text-dim:     #5a5040;
-      --radius-sm:    8px;
-      --radius-md:    14px;
-      --radius-lg:    22px;
-      --radius-xl:    32px;
-      --shadow-gold:  0 0 24px rgba(201,168,76,0.18), 0 2px 8px rgba(0,0,0,0.8);
-      --shadow-card:  0 4px 32px rgba(0,0,0,0.7);
-      --transition:   all 0.22s cubic-bezier(0.4,0,0.2,1);
+      --black-deep:    #080808;
+      --black-panel:   #111111;
+      --black-card:    #181818;
+      --black-input:   #1c1c1c;
+      --black-border:  #272727;
+      --black-hover:   #202020;
+      --gold-bright:   #c9a84c;
+      --gold-mid:      #b8923e;
+      --gold-muted:    #8a6a28;
+      --gold-shine:    #e8c96a;
+      --gold-subtle:   rgba(201,168,76,0.10);
+      --gold-glow:     rgba(201,168,76,0.22);
+      /* Subject accent colors */
+      --math-color:    #5b9cf6;
+      --math-subtle:   rgba(91,156,246,0.10);
+      --ela-color:     #a78bfa;
+      --ela-subtle:    rgba(167,139,250,0.10);
+      --sci-color:     #34d399;
+      --sci-subtle:    rgba(52,211,153,0.10);
+      --hist-color:    #fb923c;
+      --hist-subtle:   rgba(251,146,60,0.10);
+      --gen-color:     var(--gold-bright);
+      --gen-subtle:    var(--gold-subtle);
+      /* Typography */
+      --font-ui:       'Inter', system-ui, sans-serif;
+      --font-display:  'Cinzel', Georgia, serif;
+      /* Spacing */
+      --radius-sm:  8px;
+      --radius-md:  14px;
+      --radius-lg:  20px;
+      --radius-xl:  28px;
+      /* Shadows */
+      --shadow-card: 0 2px 24px rgba(0,0,0,0.6);
+      --shadow-gold: 0 0 20px rgba(201,168,76,0.15), 0 2px 8px rgba(0,0,0,0.7);
+      --transition:  all 0.2s cubic-bezier(0.4,0,0.2,1);
     }
 
-    /* ─── RESET & BASE ──────────────────────────────────────── */
+    /* ─── RESET ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-ui);
       background: var(--black-deep);
-      color: var(--text-primary);
+      color: #e8e0cc;
       min-height: 100vh;
       overflow-x: hidden;
+      line-height: 1.5;
     }
-
-    /* Subtle geometric background texture */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.02) 50%, transparent 60%),
-        repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 60px,
-          rgba(201,168,76,0.015) 60px,
-          rgba(201,168,76,0.015) 61px
-        );
-      pointer-events: none;
-      z-index: 0;
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        45deg, transparent, transparent 80px,
+        rgba(201,168,76,0.012) 80px, rgba(201,168,76,0.012) 81px
+      );
+      pointer-events: none; z-index: 0;
     }
 
     /* ─── SCROLLBAR ─────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--black-panel); }
-    ::-webkit-scrollbar-thumb { background: var(--gold-muted); border-radius: 3px; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--black-border); border-radius: 99px; }
 
-    /* ─── GOLD GRADIENT HELPERS ─────────────────────────────── */
+    /* ─── HELPERS ───────────────────────────────────────────── */
     .gold-text {
-      background: linear-gradient(135deg, var(--gold-shine) 0%, var(--gold-bright) 50%, var(--gold-mid) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      background: linear-gradient(135deg, var(--gold-shine), var(--gold-bright) 50%, var(--gold-mid));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .gold-rule {
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
-      opacity: 0.4;
+      opacity: 0.3;
     }
+    .hidden { display: none !important; }
 
-    /* ─── NAVIGATION BAR ────────────────────────────────────── */
+    /* ─── OBSIDIA LOGO SVG (reusable via use) ───────────────── */
+    .logo-svg { overflow: visible; }
+
+    /* ─── NAV ───────────────────────────────────────────────── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-      height: 64px;
-      background: rgba(8,8,8,0.92);
-      backdrop-filter: blur(20px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 62px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+      background: rgba(8,8,8,0.94);
+      backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--black-border);
     }
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
+      display: flex; align-items: center; gap: 9px;
+      text-decoration: none; flex-shrink: 0;
     }
-    .nav-logo-gem {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
-      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-      flex-shrink: 0;
-    }
+    .nav-logo-svg { width: 34px; height: 34px; flex-shrink: 0; }
     .nav-logo-text {
-      font-family: 'Cinzel', serif;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
+      font-family: var(--font-display);
+      font-size: 17px; font-weight: 700;
+      letter-spacing: 0.1em;
     }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .nav-center {
+      display: flex; align-items: center; gap: 2px;
       list-style: none;
     }
-    .nav-links a {
+    .nav-center a {
       text-decoration: none;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      padding: 6px 14px;
+      color: #7a7060;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 5px 13px;
       border-radius: var(--radius-sm);
       transition: var(--transition);
     }
-    .nav-links a:hover { color: var(--gold-bright); background: var(--gold-subtle); }
-    .nav-links a.active { color: var(--gold-bright); }
-    .nav-cta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .btn-nav-sign {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 6px 12px;
+    .nav-center a:hover { color: #c8b88a; }
+    .nav-center a.active { color: var(--gold-bright); }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .btn-ghost {
+      font-family: var(--font-ui); font-size: 13px; font-weight: 500;
+      color: #7a7060; background: none; border: none;
+      padding: 6px 12px; cursor: pointer; border-radius: var(--radius-sm);
       transition: var(--transition);
     }
-    .btn-nav-sign:hover { color: var(--text-primary); }
-    .btn-nav-primary {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--black-deep);
+    .btn-ghost:hover { color: #e8e0cc; }
+    .btn-gold {
+      font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #0a0a0a;
       background: linear-gradient(135deg, var(--gold-shine), var(--gold-bright));
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 8px 18px;
-      cursor: pointer;
+      border: none; border-radius: var(--radius-sm);
+      padding: 8px 18px; cursor: pointer;
       transition: var(--transition);
     }
-    .btn-nav-primary:hover {
-      box-shadow: 0 0 16px var(--gold-glow);
-      transform: translateY(-1px);
-    }
+    .btn-gold:hover { box-shadow: 0 0 16px var(--gold-glow); transform: translateY(-1px); }
 
     /* ─── PAGE LAYOUT ───────────────────────────────────────── */
-    main {
-      position: relative;
-      z-index: 1;
-      padding-top: 64px;
-    }
+    main { position: relative; z-index: 1; padding-top: 62px; }
 
-    /* ─── HERO SECTION ──────────────────────────────────────── */
+    /* ─── HERO ──────────────────────────────────────────────── */
     .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 56px 24px 40px;
-      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 48px 24px 36px; text-align: center;
     }
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 14px;
-      border: 1px solid var(--gold-muted);
-      border-radius: 99px;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold-bright);
-      margin-bottom: 22px;
-      background: var(--gold-subtle);
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 4px 14px;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 99px; background: var(--gold-subtle);
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold-bright); margin-bottom: 20px;
     }
     .hero-badge-dot {
-      width: 6px; height: 6px;
+      width: 5px; height: 5px; border-radius: 50%;
       background: var(--gold-bright);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
+      animation: pulse 2.5s ease-in-out infinite;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
+      50% { opacity: 0.4; transform: scale(0.75); }
     }
     .hero-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(36px, 5vw, 60px);
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-    .hero-tagline {
-      font-size: clamp(13px, 1.6vw, 16px);
-      font-weight: 400;
-      color: var(--text-secondary);
-      letter-spacing: 0.06em;
-      font-style: italic;
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4.5vw, 56px);
+      font-weight: 700; letter-spacing: 0.05em; line-height: 1.1;
       margin-bottom: 10px;
     }
-    .gold-rule.hero-rule {
-      width: 120px;
-      margin: 16px auto 0;
+    .hero-tagline {
+      font-size: clamp(13px, 1.5vw, 15px);
+      font-weight: 400; font-style: italic;
+      color: #7a7060; letter-spacing: 0.05em;
     }
+    .gold-rule.hero-rule { width: 100px; margin: 18px auto 0; }
 
-    /* ─── WORKSPACE GRID ────────────────────────────────────── */
+    /* ─── WORKSPACE ─────────────────────────────────────────── */
     .workspace {
       display: grid;
-      grid-template-columns: 280px 1fr 280px;
-      grid-template-rows: auto 1fr;
-      gap: 16px;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 24px 20px 32px;
+      grid-template-columns: 268px 1fr 268px;
+      gap: 14px;
+      max-width: 1300px; margin: 0 auto;
+      padding: 20px 18px 36px;
       align-items: start;
     }
 
@@ -245,877 +201,502 @@
       box-shadow: var(--shadow-card);
     }
     .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
       border-bottom: 1px solid var(--black-border);
     }
     .panel-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
       color: var(--gold-bright);
     }
-    .panel-icon {
-      width: 20px; height: 20px;
-      opacity: 0.5;
-    }
 
-    /* ─── LEFT PANEL: QUICK SNAP + RECENT ───────────────────── */
+    /* ─── LEFT: UPLOAD IMAGE ────────────────────────────────── */
     .left-panel { grid-column: 1; }
 
-    /* Quick Snap Button */
-    .quick-snap-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 28px 20px 24px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      gap: 14px;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
+    .upload-btn {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      width: 100%; padding: 26px 18px 22px;
+      background: none; border: none; cursor: pointer;
+      gap: 12px; transition: var(--transition);
+      position: relative; overflow: hidden;
     }
-    .quick-snap-btn::before {
+    .upload-btn::before {
       content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,0.07), transparent 68%);
+      opacity: 0; transition: opacity 0.28s ease;
     }
-    .quick-snap-btn:hover::before { opacity: 1; }
-    .quick-snap-btn:hover { transform: translateY(-2px); }
-    .quick-snap-btn:active { transform: translateY(0) scale(0.98); }
+    .upload-btn:hover::before { opacity: 1; }
+    .upload-btn:hover { transform: translateY(-2px); }
+    .upload-btn:active { transform: scale(0.985); }
 
-    .snap-icon-wrap {
-      position: relative;
-      width: 96px; height: 96px;
-    }
-    .snap-icon-body {
-      width: 96px; height: 88px;
-      background: linear-gradient(145deg, #1e1e1e 0%, #111 100%);
-      border: 2px solid var(--gold-bright);
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .upload-icon-wrap {
+      width: 88px; height: 88px;
+      background: linear-gradient(160deg, #1d1d1d, #101010);
+      border: 1.5px solid var(--gold-bright);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
       box-shadow:
-        0 0 0 1px rgba(201,168,76,0.2),
-        inset 0 1px 0 rgba(201,168,76,0.15),
+        0 0 0 1px rgba(201,168,76,0.15),
+        inset 0 1px 0 rgba(201,168,76,0.12),
         var(--shadow-gold);
-      position: relative;
-      overflow: hidden;
-    }
-    .snap-icon-body::before {
-      content: '';
-      position: absolute;
-      top: 6px; left: 6px; right: 6px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
-    }
-    /* Camera shutter SVG */
-    .snap-shutter {
-      width: 56px; height: 56px;
+      transition: var(--transition);
       position: relative;
     }
-    .shutter-ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 2px solid;
-    }
-    .shutter-outer {
-      inset: 0;
-      border-color: var(--gold-bright);
-      box-shadow: 0 0 12px rgba(201,168,76,0.4);
-    }
-    .shutter-mid {
-      inset: 8px;
-      border-color: var(--gold-mid);
-    }
-    .shutter-inner {
-      inset: 18px;
-      background: radial-gradient(circle, #111 50%, #222);
-      border-color: var(--gold-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .shutter-q {
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      color: var(--gold-bright);
-      font-weight: 700;
-    }
-    /* Shutter blades */
-    .shutter-blade {
-      position: absolute;
-      width: 2px;
-      height: 18px;
-      background: var(--gold-bright);
-      border-radius: 1px;
-      top: 50%;
-      left: 50%;
-      transform-origin: bottom center;
-      opacity: 0.5;
-    }
-
-    .snap-viewfinder-top {
-      position: absolute;
-      top: 6px; left: 50%;
-      transform: translateX(-50%);
-      width: 12px; height: 8px;
-      border-top: 2px solid var(--gold-bright);
-      border-left: 2px solid var(--gold-bright);
-      border-right: 2px solid var(--gold-bright);
-      border-radius: 3px 3px 0 0;
-    }
-    .snap-flash {
-      position: absolute;
-      top: 8px; left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      color: var(--gold-bright);
-    }
-    .snap-corner {
-      position: absolute;
-      width: 10px; height: 10px;
-    }
-    .snap-corner-tl { top: 5px; left: 5px; border-top: 2px solid var(--gold-bright); border-left: 2px solid var(--gold-bright); }
-    .snap-corner-br { bottom: 5px; right: 5px; border-bottom: 2px solid var(--gold-bright); border-right: 2px solid var(--gold-bright); }
-
-    .snap-label {
-      font-family: 'Cinzel', serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-    .snap-sublabel {
-      font-size: 11px;
-      color: var(--text-secondary);
-      letter-spacing: 0.06em;
-    }
-
-    /* Quick Snap Glow animation on hover */
-    .quick-snap-btn:hover .snap-icon-body {
+    .upload-btn:hover .upload-icon-wrap {
+      border-color: var(--gold-shine);
       box-shadow:
-        0 0 0 1px rgba(201,168,76,0.4),
-        0 0 32px rgba(201,168,76,0.3),
-        inset 0 1px 0 rgba(201,168,76,0.2);
+        0 0 0 1px rgba(201,168,76,0.3),
+        0 0 28px rgba(201,168,76,0.22),
+        inset 0 1px 0 rgba(201,168,76,0.18);
+    }
+    .upload-icon-svg {
+      width: 38px; height: 38px;
+      color: var(--gold-bright);
+      transition: var(--transition);
+    }
+    .upload-btn:hover .upload-icon-svg { color: var(--gold-shine); }
+
+    .upload-label {
+      font-family: var(--font-display);
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .upload-sublabel {
+      font-size: 11px; color: #6a6050;
+      letter-spacing: 0.04em; text-align: center;
+      line-height: 1.5;
     }
 
-    /* Recent Snaps */
-    .recent-section { padding: 0 16px 16px; }
+    /* Recent Uploads */
+    .recent-section { padding: 0 14px 16px; }
     .recent-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 12px 4px 8px;
+      font-size: 9.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: #4a4438;
+      padding: 12px 6px 8px;
     }
-    .recent-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 10px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .recent-item:hover { background: var(--gold-subtle); }
-    .recent-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .recent-item-text { flex: 1; min-width: 0; }
-    .recent-item-title {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .recent-item-meta {
-      font-size: 10px;
-      color: var(--text-dim);
-      margin-top: 1px;
-    }
-    .recent-item-time {
-      font-size: 10px;
-      color: var(--text-dim);
-      flex-shrink: 0;
-    }
-
-    /* Subject color dots */
-    .dot-math    { background: #4c8ef5; }
-    .dot-english { background: #9f6ef5; }
-    .dot-science { background: #4cba6e; }
-    .dot-history { background: #e07c4c; }
-    .dot-other   { background: var(--gold-bright); }
-
-    /* ─── CENTER PANEL: AI CHAT ─────────────────────────────── */
-    .center-panel {
-      grid-column: 2;
-      display: flex;
-      flex-direction: column;
-      min-height: 600px;
-    }
-
-    /* Tab bar */
-    .chat-tabs {
-      display: flex;
-      padding: 0 20px;
-      border-bottom: 1px solid var(--black-border);
-      gap: 2px;
-    }
-    .chat-tab {
-      padding: 14px 16px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--text-dim);
-      cursor: pointer;
-      position: relative;
-      transition: var(--transition);
-      border: none;
-      background: none;
-      white-space: nowrap;
-    }
-    .chat-tab:hover { color: var(--text-secondary); }
-    .chat-tab.active { color: var(--gold-bright); }
-    .chat-tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
-    }
-
-    /* Chat messages area */
-    .chat-messages {
-      flex: 1;
-      padding: 24px 24px 8px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      min-height: 360px;
-      max-height: 420px;
-    }
-
-    /* Welcome state */
-    .chat-welcome {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      gap: 12px;
-      padding: 40px 20px;
+    .recent-empty {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      padding: 20px 12px;
       text-align: center;
     }
-    .welcome-gem {
-      width: 48px; height: 48px;
-      background: linear-gradient(135deg, var(--gold-shine), var(--gold-mid));
-      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-      margin-bottom: 4px;
-      animation: float 4s ease-in-out infinite;
+    .recent-empty-icon {
+      width: 32px; height: 32px;
+      border: 1.5px dashed #3a342a;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #3a342a; font-size: 14px;
     }
+    .recent-empty-text {
+      font-size: 11px; color: #4a4438; line-height: 1.5;
+    }
+
+    /* ─── CENTER: AI CHAT ───────────────────────────────────── */
+    .center-panel {
+      grid-column: 2;
+      display: flex; flex-direction: column;
+      min-height: 580px;
+    }
+
+    /* Subject tabs */
+    .subject-tabs {
+      display: flex; padding: 0 18px;
+      border-bottom: 1px solid var(--black-border);
+      gap: 0; overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .subject-tabs::-webkit-scrollbar { display: none; }
+    .subject-tab {
+      padding: 13px 14px 11px;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #4a4438;
+      cursor: pointer; border: none; background: none;
+      position: relative; transition: var(--transition);
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .subject-tab:hover { color: #8a8070; }
+    .subject-tab.active { color: var(--tab-color, var(--gold-bright)); }
+    .subject-tab.active::after {
+      content: '';
+      position: absolute; bottom: -1px; left: 4px; right: 4px;
+      height: 2px; border-radius: 1px;
+      background: var(--tab-color, var(--gold-bright));
+    }
+    /* Per-tab accent colors */
+    .subject-tab[data-tab="math"]    { --tab-color: var(--math-color); }
+    .subject-tab[data-tab="ela"]     { --tab-color: var(--ela-color); }
+    .subject-tab[data-tab="science"] { --tab-color: var(--sci-color); }
+    .subject-tab[data-tab="history"] { --tab-color: var(--hist-color); }
+    .subject-tab[data-tab="general"] { --tab-color: var(--gen-color); }
+
+    /* Tab indicator dot */
+    .tab-dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; margin-right: 5px;
+      background: currentColor; opacity: 0.55;
+      vertical-align: middle; position: relative; top: -1px;
+    }
+    .subject-tab.active .tab-dot { opacity: 1; }
+
+    /* Messages */
+    .chat-messages {
+      flex: 1; padding: 22px 22px 6px;
+      overflow-y: auto;
+      display: flex; flex-direction: column; gap: 14px;
+      min-height: 340px; max-height: 400px;
+    }
+
+    /* Welcome states */
+    .chat-welcome {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      flex: 1; gap: 10px;
+      padding: 32px 20px; text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+    .welcome-logo { margin-bottom: 2px; animation: float 4s ease-in-out infinite; }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+      50% { transform: translateY(-5px); }
+    }
+    .welcome-subject-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 11px;
+      border-radius: 99px; border: 1px solid;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 2px;
     }
     .welcome-title {
-      font-family: 'Cinzel', serif;
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
+      font-family: var(--font-display);
+      font-size: 19px; font-weight: 600; letter-spacing: 0.05em;
     }
     .welcome-sub {
-      font-size: 13px;
-      color: var(--text-secondary);
-      max-width: 340px;
-      line-height: 1.6;
+      font-size: 13px; color: #6a6050;
+      max-width: 360px; line-height: 1.65;
     }
     .suggestion-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 8px;
+      display: flex; flex-wrap: wrap; gap: 7px;
+      justify-content: center; margin-top: 6px;
     }
     .chip {
-      padding: 7px 14px;
+      padding: 6px 13px;
       border: 1px solid var(--black-border);
       border-radius: 99px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      background: var(--black-card);
-      transition: var(--transition);
-      white-space: nowrap;
+      font-size: 12px; color: #6a6050;
+      cursor: pointer; background: var(--black-card);
+      transition: var(--transition); white-space: nowrap;
+      font-family: var(--font-ui);
     }
-    .chip:hover {
-      border-color: var(--gold-muted);
-      color: var(--gold-bright);
-      background: var(--gold-subtle);
-    }
+    .chip:hover { border-color: var(--chip-color, var(--gold-muted)); color: var(--chip-color, var(--gold-bright)); background: var(--chip-subtle, var(--gold-subtle)); }
 
-    /* Message bubbles */
-    .msg {
-      display: flex;
-      gap: 10px;
-      animation: msgIn 0.3s ease;
-    }
-    @keyframes msgIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* Messages */
+    .msg { display: flex; gap: 9px; animation: msgIn 0.25s ease; }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; } }
     .msg-avatar {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
+      width: 28px; height: 28px; border-radius: 50%;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; font-family: var(--font-display);
     }
-    .msg-avatar-ai {
-      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
-      color: var(--black-deep);
-      font-family: 'Cinzel', serif;
-    }
-    .msg-avatar-user {
-      background: var(--black-card);
-      border: 1px solid var(--black-border);
-      color: var(--text-secondary);
-    }
+    .msg-avatar-ai { background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid)); color: #0a0a0a; }
+    .msg-avatar-user { background: var(--black-card); border: 1px solid var(--black-border); color: #6a6050; }
     .msg-bubble {
-      max-width: 85%;
-      padding: 11px 15px;
-      border-radius: var(--radius-md);
-      font-size: 13.5px;
-      line-height: 1.65;
+      max-width: 86%; padding: 10px 14px;
+      border-radius: var(--radius-md); font-size: 13.5px; line-height: 1.65;
     }
-    .msg.ai .msg-bubble {
-      background: var(--black-card);
-      border: 1px solid var(--black-border);
-      color: var(--text-primary);
-      border-bottom-left-radius: 4px;
-    }
-    .msg.user {
-      flex-direction: row-reverse;
-    }
-    .msg.user .msg-bubble {
-      background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
-      border: 1px solid var(--gold-muted);
-      color: var(--text-primary);
-      border-bottom-right-radius: 4px;
-    }
-    .msg-time {
-      font-size: 10px;
-      color: var(--text-dim);
-      margin-top: 4px;
-      padding: 0 4px;
-    }
+    .msg.ai .msg-bubble { background: var(--black-card); border: 1px solid var(--black-border); border-bottom-left-radius: 4px; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg.user .msg-bubble { background: rgba(201,168,76,0.10); border: 1px solid rgba(201,168,76,0.22); border-bottom-right-radius: 4px; }
+    .msg-time { font-size: 10px; color: #3a342a; margin-top: 3px; padding: 0 3px; }
     .msg.user .msg-time { text-align: right; }
 
-    /* Typing indicator */
-    .typing-indicator {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-    }
-    .typing-dots {
-      display: flex;
-      gap: 4px;
-      padding: 13px 16px;
-      background: var(--black-card);
-      border: 1px solid var(--black-border);
-      border-radius: var(--radius-md);
-      border-bottom-left-radius: 4px;
-    }
-    .typing-dot {
-      width: 6px; height: 6px;
-      background: var(--gold-muted);
-      border-radius: 50%;
-      animation: typingBounce 1.2s ease-in-out infinite;
-    }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingBounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-5px); background: var(--gold-bright); }
-    }
+    /* Image message */
+    .msg-img { max-width: 200px; max-height: 160px; border-radius: 8px; object-fit: cover; display: block; }
 
-    /* Chat input area */
+    /* Typing */
+    .typing-indicator { display: flex; gap: 9px; align-items: flex-end; }
+    .typing-dots {
+      display: flex; gap: 4px; padding: 12px 14px;
+      background: var(--black-card); border: 1px solid var(--black-border);
+      border-radius: var(--radius-md); border-bottom-left-radius: 4px;
+    }
+    .typing-dot { width: 5px; height: 5px; background: #4a4438; border-radius: 50%; animation: bounce 1.2s ease-in-out infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.18s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); background: var(--gold-bright); } }
+
+    /* Input area */
     .chat-input-wrap {
-      padding: 16px 20px 20px;
+      padding: 14px 18px 18px;
       border-top: 1px solid var(--black-border);
     }
-    .chat-input-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
+    .chat-input-box {
+      display: flex; align-items: flex-end; gap: 8px;
       background: var(--black-input);
       border: 1px solid var(--black-border);
       border-radius: var(--radius-md);
-      padding: 10px 12px;
+      padding: 9px 10px;
       transition: var(--transition);
     }
-    .chat-input-row:focus-within {
-      border-color: var(--gold-muted);
-      box-shadow: 0 0 0 2px rgba(201,168,76,0.08);
+    .chat-input-box:focus-within {
+      border-color: rgba(201,168,76,0.35);
+      box-shadow: 0 0 0 2px rgba(201,168,76,0.06);
     }
-    .chat-input-actions-left {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-      align-self: flex-end;
-      padding-bottom: 2px;
+    .input-attach {
+      width: 26px; height: 26px;
+      background: none; border: none; cursor: pointer;
+      color: #3a342a; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); flex-shrink: 0; align-self: flex-end; padding-bottom: 1px;
     }
-    .input-action-btn {
-      width: 28px; height: 28px;
-      border: none;
-      background: none;
-      color: var(--text-dim);
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-      font-size: 14px;
-    }
-    .input-action-btn:hover {
-      color: var(--gold-bright);
-      background: var(--gold-subtle);
-    }
+    .input-attach:hover { color: var(--gold-bright); background: var(--gold-subtle); }
     .chat-textarea {
-      flex: 1;
-      background: none;
-      border: none;
-      outline: none;
-      color: var(--text-primary);
-      font-family: 'Inter', sans-serif;
-      font-size: 13.5px;
-      line-height: 1.5;
-      resize: none;
-      min-height: 22px;
-      max-height: 120px;
+      flex: 1; background: none; border: none; outline: none;
+      color: #e8e0cc; font-family: var(--font-ui);
+      font-size: 13.5px; line-height: 1.5; resize: none;
+      min-height: 20px; max-height: 120px;
     }
-    .chat-textarea::placeholder { color: var(--text-dim); }
-    .chat-send-btn {
-      width: 34px; height: 34px;
+    .chat-textarea::placeholder { color: #3a342a; }
+    .chat-send {
+      width: 32px; height: 32px;
       background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
-      border: none;
-      border-radius: var(--radius-sm);
-      color: var(--black-deep);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      flex-shrink: 0;
-      align-self: flex-end;
-      transition: var(--transition);
+      border: none; border-radius: 8px;
+      color: #0a0a0a; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; align-self: flex-end; transition: var(--transition);
     }
-    .chat-send-btn:hover {
-      box-shadow: 0 0 12px var(--gold-glow);
-      transform: scale(1.05);
+    .chat-send:hover { box-shadow: 0 0 12px var(--gold-glow); transform: scale(1.06); }
+    .chat-send:disabled { background: var(--black-border); color: #3a342a; cursor: not-allowed; transform: none; box-shadow: none; }
+    .chat-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 7px; padding: 0 3px;
     }
-    .chat-send-btn:disabled {
-      background: var(--black-border);
-      color: var(--text-dim);
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .chat-footer-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 8px;
-      padding: 0 4px;
-    }
-    .chat-footer-hint {
-      font-size: 10px;
-      color: var(--text-dim);
-    }
-    .chat-model-badge {
-      font-size: 10px;
-      color: var(--gold-muted);
-      letter-spacing: 0.06em;
-    }
+    .chat-footer-hint { font-size: 10px; color: #3a342a; }
+    .chat-model-tag { font-size: 10px; color: #5a5040; letter-spacing: 0.07em; }
 
-    /* ─── RIGHT PANEL: TOOLS ────────────────────────────────── */
+    /* ─── RIGHT: TOOLS ──────────────────────────────────────── */
     .right-panel { grid-column: 3; }
-
-    /* Tools tab bar */
     .tools-tabs {
-      display: flex;
-      padding: 0 16px;
-      gap: 4px;
+      display: flex; padding: 0 14px; gap: 0;
       border-bottom: 1px solid var(--black-border);
     }
     .tools-tab {
-      padding: 12px 10px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      color: var(--text-dim);
-      cursor: pointer;
-      border: none;
-      background: none;
-      position: relative;
-      transition: var(--transition);
+      padding: 11px 9px 9px;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #4a4438; cursor: pointer; border: none; background: none;
+      position: relative; transition: var(--transition); white-space: nowrap;
     }
-    .tools-tab:hover { color: var(--text-secondary); }
+    .tools-tab:hover { color: #8a8070; }
     .tools-tab.active { color: var(--gold-bright); }
     .tools-tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; left: 0; right: 0;
-      height: 2px;
-      background: var(--gold-bright);
+      content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+      height: 2px; background: var(--gold-bright);
     }
-    .tools-tab-teacher.active { color: #4c8ef5; }
-    .tools-tab-teacher.active::after { background: #4c8ef5; }
+    .tools-tab.educator.active { color: var(--math-color); }
+    .tools-tab.educator.active::after { background: var(--math-color); }
 
-    /* Tools grid */
-    .tools-content { padding: 12px; }
-    .tools-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .tools-content { padding: 10px; }
+    .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+
     .tool-card {
-      background: var(--black-card);
-      border: 1px solid var(--black-border);
-      border-radius: var(--radius-md);
-      padding: 14px 12px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      position: relative;
-      overflow: hidden;
+      background: var(--black-card); border: 1px solid var(--black-border);
+      border-radius: var(--radius-md); padding: 13px 11px;
+      cursor: pointer; transition: var(--transition);
+      display: flex; flex-direction: column; gap: 5px;
     }
-    .tool-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-    .tool-card:hover::before { opacity: 1; }
     .tool-card:hover { border-color: var(--gold-muted); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
-    .tool-card.featured {
-      grid-column: span 2;
-      flex-direction: row;
-      align-items: center;
-      padding: 14px 16px;
+    .tool-card.span2 {
+      grid-column: span 2; flex-direction: row;
+      align-items: center; gap: 12px; padding: 13px 14px;
     }
-    .tool-icon {
-      font-size: 20px;
-      line-height: 1;
+    .tool-card.math-card:hover    { border-color: var(--math-color); box-shadow: 0 0 16px rgba(91,156,246,0.12); }
+    .tool-card.ela-card:hover     { border-color: var(--ela-color); box-shadow: 0 0 16px rgba(167,139,250,0.12); }
+    .tool-card.educator-card:hover { border-color: rgba(91,156,246,0.5); box-shadow: 0 0 16px rgba(91,156,246,0.10); }
+    .tool-icon { font-size: 18px; line-height: 1; flex-shrink: 0; }
+    .tool-text { flex: 1; min-width: 0; }
+    .tool-name { font-size: 11.5px; font-weight: 600; color: #d0c8b0; letter-spacing: 0.01em; }
+    .tool-desc { font-size: 10px; color: #4a4438; line-height: 1.45; margin-top: 2px; }
+    .tool-card.span2 .tool-name { font-size: 13px; }
+    .tool-card.span2 .tool-desc { font-size: 11px; }
+    .tool-tag {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 2px 7px; border-radius: 99px;
+      flex-shrink: 0; align-self: flex-start;
     }
-    .tool-name {
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: 0.02em;
-    }
-    .tool-desc {
-      font-size: 10px;
-      color: var(--text-dim);
-      line-height: 1.4;
-    }
-    .tool-card.featured .tool-name { font-size: 13px; }
-    .tool-card.featured .tool-desc { font-size: 11px; }
-    .tool-card.featured .tool-text { flex: 1; }
-    .tool-badge {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 2px 7px;
-      border-radius: 99px;
-      background: var(--gold-subtle);
-      color: var(--gold-bright);
-      border: 1px solid var(--gold-muted);
-    }
-    .tool-badge.new { background: rgba(76,190,110,0.1); color: #4cba6e; border-color: #4cba6e; }
+    .tag-gold { background: var(--gold-subtle); color: var(--gold-bright); border: 1px solid var(--gold-muted); }
+    .tag-blue { background: var(--math-subtle); color: var(--math-color); border: 1px solid rgba(91,156,246,0.3); }
+    .tag-purple { background: var(--ela-subtle); color: var(--ela-color); border: 1px solid rgba(167,139,250,0.3); }
 
-    /* Teacher panel */
-    .teacher-tools-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+    .educator-card {
+      background: var(--black-card); border: 1px solid rgba(91,156,246,0.15);
+      border-radius: var(--radius-md); padding: 13px 11px;
+      cursor: pointer; transition: var(--transition);
+      display: flex; flex-direction: column; gap: 5px;
     }
-    .teacher-card {
-      background: var(--black-card);
-      border: 1px solid rgba(76,142,245,0.2);
-      border-radius: var(--radius-md);
-      padding: 13px 11px;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .teacher-card:hover {
-      border-color: rgba(76,142,245,0.5);
-      background: rgba(76,142,245,0.05);
-      transform: translateY(-2px);
-    }
-    .teacher-card.featured { grid-column: span 2; flex-direction: row; align-items: center; padding: 14px 16px; }
-    .teacher-card.featured .tool-text { flex: 1; }
-    .tool-badge.educator {
-      background: rgba(76,142,245,0.1);
-      color: #4c8ef5;
-      border-color: rgba(76,142,245,0.4);
-    }
+    .educator-card:hover { border-color: rgba(91,156,246,0.45); background: rgba(91,156,246,0.04); transform: translateY(-2px); }
+    .educator-card.span2 { grid-column: span 2; flex-direction: row; align-items: center; gap: 12px; padding: 13px 14px; }
+    .educator-card.span2 .tool-name { font-size: 13px; }
+    .educator-card.span2 .tool-desc { font-size: 11px; }
+    .educator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
 
-    /* ─── QUICK SNAP MODAL ──────────────────────────────────── */
+    /* ─── UPLOAD MODAL ──────────────────────────────────────── */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.78); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.22s ease;
     }
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .modal-overlay.open { opacity: 1; pointer-events: auto; }
     .modal {
       background: var(--black-panel);
       border: 1px solid var(--black-border);
       border-radius: var(--radius-xl);
-      width: min(520px, 94vw);
-      padding: 36px 32px 32px;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.9), 0 0 60px rgba(201,168,76,0.08);
-      transform: translateY(16px) scale(0.97);
-      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      width: min(500px, 94vw); padding: 32px 28px 28px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.88), 0 0 48px rgba(201,168,76,0.06);
+      transform: translateY(14px) scale(0.97);
+      transition: transform 0.24s cubic-bezier(0.34,1.5,0.64,1);
     }
-    .modal-overlay.open .modal {
-      transform: translateY(0) scale(1);
-    }
-    .modal-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 8px;
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 6px;
     }
     .modal-title {
-      font-family: 'Cinzel', serif;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 700; letter-spacing: 0.06em;
     }
     .modal-close {
-      width: 32px; height: 32px;
-      background: var(--black-card);
-      border: 1px solid var(--black-border);
-      border-radius: var(--radius-sm);
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 30px; height: 30px;
+      background: var(--black-card); border: 1px solid var(--black-border);
+      border-radius: 7px; color: #6a6050; cursor: pointer;
+      font-size: 15px; display: flex; align-items: center; justify-content: center;
       transition: var(--transition);
     }
-    .modal-close:hover { color: var(--text-primary); border-color: var(--gold-muted); }
+    .modal-close:hover { color: #e8e0cc; border-color: var(--gold-muted); }
     .modal-sub {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 28px;
-      line-height: 1.5;
+      font-size: 13px; color: #6a6050;
+      margin-bottom: 22px; line-height: 1.55;
     }
+
+    /* Subject selection grid */
     .subject-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
     }
-    .subject-btn {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px 18px;
+    .subject-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px;
       background: var(--black-card);
       border: 1px solid var(--black-border);
       border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: var(--transition);
-      text-align: left;
+      cursor: pointer; transition: var(--transition); text-align: left;
+      font-family: var(--font-ui);
     }
-    .subject-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    .subject-emoji { font-size: 24px; line-height: 1; }
-    .subject-info { flex: 1; }
-    .subject-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: 0.02em;
-      margin-bottom: 2px;
-    }
-    .subject-hint { font-size: 11px; color: var(--text-dim); }
-    .subject-btn.math   { border-color: rgba(76,142,245,0.3);  }
-    .subject-btn.math:hover   { border-color: #4c8ef5;  background: rgba(76,142,245,0.06); }
-    .subject-btn.english { border-color: rgba(159,110,245,0.3); }
-    .subject-btn.english:hover { border-color: #9f6ef5; background: rgba(159,110,245,0.06); }
-    .subject-btn.science { border-color: rgba(76,186,110,0.3); }
-    .subject-btn.science:hover { border-color: #4cba6e; background: rgba(76,186,110,0.06); }
-    .subject-btn.history { border-color: rgba(224,124,76,0.3); }
-    .subject-btn.history:hover { border-color: #e07c4c; background: rgba(224,124,76,0.06); }
-    .subject-btn.other  { border-color: rgba(201,168,76,0.3); }
-    .subject-btn.other:hover  { border-color: var(--gold-bright); background: var(--gold-subtle); }
-    .subject-btn.other  { grid-column: span 2; }
+    .subject-card:hover { transform: translateY(-2px); box-shadow: 0 4px 18px rgba(0,0,0,0.5); }
+    .subject-card[data-subj="math"]:hover   { border-color: var(--math-color); background: var(--math-subtle); }
+    .subject-card[data-subj="ela"]:hover    { border-color: var(--ela-color);  background: var(--ela-subtle); }
+    .subject-card[data-subj="science"]:hover { border-color: var(--sci-color); background: var(--sci-subtle); }
+    .subject-card[data-subj="history"]:hover { border-color: var(--hist-color); background: var(--hist-subtle); }
+    .subject-card[data-subj="general"]:hover { border-color: var(--gold-bright); background: var(--gold-subtle); }
+    .subject-card[data-subj="general"] { grid-column: span 2; }
+    .subj-icon { font-size: 22px; flex-shrink: 0; }
+    .subj-info { flex: 1; }
+    .subj-name { font-size: 14px; font-weight: 600; color: #d0c8b0; letter-spacing: 0.01em; }
+    .subj-hint { font-size: 10.5px; color: #4a4438; margin-top: 2px; }
 
-    .modal-upload-area {
-      margin-top: 20px;
-      border: 1.5px dashed var(--black-border);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
+    .modal-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0 0; }
+    .modal-divider::before, .modal-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--black-border);
     }
-    .modal-upload-area:hover {
-      border-color: var(--gold-muted);
-      background: var(--gold-subtle);
-    }
-    .upload-icon { font-size: 24px; margin-bottom: 6px; }
-    .upload-text { font-size: 12px; color: var(--text-secondary); }
-    .upload-hint { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
-
-    /* ─── BOTTOM STATS BAR ──────────────────────────────────── */
-    .stats-bar {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 0 20px 40px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    .stat-card {
-      background: var(--black-panel);
-      border: 1px solid var(--black-border);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      text-align: center;
-    }
-    .stat-number {
-      font-family: 'Cinzel', serif;
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-dim);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+    .modal-divider span { font-size: 10px; color: #3a342a; letter-spacing: 0.1em; text-transform: uppercase; }
 
     /* ─── RESPONSIVE ────────────────────────────────────────── */
-    @media (max-width: 1100px) {
-      .workspace {
-        grid-template-columns: 260px 1fr;
-        grid-template-rows: auto auto auto;
-      }
+    @media (max-width: 1080px) {
+      .workspace { grid-template-columns: 248px 1fr; }
       .right-panel { grid-column: 1 / -1; }
-      .tools-grid { grid-template-columns: repeat(4, 1fr); }
-      .teacher-tools-grid { grid-template-columns: repeat(4, 1fr); }
-      .tool-card.featured, .teacher-card.featured { grid-column: span 2; }
+      .tools-grid, .educator-grid { grid-template-columns: repeat(4, 1fr); }
+      .tool-card.span2, .educator-card.span2 { grid-column: span 2; }
     }
-    @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-links { display: none; }
-      .workspace {
-        grid-template-columns: 1fr;
-        padding: 16px 12px 24px;
-      }
+    @media (max-width: 740px) {
+      nav { padding: 0 14px; }
+      .nav-center { display: none; }
+      .workspace { grid-template-columns: 1fr; padding: 14px 12px 28px; }
       .left-panel, .center-panel, .right-panel { grid-column: 1; }
-      .hero { padding: 32px 16px 28px; }
-      .tools-grid, .teacher-tools-grid { grid-template-columns: 1fr 1fr; }
-      .tool-card.featured, .teacher-card.featured { grid-column: span 2; }
-      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .hero { padding: 30px 16px 24px; }
+      .tools-grid, .educator-grid { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 480px) {
-      .stats-bar { grid-template-columns: 1fr; }
+    @media (max-width: 460px) {
       .subject-grid { grid-template-columns: 1fr; }
-      .subject-btn.other { grid-column: span 1; }
-    }
-
-    /* ─── UTILITY ───────────────────────────────────────────── */
-    .hidden { display: none !important; }
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      border: 0;
+      .subject-card[data-subj="general"] { grid-column: span 1; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════
+<!-- Hidden file input — triggered programmatically after subject selection -->
+<input type="file" id="imageFileInput" accept="image/*" style="display:none" aria-hidden="true" />
+
+<!-- ══════════════════════════════════════════════════
      NAVIGATION
-══════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════ -->
 <nav role="navigation" aria-label="Main navigation">
-  <a class="nav-logo" href="#" aria-label="Obsidia AI Home">
-    <div class="nav-logo-gem" aria-hidden="true"></div>
+  <a class="nav-logo" href="#" aria-label="Obsidia AI — Home">
+    <svg class="nav-logo-svg" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <radialGradient id="nSphere" cx="37%" cy="31%" r="62%">
+          <stop offset="0%" stop-color="#525252"/>
+          <stop offset="38%" stop-color="#1a1a1a"/>
+          <stop offset="100%" stop-color="#050505"/>
+        </radialGradient>
+        <radialGradient id="nShine" cx="33%" cy="27%" r="38%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.20)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+        <linearGradient id="nRing" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="#e8c96a"/>
+          <stop offset="42%"  stop-color="#c9a84c"/>
+          <stop offset="72%"  stop-color="#7a5e20"/>
+          <stop offset="100%" stop-color="#c9a84c"/>
+        </linearGradient>
+        <clipPath id="nTop"><rect x="0" y="0" width="34" height="16.5"/></clipPath>
+        <clipPath id="nBot"><rect x="0" y="16.5" width="34" height="17.5"/></clipPath>
+      </defs>
+      <ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#nRing)" stroke-width="2" fill="none" clip-path="url(#nBot)" opacity="0.5"/>
+      <circle cx="17" cy="16" r="12.5" fill="url(#nSphere)"/>
+      <circle cx="17" cy="16" r="12.5" fill="url(#nShine)"/>
+      <ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#nRing)" stroke-width="2" fill="none" clip-path="url(#nTop)"/>
+    </svg>
     <span class="nav-logo-text gold-text">OBSIDIA AI</span>
   </a>
 
-  <ul class="nav-links" role="list">
+  <ul class="nav-center" role="list">
     <li><a href="#" class="active" aria-current="page">Home</a></li>
-    <li><a href="#">Prompts</a></li>
-    <li><a href="#">Study Hub</a></li>
-    <li><a href="#">Community</a></li>
+    <li><a href="#">Math AI</a></li>
+    <li><a href="#">Reading & ELA</a></li>
+    <li><a href="#">Educators</a></li>
   </ul>
 
-  <div class="nav-cta">
-    <button class="btn-nav-sign">Sign in</button>
-    <button class="btn-nav-primary">Get Started</button>
+  <div class="nav-right">
+    <button class="btn-ghost">Sign In</button>
+    <button class="btn-gold">Get Started</button>
   </div>
 </nav>
 
-<!-- ══════════════════════════════════════════════════════
+<!-- ══════════════════════════════════════════════════
      MAIN
-══════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════ -->
 <main>
 
   <!-- HERO -->
   <section class="hero" aria-labelledby="hero-title">
-    <div class="hero-badge">
+    <div class="hero-badge" aria-label="Currently in Beta">
       <div class="hero-badge-dot" aria-hidden="true"></div>
       Now in Beta
     </div>
@@ -1129,110 +710,201 @@
   <!-- WORKSPACE -->
   <div class="workspace">
 
-    <!-- ── LEFT: QUICK SNAP + RECENT ── -->
-    <aside class="panel left-panel" aria-label="Quick Snap and Recent Activity">
+    <!-- ── LEFT: UPLOAD IMAGE ── -->
+    <aside class="panel left-panel" aria-label="Upload Image">
 
       <div class="panel-header">
-        <span class="panel-title">Quick Snap</span>
-        <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
-          <circle cx="12" cy="13" r="4"/>
+        <span class="panel-title">Upload Image</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#4a4438" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
         </svg>
       </div>
 
       <button
-        class="quick-snap-btn"
-        id="quickSnapBtn"
+        class="upload-btn"
+        id="uploadImageBtn"
         aria-haspopup="dialog"
-        aria-label="Open Quick Snap — instantly solve a problem by subject"
+        aria-label="Upload an image of your assignment"
       >
-        <div class="snap-icon-wrap" aria-hidden="true">
-          <div class="snap-icon-body">
-            <div class="snap-corner snap-corner-tl"></div>
-            <div class="snap-corner snap-corner-br"></div>
-            <!-- Camera shutter -->
-            <div class="snap-shutter">
-              <div class="shutter-ring shutter-outer"></div>
-              <div class="shutter-ring shutter-mid"></div>
-              <div class="shutter-ring shutter-inner">
-                <span class="shutter-q">?</span>
-              </div>
-            </div>
-          </div>
+        <div class="upload-icon-wrap" aria-hidden="true">
+          <!-- Upload / camera icon -->
+          <svg class="upload-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
         </div>
-        <span class="snap-label gold-text">Quick Snap</span>
-        <span class="snap-sublabel">Tap to solve instantly</span>
+        <span class="upload-label gold-text">Upload Image</span>
+        <span class="upload-sublabel">Snap or upload your assignment<br>for instant AI assistance</span>
       </button>
 
       <div class="gold-rule" aria-hidden="true"></div>
 
-      <div class="recent-section" aria-label="Recent Quick Snaps">
-        <div class="recent-label">Recent Snaps</div>
-
-        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Quadratic Formula, Math, 2 minutes ago">
-          <div class="recent-dot dot-math" aria-hidden="true"></div>
-          <div class="recent-item-text">
-            <div class="recent-item-title">Quadratic Formula</div>
-            <div class="recent-item-meta">Math · Algebra</div>
+      <div class="recent-section" aria-label="Recent uploads">
+        <div class="recent-label">Recent Uploads</div>
+        <div class="recent-empty" id="recentEmpty">
+          <div class="recent-empty-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
           </div>
-          <div class="recent-item-time">2m</div>
-        </div>
-
-        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Essay Outline, English, 18 minutes ago">
-          <div class="recent-dot dot-english" aria-hidden="true"></div>
-          <div class="recent-item-text">
-            <div class="recent-item-title">Essay Outline Help</div>
-            <div class="recent-item-meta">English · Writing</div>
-          </div>
-          <div class="recent-item-time">18m</div>
-        </div>
-
-        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Cell Division, Science, yesterday">
-          <div class="recent-dot dot-science" aria-hidden="true"></div>
-          <div class="recent-item-text">
-            <div class="recent-item-title">Cell Division</div>
-            <div class="recent-item-meta">Science · Biology</div>
-          </div>
-          <div class="recent-item-time">1d</div>
-        </div>
-
-        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Civil War Timeline, History, yesterday">
-          <div class="recent-dot dot-history" aria-hidden="true"></div>
-          <div class="recent-item-text">
-            <div class="recent-item-title">Civil War Timeline</div>
-            <div class="recent-item-meta">History · US</div>
-          </div>
-          <div class="recent-item-time">1d</div>
+          <p class="recent-empty-text">Upload an image to get started.<br>Your history will appear here.</p>
         </div>
       </div>
     </aside>
 
     <!-- ── CENTER: AI CHAT ── -->
-    <section class="panel center-panel" aria-label="AI Chat Interface">
+    <section class="panel center-panel" aria-label="AI Tutor Chat">
 
-      <!-- Tab bar -->
-      <div class="chat-tabs" role="tablist" aria-label="Chat modes">
-        <button class="chat-tab active" role="tab" aria-selected="true" aria-controls="chat-panel">Chat</button>
-        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Explain</button>
-        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Practice</button>
-        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Summarize</button>
-        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Translate</button>
+      <!-- Subject tabs -->
+      <div class="subject-tabs" role="tablist" aria-label="Select AI tutor subject">
+        <button class="subject-tab active" role="tab" aria-selected="true" data-tab="math" onclick="switchSubjectTab('math')">
+          <span class="tab-dot" aria-hidden="true"></span>Math AI
+        </button>
+        <button class="subject-tab" role="tab" aria-selected="false" data-tab="ela" onclick="switchSubjectTab('ela')">
+          <span class="tab-dot" aria-hidden="true"></span>Reading & ELA
+        </button>
+        <button class="subject-tab" role="tab" aria-selected="false" data-tab="science" onclick="switchSubjectTab('science')">
+          <span class="tab-dot" aria-hidden="true"></span>Science
+        </button>
+        <button class="subject-tab" role="tab" aria-selected="false" data-tab="history" onclick="switchSubjectTab('history')">
+          <span class="tab-dot" aria-hidden="true"></span>History
+        </button>
+        <button class="subject-tab" role="tab" aria-selected="false" data-tab="general" onclick="switchSubjectTab('general')">
+          <span class="tab-dot" aria-hidden="true"></span>General
+        </button>
       </div>
 
       <!-- Messages -->
       <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
 
-        <!-- Welcome state (shown when no messages) -->
-        <div class="chat-welcome" id="chatWelcome">
-          <div class="welcome-gem" aria-hidden="true"></div>
-          <h2 class="welcome-title gold-text">What can I help you with?</h2>
-          <p class="welcome-sub">Ask me anything — from homework help to essay feedback, equations to essay structure.</p>
-          <div class="suggestion-chips" role="list" aria-label="Suggested prompts">
-            <button class="chip" role="listitem" onclick="useSuggestion(this)">Explain photosynthesis</button>
-            <button class="chip" role="listitem" onclick="useSuggestion(this)">Solve x² + 5x + 6 = 0</button>
-            <button class="chip" role="listitem" onclick="useSuggestion(this)">Outline my essay</button>
-            <button class="chip" role="listitem" onclick="useSuggestion(this)">Civil War causes</button>
-            <button class="chip" role="listitem" onclick="useSuggestion(this)">Study plan for finals</button>
+        <!-- MATH AI WELCOME -->
+        <div class="chat-welcome" id="welcome-math">
+          <svg class="welcome-logo" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="wS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
+              <radialGradient id="wH" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+              <linearGradient id="wR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
+              <clipPath id="wRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
+              <clipPath id="wRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
+            </defs>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#wR)" stroke-width="2.8" fill="none" clip-path="url(#wRB)" opacity="0.5"/>
+            <circle cx="27" cy="25" r="19" fill="url(#wS)"/>
+            <circle cx="27" cy="25" r="19" fill="url(#wH)"/>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#wR)" stroke-width="2.8" fill="none" clip-path="url(#wRT)"/>
+          </svg>
+          <div class="welcome-subject-badge" style="color:var(--math-color);border-color:rgba(91,156,246,0.35);background:var(--math-subtle);">Math AI</div>
+          <h2 class="welcome-title">Advanced Mathematics</h2>
+          <p class="welcome-sub">From pre-algebra through college-level calculus, linear algebra, differential equations, and beyond — with clear, step-by-step solutions.</p>
+          <div class="suggestion-chips" style="--chip-color:var(--math-color);--chip-subtle:var(--math-subtle)">
+            <button class="chip" onclick="useSuggestion(this)">Solve a calculus problem</button>
+            <button class="chip" onclick="useSuggestion(this)">Explain linear algebra</button>
+            <button class="chip" onclick="useSuggestion(this)">Help with statistics</button>
+            <button class="chip" onclick="useSuggestion(this)">Graph this function</button>
+          </div>
+        </div>
+
+        <!-- ELA WELCOME -->
+        <div class="chat-welcome hidden" id="welcome-ela">
+          <svg class="welcome-logo" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="eS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
+              <radialGradient id="eH" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+              <linearGradient id="eR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
+              <clipPath id="eRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
+              <clipPath id="eRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
+            </defs>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#eR)" stroke-width="2.8" fill="none" clip-path="url(#eRB)" opacity="0.5"/>
+            <circle cx="27" cy="25" r="19" fill="url(#eS)"/>
+            <circle cx="27" cy="25" r="19" fill="url(#eH)"/>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#eR)" stroke-width="2.8" fill="none" clip-path="url(#eRT)"/>
+          </svg>
+          <div class="welcome-subject-badge" style="color:var(--ela-color);border-color:rgba(167,139,250,0.35);background:var(--ela-subtle);">Reading & ELA</div>
+          <h2 class="welcome-title">Essays, Reading & Writing</h2>
+          <p class="welcome-sub">Full essay creation, literary analysis, grammar help, and grade-calibrated writing assistance — from middle school through college level.</p>
+          <div class="suggestion-chips" style="--chip-color:var(--ela-color);--chip-subtle:var(--ela-subtle)">
+            <button class="chip" onclick="useSuggestion(this)">Write a 5-paragraph essay</button>
+            <button class="chip" onclick="useSuggestion(this)">Analyze a passage</button>
+            <button class="chip" onclick="useSuggestion(this)">Improve my writing</button>
+            <button class="chip" onclick="useSuggestion(this)">Create an outline</button>
+          </div>
+        </div>
+
+        <!-- SCIENCE WELCOME -->
+        <div class="chat-welcome hidden" id="welcome-science">
+          <svg class="welcome-logo" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="sS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
+              <radialGradient id="sH" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+              <linearGradient id="sR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
+              <clipPath id="sRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
+              <clipPath id="sRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
+            </defs>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#sR)" stroke-width="2.8" fill="none" clip-path="url(#sRB)" opacity="0.5"/>
+            <circle cx="27" cy="25" r="19" fill="url(#sS)"/>
+            <circle cx="27" cy="25" r="19" fill="url(#sH)"/>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#sR)" stroke-width="2.8" fill="none" clip-path="url(#sRT)"/>
+          </svg>
+          <div class="welcome-subject-badge" style="color:var(--sci-color);border-color:rgba(52,211,153,0.35);background:var(--sci-subtle);">Science</div>
+          <h2 class="welcome-title">Biology, Chemistry & Physics</h2>
+          <p class="welcome-sub">Concepts, equations, lab reports, and problem sets across all science disciplines — with visual explanations and real-world context.</p>
+          <div class="suggestion-chips" style="--chip-color:var(--sci-color);--chip-subtle:var(--sci-subtle)">
+            <button class="chip" onclick="useSuggestion(this)">Explain cell division</button>
+            <button class="chip" onclick="useSuggestion(this)">Balance a chemical equation</button>
+            <button class="chip" onclick="useSuggestion(this)">Newton's laws of motion</button>
+            <button class="chip" onclick="useSuggestion(this)">Help with a lab report</button>
+          </div>
+        </div>
+
+        <!-- HISTORY WELCOME -->
+        <div class="chat-welcome hidden" id="welcome-history">
+          <svg class="welcome-logo" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="hS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
+              <radialGradient id="hH" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+              <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
+              <clipPath id="hRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
+              <clipPath id="hRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
+            </defs>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#hR)" stroke-width="2.8" fill="none" clip-path="url(#hRB)" opacity="0.5"/>
+            <circle cx="27" cy="25" r="19" fill="url(#hS)"/>
+            <circle cx="27" cy="25" r="19" fill="url(#hH)"/>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#hR)" stroke-width="2.8" fill="none" clip-path="url(#hRT)"/>
+          </svg>
+          <div class="welcome-subject-badge" style="color:var(--hist-color);border-color:rgba(251,146,60,0.35);background:var(--hist-subtle);">History</div>
+          <h2 class="welcome-title">History & Social Studies</h2>
+          <p class="welcome-sub">World history, US history, government, and civics — with timelines, analysis, primary source breakdowns, and essay support.</p>
+          <div class="suggestion-chips" style="--chip-color:var(--hist-color);--chip-subtle:var(--hist-subtle)">
+            <button class="chip" onclick="useSuggestion(this)">Causes of World War I</button>
+            <button class="chip" onclick="useSuggestion(this)">Civil Rights Movement</button>
+            <button class="chip" onclick="useSuggestion(this)">Compare two governments</button>
+            <button class="chip" onclick="useSuggestion(this)">Analyze a primary source</button>
+          </div>
+        </div>
+
+        <!-- GENERAL WELCOME -->
+        <div class="chat-welcome hidden" id="welcome-general">
+          <svg class="welcome-logo" width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="gS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient>
+              <radialGradient id="gH" cx="34%" cy="26%" r="38%"><stop offset="0%" stop-color="rgba(255,255,255,0.24)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient>
+              <linearGradient id="gR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient>
+              <clipPath id="gRT"><rect x="0" y="0" width="54" height="26"/></clipPath>
+              <clipPath id="gRB"><rect x="0" y="26" width="54" height="28"/></clipPath>
+            </defs>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#gR)" stroke-width="2.8" fill="none" clip-path="url(#gRB)" opacity="0.5"/>
+            <circle cx="27" cy="25" r="19" fill="url(#gS)"/>
+            <circle cx="27" cy="25" r="19" fill="url(#gH)"/>
+            <ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#gR)" stroke-width="2.8" fill="none" clip-path="url(#gRT)"/>
+          </svg>
+          <div class="welcome-subject-badge" style="color:var(--gold-bright);border-color:rgba(201,168,76,0.35);background:var(--gold-subtle);">General</div>
+          <h2 class="welcome-title">How can I help you?</h2>
+          <p class="welcome-sub">Ask about any subject, get study strategies, or explore a topic you're working on. I'm here to help you understand — not just give answers.</p>
+          <div class="suggestion-chips">
+            <button class="chip" onclick="useSuggestion(this)">Build a study schedule</button>
+            <button class="chip" onclick="useSuggestion(this)">Summarize my notes</button>
+            <button class="chip" onclick="useSuggestion(this)">Make practice questions</button>
+            <button class="chip" onclick="useSuggestion(this)">Explain a concept simply</button>
           </div>
         </div>
 
@@ -1240,34 +912,26 @@
 
       <!-- Input -->
       <div class="chat-input-wrap">
-        <div class="chat-input-row">
-          <div class="chat-input-actions-left">
-            <button class="input-action-btn" title="Attach file" aria-label="Attach file">
-              📎
-            </button>
-            <button class="input-action-btn" title="Upload image" aria-label="Upload image">
-              🖼️
-            </button>
-          </div>
+        <div class="chat-input-box">
+          <button class="input-attach" id="chatUploadBtn" title="Attach image" aria-label="Attach image to this conversation">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </button>
           <textarea
-            class="chat-textarea"
-            id="chatInput"
-            placeholder="Ask anything..."
-            rows="1"
+            class="chat-textarea" id="chatInput"
+            placeholder="Ask your question..." rows="1"
             aria-label="Type your message"
           ></textarea>
-          <button
-            class="chat-send-btn"
-            id="sendBtn"
-            aria-label="Send message"
-            disabled
-          >
-            ➤
+          <button class="chat-send" id="sendBtn" aria-label="Send message" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
           </button>
         </div>
-        <div class="chat-footer-row">
+        <div class="chat-footer">
           <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-          <span class="chat-model-badge">OBSIDIA v1 · BETA</span>
+          <span class="chat-model-tag" id="modelTag">MATH AI · BETA</span>
         </div>
       </div>
 
@@ -1276,60 +940,56 @@
     <!-- ── RIGHT: TOOLS ── -->
     <aside class="panel right-panel" aria-label="Academic Tools">
 
-      <!-- Tools tab bar -->
       <div class="tools-tabs" role="tablist" aria-label="Tool categories">
-        <button class="tools-tab active" role="tab" aria-selected="true" id="tab-student" onclick="switchToolTab('student')">Student</button>
-        <button class="tools-tab" role="tab" aria-selected="false" id="tab-study" onclick="switchToolTab('study')">Study</button>
-        <button class="tools-tab tools-tab-teacher" role="tab" aria-selected="false" id="tab-teacher" onclick="switchToolTab('teacher')">Educator</button>
+        <button class="tools-tab active" role="tab" aria-selected="true" id="ttab-student" onclick="switchToolTab('student')">Student</button>
+        <button class="tools-tab" role="tab" aria-selected="false" id="ttab-study" onclick="switchToolTab('study')">Study</button>
+        <button class="tools-tab educator" role="tab" aria-selected="false" id="ttab-educator" onclick="switchToolTab('educator')">Educator</button>
       </div>
 
       <!-- STUDENT TOOLS -->
       <div class="tools-content" id="tools-student">
-        <div class="tools-grid" role="list" aria-label="Student tools">
+        <div class="tools-grid">
 
-          <div class="tool-card featured" role="listitem" tabindex="0" onclick="openTool('essay-helper')">
-            <div class="tool-icon" aria-hidden="true">✍️</div>
+          <div class="tool-card span2 math-card" tabindex="0" role="button" onclick="openTool('math-ai')" aria-label="Open Math AI">
+            <div class="tool-icon">🔢</div>
             <div class="tool-text">
-              <div class="tool-name">Essay Helper</div>
-              <div class="tool-desc">Outline, draft, and refine any essay with guided AI feedback</div>
+              <div class="tool-name">Math AI</div>
+              <div class="tool-desc">College-level math with step-by-step solutions — algebra through differential equations</div>
             </div>
-            <span class="tool-badge">Popular</span>
+            <span class="tool-tag tag-blue">AI Tutor</span>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('math-solver')">
-            <div class="tool-icon" aria-hidden="true">🔢</div>
-            <div class="tool-name">Math Solver</div>
-            <div class="tool-desc">Step-by-step solutions</div>
+          <div class="tool-card span2 ela-card" tabindex="0" role="button" onclick="openTool('essay-creator')" aria-label="Open Reading & ELA AI">
+            <div class="tool-icon">✍️</div>
+            <div class="tool-text">
+              <div class="tool-name">Reading & ELA AI</div>
+              <div class="tool-desc">Essay creator with grade-calibrated writing — middle school through college</div>
+            </div>
+            <span class="tool-tag tag-purple">AI Tutor</span>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('citation')">
-            <div class="tool-icon" aria-hidden="true">📚</div>
-            <div class="tool-name">Citation Gen</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('citation')">
+            <div class="tool-icon">📚</div>
+            <div class="tool-name">Citation Generator</div>
             <div class="tool-desc">MLA, APA, Chicago</div>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('vocab')">
-            <div class="tool-icon" aria-hidden="true">🔤</div>
-            <div class="tool-name">Vocab Builder</div>
-            <div class="tool-desc">Flashcards & quizzes</div>
-          </div>
-
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('science')">
-            <div class="tool-icon" aria-hidden="true">⚗️</div>
-            <div class="tool-name">Science Lab</div>
-            <div class="tool-desc">Lab report & data help</div>
-          </div>
-
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('history')">
-            <div class="tool-icon" aria-hidden="true">🗺️</div>
-            <div class="tool-name">History Maps</div>
-            <div class="tool-desc">Timelines & context</div>
-          </div>
-
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('proofread')">
-            <div class="tool-icon" aria-hidden="true">🔍</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('proofread')">
+            <div class="tool-icon">🔍</div>
             <div class="tool-name">Proofreader</div>
-            <div class="tool-desc">Grammar & style check</div>
+            <div class="tool-desc">Grammar & style</div>
+          </div>
+
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('science-lab')">
+            <div class="tool-icon">⚗️</div>
+            <div class="tool-name">Science Lab</div>
+            <div class="tool-desc">Lab report help</div>
+          </div>
+
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('vocab')">
+            <div class="tool-icon">🔤</div>
+            <div class="tool-name">Vocab Builder</div>
+            <div class="tool-desc">Definitions & context</div>
           </div>
 
         </div>
@@ -1337,101 +997,101 @@
 
       <!-- STUDY TOOLS -->
       <div class="tools-content hidden" id="tools-study">
-        <div class="tools-grid" role="list" aria-label="Study tools">
+        <div class="tools-grid">
 
-          <div class="tool-card featured" role="listitem" tabindex="0" onclick="openTool('flashcards')">
-            <div class="tool-icon" aria-hidden="true">🃏</div>
+          <div class="tool-card span2" tabindex="0" role="button" onclick="openTool('flashcards')">
+            <div class="tool-icon">🃏</div>
             <div class="tool-text">
               <div class="tool-name">Smart Flashcards</div>
-              <div class="tool-desc">AI-generated cards from your notes — spaced repetition built in</div>
+              <div class="tool-desc">AI-generated cards from your notes</div>
             </div>
-            <span class="tool-badge new">New</span>
+            <span class="tool-tag tag-gold">Create</span>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('quiz')">
-            <div class="tool-icon" aria-hidden="true">❓</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('quiz')">
+            <div class="tool-icon">❓</div>
             <div class="tool-name">Practice Quiz</div>
             <div class="tool-desc">Test your knowledge</div>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('notes')">
-            <div class="tool-icon" aria-hidden="true">📝</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('notes')">
+            <div class="tool-icon">📝</div>
             <div class="tool-name">Note Summarizer</div>
-            <div class="tool-desc">Compress long notes</div>
+            <div class="tool-desc">Condense long notes</div>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('planner')">
-            <div class="tool-icon" aria-hidden="true">📅</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('planner')">
+            <div class="tool-icon">📅</div>
             <div class="tool-name">Study Planner</div>
-            <div class="tool-desc">Build a study schedule</div>
+            <div class="tool-desc">Custom schedule</div>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('mindmap')">
-            <div class="tool-icon" aria-hidden="true">🕸️</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('mindmap')">
+            <div class="tool-icon">🕸️</div>
             <div class="tool-name">Mind Map</div>
-            <div class="tool-desc">Visual concept mapping</div>
+            <div class="tool-desc">Visual outlines</div>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('pomodoro')">
-            <div class="tool-icon" aria-hidden="true">⏱️</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('timer')">
+            <div class="tool-icon">⏱️</div>
             <div class="tool-name">Focus Timer</div>
-            <div class="tool-desc">Pomodoro sessions</div>
+            <div class="tool-desc">Timed study sessions</div>
           </div>
 
-          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('translate')">
-            <div class="tool-icon" aria-hidden="true">🌐</div>
+          <div class="tool-card" tabindex="0" role="button" onclick="openTool('translate')">
+            <div class="tool-icon">🌐</div>
             <div class="tool-name">Translator</div>
-            <div class="tool-desc">40+ languages</div>
+            <div class="tool-desc">Multilingual support</div>
           </div>
 
         </div>
       </div>
 
       <!-- EDUCATOR TOOLS -->
-      <div class="tools-content hidden" id="tools-teacher">
-        <div class="teacher-tools-grid" role="list" aria-label="Educator tools">
+      <div class="tools-content hidden" id="tools-educator">
+        <div class="educator-grid">
 
-          <div class="teacher-card featured" role="listitem" tabindex="0" onclick="openTool('lesson-builder')">
-            <div class="tool-icon" aria-hidden="true">🏗️</div>
+          <div class="educator-card span2" tabindex="0" role="button" onclick="openTool('lesson-builder')">
+            <div class="tool-icon">🏗️</div>
             <div class="tool-text">
               <div class="tool-name">Lesson Builder</div>
-              <div class="tool-desc">Generate complete lesson plans aligned to curriculum standards</div>
+              <div class="tool-desc">Complete lesson plans aligned to curriculum standards</div>
             </div>
-            <span class="tool-badge educator">Educator</span>
+            <span class="tool-tag tag-blue">Educator</span>
           </div>
 
-          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('rubric')">
-            <div class="tool-icon" aria-hidden="true">📋</div>
+          <div class="educator-card" tabindex="0" role="button" onclick="openTool('rubric')">
+            <div class="tool-icon">📋</div>
             <div class="tool-name">Rubric Creator</div>
             <div class="tool-desc">Custom grading rubrics</div>
           </div>
 
-          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('quiz-gen')">
-            <div class="tool-icon" aria-hidden="true">🧪</div>
+          <div class="educator-card" tabindex="0" role="button" onclick="openTool('quiz-gen')">
+            <div class="tool-icon">🧪</div>
             <div class="tool-name">Quiz Generator</div>
-            <div class="tool-desc">Auto-generate tests</div>
+            <div class="tool-desc">Auto-generate assessments</div>
           </div>
 
-          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('feedback')">
-            <div class="tool-icon" aria-hidden="true">💬</div>
+          <div class="educator-card" tabindex="0" role="button" onclick="openTool('feedback-writer')">
+            <div class="tool-icon">💬</div>
             <div class="tool-name">Feedback Writer</div>
             <div class="tool-desc">Student comment banks</div>
           </div>
 
-          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('differentiate')">
-            <div class="tool-icon" aria-hidden="true">🎯</div>
+          <div class="educator-card" tabindex="0" role="button" onclick="openTool('differentiate')">
+            <div class="tool-icon">🎯</div>
             <div class="tool-name">Differentiate</div>
             <div class="tool-desc">Adapt for all levels</div>
           </div>
 
-          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('progress')">
-            <div class="tool-icon" aria-hidden="true">📊</div>
-            <div class="tool-name">Progress Report</div>
-            <div class="tool-desc">Generate student reports</div>
+          <div class="educator-card" tabindex="0" role="button" onclick="openTool('progress')">
+            <div class="tool-icon">📊</div>
+            <div class="tool-name">Progress Reports</div>
+            <div class="tool-desc">Student reports</div>
           </div>
 
-          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('class-email')">
-            <div class="tool-icon" aria-hidden="true">✉️</div>
+          <div class="educator-card" tabindex="0" role="button" onclick="openTool('email')">
+            <div class="tool-icon">✉️</div>
             <div class="tool-name">Email Composer</div>
             <div class="tool-desc">Parent & admin comms</div>
           </div>
@@ -1442,156 +1102,294 @@
     </aside>
   </div><!-- end .workspace -->
 
-  <!-- STATS BAR -->
-  <div class="stats-bar" aria-label="Platform statistics">
-    <div class="stat-card">
-      <div class="stat-number gold-text">47K+</div>
-      <div class="stat-label">Students Helped</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number gold-text">1.2M</div>
-      <div class="stat-label">Problems Solved</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number gold-text">98%</div>
-      <div class="stat-label">Satisfaction Rate</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number gold-text">6–12+</div>
-      <div class="stat-label">Grade Levels Served</div>
-    </div>
-  </div>
+</main>
 
-</main><!-- end main -->
-
-<!-- ══════════════════════════════════════════════════════
-     QUICK SNAP MODAL
-══════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════
+     UPLOAD IMAGE MODAL
+══════════════════════════════════════════════════ -->
 <div
-  class="modal-overlay"
-  id="snapModal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modal-title"
-  aria-describedby="modal-sub"
+  class="modal-overlay" id="uploadModal"
+  role="dialog" aria-modal="true"
+  aria-labelledby="modal-title" aria-describedby="modal-sub"
 >
   <div class="modal">
-    <div class="modal-header">
-      <h2 class="modal-title gold-text" id="modal-title">Quick Snap</h2>
-      <button class="modal-close" id="modalClose" aria-label="Close Quick Snap dialog">✕</button>
+    <div class="modal-head">
+      <h2 class="modal-title gold-text" id="modal-title">Upload Image</h2>
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
     </div>
     <p class="modal-sub" id="modal-sub">
-      Choose your subject and we'll get you to the right tools instantly. You can also snap a photo of your problem.
+      Which subject is this for? Select below and we'll open your camera or file picker and connect you with the right AI instantly.
     </p>
 
-    <div class="subject-grid" role="list" aria-label="Choose a subject">
-      <button class="subject-btn math" role="listitem" onclick="snapSubject('math')" aria-label="Math">
-        <span class="subject-emoji" aria-hidden="true">🔢</span>
-        <div class="subject-info">
-          <div class="subject-name">Math</div>
-          <div class="subject-hint">Algebra · Calculus · Stats</div>
+    <div class="subject-grid" role="list" aria-label="Select a subject">
+
+      <button class="subject-card" role="listitem" data-subj="math" onclick="selectSubjectAndUpload('math')" aria-label="Math AI">
+        <span class="subj-icon" aria-hidden="true">🔢</span>
+        <div class="subj-info">
+          <div class="subj-name">Math AI</div>
+          <div class="subj-hint">Algebra · Calculus · Statistics · Proofs</div>
         </div>
       </button>
 
-      <button class="subject-btn english" role="listitem" onclick="snapSubject('english')" aria-label="English">
-        <span class="subject-emoji" aria-hidden="true">📖</span>
-        <div class="subject-info">
-          <div class="subject-name">English</div>
-          <div class="subject-hint">Writing · Reading · Grammar</div>
+      <button class="subject-card" role="listitem" data-subj="ela" onclick="selectSubjectAndUpload('ela')" aria-label="Reading & ELA">
+        <span class="subj-icon" aria-hidden="true">📖</span>
+        <div class="subj-info">
+          <div class="subj-name">Reading & ELA</div>
+          <div class="subj-hint">Essays · Literature · Grammar</div>
         </div>
       </button>
 
-      <button class="subject-btn science" role="listitem" onclick="snapSubject('science')" aria-label="Science">
-        <span class="subject-emoji" aria-hidden="true">⚗️</span>
-        <div class="subject-info">
-          <div class="subject-name">Science</div>
-          <div class="subject-hint">Biology · Chemistry · Physics</div>
+      <button class="subject-card" role="listitem" data-subj="science" onclick="selectSubjectAndUpload('science')" aria-label="Science">
+        <span class="subj-icon" aria-hidden="true">⚗️</span>
+        <div class="subj-info">
+          <div class="subj-name">Science</div>
+          <div class="subj-hint">Biology · Chemistry · Physics</div>
         </div>
       </button>
 
-      <button class="subject-btn history" role="listitem" onclick="snapSubject('history')" aria-label="History">
-        <span class="subject-emoji" aria-hidden="true">🗺️</span>
-        <div class="subject-info">
-          <div class="subject-name">History</div>
-          <div class="subject-hint">World · US · Government</div>
+      <button class="subject-card" role="listitem" data-subj="history" onclick="selectSubjectAndUpload('history')" aria-label="History">
+        <span class="subj-icon" aria-hidden="true">🗺️</span>
+        <div class="subj-info">
+          <div class="subj-name">History</div>
+          <div class="subj-hint">World History · US · Government</div>
         </div>
       </button>
 
-      <button class="subject-btn other" role="listitem" onclick="snapSubject('other')" aria-label="Other subject">
-        <span class="subject-emoji" aria-hidden="true">✨</span>
-        <div class="subject-info">
-          <div class="subject-name">Other</div>
-          <div class="subject-hint">Art · Music · Foreign Language · Anything else</div>
+      <button class="subject-card" role="listitem" data-subj="general" onclick="selectSubjectAndUpload('general')" aria-label="General">
+        <span class="subj-icon" aria-hidden="true">✨</span>
+        <div class="subj-info">
+          <div class="subj-name">General</div>
+          <div class="subj-hint">Other subjects or not sure</div>
         </div>
       </button>
+
     </div>
 
-    <div class="modal-upload-area" role="button" tabindex="0" aria-label="Upload an image of your problem">
-      <div class="upload-icon" aria-hidden="true">📷</div>
-      <div class="upload-text">Snap a photo of your problem</div>
-      <div class="upload-hint">Supports JPG, PNG, PDF — or paste from clipboard</div>
-    </div>
-
-  </div><!-- end .modal -->
-</div><!-- end overlay -->
+    <div class="modal-divider"><span>or drop a file anywhere on this dialog</span></div>
+  </div>
+</div>
 
 <script>
-/* ─── QUICK SNAP MODAL ────────────────────────────── */
-const snapBtn   = document.getElementById('quickSnapBtn');
-const snapModal = document.getElementById('snapModal');
-const modalClose = document.getElementById('modalClose');
+/* ══════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════ */
+let activeSubject = 'math';
+let pendingUploadSubject = null;
+const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
-function openModal() {
-  snapModal.classList.add('open');
+const modelTags = {
+  math:    'MATH AI · BETA',
+  ela:     'READING & ELA · BETA',
+  science: 'SCIENCE AI · BETA',
+  history: 'HISTORY AI · BETA',
+  general: 'OBSIDIA AI · BETA',
+};
+
+/* ══════════════════════════════════════════════════════
+   UPLOAD MODAL
+══════════════════════════════════════════════════════ */
+const uploadModal = document.getElementById('uploadModal');
+const modalClose  = document.getElementById('modalClose');
+const uploadBtn   = document.getElementById('uploadImageBtn');
+const fileInput   = document.getElementById('imageFileInput');
+
+function openUploadModal() {
+  uploadModal.classList.add('open');
   document.body.style.overflow = 'hidden';
   modalClose.focus();
 }
-function closeModal() {
-  snapModal.classList.remove('open');
+function closeUploadModal() {
+  uploadModal.classList.remove('open');
   document.body.style.overflow = '';
-  snapBtn.focus();
 }
 
-snapBtn.addEventListener('click', openModal);
-modalClose.addEventListener('click', closeModal);
-snapModal.addEventListener('click', e => {
-  if (e.target === snapModal) closeModal();
-});
+uploadBtn.addEventListener('click', openUploadModal);
+// Chat input image button also opens modal
+document.getElementById('chatUploadBtn').addEventListener('click', openUploadModal);
+
+modalClose.addEventListener('click', closeUploadModal);
+uploadModal.addEventListener('click', e => { if (e.target === uploadModal) closeUploadModal(); });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && snapModal.classList.contains('open')) closeModal();
+  if (e.key === 'Escape' && uploadModal.classList.contains('open')) closeUploadModal();
 });
 
-function snapSubject(subject) {
-  closeModal();
-  const prefill = {
-    math: 'Help me with a math problem: ',
-    english: 'Help me with English: ',
-    science: 'Help me understand this science concept: ',
-    history: 'Help me with this history topic: ',
-    other: "I need help with something: "
-  };
-  const input = document.getElementById('chatInput');
-  input.value = prefill[subject] || '';
-  input.focus();
-  input.dispatchEvent(new Event('input'));
-  // scroll chat into view on mobile
-  document.querySelector('.center-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+/* ── Subject selection → switch tab → trigger file input ── */
+function selectSubjectAndUpload(subj) {
+  pendingUploadSubject = subj;
+  closeUploadModal();
+
+  // Switch to the correct AI tab
+  switchSubjectTab(subj);
+
+  // On mobile: set capture="environment" to open back camera directly.
+  // On desktop: no capture attr → standard file dialog.
+  if (isMobile) {
+    fileInput.setAttribute('capture', 'environment');
+  } else {
+    fileInput.removeAttribute('capture');
+  }
+
+  // Small delay lets modal close animation finish before dialog opens
+  setTimeout(() => fileInput.click(), 220);
 }
 
-/* ─── CHAT INTERFACE ──────────────────────────────── */
-const chatInput   = document.getElementById('chatInput');
-const sendBtn     = document.getElementById('sendBtn');
-const chatMessages = document.getElementById('chatMessages');
-const chatWelcome = document.getElementById('chatWelcome');
+/* ── After file selected ── */
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (!file) return;
 
-// Auto-resize textarea
+  const reader = new FileReader();
+  reader.onload = e => {
+    // Hide welcome for active tab
+    const welcome = document.getElementById(`welcome-${activeSubject}`);
+    if (welcome) welcome.classList.add('hidden');
+
+    // Show image as user message
+    appendImageMessage(e.target.result, file.name);
+
+    // Show AI acknowledgement after brief delay
+    const typingEl = appendTyping();
+    setTimeout(() => {
+      typingEl.remove();
+      const context = {
+        math:    "I can see your math problem. Let me work through this step by step — I'll explain every operation clearly so you understand the method, not just the answer.",
+        ela:     "I've received your writing or reading material. I'll analyze it carefully and provide detailed feedback. Would you like me to focus on structure, grammar, style, or all three?",
+        science: "Got your science material. I'll break down the concepts, walk through any calculations, and explain the underlying principles so it makes sense.",
+        history: "I have your history content. I'll provide context, explain key events or figures involved, and help you connect this to broader historical themes.",
+        general: "I can see your image. Tell me what you need help with and I'll guide you through it."
+      };
+      appendMessage('ai', context[activeSubject] || context.general);
+    }, 1100 + Math.random() * 600);
+
+    // Add to recent uploads (just track the filename for now)
+    addRecentUpload(file.name, activeSubject);
+  };
+  reader.readAsDataURL(file);
+
+  // Reset so the same file can be re-selected
+  fileInput.value = '';
+  pendingUploadSubject = null;
+});
+
+/* ── Drag & drop onto modal ── */
+uploadModal.addEventListener('dragover', e => { e.preventDefault(); });
+uploadModal.addEventListener('drop', e => {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    fileInput.files = e.dataTransfer.files;
+    fileInput.dispatchEvent(new Event('change'));
+    closeUploadModal();
+  }
+});
+
+/* ══════════════════════════════════════════════════════
+   SUBJECT TABS
+══════════════════════════════════════════════════════ */
+function switchSubjectTab(subj) {
+  activeSubject = subj;
+
+  // Update tabs
+  document.querySelectorAll('.subject-tab').forEach(t => {
+    const isActive = t.dataset.tab === subj;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+
+  // Show/hide welcome states (only if no messages exist yet)
+  const msgs = document.querySelectorAll('.msg');
+  if (msgs.length === 0) {
+    document.querySelectorAll('.chat-welcome').forEach(w => w.classList.add('hidden'));
+    const welcome = document.getElementById(`welcome-${subj}`);
+    if (welcome) {
+      welcome.classList.remove('hidden');
+      // Re-trigger animation
+      welcome.style.animation = 'none';
+      welcome.offsetHeight;
+      welcome.style.animation = '';
+    }
+  }
+
+  // Update model tag
+  document.getElementById('modelTag').textContent = modelTags[subj] || modelTags.general;
+
+  // Update input placeholder
+  const placeholders = {
+    math:    'Enter a math problem or equation...',
+    ela:     'Ask about your essay, passage, or writing...',
+    science: 'Ask a science question...',
+    history: 'Ask about history, events, or documents...',
+    general: 'Ask anything...',
+  };
+  document.getElementById('chatInput').placeholder = placeholders[subj] || 'Ask anything...';
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOLS TABS
+══════════════════════════════════════════════════════ */
+function switchToolTab(tab) {
+  ['student','study','educator'].forEach(t => {
+    document.getElementById(`tools-${t}`).classList.add('hidden');
+    const el = document.getElementById(`ttab-${t}`);
+    el.classList.remove('active');
+    el.setAttribute('aria-selected', 'false');
+  });
+  document.getElementById(`tools-${tab}`).classList.remove('hidden');
+  const active = document.getElementById(`ttab-${tab}`);
+  active.classList.add('active');
+  active.setAttribute('aria-selected', 'true');
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL CARDS → PREFILL CHAT
+══════════════════════════════════════════════════════ */
+function openTool(tool) {
+  const config = {
+    'math-ai':        { subj: 'math',    prompt: 'I need help with a math problem: ' },
+    'essay-creator':  { subj: 'ela',     prompt: 'Help me write an essay. My prompt is: ' },
+    'citation':       { subj: 'general', prompt: 'Generate a citation in MLA format for: ' },
+    'proofread':      { subj: 'ela',     prompt: 'Please proofread and improve this text:\n\n' },
+    'science-lab':    { subj: 'science', prompt: 'Help me with my lab report. The experiment was: ' },
+    'vocab':          { subj: 'general', prompt: 'Define these words and show them in context: ' },
+    'flashcards':     { subj: 'general', prompt: 'Create flashcards from these notes: ' },
+    'quiz':           { subj: 'general', prompt: 'Quiz me on this topic: ' },
+    'notes':          { subj: 'general', prompt: 'Summarize these notes into key points:\n\n' },
+    'planner':        { subj: 'general', prompt: 'Build a study plan. My subjects and exam dates are: ' },
+    'mindmap':        { subj: 'general', prompt: 'Create a mind map outline for: ' },
+    'timer':          { subj: 'general', prompt: 'Help me set up a focused study session for: ' },
+    'translate':      { subj: 'general', prompt: 'Translate this text to ' },
+    'lesson-builder': { subj: 'general', prompt: 'Create a detailed lesson plan for: ' },
+    'rubric':         { subj: 'general', prompt: 'Create a grading rubric for: ' },
+    'quiz-gen':       { subj: 'general', prompt: 'Generate a 10-question quiz about: ' },
+    'feedback-writer':{ subj: 'general', prompt: 'Write constructive feedback for a student who: ' },
+    'differentiate':  { subj: 'general', prompt: 'Adapt this lesson for mixed learning levels: ' },
+    'progress':       { subj: 'general', prompt: "Write a student progress report for: " },
+    'email':          { subj: 'general', prompt: 'Write a professional email to parents regarding: ' },
+  };
+  const c = config[tool];
+  if (c) {
+    switchSubjectTab(c.subj);
+    const input = document.getElementById('chatInput');
+    input.value = c.prompt;
+    input.dispatchEvent(new Event('input'));
+    input.focus();
+    document.querySelector('.center-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   CHAT
+══════════════════════════════════════════════════════ */
+const chatInput    = document.getElementById('chatInput');
+const sendBtn      = document.getElementById('sendBtn');
+const chatMessages = document.getElementById('chatMessages');
+
 chatInput.addEventListener('input', () => {
   chatInput.style.height = 'auto';
   chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
   sendBtn.disabled = chatInput.value.trim() === '';
 });
 
-// Enter to send, Shift+Enter for new line
 chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
@@ -1604,98 +1402,91 @@ function sendMessage() {
   const text = chatInput.value.trim();
   if (!text) return;
 
-  // Hide welcome state
-  chatWelcome.classList.add('hidden');
-
-  // Add user message
+  hideActiveWelcome();
   appendMessage('user', text);
-
   chatInput.value = '';
   chatInput.style.height = 'auto';
   sendBtn.disabled = true;
 
-  // Show typing indicator then respond
   const typingEl = appendTyping();
   setTimeout(() => {
     typingEl.remove();
-    appendMessage('ai', getAIResponse(text));
+    appendMessage('ai', getAIResponse(text, activeSubject));
     sendBtn.disabled = chatInput.value.trim() === '';
-  }, 1200 + Math.random() * 800);
+  }, 1000 + Math.random() * 700);
+}
+
+function hideActiveWelcome() {
+  document.querySelectorAll('.chat-welcome').forEach(w => w.classList.add('hidden'));
 }
 
 function appendMessage(role, text) {
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const avatarLabels = { math: 'M', ela: 'R', science: 'S', history: 'H', general: 'O' };
 
-  const msg = document.createElement('div');
-  msg.className = `msg ${role}`;
+  const msg   = document.createElement('div'); msg.className = `msg ${role}`;
+  const av    = document.createElement('div');
+  av.className = `msg-avatar msg-avatar-${role}`;
+  av.setAttribute('aria-hidden', 'true');
+  av.textContent = role === 'ai' ? (avatarLabels[activeSubject] || 'O') : 'You';
 
-  const avatar = document.createElement('div');
-  avatar.className = `msg-avatar msg-avatar-${role}`;
-  avatar.setAttribute('aria-hidden', 'true');
-  avatar.textContent = role === 'ai' ? 'O' : 'U';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  bubble.textContent = text;
-
-  const time = document.createElement('div');
-  time.className = 'msg-time';
-  time.textContent = timeStr;
-
-  const wrap = document.createElement('div');
-  wrap.style.display = 'flex';
-  wrap.style.flexDirection = 'column';
-  if (role === 'user') wrap.style.alignItems = 'flex-end';
-  wrap.appendChild(bubble);
-  wrap.appendChild(time);
-
-  msg.appendChild(avatar);
-  msg.appendChild(wrap);
+  const bubble = document.createElement('div'); bubble.className = 'msg-bubble'; bubble.textContent = text;
+  const time   = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+  const wrap   = document.createElement('div');
+  wrap.style.cssText = `display:flex;flex-direction:column;${role === 'user' ? 'align-items:flex-end' : ''}`;
+  wrap.appendChild(bubble); wrap.appendChild(time);
+  msg.appendChild(av); msg.appendChild(wrap);
   chatMessages.appendChild(msg);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   return msg;
 }
 
+function appendImageMessage(src, name) {
+  const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const msg   = document.createElement('div'); msg.className = 'msg user';
+  const av    = document.createElement('div'); av.className = 'msg-avatar msg-avatar-user'; av.setAttribute('aria-hidden','true'); av.textContent = 'You';
+  const img   = document.createElement('img'); img.src = src; img.className = 'msg-img'; img.alt = `Uploaded: ${name}`;
+  const time  = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+  const wrap  = document.createElement('div');
+  wrap.style.cssText = 'display:flex;flex-direction:column;align-items:flex-end';
+  wrap.appendChild(img); wrap.appendChild(time);
+  msg.appendChild(av); msg.appendChild(wrap);
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 function appendTyping() {
-  const wrap = document.createElement('div');
-  wrap.className = 'typing-indicator';
-
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar msg-avatar-ai';
-  avatar.setAttribute('aria-hidden', 'true');
-  avatar.textContent = 'O';
-
-  const dots = document.createElement('div');
-  dots.className = 'typing-dots';
-  dots.setAttribute('aria-label', 'Obsidia AI is typing');
-  dots.setAttribute('role', 'status');
-  for (let i = 0; i < 3; i++) {
-    const d = document.createElement('div');
-    d.className = 'typing-dot';
-    dots.appendChild(d);
-  }
-
-  wrap.appendChild(avatar);
-  wrap.appendChild(dots);
+  const wrap = document.createElement('div'); wrap.className = 'typing-indicator';
+  const av   = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true');
+  const avatarLabels = { math: 'M', ela: 'R', science: 'S', history: 'H', general: 'O' };
+  av.textContent = avatarLabels[activeSubject] || 'O';
+  const dots = document.createElement('div'); dots.className = 'typing-dots'; dots.setAttribute('role','status'); dots.setAttribute('aria-label','AI is typing');
+  for (let i = 0; i < 3; i++) { const d = document.createElement('div'); d.className = 'typing-dot'; dots.appendChild(d); }
+  wrap.appendChild(av); wrap.appendChild(dots);
   chatMessages.appendChild(wrap);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   return wrap;
 }
 
-function getAIResponse(input) {
+function getAIResponse(input, subject) {
   const lc = input.toLowerCase();
-  if (lc.includes('math') || lc.includes('equation') || /\d+x|\^2|solve/.test(lc))
-    return "I'd love to help with that math problem! Could you paste the full equation or problem statement? I'll walk you through it step by step.";
-  if (lc.includes('essay') || lc.includes('outline') || lc.includes('writing'))
-    return "Great — let's work on your essay together. What's the topic or prompt? Once I know, I can help you build a strong thesis and outline the key arguments.";
-  if (lc.includes('history') || lc.includes('civil war') || lc.includes('war'))
-    return "History is fascinating! Tell me more about what you're studying — are you looking for a timeline, key causes, or analysis of a specific event?";
-  if (lc.includes('photosynthesis') || lc.includes('science') || lc.includes('biology'))
-    return "Photosynthesis is the process by which plants convert light energy into chemical energy stored as glucose. The simplified equation is: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂. Want me to break down each stage?";
-  if (lc.includes('study') || lc.includes('finals') || lc.includes('plan'))
-    return "Building a solid study plan is half the battle! Tell me your subjects, exam dates, and how many hours a day you can study — I'll build a personalized schedule for you.";
-  return "I'm here and ready to help! Could you give me a bit more detail about what you need? The more context you provide, the better I can assist you.";
+  if (subject === 'math') {
+    if (/integral|calculus|derivative|limit/i.test(lc)) return "Let's work through that calculus problem together. Share the full expression and I'll walk you through each step — showing you the technique, not just the result.";
+    if (/equation|solve|algebra|x\s*=/i.test(lc)) return "I'll solve this step by step, explaining the reasoning at each stage. Paste the full equation and let's get started.";
+    return "I'm ready to help with your math problem. Share the full question — including any given values or constraints — and I'll provide a detailed solution.";
+  }
+  if (subject === 'ela') {
+    if (/essay|write|paragraph|thesis/i.test(lc)) return "I can help you build a strong essay. What's the prompt or topic? Once I know your grade level and requirements, I'll help you develop a thesis, structure your argument, and refine your writing.";
+    if (/grammar|proofread|fix|edit/i.test(lc)) return "Paste your text and I'll review it for grammar, clarity, sentence structure, and style — with specific suggestions for each issue.";
+    return "I'm here to help with your reading and writing. What are you working on — an essay, a passage analysis, or something else?";
+  }
+  if (subject === 'science') {
+    return "Great question. Let me explain that concept clearly, starting with the core principle and building up with examples. What specifically would you like me to focus on?";
+  }
+  if (subject === 'history') {
+    return "I'll provide historical context along with analysis. Which aspect would you like to focus on — causes, key figures, timeline of events, or long-term impact?";
+  }
+  return "I'm here to help. Could you give me a bit more detail about what you're working on? The more context you share, the better I can assist you.";
 }
 
 function useSuggestion(el) {
@@ -1704,83 +1495,53 @@ function useSuggestion(el) {
   chatInput.focus();
 }
 
-/* ─── CHAT TABS ───────────────────────────────────── */
-document.querySelectorAll('.chat-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.chat-tab').forEach(t => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    tab.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
+/* ══════════════════════════════════════════════════════
+   RECENT UPLOADS
+══════════════════════════════════════════════════════ */
+const recentData = [];
+function addRecentUpload(name, subject) {
+  recentData.unshift({ name, subject, time: new Date() });
+  renderRecentUploads();
+}
+const subjectColors = { math: '#5b9cf6', ela: '#a78bfa', science: '#34d399', history: '#fb923c', general: '#c9a84c' };
+function renderRecentUploads() {
+  const section = document.querySelector('.recent-section');
+  const empty = document.getElementById('recentEmpty');
+  if (recentData.length === 0) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  // Clear old items
+  section.querySelectorAll('.recent-upload-item').forEach(el => el.remove());
+  recentData.slice(0, 5).forEach(item => {
+    const mins = Math.round((Date.now() - item.time) / 60000);
+    const timeStr = mins < 1 ? 'just now' : mins < 60 ? `${mins}m ago` : `${Math.round(mins/60)}h ago`;
+    const div = document.createElement('div');
+    div.className = 'recent-upload-item';
+    div.style.cssText = 'display:flex;align-items:center;gap:9px;padding:8px 8px;border-radius:8px;cursor:pointer;transition:background 0.18s ease;';
+    div.innerHTML = `
+      <div style="width:7px;height:7px;border-radius:50%;background:${subjectColors[item.subject]||'#c9a84c'};flex-shrink:0;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11.5px;font-weight:500;color:#c8b88a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.name}</div>
+        <div style="font-size:10px;color:#4a4438;margin-top:1px;">${item.subject.charAt(0).toUpperCase()+item.subject.slice(1)}</div>
+      </div>
+      <div style="font-size:10px;color:#3a342a;flex-shrink:0;">${timeStr}</div>
+    `;
+    div.addEventListener('mouseenter', () => div.style.background = 'rgba(201,168,76,0.07)');
+    div.addEventListener('mouseleave', () => div.style.background = '');
+    section.appendChild(div);
   });
-});
-
-/* ─── TOOL TABS ───────────────────────────────────── */
-function switchToolTab(tab) {
-  ['student','study','teacher'].forEach(t => {
-    document.getElementById(`tools-${t}`).classList.add('hidden');
-    const tabEl = document.getElementById(`tab-${t}`);
-    tabEl.classList.remove('active');
-    tabEl.setAttribute('aria-selected', 'false');
-  });
-  document.getElementById(`tools-${tab}`).classList.remove('hidden');
-  const activeTab = document.getElementById(`tab-${tab}`);
-  activeTab.classList.add('active');
-  activeTab.setAttribute('aria-selected', 'true');
 }
 
-/* ─── TOOL CARDS ──────────────────────────────────── */
-function openTool(tool) {
-  const prompts = {
-    'essay-helper': 'Help me write an essay. My topic is: ',
-    'math-solver': 'Solve this math problem step by step: ',
-    'citation': 'Generate a citation in MLA format for: ',
-    'vocab': 'Create vocabulary flashcards for these words: ',
-    'science': 'Help me with my science lab report: ',
-    'history': 'Explain this history topic: ',
-    'proofread': 'Proofread and improve this text:\n\n',
-    'flashcards': 'Create study flashcards from these notes: ',
-    'quiz': 'Quiz me on this topic: ',
-    'notes': 'Summarize these notes: ',
-    'planner': "Build a study plan for my upcoming exam on: ",
-    'mindmap': 'Create a mind map outline for: ',
-    'translate': 'Translate this text to: ',
-    'lesson-builder': 'Create a lesson plan for: ',
-    'rubric': 'Create a grading rubric for: ',
-    'quiz-gen': 'Generate a quiz with 10 questions about: ',
-    'feedback': 'Write constructive feedback for a student who: ',
-    'differentiate': 'Adapt this lesson for different learning levels: ',
-    'progress': 'Write a progress report for a student who: ',
-    'class-email': 'Write a professional email to parents about: ',
-  };
-  chatWelcome.classList.add('hidden');
-  const input = document.getElementById('chatInput');
-  input.value = prompts[tool] || '';
-  input.dispatchEvent(new Event('input'));
-  input.focus();
-  document.querySelector('.center-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-/* ─── KEYBOARD: RECENT ITEMS ─────────────────────── */
-document.querySelectorAll('.recent-item').forEach(item => {
-  item.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      item.click();
-    }
+/* ══════════════════════════════════════════════════════
+   KEYBOARD: TOOL CARDS
+══════════════════════════════════════════════════════ */
+document.querySelectorAll('[role="button"]').forEach(el => {
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
   });
 });
 
-/* ─── KEYBOARD: TOOL CARDS ───────────────────────── */
-document.querySelectorAll('.tool-card, .teacher-card').forEach(card => {
-  card.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      card.click();
-    }
-  });
-});
+/* Init */
+switchSubjectTab('math');
 </script>
 </body>
 </html>
