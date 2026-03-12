@@ -2495,6 +2495,7 @@
 <script>
 /* Error handler — shows JS errors on screen for debugging */
 window.onerror = function(msg, url, line) {
+  if (msg === 'Script error.' && line === 0) return true;
   var d = document.createElement('div');
   d.style.cssText = 'position:fixed;bottom:10px;left:10px;right:10px;background:#1a0505;border:1px solid #f43f5e;color:#f43f5e;padding:12px 16px;border-radius:8px;font-size:12px;z-index:9999;font-family:monospace';
   d.textContent = 'JS Error: ' + msg + ' (line ' + line + ')';
