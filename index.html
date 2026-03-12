@@ -93,25 +93,6 @@
     }
     .nav-logo-svg { width: 34px; height: 34px; flex-shrink: 0; }
     .nav-logo-text { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: 0.1em; }
-    .nav-tabs {
-      display: flex; align-items: center; gap: 2px;
-      list-style: none;
-    }
-    .nav-tab {
-      text-decoration: none; color: #7a7060;
-      font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
-      padding: 5px 13px; border-radius: var(--radius-sm);
-      transition: var(--transition); cursor: pointer;
-      border: none; background: none; font-family: var(--font-ui);
-      position: relative;
-    }
-    .nav-tab:hover { color: #c8b88a; }
-    .nav-tab.active { color: var(--gold-bright); }
-    .nav-tab.active::after {
-      content: ''; position: absolute; bottom: -19px; left: 20%; right: 20%;
-      height: 2px; border-radius: 1px;
-      background: var(--gold-bright);
-    }
     .nav-right { display: flex; align-items: center; gap: 10px; }
     .btn-ghost {
       font-family: var(--font-ui); font-size: 13px; font-weight: 500;
@@ -186,52 +167,14 @@
     }
     .gold-rule.hero-rule { width: 100px; margin: 16px auto 0; }
 
-    /* ─── HOME: FEATURE CARDS ──────────────────────────────── */
-    .features {
+    /* ─── HOME: WORKSPACE ──────────────────────────────────── */
+    .workspace {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px; max-width: 1080px;
-      margin: 0 auto; padding: 24px 18px 20px;
-    }
-    .feature-card {
-      background: var(--black-panel);
-      border: 1px solid var(--black-border);
-      border-radius: var(--radius-md);
-      padding: 18px 16px;
-      cursor: pointer; transition: var(--transition);
-      text-align: left; display: flex; flex-direction: column; gap: 8px;
-      font-family: var(--font-ui);
-    }
-    .feature-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      border-color: var(--fc-color, var(--gold-muted));
-    }
-    .feature-icon {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; border: 1px solid transparent;
-      transition: var(--transition);
-    }
-    .feature-card:hover .feature-icon { border-color: currentColor; }
-    .feature-name {
-      font-size: 13px; font-weight: 600; color: #d0c8b0;
-      letter-spacing: 0.01em;
-    }
-    .feature-desc { font-size: 11px; color: #5a5040; line-height: 1.45; }
-    .feature-arrow {
-      font-size: 11px; color: var(--fc-color, var(--gold-muted));
-      font-weight: 600; letter-spacing: 0.06em; margin-top: auto;
-      opacity: 0; transition: var(--transition);
-    }
-    .feature-card:hover .feature-arrow { opacity: 1; }
-
-    /* ─── HOME: DASHBOARD ──────────────────────────────────── */
-    .dashboard {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px; max-width: 1080px;
-      margin: 0 auto; padding: 0 18px 40px;
+      grid-template-columns: 1fr 280px;
+      gap: 14px;
+      max-width: 1080px; margin: 0 auto;
+      padding: 20px 18px 40px;
+      align-items: start;
     }
 
     .panel {
@@ -250,6 +193,56 @@
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.16em; text-transform: uppercase;
       color: var(--gold-bright);
+    }
+
+    /* ─── TOOLS PANEL (RIGHT) ──────────────────────────────── */
+    .tools-panel { grid-column: 2; }
+    .tp-list { padding: 6px 0 14px; overflow-y: auto; max-height: 72vh; }
+    .tp-list::-webkit-scrollbar { width: 3px; }
+    .tp-list::-webkit-scrollbar-thumb { background: var(--black-border); border-radius: 99px; }
+    .tp-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: #3a342a;
+      padding: 10px 18px 4px;
+    }
+    .tp-section-divider { height: 1px; background: var(--black-border); margin: 5px 14px; opacity: 0.5; }
+    .tp-card {
+      display: flex; align-items: center; gap: 11px;
+      padding: 10px 16px 10px 14px;
+      cursor: pointer; transition: var(--transition);
+      border-left: 2px solid transparent;
+      user-select: none;
+    }
+    .tp-card:hover {
+      background: var(--black-hover);
+      border-left-color: var(--card-accent, var(--gold-muted));
+    }
+    .tp-icon-badge {
+      width: 33px; height: 33px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: var(--transition);
+      font-size: 13px; border: 1px solid transparent;
+    }
+    .tp-card:hover .tp-icon-badge { border-color: currentColor; opacity: 0.9; }
+    .tp-body { flex: 1; min-width: 0; }
+    .tp-name {
+      font-size: 12px; font-weight: 600; color: #c8b88a;
+      letter-spacing: 0.01em; line-height: 1.3;
+    }
+    .tp-desc { font-size: 10px; color: #4a4438; margin-top: 2px; line-height: 1.35; }
+    .tp-right { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+    .tp-badge {
+      font-size: 8px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 2px 6px; border-radius: 99px;
+    }
+    .tp-badge-gold { background: var(--gold-subtle); color: var(--gold-bright); border: 1px solid rgba(201,168,76,0.25); }
+    .tp-badge-blue { background: var(--math-subtle); color: var(--math-color); border: 1px solid rgba(91,156,246,0.25); }
+    .tp-badge-red  { background: rgba(244,63,94,0.10); color: #f43f5e; border: 1px solid rgba(244,63,94,0.25); }
+    .tp-badge-new  { background: rgba(52,211,153,0.10); color: var(--sci-color); border: 1px solid rgba(52,211,153,0.25); }
+    .tp-badge-purple { background: rgba(99,102,241,0.12); color: #6366f1; border: 1px solid rgba(99,102,241,0.25); }
+    .tp-chevron {
+      width: 14px; height: 14px; color: #3a342a;
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;
     }
 
     /* ─── DRAG & DROP ZONE ─────────────────────────────────── */
@@ -553,32 +546,19 @@
     .method-hint { font-size: 10px; color: #5a5040; margin-top: 3px; }
 
     /* ─── RESPONSIVE ───────────────────────────────────────── */
-    /* Section labels for feature grid */
-    .features-section {
-      grid-column: 1 / -1;
-      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
-      text-transform: uppercase; color: #3a342a;
-      padding: 8px 0 0;
-    }
-    .features-section:first-child { padding-top: 0; }
-
-    @media (max-width: 1100px) {
-      .features { grid-template-columns: repeat(4, 1fr); }
-    }
     @media (max-width: 900px) {
-      .features { grid-template-columns: repeat(3, 1fr); }
       .method-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 840px) {
+      .workspace { grid-template-columns: 1fr; }
+      .tools-panel { grid-column: 1; }
     }
     @media (max-width: 740px) {
       nav { padding: 0 14px; }
-      .nav-tabs { display: none; }
-      .dashboard { grid-template-columns: 1fr; }
-      .features { grid-template-columns: 1fr 1fr; padding: 16px 12px; }
       .hero { padding: 28px 16px 20px; }
       .sp-layout { padding: 16px 12px 32px; }
     }
     @media (max-width: 460px) {
-      .features { grid-template-columns: 1fr; }
       .method-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -621,14 +601,6 @@
     <span class="nav-logo-text gold-text">OBSIDIA AI</span>
   </a>
 
-  <div class="nav-tabs" role="tablist">
-    <button class="nav-tab active" data-page="home" onclick="navigate('home')">Home</button>
-    <button class="nav-tab" data-page="math" onclick="navigate('math')">Math AI</button>
-    <button class="nav-tab" data-page="essay" onclick="navigate('essay')">Essay Writer</button>
-    <button class="nav-tab" data-page="study" onclick="navigate('study')">Study Guide</button>
-    <button class="nav-tab" data-page="notes" onclick="navigate('notes')">Notes</button>
-  </div>
-
   <div class="nav-right">
     <button class="btn-ghost">Sign In</button>
     <button class="btn-gold">Get Started</button>
@@ -665,164 +637,227 @@
     <div class="gold-rule hero-rule" aria-hidden="true"></div>
   </section>
 
-  <!-- Feature Navigation Cards -->
-  <div class="features">
-    <div class="features-section">AI Tools</div>
-    <div class="feature-card" style="--fc-color:var(--math-color)" onclick="navigate('math')">
-      <div class="feature-icon" style="background:var(--math-subtle);color:var(--math-color);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-      </div>
-      <div class="feature-name">Advanced Math</div>
-      <div class="feature-desc">Algebra through calculus, step-by-step solutions with explanations</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
+  <!-- Workspace: Chat Center + Tools Right -->
+  <div class="workspace">
 
-    <div class="feature-card" style="--fc-color:var(--ela-color)" onclick="navigate('essay')">
-      <div class="feature-icon" style="background:var(--ela-subtle);color:var(--ela-color);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      </div>
-      <div class="feature-name">Essay Writer</div>
-      <div class="feature-desc">AI drafting with humanizer toggle and grade-level calibration</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
+    <!-- CENTER: Chat + Upload -->
+    <div style="display:flex;flex-direction:column;gap:14px;">
 
-    <div class="feature-card" style="--fc-color:var(--sci-color)" onclick="navigate('study')">
-      <div class="feature-icon" style="background:var(--sci-subtle);color:var(--sci-color);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-      </div>
-      <div class="feature-name">Study Guide</div>
-      <div class="feature-desc">Flashcards, Cornell notes, mind maps and spaced review</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="feature-card" style="--fc-color:#fbbf24" onclick="navigate('notes')">
-      <div class="feature-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </div>
-      <div class="feature-name">Lecture Notes</div>
-      <div class="feature-desc">Record or upload lectures for AI transcription and summaries</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="features-section">Capture & Verify</div>
-
-    <div class="feature-card" style="--fc-color:#22d3ee" onclick="navigate('doublecheck')">
-      <div class="feature-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
-      </div>
-      <div class="feature-name">Double Check</div>
-      <div class="feature-desc">Verify facts and cross-reference AI responses</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="feature-card" style="--fc-color:var(--gold-bright)" onclick="navigate('grading')">
-      <div class="feature-icon" style="background:var(--gold-subtle);color:var(--gold-bright);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      <div class="feature-name">Grading</div>
-      <div class="feature-desc">Upload work for AI-powered grading with custom scales</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="feature-card" style="--fc-color:#f43f5e" onclick="navigate('testprep')">
-      <div class="feature-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-      </div>
-      <div class="feature-name">ACT / SAT Prep</div>
-      <div class="feature-desc">Practice problems, strategy guides & score analysis</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="feature-card" style="--fc-color:#6366f1" onclick="navigate('teacher')">
-      <div class="feature-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-      </div>
-      <div class="feature-name">Teacher Tools</div>
-      <div class="feature-desc">Lesson plans, rubrics, quizzes & assessments</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="features-section">Account</div>
-
-    <div class="feature-card" style="--fc-color:#64748b" onclick="navigate('history')">
-      <div class="feature-icon" style="background:rgba(100,116,139,0.12);color:#64748b;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </div>
-      <div class="feature-name">History</div>
-      <div class="feature-desc">Browse and revisit past conversations</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-
-    <div class="feature-card" style="--fc-color:#f97316" onclick="navigate('feedback')">
-      <div class="feature-icon" style="background:rgba(249,115,22,0.10);color:#f97316;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      </div>
-      <div class="feature-name">Feedback</div>
-      <div class="feature-desc">Rate responses and report issues</div>
-      <div class="feature-arrow">Open →</div>
-    </div>
-  </div>
-
-  <!-- Dashboard: Drop Zone + Basic Chat -->
-  <div class="dashboard">
-
-    <!-- Drag & Drop Upload -->
-    <div class="panel dropzone-panel">
-      <div class="panel-header">
-        <span class="panel-title">Upload Image</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#4a4438"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drag and drop an image or click to upload">
-        <div class="dz-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
+      <!-- Drag & Drop Upload -->
+      <div class="panel dropzone-panel">
+        <div class="panel-header">
+          <span class="panel-title">Upload Image</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#4a4438"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
-        <div class="dz-title gold-text">Drop files or click to upload</div>
-        <div class="dz-hint">Drag an image of your assignment here,<br>or click to browse from your device</div>
-        <div class="dz-formats">
-          <span class="dz-format-tag">JPEG</span>
-          <span class="dz-format-tag">PNG</span>
-          <span class="dz-format-tag">WebP</span>
-          <span class="dz-format-tag">PDF</span>
+        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drag and drop an image or click to upload">
+          <div class="dz-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <div class="dz-title gold-text">Drop files or click to upload</div>
+          <div class="dz-hint">Drag an image of your assignment here,<br>or click to browse from your device</div>
+          <div class="dz-formats">
+            <span class="dz-format-tag">JPEG</span>
+            <span class="dz-format-tag">PNG</span>
+            <span class="dz-format-tag">WebP</span>
+            <span class="dz-format-tag">PDF</span>
+          </div>
+          <div class="dz-status">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Release to upload
+          </div>
+          <div class="dz-error" id="dzError"></div>
         </div>
-        <div class="dz-status">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px"><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Release to upload
-        </div>
-        <div class="dz-error" id="dzError"></div>
       </div>
-    </div>
 
-    <!-- Basic Chat -->
-    <div class="panel home-chat">
-      <div class="panel-header">
-        <span class="panel-title">General AI Chat</span>
-        <span class="chat-model-tag">OBSIDIA AI · BETA</span>
-      </div>
-      <div class="home-chat-messages" id="homeChatMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="homeWelcome">
-          <h2 class="welcome-title">How can I help?</h2>
-          <p class="welcome-sub">Ask about any subject, get study tips, or explore a topic. Use the tools above for specialized help.</p>
-          <div class="suggestion-chips">
-            <button class="chip" onclick="homeUseSuggestion(this)">Build a study schedule</button>
-            <button class="chip" onclick="homeUseSuggestion(this)">Summarize my notes</button>
-            <button class="chip" onclick="homeUseSuggestion(this)">Explain a concept</button>
+      <!-- Basic Chat -->
+      <div class="panel home-chat">
+        <div class="panel-header">
+          <span class="panel-title">General AI Chat</span>
+          <span class="chat-model-tag">OBSIDIA AI · BETA</span>
+        </div>
+        <div class="home-chat-messages" id="homeChatMessages" role="log" aria-live="polite">
+          <div class="chat-welcome" id="homeWelcome">
+            <h2 class="welcome-title">How can I help?</h2>
+            <p class="welcome-sub">Ask about any subject, get study tips, or explore a topic. Use the tools on the right for specialized help.</p>
+            <div class="suggestion-chips">
+              <button class="chip" onclick="homeUseSuggestion(this)">Build a study schedule</button>
+              <button class="chip" onclick="homeUseSuggestion(this)">Summarize my notes</button>
+              <button class="chip" onclick="homeUseSuggestion(this)">Explain a concept</button>
+            </div>
+          </div>
+        </div>
+        <div class="chat-input-wrap">
+          <div class="chat-input-box">
+            <textarea class="chat-textarea" id="homeChatInput" placeholder="Ask anything..." rows="1" aria-label="Type your message"></textarea>
+            <button class="chat-send" id="homeSendBtn" aria-label="Send message" disabled>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+          <div class="chat-footer">
+            <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
           </div>
         </div>
       </div>
-      <div class="chat-input-wrap">
-        <div class="chat-input-box">
-          <textarea class="chat-textarea" id="homeChatInput" placeholder="Ask anything..." rows="1" aria-label="Type your message"></textarea>
-          <button class="chat-send" id="homeSendBtn" aria-label="Send message" disabled>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-          </button>
-        </div>
-        <div class="chat-footer">
-          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
-        </div>
-      </div>
+
     </div>
+
+    <!-- RIGHT: TOOLS PANEL -->
+    <aside class="panel tools-panel">
+      <div class="panel-header">
+        <span class="panel-title">Tools</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#4a4438;cursor:pointer"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="tp-list">
+
+        <div class="tp-section-label">Academics</div>
+
+        <div class="tp-card" style="--card-accent:var(--math-color)" onclick="navigate('math')">
+          <div class="tp-icon-badge" style="background:var(--math-subtle);color:var(--math-color);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Advanced Math</div>
+            <div class="tp-desc">Algebra through calculus, step-by-step</div>
+          </div>
+          <div class="tp-right">
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-card" style="--card-accent:var(--ela-color)" onclick="navigate('essay')">
+          <div class="tp-icon-badge" style="background:var(--ela-subtle);color:var(--ela-color);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Essay Writer</div>
+            <div class="tp-desc">Drafts, outlines, thesis & humanizer</div>
+          </div>
+          <div class="tp-right">
+            <span class="tp-badge tp-badge-purple">AI</span>
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-card" style="--card-accent:var(--sci-color)" onclick="navigate('study')">
+          <div class="tp-icon-badge" style="background:var(--sci-subtle);color:var(--sci-color);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Study Guide Creator</div>
+            <div class="tp-desc">Custom guides, cards & mind maps</div>
+          </div>
+          <div class="tp-right">
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-section-divider"></div>
+        <div class="tp-section-label">Capture & Verify</div>
+
+        <div class="tp-card" style="--card-accent:#fbbf24" onclick="navigate('notes')">
+          <div class="tp-icon-badge" style="background:rgba(251,191,36,0.12);color:#fbbf24;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Lecture Notes</div>
+            <div class="tp-desc">Record or upload for AI transcription</div>
+          </div>
+          <div class="tp-right">
+            <span class="tp-badge tp-badge-gold">AI</span>
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-card" style="--card-accent:#22d3ee" onclick="navigate('doublecheck')">
+          <div class="tp-icon-badge" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Double Check</div>
+            <div class="tp-desc">Verify facts from previous responses</div>
+          </div>
+          <div class="tp-right">
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-card" style="--card-accent:var(--gold-bright)" onclick="navigate('grading')">
+          <div class="tp-icon-badge" style="background:var(--gold-subtle);color:var(--gold-bright);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Grading</div>
+            <div class="tp-desc">Upload work for AI-powered grading</div>
+          </div>
+          <div class="tp-right">
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-section-divider"></div>
+        <div class="tp-section-label">Test Prep</div>
+
+        <div class="tp-card" style="--card-accent:#f43f5e" onclick="navigate('testprep')">
+          <div class="tp-icon-badge" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">ACT / SAT Prep</div>
+            <div class="tp-desc">Practice, strategy & score analysis</div>
+          </div>
+          <div class="tp-right">
+            <span class="tp-badge tp-badge-red">PREP</span>
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-section-divider"></div>
+        <div class="tp-section-label">Account</div>
+
+        <div class="tp-card" style="--card-accent:#64748b" onclick="navigate('history')">
+          <div class="tp-icon-badge" style="background:rgba(100,116,139,0.12);color:#64748b;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">History</div>
+            <div class="tp-desc">Browse past conversations</div>
+          </div>
+          <div class="tp-right">
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-card" style="--card-accent:#f97316" onclick="navigate('feedback')">
+          <div class="tp-icon-badge" style="background:rgba(249,115,22,0.10);color:#f97316;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Feedback</div>
+            <div class="tp-desc">Rate responses, report issues</div>
+          </div>
+          <div class="tp-right">
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+        <div class="tp-card" style="--card-accent:#6366f1" onclick="navigate('teacher')">
+          <div class="tp-icon-badge" style="background:rgba(99,102,241,0.12);color:#6366f1;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div class="tp-body">
+            <div class="tp-name">Teacher Tools</div>
+            <div class="tp-desc">Lessons, rubrics & assessments</div>
+          </div>
+          <div class="tp-right">
+            <span class="tp-badge tp-badge-purple">EDU</span>
+            <svg class="tp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+
+      </div>
+    </aside>
 
   </div>
 </div>
@@ -1524,11 +1559,6 @@ function navigate(pageId) {
       nextInput.dispatchEvent(new Event('input'));
     }
 
-    // Update nav tabs
-    document.querySelectorAll('.nav-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.page === pageId);
-    });
-
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, 210);
@@ -1960,9 +1990,9 @@ function appendTypingTo(containerId) {
 ══════════════════════════════════════════════════════ */
 function getGeneralResponse(input) {
   const lc = input.toLowerCase();
-  if (/study|schedule|plan/i.test(lc)) return "I can help you build an effective study schedule. What subjects are you studying, and when are your next exams? For specialized study tools, try the Study Guide page from the navigation above.";
-  if (/summarize|notes|summary/i.test(lc)) return "I'd be happy to summarize your notes. Paste them here and I'll create a concise breakdown. For more advanced note tools, check out the Lecture Notes page.";
-  return "I'm here to help with any subject. Share your question and I'll guide you through it. For specialized tools, use the navigation cards above — Math AI, Essay Writer, Study Guide, or Lecture Notes.";
+  if (/study|schedule|plan/i.test(lc)) return "I can help you build an effective study schedule. What subjects are you studying, and when are your next exams? For specialized study tools, try Study Guide Creator in the tools panel.";
+  if (/summarize|notes|summary/i.test(lc)) return "I'd be happy to summarize your notes. Paste them here and I'll create a concise breakdown. For more advanced note tools, check out Lecture Notes in the tools panel.";
+  return "I'm here to help with any subject. Share your question and I'll guide you through it. For specialized tools, use the tools panel on the right.";
 }
 
 function getPageResponse(pg, input) {
