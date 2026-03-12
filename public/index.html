@@ -1819,8 +1819,7 @@ function sendHomeMsg() {
   const welcome = document.getElementById('homeWelcome'); if (welcome) welcome.classList.add('hidden');
   appendMsg('homeChatMessages','user',text);
   homeChatInput.value=''; homeChatInput.style.height='auto'; homeSendBtn.disabled=true;
-  const typingEl = appendTypingTo('homeChatMessages');
-  setTimeout(() => { typingEl.remove(); typeMsg('homeChatMessages','ai',getGeneralResponse(text)); }, 900+Math.random()*600);
+  streamAIResponse('homeChatMessages', text, 'general', {}, 'home');
 }
 function homeUseSuggestion(el) { homeChatInput.value=el.textContent; homeChatInput.dispatchEvent(new Event('input')); homeChatInput.focus(); }
 
@@ -1844,8 +1843,19 @@ function sendPageMsg(pg) {
   const welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
   appendMsg(msgContainer,'user',text);
   input.value=''; input.style.height='auto'; document.getElementById(pg+'SendBtn').disabled=true;
-  const typingEl = appendTypingTo(msgContainer);
-  setTimeout(() => { typingEl.remove(); typeMsg(msgContainer,'ai',getPageResponse(pg,text)); }, 900+Math.random()*700);
+
+  // Gather per-page variables for the system prompt
+  const vars = {};
+  if (pg==='math') vars.mode = mathModeState;
+  if (pg==='essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle').checked; vars.grade = document.getElementById('essayGradeSelect').value; }
+  if (pg==='study') vars.method = studyMethod || 'none';
+  if (pg==='notes') vars.mode = notesModeState;
+  if (pg==='doublecheck') vars.mode = dcModeState;
+  if (pg==='grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect').value; }
+  if (pg==='testprep') vars.section = testSection || 'none';
+  if (pg==='teacher') vars.tool = teacherTool || 'none';
+
+  streamAIResponse(msgContainer, text, pg, vars, pg);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
 
@@ -1889,7 +1899,114 @@ function appendMsg(containerId, role, text) {
   return msg;
 }
 
-/* Word-by-word typing animation (NEW) */
+/* Conversation history per page */
+const chatHistory = {};
+allPages.forEach(p => chatHistory[p] = []);
+
+/* ── Streaming AI Response Engine ── */
+async function streamAIResponse(containerId, message, page, vars, historyKey) {
+  const container = document.getElementById(containerId);
+  const typingEl = appendTypingTo(containerId);
+
+  // Track in conversation history
+  chatHistory[historyKey].push({ role: 'user', content: message });
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        page,
+        vars,
+        history: chatHistory[historyKey].slice(-10)
+      })
+    });
+
+    typingEl.remove();
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Connection failed' }));
+      appendMsg(containerId, 'ai', err.error || 'Something went wrong. Please try again.');
+      return;
+    }
+
+    // Create the AI message bubble for streaming into
+    const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    const msg = document.createElement('div'); msg.className = 'msg ai';
+    const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
+    const bubble = document.createElement('div'); bubble.className = 'msg-bubble';
+    const time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+    const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;';
+    wrap.appendChild(bubble); wrap.appendChild(time);
+    msg.appendChild(av); msg.appendChild(wrap);
+    container.appendChild(msg);
+
+    // Read the SSE stream
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // Keep incomplete line in buffer
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.error) { bubble.textContent += '\n\n⚠ ' + data.error; break; }
+          if (data.done) break;
+          if (data.text) {
+            fullText += data.text;
+            // Render markdown-light: bold, italic, code, headers
+            bubble.innerHTML = renderMarkdown(fullText);
+            container.scrollTop = container.scrollHeight;
+          }
+        } catch(e) { /* skip malformed chunks */ }
+      }
+    }
+
+    // Save assistant response to history
+    chatHistory[historyKey].push({ role: 'assistant', content: fullText });
+
+  } catch (err) {
+    typingEl.remove();
+    // Fallback to demo mode if API is not available
+    const fallback = getFallbackResponse(page, message, vars);
+    typeMsg(containerId, 'ai', fallback);
+    chatHistory[historyKey].push({ role: 'assistant', content: fallback });
+  }
+}
+
+/* ── Lightweight Markdown Renderer ── */
+function renderMarkdown(text) {
+  return text
+    // Code blocks
+    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre style="background:var(--black-card);border:1px solid var(--black-border);border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto;font-size:12px;font-family:monospace;color:#c8b88a"><code>$2</code></pre>')
+    // Inline code
+    .replace(/`([^`]+)`/g, '<code style="background:var(--black-card);padding:1px 5px;border-radius:4px;font-size:12px;font-family:monospace;color:#c8b88a">$1</code>')
+    // Bold
+    .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#e8e0cc;font-weight:600">$1</strong>')
+    // Italic
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    // Headers
+    .replace(/^### (.+)$/gm, '<div style="font-weight:600;color:#e8e0cc;margin:10px 0 4px;font-size:13px">$1</div>')
+    .replace(/^## (.+)$/gm, '<div style="font-weight:600;color:var(--gold-bright);margin:12px 0 6px;font-size:14px">$1</div>')
+    // Bullet lists
+    .replace(/^[-*] (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">• $1</div>')
+    // Numbered lists
+    .replace(/^(\d+)\. (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">$1. $2</div>')
+    // Line breaks
+    .replace(/\n/g, '<br>');
+}
+
+/* Word-by-word typing animation (fallback for demo mode) */
 function typeMsg(containerId, role, text) {
   const container = document.getElementById(containerId);
   const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
@@ -1939,41 +2056,21 @@ function appendTypingTo(containerId) {
 }
 
 /* ══════════════════════════════════════════════════════
-   AI RESPONSES (demo)
+   FALLBACK RESPONSES (used when API is unavailable)
 ══════════════════════════════════════════════════════ */
-function getGeneralResponse(input) {
-  const lc = input.toLowerCase();
-  if (/study|schedule|plan/i.test(lc)) return "I can help you build an effective study schedule. What subjects are you studying, and when are your next exams? For specialized study tools, try the Study Guide page from the navigation above.";
-  if (/summarize|notes|summary/i.test(lc)) return "I'd be happy to summarize your notes. Paste them here and I'll create a concise breakdown. For more advanced note tools, check out the Lecture Notes page.";
-  return "I'm here to help with any subject. Share your question and I'll guide you through it. For specialized tools, use the navigation cards above — Math AI, Essay Writer, Study Guide, or Lecture Notes.";
-}
-
-function getPageResponse(pg, input) {
-  const lc = input.toLowerCase();
-  if (pg==='math') {
-    if (mathModeState==='explain') return "Great question. Let me break that concept down from the fundamentals, building up step by step so you understand the underlying principles — not just the formula.";
-    if (mathModeState==='graph') return "I'll help you visualize that function. Let me describe the key features: domain, range, intercepts, asymptotes, and overall shape.";
-    if (mathModeState==='practice') return "Here's a set of practice problems, organized from easier to more challenging. Try the first one and I'll walk you through it if you get stuck.";
-    if (/integral|calculus|derivative|limit/i.test(lc)) return "Let's work through that calculus problem together. I'll show you the technique at each step — identifying the method, applying it, and verifying the result.";
-    return "I'm ready to help with your math problem. Share the full question — including any given values or constraints — and I'll provide a detailed, step-by-step solution.";
-  }
-  if (pg==='essay') {
-    const humanize = document.getElementById('humanizerToggle').checked;
-    const grade = document.getElementById('essayGradeSelect').value;
-    const note = humanize ? ' I\'ll write this at a '+grade.toLowerCase()+' level with a natural, human tone.' : ' I\'ll calibrate for '+grade.toLowerCase()+' level.';
-    if (essayModeState==='proofread') return "I'll review your text for grammar, clarity, and style — providing specific suggestions."+note;
-    if (essayModeState==='outline') return "I'll create a structured outline with a clear thesis and supporting arguments."+note;
-    return "I'll help build a strong essay. Let me develop a thesis and draft each section."+note;
-  }
-  if (pg==='study') { return studyMethod ? "I'll create a study guide using your selected method. Let me organize the key concepts and structure everything for effective review." : "Select a study method above, then paste your notes or describe the topic."; }
-  if (pg==='notes') { return "I'll process your lecture content and generate structured notes. Share the material or describe what was covered."; }
-  if (pg==='doublecheck') { return "I'll fact-check that by cross-referencing multiple reliable sources. Here's what I found regarding accuracy and context."; }
-  if (pg==='grading') { const scale = document.getElementById('gradingScaleSelect').value; return "I'll evaluate this work using the "+scale+" — assessing content, structure, and mechanics."; }
-  if (pg==='testprep') { return testSection ? "Here's a practice problem. Take your time, then share your answer and I'll walk you through the solution." : "Select a section above to start practicing."; }
-  if (pg==='teacher') { return teacherTool ? "I'll create professional teaching materials based on your specifications with clear objectives and standards alignment." : "Select a tool above or describe what you need."; }
-  if (pg==='history') { return "Conversation history is coming soon! All your chats will be searchable and organized."; }
-  if (pg==='feedback') { return "Thank you for your feedback! This has been recorded and helps us improve Obsidia AI."; }
-  return "I'm here to help. Could you give me more detail?";
+function getFallbackResponse(page, input, vars) {
+  if (page === 'general') return "I'm running in demo mode — the AI backend isn't connected yet. Once your Anthropic API key is configured, I'll give real answers to any question. For now, explore the tools above!";
+  if (page === 'math') return "Demo mode: I'd solve \"" + input.slice(0,40) + "\" step by step with full explanations. Connect the AI backend to get real solutions!";
+  if (page === 'essay') return "Demo mode: I'd help you write about \"" + input.slice(0,40) + "\" with " + (vars.humanizer ? "a natural human tone" : "academic precision") + " at " + (vars.grade||"high school") + " level. Connect the AI backend to get started!";
+  if (page === 'study') return "Demo mode: I'd create " + (vars.method || "a study guide") + " from your material. Connect the AI backend to generate real study resources!";
+  if (page === 'notes') return "Demo mode: I'd process your lecture content into organized notes. Connect the AI backend for real transcription and summarization!";
+  if (page === 'doublecheck') return "Demo mode: I'd fact-check this claim against reliable sources. Connect the AI backend for real verification!";
+  if (page === 'grading') return "Demo mode: I'd evaluate this work using the " + (vars.scale || "A-F") + " scale. Connect the AI backend for real grading!";
+  if (page === 'testprep') return "Demo mode: I'd generate practice problems for " + (vars.section || "your selected section") + ". Connect the AI backend for real test prep!";
+  if (page === 'teacher') return "Demo mode: I'd create professional teaching materials. Connect the AI backend to generate real resources!";
+  if (page === 'history') return "Conversation history will be available once persistence is added in a future update.";
+  if (page === 'feedback') return "Thank you for your feedback! This has been recorded.";
+  return "Demo mode active. Connect the AI backend for real responses!";
 }
 
 /* Init */

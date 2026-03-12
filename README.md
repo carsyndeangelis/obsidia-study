@@ -1,54 +1,74 @@
-# Obsidia Study v2.0
+# Obsidia Study v2.1
 
-> AI made by a student, for students — now with gamification, mobile support, and a polished dashboard.
+> AI made by a student, for students — now with real AI, streaming responses, and Vercel deployment.
 
-## What's New in v2.0
+## Quick Start
 
-### Navigation & UX
-- **Mobile hamburger drawer** — full slide-out navigation for phones/tablets with profile, streak, and all tools
-- **Quick Snap button** — camera icon in the nav bar lets you snap a photo of homework instantly (uses device camera on mobile)
-- **Keyboard shortcuts** — press `?` to see all shortcuts. `G+H` for home, `G+M` for math, `/` to focus chat, `Q` for quick snap
-- **Staggered entrance animations** — cards and stats fade in sequentially for a polished feel
+### 1. Get your API key (free to start)
 
-### Dashboard & Gamification
-- **Stats bar** — animated counters showing total sessions, day streak, XP, and weekly goal progress
-- **XP progress bar** — shows your current level (LVL 12 Scholar) with a fill bar toward the next level
-- **Progress ring** — SVG ring animation showing weekly goal completion percentage
-- **Streak flame** — animated flame icon with subtle scaling dance animation
-- **Activity feed panel** — new left column showing your recent study sessions with XP earned
+Go to [console.anthropic.com](https://console.anthropic.com/) and create an account. You'll get free credits — enough for hundreds of student conversations.
 
-### Settings & Profile Page
-- **Full settings page** (navigate via gear icon or `G+,`) with four cards:
-  - **Profile** — name, email, grade level
-  - **Study Goals** — daily sessions, weekly XP target, focus subjects, test prep mode
-  - **Preferences** — AI response style, auto-humanizer, sound effects, streak reminders
-  - **Achievements** — earned badges, locked badges, progress percentages
+Copy your API key (starts with `sk-ant-...`).
 
-### Chat Enhancements
-- **Word-by-word typing animation** — AI responses appear word by word instead of all at once
-- **Three-column dashboard** — activity feed + upload zone + chat side by side
+### 2. Deploy to Vercel (free)
 
-### Architecture Improvements
-- All pages now registered in the router (including settings)
-- Cleaner responsive breakpoints for 4 screen sizes
-- Footer with keyboard shortcut hint
-- Mobile-specific: nav buttons hidden, hamburger shown, single-column layouts
+Or manually:
 
-## File Structure
-
-```
-obsidia-v2/
-├── index.html          # Single-file SPA (HTML + CSS + JS)
-├── Images/
-│   └── Quick Snap Navigation Button.jpg
-└── README.md
+```bash
+npm install -g vercel
+git clone https://github.com/carsyndeangelis/obsidia-study.git
+cd obsidia-study
+npm install
+vercel
 ```
 
-## Getting Started
+### 3. Add your API key
 
-1. Open `index.html` in any modern browser
-2. No build step, no dependencies, no server required
-3. Works offline — all fonts loaded from Google Fonts CDN
+In the Vercel dashboard:
+1. Go to your project → **Settings** → **Environment Variables**
+2. Add: `ANTHROPIC_API_KEY` = `sk-ant-your-key-here`
+3. Redeploy (Deployments → three dots → Redeploy)
+
+### 4. Local development
+
+```bash
+cp .env.example .env.local
+# Edit .env.local with your API key
+npm install
+npx vercel dev
+# Opens at http://localhost:3000
+```
+
+## Architecture
+
+```
+obsidia-study/
+├── public/
+│   ├── index.html          # Frontend SPA
+│   └── Images/             # Static assets
+├── api/
+│   ├── chat.js             # Serverless AI proxy
+│   └── prompts.js          # Per-tool system prompts
+├── vercel.json             # Routing config
+├── package.json            # Anthropic SDK
+├── .env.example            # API key template
+└── .gitignore
+```
+
+The frontend sends messages to `/api/chat`. The serverless function adds the right system prompt per tool, calls Claude with streaming, and pipes the response back. The API key never touches the browser.
+
+## Per-Tool AI Specializations
+
+| Tool | Behavior |
+|------|----------|
+| Math AI | Step-by-step solver. Modes: solve, explain, graph, practice |
+| Essay Writer | Writing coach with humanizer and grade calibration |
+| Study Guide | Flashcards, Cornell notes, mind maps, outlines, quizzes |
+| Lecture Notes | Transcription, summarization, key points, questions |
+| Double Check | Fact verification, source finding, bias analysis |
+| Grading | Multi-scale evaluation with rubric support |
+| ACT/SAT Prep | Section-specific practice with strategy coaching |
+| Teacher Tools | Lesson plans, rubrics, quizzes, parent comms |
 
 ## Keyboard Shortcuts
 
@@ -63,13 +83,12 @@ obsidia-v2/
 | Quick Snap | `Q` |
 | Show Shortcuts | `?` |
 
-## Design System
+## Cost Estimate
 
-- **Fonts**: Cinzel (display), Inter (UI)
-- **Colors**: Dark obsidian (#080808) with gold (#c9a84c) accents
-- **Subject colors**: Math (blue), Essay (purple), Study (green), Notes (amber)
-- **Radius tokens**: 8px (sm), 14px (md), 20px (lg), 28px (xl)
+Claude Sonnet costs ~$3/M input tokens and ~$15/M output tokens. A typical 10-message session costs $0.01-0.03.
 
-## Browser Support
+## Roadmap
 
-Tested on Chrome, Firefox, Safari, Edge (latest versions). Mobile-optimized for iOS Safari and Android Chrome.
+- **v2.2** — User auth, persistent streak & XP
+- **v2.3** — Theme toggle, onboarding, achievements page
+- **v2.4** — PWA support, push notifications

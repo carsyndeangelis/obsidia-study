@@ -1,0 +1,17 @@
+{
+  "name": "obsidia-study",
+  "version": "2.1.0",
+  "description": "Obsidia AI — Academic assistance platform built by a student, for students",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site — no build step needed'",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
