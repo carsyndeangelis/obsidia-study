@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obsidia AI — Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── DESIGN TOKENS ─────────────────────────────────────── */
+    :root {
+      --black-deep:   #080808;
+      --black-panel:  #111111;
+      --black-card:   #181818;
+      --black-input:  #1f1f1f;
+      --black-border: #2a2a2a;
+      --gold-bright:  #c9a84c;
+      --gold-mid:     #b8923e;
+      --gold-muted:   #8a6a28;
+      --gold-shine:   #e8c96a;
+      --gold-subtle:  rgba(201,168,76,0.12);
+      --gold-glow:    rgba(201,168,76,0.25);
+      --text-primary: #f0ead6;
+      --text-secondary: #9e9070;
+      --text-dim:     #5a5040;
+      --radius-sm:    8px;
+      --radius-md:    14px;
+      --radius-lg:    22px;
+      --radius-xl:    32px;
+      --shadow-gold:  0 0 24px rgba(201,168,76,0.18), 0 2px 8px rgba(0,0,0,0.8);
+      --shadow-card:  0 4px 32px rgba(0,0,0,0.7);
+      --transition:   all 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── RESET & BASE ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Subtle geometric background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.02) 50%, transparent 60%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 60px,
+          rgba(201,168,76,0.015) 60px,
+          rgba(201,168,76,0.015) 61px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── SCROLLBAR ─────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--black-panel); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-muted); border-radius: 3px; }
+
+    /* ─── GOLD GRADIENT HELPERS ─────────────────────────────── */
+    .gold-text {
+      background: linear-gradient(135deg, var(--gold-shine) 0%, var(--gold-bright) 50%, var(--gold-mid) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gold-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+      opacity: 0.4;
+    }
+
+    /* ─── NAVIGATION BAR ────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--black-border);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-gem {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      flex-shrink: 0;
+    }
+    .nav-logo-text {
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    .nav-links a:hover { color: var(--gold-bright); background: var(--gold-subtle); }
+    .nav-links a.active { color: var(--gold-bright); }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-nav-sign {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 12px;
+      transition: var(--transition);
+    }
+    .btn-nav-sign:hover { color: var(--text-primary); }
+    .btn-nav-primary {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--black-deep);
+      background: linear-gradient(135deg, var(--gold-shine), var(--gold-bright));
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 18px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-nav-primary:hover {
+      box-shadow: 0 0 16px var(--gold-glow);
+      transform: translateY(-1px);
+    }
+
+    /* ─── PAGE LAYOUT ───────────────────────────────────────── */
+    main {
+      position: relative;
+      z-index: 1;
+      padding-top: 64px;
+    }
+
+    /* ─── HERO SECTION ──────────────────────────────────────── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 56px 24px 40px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 14px;
+      border: 1px solid var(--gold-muted);
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+      margin-bottom: 22px;
+      background: var(--gold-subtle);
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--gold-bright);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .hero-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .hero-tagline {
+      font-size: clamp(13px, 1.6vw, 16px);
+      font-weight: 400;
+      color: var(--text-secondary);
+      letter-spacing: 0.06em;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    .gold-rule.hero-rule {
+      width: 120px;
+      margin: 16px auto 0;
+    }
+
+    /* ─── WORKSPACE GRID ────────────────────────────────────── */
+    .workspace {
+      display: grid;
+      grid-template-columns: 280px 1fr 280px;
+      grid-template-rows: auto 1fr;
+      gap: 16px;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px 20px 32px;
+      align-items: start;
+    }
+
+    /* ─── PANEL BASE ────────────────────────────────────────── */
+    .panel {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--black-border);
+    }
+    .panel-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+    }
+    .panel-icon {
+      width: 20px; height: 20px;
+      opacity: 0.5;
+    }
+
+    /* ─── LEFT PANEL: QUICK SNAP + RECENT ───────────────────── */
+    .left-panel { grid-column: 1; }
+
+    /* Quick Snap Button */
+    .quick-snap-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 28px 20px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      gap: 14px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .quick-snap-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .quick-snap-btn:hover::before { opacity: 1; }
+    .quick-snap-btn:hover { transform: translateY(-2px); }
+    .quick-snap-btn:active { transform: translateY(0) scale(0.98); }
+
+    .snap-icon-wrap {
+      position: relative;
+      width: 96px; height: 96px;
+    }
+    .snap-icon-body {
+      width: 96px; height: 88px;
+      background: linear-gradient(145deg, #1e1e1e 0%, #111 100%);
+      border: 2px solid var(--gold-bright);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 0 0 1px rgba(201,168,76,0.2),
+        inset 0 1px 0 rgba(201,168,76,0.15),
+        var(--shadow-gold);
+      position: relative;
+      overflow: hidden;
+    }
+    .snap-icon-body::before {
+      content: '';
+      position: absolute;
+      top: 6px; left: 6px; right: 6px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+    }
+    /* Camera shutter SVG */
+    .snap-shutter {
+      width: 56px; height: 56px;
+      position: relative;
+    }
+    .shutter-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+    }
+    .shutter-outer {
+      inset: 0;
+      border-color: var(--gold-bright);
+      box-shadow: 0 0 12px rgba(201,168,76,0.4);
+    }
+    .shutter-mid {
+      inset: 8px;
+      border-color: var(--gold-mid);
+    }
+    .shutter-inner {
+      inset: 18px;
+      background: radial-gradient(circle, #111 50%, #222);
+      border-color: var(--gold-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .shutter-q {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      color: var(--gold-bright);
+      font-weight: 700;
+    }
+    /* Shutter blades */
+    .shutter-blade {
+      position: absolute;
+      width: 2px;
+      height: 18px;
+      background: var(--gold-bright);
+      border-radius: 1px;
+      top: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      opacity: 0.5;
+    }
+
+    .snap-viewfinder-top {
+      position: absolute;
+      top: 6px; left: 50%;
+      transform: translateX(-50%);
+      width: 12px; height: 8px;
+      border-top: 2px solid var(--gold-bright);
+      border-left: 2px solid var(--gold-bright);
+      border-right: 2px solid var(--gold-bright);
+      border-radius: 3px 3px 0 0;
+    }
+    .snap-flash {
+      position: absolute;
+      top: 8px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: var(--gold-bright);
+    }
+    .snap-corner {
+      position: absolute;
+      width: 10px; height: 10px;
+    }
+    .snap-corner-tl { top: 5px; left: 5px; border-top: 2px solid var(--gold-bright); border-left: 2px solid var(--gold-bright); }
+    .snap-corner-br { bottom: 5px; right: 5px; border-bottom: 2px solid var(--gold-bright); border-right: 2px solid var(--gold-bright); }
+
+    .snap-label {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .snap-sublabel {
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 0.06em;
+    }
+
+    /* Quick Snap Glow animation on hover */
+    .quick-snap-btn:hover .snap-icon-body {
+      box-shadow:
+        0 0 0 1px rgba(201,168,76,0.4),
+        0 0 32px rgba(201,168,76,0.3),
+        inset 0 1px 0 rgba(201,168,76,0.2);
+    }
+
+    /* Recent Snaps */
+    .recent-section { padding: 0 16px 16px; }
+    .recent-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 12px 4px 8px;
+    }
+    .recent-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .recent-item:hover { background: var(--gold-subtle); }
+    .recent-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .recent-item-text { flex: 1; min-width: 0; }
+    .recent-item-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .recent-item-meta {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 1px;
+    }
+    .recent-item-time {
+      font-size: 10px;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    /* Subject color dots */
+    .dot-math    { background: #4c8ef5; }
+    .dot-english { background: #9f6ef5; }
+    .dot-science { background: #4cba6e; }
+    .dot-history { background: #e07c4c; }
+    .dot-other   { background: var(--gold-bright); }
+
+    /* ─── CENTER PANEL: AI CHAT ─────────────────────────────── */
+    .center-panel {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      min-height: 600px;
+    }
+
+    /* Tab bar */
+    .chat-tabs {
+      display: flex;
+      padding: 0 20px;
+      border-bottom: 1px solid var(--black-border);
+      gap: 2px;
+    }
+    .chat-tab {
+      padding: 14px 16px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+      border: none;
+      background: none;
+      white-space: nowrap;
+    }
+    .chat-tab:hover { color: var(--text-secondary); }
+    .chat-tab.active { color: var(--gold-bright); }
+    .chat-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+    }
+
+    /* Chat messages area */
+    .chat-messages {
+      flex: 1;
+      padding: 24px 24px 8px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 360px;
+      max-height: 420px;
+    }
+
+    /* Welcome state */
+    .chat-welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 12px;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .welcome-gem {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--gold-shine), var(--gold-mid));
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      margin-bottom: 4px;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .welcome-title {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+    .welcome-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      max-width: 340px;
+      line-height: 1.6;
+    }
+    .suggestion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .chip {
+      padding: 7px 14px;
+      border: 1px solid var(--black-border);
+      border-radius: 99px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      background: var(--black-card);
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .chip:hover {
+      border-color: var(--gold-muted);
+      color: var(--gold-bright);
+      background: var(--gold-subtle);
+    }
+
+    /* Message bubbles */
+    .msg {
+      display: flex;
+      gap: 10px;
+      animation: msgIn 0.3s ease;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .msg-avatar-ai {
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
+      color: var(--black-deep);
+      font-family: 'Cinzel', serif;
+    }
+    .msg-avatar-user {
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      color: var(--text-secondary);
+    }
+    .msg-bubble {
+      max-width: 85%;
+      padding: 11px 15px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .msg.ai .msg-bubble {
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user {
+      flex-direction: row-reverse;
+    }
+    .msg.user .msg-bubble {
+      background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
+      border: 1px solid var(--gold-muted);
+      color: var(--text-primary);
+      border-bottom-right-radius: 4px;
+    }
+    .msg-time {
+      font-size: 10px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+    .msg.user .msg-time { text-align: right; }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      padding: 13px 16px;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      border-bottom-left-radius: 4px;
+    }
+    .typing-dot {
+      width: 6px; height: 6px;
+      background: var(--gold-muted);
+      border-radius: 50%;
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); background: var(--gold-bright); }
+    }
+
+    /* Chat input area */
+    .chat-input-wrap {
+      padding: 16px 20px 20px;
+      border-top: 1px solid var(--black-border);
+    }
+    .chat-input-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      background: var(--black-input);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      transition: var(--transition);
+    }
+    .chat-input-row:focus-within {
+      border-color: var(--gold-muted);
+      box-shadow: 0 0 0 2px rgba(201,168,76,0.08);
+    }
+    .chat-input-actions-left {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+      align-self: flex-end;
+      padding-bottom: 2px;
+    }
+    .input-action-btn {
+      width: 28px; height: 28px;
+      border: none;
+      background: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      font-size: 14px;
+    }
+    .input-action-btn:hover {
+      color: var(--gold-bright);
+      background: var(--gold-subtle);
+    }
+    .chat-textarea {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 13.5px;
+      line-height: 1.5;
+      resize: none;
+      min-height: 22px;
+      max-height: 120px;
+    }
+    .chat-textarea::placeholder { color: var(--text-dim); }
+    .chat-send-btn {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--black-deep);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      align-self: flex-end;
+      transition: var(--transition);
+    }
+    .chat-send-btn:hover {
+      box-shadow: 0 0 12px var(--gold-glow);
+      transform: scale(1.05);
+    }
+    .chat-send-btn:disabled {
+      background: var(--black-border);
+      color: var(--text-dim);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .chat-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding: 0 4px;
+    }
+    .chat-footer-hint {
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+    .chat-model-badge {
+      font-size: 10px;
+      color: var(--gold-muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── RIGHT PANEL: TOOLS ────────────────────────────────── */
+    .right-panel { grid-column: 3; }
+
+    /* Tools tab bar */
+    .tools-tabs {
+      display: flex;
+      padding: 0 16px;
+      gap: 4px;
+      border-bottom: 1px solid var(--black-border);
+    }
+    .tools-tab {
+      padding: 12px 10px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      color: var(--text-dim);
+      cursor: pointer;
+      border: none;
+      background: none;
+      position: relative;
+      transition: var(--transition);
+    }
+    .tools-tab:hover { color: var(--text-secondary); }
+    .tools-tab.active { color: var(--gold-bright); }
+    .tools-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold-bright);
+    }
+    .tools-tab-teacher.active { color: #4c8ef5; }
+    .tools-tab-teacher.active::after { background: #4c8ef5; }
+
+    /* Tools grid */
+    .tools-content { padding: 12px; }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .tool-card {
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .tool-card:hover::before { opacity: 1; }
+    .tool-card:hover { border-color: var(--gold-muted); transform: translateY(-2px); box-shadow: var(--shadow-gold); }
+    .tool-card.featured {
+      grid-column: span 2;
+      flex-direction: row;
+      align-items: center;
+      padding: 14px 16px;
+    }
+    .tool-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .tool-name {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+    }
+    .tool-desc {
+      font-size: 10px;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+    .tool-card.featured .tool-name { font-size: 13px; }
+    .tool-card.featured .tool-desc { font-size: 11px; }
+    .tool-card.featured .tool-text { flex: 1; }
+    .tool-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 99px;
+      background: var(--gold-subtle);
+      color: var(--gold-bright);
+      border: 1px solid var(--gold-muted);
+    }
+    .tool-badge.new { background: rgba(76,190,110,0.1); color: #4cba6e; border-color: #4cba6e; }
+
+    /* Teacher panel */
+    .teacher-tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .teacher-card {
+      background: var(--black-card);
+      border: 1px solid rgba(76,142,245,0.2);
+      border-radius: var(--radius-md);
+      padding: 13px 11px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .teacher-card:hover {
+      border-color: rgba(76,142,245,0.5);
+      background: rgba(76,142,245,0.05);
+      transform: translateY(-2px);
+    }
+    .teacher-card.featured { grid-column: span 2; flex-direction: row; align-items: center; padding: 14px 16px; }
+    .teacher-card.featured .tool-text { flex: 1; }
+    .tool-badge.educator {
+      background: rgba(76,142,245,0.1);
+      color: #4c8ef5;
+      border-color: rgba(76,142,245,0.4);
+    }
+
+    /* ─── QUICK SNAP MODAL ──────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-xl);
+      width: min(520px, 94vw);
+      padding: 36px 32px 32px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.9), 0 0 60px rgba(201,168,76,0.08);
+      transform: translateY(16px) scale(0.97);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .modal-title {
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    .modal-close:hover { color: var(--text-primary); border-color: var(--gold-muted); }
+    .modal-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .subject-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .subject-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      background: var(--black-card);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+    }
+    .subject-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .subject-emoji { font-size: 24px; line-height: 1; }
+    .subject-info { flex: 1; }
+    .subject-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      margin-bottom: 2px;
+    }
+    .subject-hint { font-size: 11px; color: var(--text-dim); }
+    .subject-btn.math   { border-color: rgba(76,142,245,0.3);  }
+    .subject-btn.math:hover   { border-color: #4c8ef5;  background: rgba(76,142,245,0.06); }
+    .subject-btn.english { border-color: rgba(159,110,245,0.3); }
+    .subject-btn.english:hover { border-color: #9f6ef5; background: rgba(159,110,245,0.06); }
+    .subject-btn.science { border-color: rgba(76,186,110,0.3); }
+    .subject-btn.science:hover { border-color: #4cba6e; background: rgba(76,186,110,0.06); }
+    .subject-btn.history { border-color: rgba(224,124,76,0.3); }
+    .subject-btn.history:hover { border-color: #e07c4c; background: rgba(224,124,76,0.06); }
+    .subject-btn.other  { border-color: rgba(201,168,76,0.3); }
+    .subject-btn.other:hover  { border-color: var(--gold-bright); background: var(--gold-subtle); }
+    .subject-btn.other  { grid-column: span 2; }
+
+    .modal-upload-area {
+      margin-top: 20px;
+      border: 1.5px dashed var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .modal-upload-area:hover {
+      border-color: var(--gold-muted);
+      background: var(--gold-subtle);
+    }
+    .upload-icon { font-size: 24px; margin-bottom: 6px; }
+    .upload-text { font-size: 12px; color: var(--text-secondary); }
+    .upload-hint { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+    /* ─── BOTTOM STATS BAR ──────────────────────────────────── */
+    .stats-bar {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .stat-card {
+      background: var(--black-panel);
+      border: 1px solid var(--black-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Cinzel', serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .workspace {
+        grid-template-columns: 260px 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .right-panel { grid-column: 1 / -1; }
+      .tools-grid { grid-template-columns: repeat(4, 1fr); }
+      .teacher-tools-grid { grid-template-columns: repeat(4, 1fr); }
+      .tool-card.featured, .teacher-card.featured { grid-column: span 2; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .workspace {
+        grid-template-columns: 1fr;
+        padding: 16px 12px 24px;
+      }
+      .left-panel, .center-panel, .right-panel { grid-column: 1; }
+      .hero { padding: 32px 16px 28px; }
+      .tools-grid, .teacher-tools-grid { grid-template-columns: 1fr 1fr; }
+      .tool-card.featured, .teacher-card.featured { grid-column: span 2; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .stats-bar { grid-template-columns: 1fr; }
+      .subject-grid { grid-template-columns: 1fr; }
+      .subject-btn.other { grid-column: span 1; }
+    }
+
+    /* ─── UTILITY ───────────────────────────────────────────── */
+    .hidden { display: none !important; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════════════ -->
+<nav role="navigation" aria-label="Main navigation">
+  <a class="nav-logo" href="#" aria-label="Obsidia AI Home">
+    <div class="nav-logo-gem" aria-hidden="true"></div>
+    <span class="nav-logo-text gold-text">OBSIDIA AI</span>
+  </a>
+
+  <ul class="nav-links" role="list">
+    <li><a href="#" class="active" aria-current="page">Home</a></li>
+    <li><a href="#">Prompts</a></li>
+    <li><a href="#">Study Hub</a></li>
+    <li><a href="#">Community</a></li>
+  </ul>
+
+  <div class="nav-cta">
+    <button class="btn-nav-sign">Sign in</button>
+    <button class="btn-nav-primary">Get Started</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════════════════ -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-badge">
+      <div class="hero-badge-dot" aria-hidden="true"></div>
+      Now in Beta
+    </div>
+    <h1 class="hero-title" id="hero-title">
+      <span class="gold-text">Obsidia</span> AI
+    </h1>
+    <p class="hero-tagline">"AI made by a student, for students"</p>
+    <div class="gold-rule hero-rule" aria-hidden="true"></div>
+  </section>
+
+  <!-- WORKSPACE -->
+  <div class="workspace">
+
+    <!-- ── LEFT: QUICK SNAP + RECENT ── -->
+    <aside class="panel left-panel" aria-label="Quick Snap and Recent Activity">
+
+      <div class="panel-header">
+        <span class="panel-title">Quick Snap</span>
+        <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+
+      <button
+        class="quick-snap-btn"
+        id="quickSnapBtn"
+        aria-haspopup="dialog"
+        aria-label="Open Quick Snap — instantly solve a problem by subject"
+      >
+        <div class="snap-icon-wrap" aria-hidden="true">
+          <div class="snap-icon-body">
+            <div class="snap-corner snap-corner-tl"></div>
+            <div class="snap-corner snap-corner-br"></div>
+            <!-- Camera shutter -->
+            <div class="snap-shutter">
+              <div class="shutter-ring shutter-outer"></div>
+              <div class="shutter-ring shutter-mid"></div>
+              <div class="shutter-ring shutter-inner">
+                <span class="shutter-q">?</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="snap-label gold-text">Quick Snap</span>
+        <span class="snap-sublabel">Tap to solve instantly</span>
+      </button>
+
+      <div class="gold-rule" aria-hidden="true"></div>
+
+      <div class="recent-section" aria-label="Recent Quick Snaps">
+        <div class="recent-label">Recent Snaps</div>
+
+        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Quadratic Formula, Math, 2 minutes ago">
+          <div class="recent-dot dot-math" aria-hidden="true"></div>
+          <div class="recent-item-text">
+            <div class="recent-item-title">Quadratic Formula</div>
+            <div class="recent-item-meta">Math · Algebra</div>
+          </div>
+          <div class="recent-item-time">2m</div>
+        </div>
+
+        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Essay Outline, English, 18 minutes ago">
+          <div class="recent-dot dot-english" aria-hidden="true"></div>
+          <div class="recent-item-text">
+            <div class="recent-item-title">Essay Outline Help</div>
+            <div class="recent-item-meta">English · Writing</div>
+          </div>
+          <div class="recent-item-time">18m</div>
+        </div>
+
+        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Cell Division, Science, yesterday">
+          <div class="recent-dot dot-science" aria-hidden="true"></div>
+          <div class="recent-item-text">
+            <div class="recent-item-title">Cell Division</div>
+            <div class="recent-item-meta">Science · Biology</div>
+          </div>
+          <div class="recent-item-time">1d</div>
+        </div>
+
+        <div class="recent-item" role="button" tabindex="0" aria-label="Recent: Civil War Timeline, History, yesterday">
+          <div class="recent-dot dot-history" aria-hidden="true"></div>
+          <div class="recent-item-text">
+            <div class="recent-item-title">Civil War Timeline</div>
+            <div class="recent-item-meta">History · US</div>
+          </div>
+          <div class="recent-item-time">1d</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── CENTER: AI CHAT ── -->
+    <section class="panel center-panel" aria-label="AI Chat Interface">
+
+      <!-- Tab bar -->
+      <div class="chat-tabs" role="tablist" aria-label="Chat modes">
+        <button class="chat-tab active" role="tab" aria-selected="true" aria-controls="chat-panel">Chat</button>
+        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Explain</button>
+        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Practice</button>
+        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Summarize</button>
+        <button class="chat-tab" role="tab" aria-selected="false" aria-controls="chat-panel">Translate</button>
+      </div>
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
+
+        <!-- Welcome state (shown when no messages) -->
+        <div class="chat-welcome" id="chatWelcome">
+          <div class="welcome-gem" aria-hidden="true"></div>
+          <h2 class="welcome-title gold-text">What can I help you with?</h2>
+          <p class="welcome-sub">Ask me anything — from homework help to essay feedback, equations to essay structure.</p>
+          <div class="suggestion-chips" role="list" aria-label="Suggested prompts">
+            <button class="chip" role="listitem" onclick="useSuggestion(this)">Explain photosynthesis</button>
+            <button class="chip" role="listitem" onclick="useSuggestion(this)">Solve x² + 5x + 6 = 0</button>
+            <button class="chip" role="listitem" onclick="useSuggestion(this)">Outline my essay</button>
+            <button class="chip" role="listitem" onclick="useSuggestion(this)">Civil War causes</button>
+            <button class="chip" role="listitem" onclick="useSuggestion(this)">Study plan for finals</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Input -->
+      <div class="chat-input-wrap">
+        <div class="chat-input-row">
+          <div class="chat-input-actions-left">
+            <button class="input-action-btn" title="Attach file" aria-label="Attach file">
+              📎
+            </button>
+            <button class="input-action-btn" title="Upload image" aria-label="Upload image">
+              🖼️
+            </button>
+          </div>
+          <textarea
+            class="chat-textarea"
+            id="chatInput"
+            placeholder="Ask anything..."
+            rows="1"
+            aria-label="Type your message"
+          ></textarea>
+          <button
+            class="chat-send-btn"
+            id="sendBtn"
+            aria-label="Send message"
+            disabled
+          >
+            ➤
+          </button>
+        </div>
+        <div class="chat-footer-row">
+          <span class="chat-footer-hint">Enter to send · Shift+Enter for new line</span>
+          <span class="chat-model-badge">OBSIDIA v1 · BETA</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── RIGHT: TOOLS ── -->
+    <aside class="panel right-panel" aria-label="Academic Tools">
+
+      <!-- Tools tab bar -->
+      <div class="tools-tabs" role="tablist" aria-label="Tool categories">
+        <button class="tools-tab active" role="tab" aria-selected="true" id="tab-student" onclick="switchToolTab('student')">Student</button>
+        <button class="tools-tab" role="tab" aria-selected="false" id="tab-study" onclick="switchToolTab('study')">Study</button>
+        <button class="tools-tab tools-tab-teacher" role="tab" aria-selected="false" id="tab-teacher" onclick="switchToolTab('teacher')">Educator</button>
+      </div>
+
+      <!-- STUDENT TOOLS -->
+      <div class="tools-content" id="tools-student">
+        <div class="tools-grid" role="list" aria-label="Student tools">
+
+          <div class="tool-card featured" role="listitem" tabindex="0" onclick="openTool('essay-helper')">
+            <div class="tool-icon" aria-hidden="true">✍️</div>
+            <div class="tool-text">
+              <div class="tool-name">Essay Helper</div>
+              <div class="tool-desc">Outline, draft, and refine any essay with guided AI feedback</div>
+            </div>
+            <span class="tool-badge">Popular</span>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('math-solver')">
+            <div class="tool-icon" aria-hidden="true">🔢</div>
+            <div class="tool-name">Math Solver</div>
+            <div class="tool-desc">Step-by-step solutions</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('citation')">
+            <div class="tool-icon" aria-hidden="true">📚</div>
+            <div class="tool-name">Citation Gen</div>
+            <div class="tool-desc">MLA, APA, Chicago</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('vocab')">
+            <div class="tool-icon" aria-hidden="true">🔤</div>
+            <div class="tool-name">Vocab Builder</div>
+            <div class="tool-desc">Flashcards & quizzes</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('science')">
+            <div class="tool-icon" aria-hidden="true">⚗️</div>
+            <div class="tool-name">Science Lab</div>
+            <div class="tool-desc">Lab report & data help</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('history')">
+            <div class="tool-icon" aria-hidden="true">🗺️</div>
+            <div class="tool-name">History Maps</div>
+            <div class="tool-desc">Timelines & context</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('proofread')">
+            <div class="tool-icon" aria-hidden="true">🔍</div>
+            <div class="tool-name">Proofreader</div>
+            <div class="tool-desc">Grammar & style check</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- STUDY TOOLS -->
+      <div class="tools-content hidden" id="tools-study">
+        <div class="tools-grid" role="list" aria-label="Study tools">
+
+          <div class="tool-card featured" role="listitem" tabindex="0" onclick="openTool('flashcards')">
+            <div class="tool-icon" aria-hidden="true">🃏</div>
+            <div class="tool-text">
+              <div class="tool-name">Smart Flashcards</div>
+              <div class="tool-desc">AI-generated cards from your notes — spaced repetition built in</div>
+            </div>
+            <span class="tool-badge new">New</span>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('quiz')">
+            <div class="tool-icon" aria-hidden="true">❓</div>
+            <div class="tool-name">Practice Quiz</div>
+            <div class="tool-desc">Test your knowledge</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('notes')">
+            <div class="tool-icon" aria-hidden="true">📝</div>
+            <div class="tool-name">Note Summarizer</div>
+            <div class="tool-desc">Compress long notes</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('planner')">
+            <div class="tool-icon" aria-hidden="true">📅</div>
+            <div class="tool-name">Study Planner</div>
+            <div class="tool-desc">Build a study schedule</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('mindmap')">
+            <div class="tool-icon" aria-hidden="true">🕸️</div>
+            <div class="tool-name">Mind Map</div>
+            <div class="tool-desc">Visual concept mapping</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('pomodoro')">
+            <div class="tool-icon" aria-hidden="true">⏱️</div>
+            <div class="tool-name">Focus Timer</div>
+            <div class="tool-desc">Pomodoro sessions</div>
+          </div>
+
+          <div class="tool-card" role="listitem" tabindex="0" onclick="openTool('translate')">
+            <div class="tool-icon" aria-hidden="true">🌐</div>
+            <div class="tool-name">Translator</div>
+            <div class="tool-desc">40+ languages</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EDUCATOR TOOLS -->
+      <div class="tools-content hidden" id="tools-teacher">
+        <div class="teacher-tools-grid" role="list" aria-label="Educator tools">
+
+          <div class="teacher-card featured" role="listitem" tabindex="0" onclick="openTool('lesson-builder')">
+            <div class="tool-icon" aria-hidden="true">🏗️</div>
+            <div class="tool-text">
+              <div class="tool-name">Lesson Builder</div>
+              <div class="tool-desc">Generate complete lesson plans aligned to curriculum standards</div>
+            </div>
+            <span class="tool-badge educator">Educator</span>
+          </div>
+
+          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('rubric')">
+            <div class="tool-icon" aria-hidden="true">📋</div>
+            <div class="tool-name">Rubric Creator</div>
+            <div class="tool-desc">Custom grading rubrics</div>
+          </div>
+
+          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('quiz-gen')">
+            <div class="tool-icon" aria-hidden="true">🧪</div>
+            <div class="tool-name">Quiz Generator</div>
+            <div class="tool-desc">Auto-generate tests</div>
+          </div>
+
+          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('feedback')">
+            <div class="tool-icon" aria-hidden="true">💬</div>
+            <div class="tool-name">Feedback Writer</div>
+            <div class="tool-desc">Student comment banks</div>
+          </div>
+
+          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('differentiate')">
+            <div class="tool-icon" aria-hidden="true">🎯</div>
+            <div class="tool-name">Differentiate</div>
+            <div class="tool-desc">Adapt for all levels</div>
+          </div>
+
+          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('progress')">
+            <div class="tool-icon" aria-hidden="true">📊</div>
+            <div class="tool-name">Progress Report</div>
+            <div class="tool-desc">Generate student reports</div>
+          </div>
+
+          <div class="teacher-card" role="listitem" tabindex="0" onclick="openTool('class-email')">
+            <div class="tool-icon" aria-hidden="true">✉️</div>
+            <div class="tool-name">Email Composer</div>
+            <div class="tool-desc">Parent & admin comms</div>
+          </div>
+
+        </div>
+      </div>
+
+    </aside>
+  </div><!-- end .workspace -->
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" aria-label="Platform statistics">
+    <div class="stat-card">
+      <div class="stat-number gold-text">47K+</div>
+      <div class="stat-label">Students Helped</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number gold-text">1.2M</div>
+      <div class="stat-label">Problems Solved</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number gold-text">98%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number gold-text">6–12+</div>
+      <div class="stat-label">Grade Levels Served</div>
+    </div>
+  </div>
+
+</main><!-- end main -->
+
+<!-- ══════════════════════════════════════════════════════
+     QUICK SNAP MODAL
+══════════════════════════════════════════════════════ -->
+<div
+  class="modal-overlay"
+  id="snapModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+  aria-describedby="modal-sub"
+>
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title gold-text" id="modal-title">Quick Snap</h2>
+      <button class="modal-close" id="modalClose" aria-label="Close Quick Snap dialog">✕</button>
+    </div>
+    <p class="modal-sub" id="modal-sub">
+      Choose your subject and we'll get you to the right tools instantly. You can also snap a photo of your problem.
+    </p>
+
+    <div class="subject-grid" role="list" aria-label="Choose a subject">
+      <button class="subject-btn math" role="listitem" onclick="snapSubject('math')" aria-label="Math">
+        <span class="subject-emoji" aria-hidden="true">🔢</span>
+        <div class="subject-info">
+          <div class="subject-name">Math</div>
+          <div class="subject-hint">Algebra · Calculus · Stats</div>
+        </div>
+      </button>
+
+      <button class="subject-btn english" role="listitem" onclick="snapSubject('english')" aria-label="English">
+        <span class="subject-emoji" aria-hidden="true">📖</span>
+        <div class="subject-info">
+          <div class="subject-name">English</div>
+          <div class="subject-hint">Writing · Reading · Grammar</div>
+        </div>
+      </button>
+
+      <button class="subject-btn science" role="listitem" onclick="snapSubject('science')" aria-label="Science">
+        <span class="subject-emoji" aria-hidden="true">⚗️</span>
+        <div class="subject-info">
+          <div class="subject-name">Science</div>
+          <div class="subject-hint">Biology · Chemistry · Physics</div>
+        </div>
+      </button>
+
+      <button class="subject-btn history" role="listitem" onclick="snapSubject('history')" aria-label="History">
+        <span class="subject-emoji" aria-hidden="true">🗺️</span>
+        <div class="subject-info">
+          <div class="subject-name">History</div>
+          <div class="subject-hint">World · US · Government</div>
+        </div>
+      </button>
+
+      <button class="subject-btn other" role="listitem" onclick="snapSubject('other')" aria-label="Other subject">
+        <span class="subject-emoji" aria-hidden="true">✨</span>
+        <div class="subject-info">
+          <div class="subject-name">Other</div>
+          <div class="subject-hint">Art · Music · Foreign Language · Anything else</div>
+        </div>
+      </button>
+    </div>
+
+    <div class="modal-upload-area" role="button" tabindex="0" aria-label="Upload an image of your problem">
+      <div class="upload-icon" aria-hidden="true">📷</div>
+      <div class="upload-text">Snap a photo of your problem</div>
+      <div class="upload-hint">Supports JPG, PNG, PDF — or paste from clipboard</div>
+    </div>
+
+  </div><!-- end .modal -->
+</div><!-- end overlay -->
+
+<script>
+/* ─── QUICK SNAP MODAL ────────────────────────────── */
+const snapBtn   = document.getElementById('quickSnapBtn');
+const snapModal = document.getElementById('snapModal');
+const modalClose = document.getElementById('modalClose');
+
+function openModal() {
+  snapModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modalClose.focus();
+}
+function closeModal() {
+  snapModal.classList.remove('open');
+  document.body.style.overflow = '';
+  snapBtn.focus();
+}
+
+snapBtn.addEventListener('click', openModal);
+modalClose.addEventListener('click', closeModal);
+snapModal.addEventListener('click', e => {
+  if (e.target === snapModal) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && snapModal.classList.contains('open')) closeModal();
+});
+
+function snapSubject(subject) {
+  closeModal();
+  const prefill = {
+    math: 'Help me with a math problem: ',
+    english: 'Help me with English: ',
+    science: 'Help me understand this science concept: ',
+    history: 'Help me with this history topic: ',
+    other: "I need help with something: "
+  };
+  const input = document.getElementById('chatInput');
+  input.value = prefill[subject] || '';
+  input.focus();
+  input.dispatchEvent(new Event('input'));
+  // scroll chat into view on mobile
+  document.querySelector('.center-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ─── CHAT INTERFACE ──────────────────────────────── */
+const chatInput   = document.getElementById('chatInput');
+const sendBtn     = document.getElementById('sendBtn');
+const chatMessages = document.getElementById('chatMessages');
+const chatWelcome = document.getElementById('chatWelcome');
+
+// Auto-resize textarea
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+  sendBtn.disabled = chatInput.value.trim() === '';
+});
+
+// Enter to send, Shift+Enter for new line
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (!sendBtn.disabled) sendMessage();
+  }
+});
+sendBtn.addEventListener('click', sendMessage);
+
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+
+  // Hide welcome state
+  chatWelcome.classList.add('hidden');
+
+  // Add user message
+  appendMessage('user', text);
+
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  sendBtn.disabled = true;
+
+  // Show typing indicator then respond
+  const typingEl = appendTyping();
+  setTimeout(() => {
+    typingEl.remove();
+    appendMessage('ai', getAIResponse(text));
+    sendBtn.disabled = chatInput.value.trim() === '';
+  }, 1200 + Math.random() * 800);
+}
+
+function appendMessage(role, text) {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const msg = document.createElement('div');
+  msg.className = `msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `msg-avatar msg-avatar-${role}`;
+  avatar.setAttribute('aria-hidden', 'true');
+  avatar.textContent = role === 'ai' ? 'O' : 'U';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = text;
+
+  const time = document.createElement('div');
+  time.className = 'msg-time';
+  time.textContent = timeStr;
+
+  const wrap = document.createElement('div');
+  wrap.style.display = 'flex';
+  wrap.style.flexDirection = 'column';
+  if (role === 'user') wrap.style.alignItems = 'flex-end';
+  wrap.appendChild(bubble);
+  wrap.appendChild(time);
+
+  msg.appendChild(avatar);
+  msg.appendChild(wrap);
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return msg;
+}
+
+function appendTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'typing-indicator';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar msg-avatar-ai';
+  avatar.setAttribute('aria-hidden', 'true');
+  avatar.textContent = 'O';
+
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.setAttribute('aria-label', 'Obsidia AI is typing');
+  dots.setAttribute('role', 'status');
+  for (let i = 0; i < 3; i++) {
+    const d = document.createElement('div');
+    d.className = 'typing-dot';
+    dots.appendChild(d);
+  }
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(dots);
+  chatMessages.appendChild(wrap);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return wrap;
+}
+
+function getAIResponse(input) {
+  const lc = input.toLowerCase();
+  if (lc.includes('math') || lc.includes('equation') || /\d+x|\^2|solve/.test(lc))
+    return "I'd love to help with that math problem! Could you paste the full equation or problem statement? I'll walk you through it step by step.";
+  if (lc.includes('essay') || lc.includes('outline') || lc.includes('writing'))
+    return "Great — let's work on your essay together. What's the topic or prompt? Once I know, I can help you build a strong thesis and outline the key arguments.";
+  if (lc.includes('history') || lc.includes('civil war') || lc.includes('war'))
+    return "History is fascinating! Tell me more about what you're studying — are you looking for a timeline, key causes, or analysis of a specific event?";
+  if (lc.includes('photosynthesis') || lc.includes('science') || lc.includes('biology'))
+    return "Photosynthesis is the process by which plants convert light energy into chemical energy stored as glucose. The simplified equation is: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂. Want me to break down each stage?";
+  if (lc.includes('study') || lc.includes('finals') || lc.includes('plan'))
+    return "Building a solid study plan is half the battle! Tell me your subjects, exam dates, and how many hours a day you can study — I'll build a personalized schedule for you.";
+  return "I'm here and ready to help! Could you give me a bit more detail about what you need? The more context you provide, the better I can assist you.";
+}
+
+function useSuggestion(el) {
+  chatInput.value = el.textContent;
+  chatInput.dispatchEvent(new Event('input'));
+  chatInput.focus();
+}
+
+/* ─── CHAT TABS ───────────────────────────────────── */
+document.querySelectorAll('.chat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.chat-tab').forEach(t => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+  });
+});
+
+/* ─── TOOL TABS ───────────────────────────────────── */
+function switchToolTab(tab) {
+  ['student','study','teacher'].forEach(t => {
+    document.getElementById(`tools-${t}`).classList.add('hidden');
+    const tabEl = document.getElementById(`tab-${t}`);
+    tabEl.classList.remove('active');
+    tabEl.setAttribute('aria-selected', 'false');
+  });
+  document.getElementById(`tools-${tab}`).classList.remove('hidden');
+  const activeTab = document.getElementById(`tab-${tab}`);
+  activeTab.classList.add('active');
+  activeTab.setAttribute('aria-selected', 'true');
+}
+
+/* ─── TOOL CARDS ──────────────────────────────────── */
+function openTool(tool) {
+  const prompts = {
+    'essay-helper': 'Help me write an essay. My topic is: ',
+    'math-solver': 'Solve this math problem step by step: ',
+    'citation': 'Generate a citation in MLA format for: ',
+    'vocab': 'Create vocabulary flashcards for these words: ',
+    'science': 'Help me with my science lab report: ',
+    'history': 'Explain this history topic: ',
+    'proofread': 'Proofread and improve this text:\n\n',
+    'flashcards': 'Create study flashcards from these notes: ',
+    'quiz': 'Quiz me on this topic: ',
+    'notes': 'Summarize these notes: ',
+    'planner': "Build a study plan for my upcoming exam on: ",
+    'mindmap': 'Create a mind map outline for: ',
+    'translate': 'Translate this text to: ',
+    'lesson-builder': 'Create a lesson plan for: ',
+    'rubric': 'Create a grading rubric for: ',
+    'quiz-gen': 'Generate a quiz with 10 questions about: ',
+    'feedback': 'Write constructive feedback for a student who: ',
+    'differentiate': 'Adapt this lesson for different learning levels: ',
+    'progress': 'Write a progress report for a student who: ',
+    'class-email': 'Write a professional email to parents about: ',
+  };
+  chatWelcome.classList.add('hidden');
+  const input = document.getElementById('chatInput');
+  input.value = prompts[tool] || '';
+  input.dispatchEvent(new Event('input'));
+  input.focus();
+  document.querySelector('.center-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ─── KEYBOARD: RECENT ITEMS ─────────────────────── */
+document.querySelectorAll('.recent-item').forEach(item => {
+  item.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      item.click();
+    }
+  });
+});
+
+/* ─── KEYBOARD: TOOL CARDS ───────────────────────── */
+document.querySelectorAll('.tool-card, .teacher-card').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
+</script>
+</body>
+</html>
