@@ -276,10 +276,10 @@
     .sidebar-drag { position: absolute; top: 0; right: -3px; bottom: 0; width: 6px; cursor: col-resize; z-index: 55; }
     .sidebar-drag:hover, .sidebar-drag.active { background: rgba(201,168,76,0.3); }
     .main-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .main-topbar { height: 58px; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--black-border); gap: 12px; flex-shrink: 0; position: relative; }
+    .main-topbar { height: 64px; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--black-border); gap: 12px; flex-shrink: 0; position: relative; }
     .main-topbar-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .main-topbar-logo { width: 38px; height: 38px; flex-shrink: 0; cursor: pointer; filter: drop-shadow(0 0 6px rgba(201,168,76,0.15)); transition: filter 0.3s; }
-    .main-topbar-logo:hover { filter: drop-shadow(0 0 10px rgba(201,168,76,0.3)); }
+    .main-topbar-logo { width: 48px; height: 48px; flex-shrink: 0; cursor: pointer; filter: drop-shadow(0 0 8px rgba(201,168,76,0.2)); transition: filter 0.3s; }
+    .main-topbar-logo:hover { filter: drop-shadow(0 0 14px rgba(201,168,76,0.4)); }
     .main-topbar-brand { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; }
     .main-topbar-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
     .main-topbar-tagline { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 13px; color: rgba(200,180,130,0.5); letter-spacing: 0.02em; white-space: nowrap; }
@@ -331,9 +331,10 @@
     @media (max-width: 900px) { .feature-split { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .feature-col-grid { grid-template-columns: 1fr; } }
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
-    .slab-zone{position:absolute;left:0;top:0;bottom:0;width:44px;z-index:20;pointer-events:none}
+    .main-panel{position:relative}
+    .slab-zone{position:absolute;left:0;top:64px;bottom:0;width:44px;z-index:20;pointer-events:none}
     .slab-zone *{pointer-events:auto}
-    .slab-handle{width:40px;height:100%;cursor:grab;z-index:10;position:absolute;left:0;top:0}
+    .slab-handle{position:absolute;left:0;top:50%;transform:translateY(-50%);width:40px;height:420px;cursor:grab;z-index:10}
     .slab-handle:active{cursor:grabbing}
     .slab-edge{position:absolute;top:0;right:0;width:18px;height:100%;background:linear-gradient(90deg,#050505,#0e0e0e,#141210,#0e0c0a,#050505);border-radius:2px;overflow:hidden}
     .slab-edge-glow{position:absolute;top:-20%;right:1px;width:4px;height:40%;background:linear-gradient(180deg,transparent,rgba(232,201,106,0.4),rgba(201,168,76,0.6),rgba(232,201,106,0.4),transparent);border-radius:2px;animation:slabEdgeTravel 2.5s ease-in-out infinite}
@@ -1352,22 +1353,32 @@
   <div class="main-topbar">
     <button class="mtb mob-btn" onclick="toggleMobileSidebar()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     <div class="main-topbar-left" onclick="navigate('home')" style="cursor:pointer">
-      <svg class="main-topbar-logo" viewBox="0 0 60 60" fill="none">
+      <svg class="main-topbar-logo" viewBox="0 0 72 72" fill="none">
         <defs>
-          <radialGradient id="hS" cx="36%" cy="28%" r="65%"><stop offset="0%" stop-color="#606060"/><stop offset="20%" stop-color="#3a3a3a"/><stop offset="50%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#060606"/></radialGradient>
-          <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a6a28"/><stop offset="100%" stop-color="#e8c96a"/></linearGradient>
-          <radialGradient id="hG" cx="35%" cy="30%" r="40%"><stop offset="0%" stop-color="rgba(255,255,255,0.12)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
-          <linearGradient id="hF" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.08"/><stop offset="50%" stop-color="#e8c96a" stop-opacity="0.15"/><stop offset="100%" stop-color="#8a6a28" stop-opacity="0.05"/></linearGradient>
+          <radialGradient id="hS" cx="34%" cy="26%" r="68%"><stop offset="0%" stop-color="#707070"/><stop offset="15%" stop-color="#484848"/><stop offset="35%" stop-color="#2a2a2a"/><stop offset="60%" stop-color="#121212"/><stop offset="100%" stop-color="#050505"/></radialGradient>
+          <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="25%" stop-color="#c9a84c"/><stop offset="50%" stop-color="#8a6a28"/><stop offset="75%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c96a"/></linearGradient>
+          <radialGradient id="hG" cx="32%" cy="28%" r="35%"><stop offset="0%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="hG2" cx="65%" cy="60%" r="25%"><stop offset="0%" stop-color="rgba(255,255,255,0.04)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <linearGradient id="hF" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.06"/><stop offset="50%" stop-color="#e8c96a" stop-opacity="0.12"/><stop offset="100%" stop-color="#8a6a28" stop-opacity="0.04"/></linearGradient>
+          <linearGradient id="hV1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="50%" stop-color="rgba(201,168,76,0.06)"/><stop offset="100%" stop-color="transparent"/></linearGradient>
         </defs>
-        <circle cx="30" cy="27" r="21" fill="url(#hS)"/>
-        <circle cx="30" cy="27" r="21" fill="url(#hG)"/>
-        <circle cx="30" cy="27" r="20.5" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="0.5"/>
-        <ellipse cx="30" cy="32" rx="26" ry="8" stroke="url(#hR)" stroke-width="2.5" fill="none" opacity="0.65"/>
-        <ellipse cx="30" cy="32" rx="24" ry="7" stroke="rgba(232,201,106,0.08)" stroke-width="0.5" fill="none"/>
-        <ellipse cx="30" cy="32" rx="28" ry="9" stroke="rgba(201,168,76,0.04)" stroke-width="0.5" fill="none"/>
-        <path d="M16 27 Q22 18 30 17 Q38 18 44 27" fill="none" stroke="url(#hF)" stroke-width="8" opacity="0.5"/>
-        <circle cx="24" cy="23" r="3" fill="rgba(255,255,255,0.03)"/>
-        <line x1="18" y1="32" x2="42" y2="32" stroke="rgba(201,168,76,0.06)" stroke-width="0.3"/>
+        <circle cx="36" cy="33" r="26" fill="url(#hS)"/>
+        <circle cx="36" cy="33" r="26" fill="url(#hG)"/>
+        <circle cx="36" cy="33" r="26" fill="url(#hG2)"/>
+        <circle cx="36" cy="33" r="25.5" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="0.5"/>
+        <path d="M18 30 Q26 18 36 16 Q46 18 54 30" fill="none" stroke="url(#hF)" stroke-width="12" opacity="0.6"/>
+        <ellipse cx="28" cy="26" r="4" fill="rgba(255,255,255,0.04)"/>
+        <ellipse cx="44" cy="40" r="2.5" fill="rgba(255,255,255,0.02)"/>
+        <path d="M20 33 Q28 28 36 30 Q44 32 52 29" fill="none" stroke="url(#hV1)" stroke-width="0.5"/>
+        <path d="M22 38 Q30 35 40 37 Q48 39 54 36" fill="none" stroke="url(#hV1)" stroke-width="0.3"/>
+        <ellipse cx="36" cy="39" rx="32" ry="10" stroke="url(#hR)" stroke-width="3.5" fill="none" opacity="0.7"/>
+        <ellipse cx="36" cy="39" rx="30" ry="9" stroke="rgba(232,201,106,0.1)" stroke-width="0.8" fill="none"/>
+        <ellipse cx="36" cy="39" rx="34" ry="11" stroke="rgba(201,168,76,0.05)" stroke-width="0.5" fill="none"/>
+        <ellipse cx="36" cy="39" rx="28" ry="8" stroke="rgba(201,168,76,0.04)" stroke-width="0.3" fill="none"/>
+        <circle cx="14" cy="39" r="1.5" fill="rgba(232,201,106,0.12)"/>
+        <circle cx="58" cy="39" r="1.5" fill="rgba(232,201,106,0.12)"/>
+        <line x1="14" y1="39" x2="18" y2="37" stroke="rgba(201,168,76,0.08)" stroke-width="0.3"/>
+        <line x1="58" y1="39" x2="54" y2="37" stroke="rgba(201,168,76,0.08)" stroke-width="0.3"/>
       </svg>
       <div class="main-topbar-brand"><span class="gold-text">OBSIDIA</span> <span style="color:#5a5040;font-weight:600">AI</span></div>
     </div>
@@ -1379,6 +1390,37 @@
       <button class="mtb" onclick="document.getElementById('quickSnapInput').click()" title="Quick Snap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
       <button class="mtb" onclick="toggleKB()" title="Shortcuts"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6" y2="8"/></svg></button>
       <button class="btn-gold" onclick="openAuth()" style="font-size:11px;padding:6px 14px" id="sbSignInBtn">Sign In</button>
+    </div>
+  </div>
+  <!-- Obsidian Slab (positioned absolute within main-panel) -->
+  <div class="slab-zone">
+    <div class="slab-hint" id="slabHint">~ drag to reveal ~</div>
+    <div class="slab-handle" id="slabHandle">
+      <div class="slab-edge"><div class="slab-edge-glow"></div></div>
+      <div class="slab-grip"><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div></div>
+    </div>
+    <div class="slab-reveal" id="slabReveal">
+      <div class="slab-inner"><div class="slab-stone">
+        <div class="slab-shimmer"><div class="slab-shimmer-wave"></div><div class="slab-shimmer-sweep"></div></div>
+        <div class="slab-glow-orb go1"></div><div class="slab-glow-orb go2"></div><div class="slab-glow-orb go3"></div>
+        <div class="slab-el"></div><div class="slab-er"></div>
+        <div class="slab-vein" style="top:20%;left:5%;width:45%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.08),transparent);transform:rotate(2deg)"></div>
+        <div class="slab-vein" style="top:55%;left:18%;width:55%;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.06),transparent);transform:rotate(-1deg);animation-delay:-1.5s"></div>
+        <div class="slab-vein" style="top:82%;left:3%;width:30%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.07),transparent);transform:rotate(3deg);animation-delay:-0.8s"></div>
+        <div class="slab-gc" style="left:4px;top:18px">&#9670; &#9674; &#9670;</div>
+        <div class="slab-gc" style="right:18px;bottom:35px">&#9758; &#9672; &#9758;</div>
+        <div class="slab-particles" id="slabParticles"></div>
+        <div class="slab-re slab-title" id="sre0">Tome of Obsidia</div>
+        <div class="slab-re slab-sub" id="sre1">Inscriptions for the Seeker</div>
+        <div class="slab-re slab-divider" id="sre2"></div>
+        <div class="slab-re slab-row" id="sre3"><div class="slab-rn">I.</div><div class="slab-rx"><b>Choose thine instrument</b> from the grimoire at left &mdash; the Oracle of Numbers, the Sacred Quill, the Codex.</div></div>
+        <div class="slab-re slab-row" id="sre4"><div class="slab-rn">II.</div><div class="slab-rx"><b>Present thy labour</b> by inscription or relic. Affix via the clip sigil, or invoke the Scan to divine its nature.</div></div>
+        <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Select the enchantment</b> from the rune bar. Each instrument bears many arts &mdash; Solve, Explain, Visualise.</div></div>
+        <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Heed the revelation</b> &mdash; the Oracle shows its workings step by step. Question further to plumb the depths.</div></div>
+        <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>Consult the sanctum</b> upon returning home. Accuracy, hours, and mastered arts inscribed in the eternal ledger.</div></div>
+        <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>Guard thy flame</b> &mdash; daily communion preserves the sacred streak. Ascend and claim the ancient honours.</div></div>
+        <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
+      </div></div>
     </div>
   </div>
   <div class="main-scroll">
@@ -1575,39 +1617,7 @@
 <!-- ═══════════════════════════════════════════════════
      PAGE: HOME
 ═══════════════════════════════════════════════════ -->
-<div class="page active" id="page-home" style="position:relative">
-
-  <!-- Obsidian Slab -->
-  <div class="slab-zone">
-    <div class="slab-hint" id="slabHint">~ drag to reveal ~</div>
-    <div class="slab-handle" id="slabHandle">
-      <div class="slab-edge"><div class="slab-edge-glow"></div></div>
-      <div class="slab-grip"><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div></div>
-    </div>
-    <div class="slab-reveal" id="slabReveal">
-      <div class="slab-inner"><div class="slab-stone">
-        <div class="slab-shimmer"><div class="slab-shimmer-wave"></div><div class="slab-shimmer-sweep"></div></div>
-        <div class="slab-glow-orb go1"></div><div class="slab-glow-orb go2"></div><div class="slab-glow-orb go3"></div>
-        <div class="slab-el"></div><div class="slab-er"></div>
-        <div class="slab-vein" style="top:20%;left:5%;width:45%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.08),transparent);transform:rotate(2deg)"></div>
-        <div class="slab-vein" style="top:55%;left:18%;width:55%;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.06),transparent);transform:rotate(-1deg);animation-delay:-1.5s"></div>
-        <div class="slab-vein" style="top:82%;left:3%;width:30%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.07),transparent);transform:rotate(3deg);animation-delay:-0.8s"></div>
-        <div class="slab-gc" style="left:4px;top:18px">&#9670; &#9674; &#9670;</div>
-        <div class="slab-gc" style="right:18px;bottom:35px">&#9758; &#9672; &#9758;</div>
-        <div class="slab-particles" id="slabParticles"></div>
-        <div class="slab-re slab-title" id="sre0">Tome of Obsidia</div>
-        <div class="slab-re slab-sub" id="sre1">Inscriptions for the Seeker</div>
-        <div class="slab-re slab-divider" id="sre2"></div>
-        <div class="slab-re slab-row" id="sre3"><div class="slab-rn">I.</div><div class="slab-rx"><b>Choose thine instrument</b> from the grimoire at left &mdash; the Oracle of Numbers, the Sacred Quill, the Codex.</div></div>
-        <div class="slab-re slab-row" id="sre4"><div class="slab-rn">II.</div><div class="slab-rx"><b>Present thy labour</b> by inscription or relic. Affix via the clip sigil, or invoke the Scan to divine its nature.</div></div>
-        <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Select the enchantment</b> from the rune bar. Each instrument bears many arts &mdash; Solve, Explain, Visualise.</div></div>
-        <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Heed the revelation</b> &mdash; the Oracle shows its workings step by step. Question further to plumb the depths.</div></div>
-        <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>Consult the sanctum</b> upon returning home. Accuracy, hours, and mastered arts inscribed in the eternal ledger.</div></div>
-        <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>Guard thy flame</b> &mdash; daily communion preserves the sacred streak. Ascend and claim the ancient honours.</div></div>
-        <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
-      </div></div>
-    </div>
-  </div>
+<div class="page active" id="page-home">
 
   <!-- ── Stats Bar (NEW) ── -->
   <!-- ── Real Study Metrics (primary) ── -->
