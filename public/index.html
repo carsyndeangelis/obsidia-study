@@ -2954,7 +2954,7 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
     var body = { message: message, page: page, vars: vars, history: chatHistory[historyKey].slice(-10), model: vars.model || 'sonnet' };
     if (imageData) body.image = imageData;
 
-    var res = await fetch('/api/chat', {
+    var res = await fetch('/api/chat.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
