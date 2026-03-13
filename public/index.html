@@ -381,6 +381,69 @@
     .continue-banner-text { font-size: 12px; color: #c8b88a; }
     .continue-banner-title { font-weight: 600; }
     .continue-banner-dismiss { background: none; border: none; color: #5a5040; font-size: 16px; cursor: pointer; margin-left: auto; padding: 0 4px; }
+    /* --- TEACHER DASHBOARD --- */
+    .td-form{background:var(--black-panel);border:1px solid var(--black-border);border-radius:12px;padding:20px;margin-bottom:16px}
+    .td-form-row{display:flex;gap:10px;margin-bottom:10px;align-items:center}
+    .td-form-label{font-size:12px;color:#8a8070;min-width:80px}
+    .td-form-input{flex:1;background:var(--black-card);border:1px solid var(--black-border);border-radius:6px;padding:8px 12px;color:#e8e0cc;font-size:13px;font-family:var(--font-ui);outline:none}
+    .td-form-input:focus{border-color:var(--gold-muted)}
+    .td-form-select{background:var(--black-card);border:1px solid var(--black-border);border-radius:6px;padding:8px 12px;color:#e8e0cc;font-size:13px;font-family:var(--font-ui);outline:none;cursor:pointer}
+    .td-tab-bar{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--black-border);padding-bottom:8px}
+    .td-tab{padding:6px 14px;border-radius:6px 6px 0 0;font-size:11px;font-weight:600;color:#5a5040;cursor:pointer;border:none;background:none;font-family:var(--font-ui)}
+    .td-tab.active{color:var(--gold-bright);border-bottom:2px solid var(--gold-bright)}
+    .td-class-card{background:var(--black-panel);border:1px solid var(--black-border);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s}
+    .td-class-card:hover{border-color:var(--gold-muted)}
+    .td-class-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .td-class-name{font-size:15px;font-weight:600;color:#e8e0cc}
+    .td-class-code{font-size:11px;font-family:monospace;background:var(--black-card);padding:3px 8px;border-radius:4px;color:var(--gold-bright);letter-spacing:0.1em}
+    .td-class-meta{font-size:11px;color:#5a5040}
+    .td-student-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--black-border)}
+    .td-student-avatar{width:28px;height:28px;border-radius:50%;background:var(--gold-subtle);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold-bright);flex-shrink:0}
+    .td-student-name{font-size:12px;font-weight:500;color:#c8b88a}
+    .td-student-stat{font-size:11px;color:#5a5040;margin-left:auto}
+    .td-assign-card{background:var(--black-panel);border:1px solid var(--black-border);border-radius:10px;padding:14px;margin-bottom:8px}
+    .td-assign-title{font-size:13px;font-weight:600;color:#e8e0cc}
+    .td-assign-meta{font-size:11px;color:#5a5040;margin-top:4px}
+    .td-assign-progress{height:4px;background:var(--black-card);border-radius:99px;overflow:hidden;margin-top:8px}
+    .td-assign-fill{height:100%;background:var(--sci-color);border-radius:99px}
+    /* --- PAYWALL --- */
+    .paywall-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s}
+    .paywall-overlay.open{opacity:1;pointer-events:auto}
+    .paywall-card{background:var(--black-panel);border:1px solid var(--black-border);border-radius:16px;padding:32px;max-width:480px;width:90%;text-align:center}
+    .paywall-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:6px}
+    .paywall-desc{font-size:13px;color:#7a7060;margin-bottom:20px;line-height:1.6}
+    .tier-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+    .tier-card{background:var(--black-card);border:1px solid var(--black-border);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s}
+    .tier-card:hover{border-color:var(--gold-muted)}
+    .tier-card.featured{border-color:var(--gold-bright);background:rgba(201,168,76,0.04)}
+    .tier-price{font-size:28px;font-weight:700;font-family:var(--font-display);color:var(--gold-bright)}
+    .tier-period{font-size:11px;color:#5a5040}
+    .tier-name{font-size:14px;font-weight:600;color:#e8e0cc;margin:8px 0 6px}
+    .tier-feat{font-size:11px;color:#8a8070;line-height:1.8;text-align:left}
+    /* --- LANDING PAGE --- */
+    .landing{display:none}.landing.visible{display:block}
+    .landing-hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
+    .landing-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.06),transparent 70%);pointer-events:none}
+    .landing-logo{width:80px;height:80px;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(201,168,76,0.3))}
+    .landing-h1{font-family:var(--font-display);font-size:48px;font-weight:700;letter-spacing:0.06em;margin-bottom:8px}
+    .landing-sub{font-size:18px;color:#8a8070;margin-bottom:32px;max-width:500px;line-height:1.6}
+    .landing-cta{display:inline-flex;padding:14px 32px;background:linear-gradient(135deg,#e8c96a,#c9a84c);color:#0a0a0a;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:var(--font-display)}
+    .landing-cta-ghost{display:inline-flex;padding:14px 32px;background:none;border:1px solid var(--gold-muted);color:var(--gold-bright);font-size:15px;font-weight:600;border-radius:10px;cursor:pointer;font-family:var(--font-display);margin-left:12px}
+    .landing-features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto;padding:60px 20px}
+    .landing-feat{background:var(--black-panel);border:1px solid var(--black-border);border-radius:14px;padding:24px;text-align:center}
+    .landing-feat-icon{font-size:32px;margin-bottom:12px}
+    .landing-feat-title{font-size:15px;font-weight:600;color:#e8e0cc;margin-bottom:6px}
+    .landing-feat-desc{font-size:12px;color:#7a7060;line-height:1.6}
+    .landing-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto;padding:0 20px}
+    .landing-tier{background:var(--black-panel);border:1px solid var(--black-border);border-radius:14px;padding:28px 20px;text-align:center}
+    .landing-tier.featured{border-color:var(--gold-bright);position:relative}
+    .landing-tier-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold-bright);color:#0a0a0a;font-size:9px;font-weight:700;padding:3px 12px;border-radius:99px;font-family:var(--font-display);letter-spacing:0.1em}
+    .landing-tier-name{font-size:16px;font-weight:600;color:#e8e0cc;margin-bottom:4px}
+    .landing-tier-price{font-size:36px;font-weight:700;font-family:var(--font-display);color:var(--gold-bright)}
+    .landing-tier-period{font-size:12px;color:#5a5040;margin-bottom:16px}
+    .landing-tier-list{text-align:left;font-size:12px;color:#8a8070;line-height:2}
+    .landing-tier-cta{display:block;width:100%;padding:10px;margin-top:16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-display);border:none}
+    @media(max-width:768px){.landing-features,.landing-tiers{grid-template-columns:1fr}.landing-h1{font-size:32px}.td-tab-bar{flex-wrap:wrap}}
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
     .main-panel{position:relative}
     .slab-zone{position:absolute;left:0;top:72px;bottom:0;width:44px;z-index:20;pointer-events:none}
@@ -1442,6 +1505,49 @@
 <body>
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
+<!-- LANDING PAGE -->
+<div class="landing" id="landingPage">
+  <div class="landing-hero">
+    <svg class="landing-logo" viewBox="0 0 100 100" fill="none"><defs><radialGradient id="lS" cx="32%" cy="30%" r="68%"><stop offset="0%" stop-color="#808080"/><stop offset="25%" stop-color="#383838"/><stop offset="60%" stop-color="#0c0c0c"/><stop offset="100%" stop-color="#040404"/></radialGradient><linearGradient id="lR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0d878"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a6a28"/><stop offset="100%" stop-color="#f0d878"/></linearGradient></defs><circle cx="50" cy="50" r="36" fill="url(#lS)"/><ellipse cx="50" cy="50" rx="45" ry="16" stroke="url(#lR)" stroke-width="5" fill="none" opacity="0.8"/></svg>
+    <div class="landing-h1"><span class="gold-text">Obsidia</span> Study</div>
+    <div class="landing-sub">AI-powered tutoring that adapts to every student. Math, writing, science, test prep &#8212; all backed by real curriculum standards.</div>
+    <div><button class="landing-cta" onclick="openAuth()">Get Started Free</button><button class="landing-cta-ghost" onclick="document.getElementById('lPricing').scrollIntoView({behavior:'smooth'})">View Pricing</button></div>
+  </div>
+  <div class="landing-features">
+    <div class="landing-feat"><div class="landing-feat-icon">&#x1F9EE;</div><div class="landing-feat-title">AI Math Tutor</div><div class="landing-feat-desc">Algebra through calculus with step-by-step LaTeX solutions. Switches to advanced model for complex topics.</div></div>
+    <div class="landing-feat"><div class="landing-feat-icon">&#x1F4DD;</div><div class="landing-feat-title">Essay Coach</div><div class="landing-feat-desc">Thesis building, outlining, drafting, proofreading. Grade-level calibrated with humanizer mode.</div></div>
+    <div class="landing-feat"><div class="landing-feat-icon">&#x1F9E0;</div><div class="landing-feat-title">Interactive Quizzes</div><div class="landing-feat-desc">AI-generated quizzes with instant feedback, scoring, and explanations. Track mastery over time.</div></div>
+    <div class="landing-feat"><div class="landing-feat-icon">&#x1F4F7;</div><div class="landing-feat-title">Homework Scanner</div><div class="landing-feat-desc">Photograph any problem. Claude Vision reads it and provides step-by-step help.</div></div>
+    <div class="landing-feat"><div class="landing-feat-icon">&#x1F3AF;</div><div class="landing-feat-title">ACT/SAT Prep</div><div class="landing-feat-desc">Real-format practice questions. Instant scoring. Strategy coaching. Score tracking.</div></div>
+    <div class="landing-feat"><div class="landing-feat-icon">&#x1F469;&#x200D;&#x1F3EB;</div><div class="landing-feat-title">Teacher Dashboard</div><div class="landing-feat-desc">Class management, assignments, student progress reports. Standards-aligned. FERPA ready.</div></div>
+  </div>
+  <div style="text-align:center;padding:60px 20px" id="lPricing">
+    <div style="font-family:var(--font-display);font-size:28px;font-weight:700;margin-bottom:8px"><span class="gold-text">Simple</span> Pricing</div>
+    <div style="font-size:14px;color:#7a7060;margin-bottom:30px">Free for students. Powerful for schools.</div>
+    <div class="landing-tiers">
+      <div class="landing-tier">
+        <div class="landing-tier-name">Free</div><div class="landing-tier-price">$0</div><div class="landing-tier-period">forever</div>
+        <div class="landing-tier-list">&#x2713; 5 AI sessions per day<br>&#x2713; All 8 study tools<br>&#x2713; Basic flashcards &amp; quizzes<br>&#x2713; XP &amp; achievements<br>&#x2713; Dark/light themes</div>
+        <button class="landing-tier-cta" style="background:var(--black-card);color:#c8b88a;border:1px solid var(--black-border)" onclick="openAuth()">Sign Up Free</button>
+      </div>
+      <div class="landing-tier featured">
+        <div class="landing-tier-badge">MOST POPULAR</div>
+        <div class="landing-tier-name">Pro</div><div class="landing-tier-price">$12</div><div class="landing-tier-period">per month</div>
+        <div class="landing-tier-list">&#x2713; Unlimited AI sessions<br>&#x2713; Claude Opus for math<br>&#x2713; Homework scanning<br>&#x2713; PDF export<br>&#x2713; Spaced repetition<br>&#x2713; No ads</div>
+        <button class="landing-tier-cta" style="background:linear-gradient(135deg,#e8c96a,#c9a84c);color:#0a0a0a" onclick="openAuth()">Start Free Trial</button>
+      </div>
+      <div class="landing-tier">
+        <div class="landing-tier-name">School</div><div class="landing-tier-price">$75</div><div class="landing-tier-period">per seat / month</div>
+        <div class="landing-tier-list">&#x2713; Everything in Pro<br>&#x2713; Teacher dashboard<br>&#x2713; Class management<br>&#x2713; Assignments &amp; grading<br>&#x2713; Progress reports<br>&#x2713; Common Core aligned<br>&#x2713; SSO &amp; FERPA</div>
+        <button class="landing-tier-cta" style="background:var(--black-card);color:var(--gold-bright);border:1px solid var(--gold-muted)" onclick="window.location.href='mailto:carsyn@obsidia.ai?subject=School%20Plan'">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;padding:40px 20px">
+    <div style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:rgba(200,180,130,0.4);max-width:600px;margin:0 auto 12px">&#x201C;Built by a student who was tired of AI tools that don&#x2019;t understand homework.&#x201D;</div>
+    <div style="font-size:12px;color:#5a5040">&#x2014; Carsyn DeAngelis, Creator</div>
+  </div>
+</div>
 <div class="app-layout">
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-head">
@@ -1461,6 +1567,7 @@
     <button class="sb-i" data-page="grading" onclick="sNav('grading')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg><span>Grading</span></button>
     <button class="sb-i" data-page="testprep" onclick="sNav('testprep')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/></svg><span>Test Prep</span></button>
     <button class="sb-i" data-page="teacher" onclick="sNav('teacher')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg><span>Teacher Tools</span></button>
+    <button class="sb-i" data-page="teacherdash" onclick="sNav('teacherdash')" id="sbTeacherDash" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Teacher Dashboard</span></button>
     <div class="sidebar-section">Productivity</div>
     <button class="sb-i" data-page="smartscan" onclick="sNav('smartscan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg><span>Smart Scan</span></button>
     <button class="sb-i" data-page="analytics" onclick="sNav('analytics')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg><span>Analytics</span></button>
@@ -2618,6 +2725,53 @@
   </div>
 </div>
 
+<!-- PAGE: TEACHER DASHBOARD -->
+<div class="page" id="page-teacherdash">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(99,102,241,0.10);color:#6366f1;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Teacher</span> Dashboard</h2><p class="sp-subtitle">Manage classes, assignments, and track student progress</p></div>
+    </div>
+    <div id="tdNotTeacher" style="text-align:center;padding:40px 20px">
+      <div style="font-size:14px;color:#c8b88a;margin-bottom:12px">This page is for teachers.</div>
+      <button class="btn-gold" onclick="becomeTeacher()" style="font-size:12px;padding:8px 18px">I'm a Teacher &#x2014; Enable Dashboard</button>
+      <div style="font-size:11px;color:#5a5040;margin-top:8px">This sets your account role to teacher.</div>
+    </div>
+    <div id="tdMain" style="display:none">
+      <div class="td-tab-bar">
+        <button class="td-tab active" onclick="tdTab(this,'classes')">My Classes</button>
+        <button class="td-tab" onclick="tdTab(this,'assignments')">Assignments</button>
+        <button class="td-tab" onclick="tdTab(this,'students')">Students</button>
+      </div>
+      <div id="tdClasses">
+        <div class="td-form">
+          <div style="font-size:14px;font-weight:600;color:#e8e0cc;margin-bottom:12px">Create New Class</div>
+          <div class="td-form-row"><div class="td-form-label">Class Name</div><input class="td-form-input" id="tdClassName" placeholder="e.g. AP Calculus Period 3" /></div>
+          <div class="td-form-row"><div class="td-form-label">Subject</div><select class="td-form-select" id="tdClassSubject"><option>Math</option><option>English</option><option>Science</option><option>History</option><option>General</option></select></div>
+          <button class="btn-gold" onclick="createClass()" style="font-size:12px;padding:8px 18px">Create Class</button>
+        </div>
+        <div id="tdClassList"><div style="text-align:center;padding:30px;color:#5a5040;font-size:12px">No classes yet. Create one above.</div></div>
+      </div>
+      <div id="tdAssignments" style="display:none">
+        <div class="td-form">
+          <div style="font-size:14px;font-weight:600;color:#e8e0cc;margin-bottom:12px">Create Assignment</div>
+          <div class="td-form-row"><div class="td-form-label">Class</div><select class="td-form-select" id="tdAssignClass" style="flex:1"><option value="">Select a class...</option></select></div>
+          <div class="td-form-row"><div class="td-form-label">Title</div><input class="td-form-input" id="tdAssignTitle" placeholder="e.g. Chapter 5 Review" /></div>
+          <div class="td-form-row"><div class="td-form-label">Tool</div><select class="td-form-select" id="tdAssignTool"><option value="math">Math AI</option><option value="essay">Essay Writer</option><option value="study">Study Guide</option><option value="testprep">Test Prep</option><option value="notes">Lecture Notes</option><option value="doublecheck">Double Check</option></select></div>
+          <div class="td-form-row"><div class="td-form-label">Prompt</div><input class="td-form-input" id="tdAssignPrompt" placeholder="What should students work on?" /></div>
+          <div class="td-form-row"><div class="td-form-label">Due Date</div><input class="td-form-input" id="tdAssignDue" type="date" style="flex:0.5" /></div>
+          <button class="btn-gold" onclick="createAssignment()" style="font-size:12px;padding:8px 18px">Create Assignment</button>
+        </div>
+        <div id="tdAssignList"><div style="text-align:center;padding:30px;color:#5a5040;font-size:12px">No assignments yet.</div></div>
+      </div>
+      <div id="tdStudents" style="display:none">
+        <div id="tdStudentList"><div style="text-align:center;padding:30px;color:#5a5040;font-size:12px">Create a class first, then students can join with the class code.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- PAGE: ACHIEVEMENTS -->
 <div class="page" id="page-achievements">
   <div class="sp-layout">
@@ -2726,6 +2880,19 @@
     </div>
     <div class="onboarding-dots"><div class="onboarding-dot active"></div><div class="onboarding-dot"></div><div class="onboarding-dot"></div></div>
     <button class="onboarding-btn" onclick="nextOnboardingStep()">Next</button>
+  </div>
+</div>
+
+<!-- Paywall Overlay -->
+<div class="paywall-overlay" id="paywallOverlay" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-card">
+    <div class="paywall-title"><span class="gold-text">Upgrade to Pro</span></div>
+    <div class="paywall-desc">You've used your 5 free sessions today. Upgrade for unlimited access and advanced features.</div>
+    <div class="tier-cards">
+      <div class="tier-card" onclick="window.location.href='mailto:carsyn@obsidia.ai?subject=Pro%20Plan'"><div class="tier-price">$12</div><div class="tier-period">/month</div><div class="tier-name">Pro</div><div class="tier-feat">&#x2713; Unlimited sessions<br>&#x2713; Image scanning<br>&#x2713; Opus model<br>&#x2713; Export tools</div></div>
+      <div class="tier-card featured" onclick="window.location.href='mailto:carsyn@obsidia.ai?subject=School%20Plan'"><div class="tier-price">$75</div><div class="tier-period">/seat/mo</div><div class="tier-name">School</div><div class="tier-feat">&#x2713; Everything in Pro<br>&#x2713; Teacher dashboard<br>&#x2713; Class management<br>&#x2713; Progress reports</div></div>
+    </div>
+    <button style="font-size:12px;padding:6px 16px;border:1px solid var(--black-border);border-radius:6px;background:none;color:#8a8070;cursor:pointer;font-family:var(--font-ui)" onclick="closePaywall()">Maybe Later</button>
   </div>
 </div>
 
@@ -3658,6 +3825,10 @@ function updateUIWithProfile(p) {
   var sbSub = document.getElementById('sbUserSub');
   if (sbSub) sbSub.textContent = 'LVL ' + (p.level || 1) + ' \u00b7 ' + (p.current_streak || 0) + ' day streak';
 
+  // Teacher dashboard link
+  var tdLink = document.getElementById('sbTeacherDash');
+  if (tdLink) tdLink.style.display = (p.role === 'teacher') ? '' : 'none';
+
   // Stats bar — direct updates
   var statCards = document.querySelectorAll('.stat-card');
   if (statCards[0]) { var v = statCards[0].querySelector('.stat-value'); if (v) { v.textContent = (p.total_sessions || 0); v.dataset.count = p.total_sessions || 0; } var l = statCards[0].querySelector('.stat-label'); if (l) l.textContent = 'Sessions'; }
@@ -4519,6 +4690,243 @@ navigate = function(pageId) {
   try { if (pageId === 'analytics') loadAnalytics(); } catch(e) {}
   try { if (pageId === 'settings') populateSettings(); } catch(e) {}
 };
+
+/* ══════════════════════════════════════════════════════
+   LANDING PAGE — Show for unauthenticated visitors
+══════════════════════════════════════════════════════ */
+function showLanding() {
+  var lp = document.getElementById('landingPage'); if (lp) lp.classList.add('visible');
+  var al = document.querySelector('.app-layout'); if (al) al.style.display = 'none';
+}
+function hideLanding() {
+  var lp = document.getElementById('landingPage'); if (lp) lp.classList.remove('visible');
+  var al = document.querySelector('.app-layout'); if (al) al.style.display = '';
+}
+
+/* ══════════════════════════════════════════════════════
+   PAYWALL — Usage gating
+══════════════════════════════════════════════════════ */
+function openPaywall() { var p = document.getElementById('paywallOverlay'); if (p) p.classList.add('open'); }
+function closePaywall() { var p = document.getElementById('paywallOverlay'); if (p) p.classList.remove('open'); }
+
+var userTier = 'free';
+var dailySessionCount = 0;
+var TIER_LIMITS = { free: 5, pro: 999, school: 999 };
+
+function checkUsageLimit() {
+  if (userTier !== 'free') return true;
+  if (dailySessionCount >= TIER_LIMITS.free) { openPaywall(); return false; }
+  dailySessionCount++;
+  return true;
+}
+
+/* ══════════════════════════════════════════════════════
+   TEACHER DASHBOARD — Full CRUD
+══════════════════════════════════════════════════════ */
+var teacherClasses = [];
+var teacherAssignments = [];
+
+function tdTab(btn, tab) {
+  btn.closest('.td-tab-bar').querySelectorAll('.td-tab').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('tdClasses').style.display = tab === 'classes' ? '' : 'none';
+  document.getElementById('tdAssignments').style.display = tab === 'assignments' ? '' : 'none';
+  document.getElementById('tdStudents').style.display = tab === 'students' ? '' : 'none';
+}
+
+async function becomeTeacher() {
+  if (!sbClient || !currentUser) { openAuth(); return; }
+  await sbClient.from('profiles').update({ role: 'teacher' }).eq('id', currentUser.id);
+  if (userProfile) userProfile.role = 'teacher';
+  showToast('success', '&#x1F469;&#x200D;&#x1F3EB;', 'Teacher Mode Enabled', 'You can now create classes and assignments');
+  loadTeacherDashboard();
+}
+
+async function loadTeacherDashboard() {
+  var notTeacher = document.getElementById('tdNotTeacher');
+  var main = document.getElementById('tdMain');
+  if (!sbClient || !currentUser || !userProfile || userProfile.role !== 'teacher') {
+    if (notTeacher) notTeacher.style.display = '';
+    if (main) main.style.display = 'none';
+    return;
+  }
+  if (notTeacher) notTeacher.style.display = 'none';
+  if (main) main.style.display = '';
+  await loadClasses();
+  await loadTeacherAssignments();
+}
+
+async function loadClasses() {
+  if (!sbClient || !currentUser) return;
+  var result = await sbClient.from('classes').select('*').eq('teacher_id', currentUser.id).order('created_at', { ascending: false });
+  teacherClasses = result.data || [];
+  var list = document.getElementById('tdClassList');
+  if (!list) return;
+  if (teacherClasses.length === 0) { list.innerHTML = '<div style="text-align:center;padding:30px;color:#5a5040;font-size:12px">No classes yet. Create one above.</div>'; return; }
+
+  list.innerHTML = '';
+  for (var i = 0; i < teacherClasses.length; i++) {
+    var c = teacherClasses[i];
+    var membersResult = await sbClient.from('class_members').select('user_id').eq('class_id', c.id);
+    var count = (membersResult.data || []).length;
+    list.innerHTML += '<div class="td-class-card" onclick="viewClassStudents(\'' + c.id + '\')">'
+      + '<div class="td-class-head"><div class="td-class-name">' + c.name + '</div><div class="td-class-code">' + c.join_code + '</div></div>'
+      + '<div class="td-class-meta">' + c.subject + ' &middot; ' + count + ' students &middot; Code: <strong>' + c.join_code + '</strong></div>'
+      + '</div>';
+  }
+
+  // Update assignment class dropdown
+  var sel = document.getElementById('tdAssignClass');
+  if (sel) {
+    sel.innerHTML = '<option value="">Select a class...</option>';
+    teacherClasses.forEach(function(c) { sel.innerHTML += '<option value="' + c.id + '">' + c.name + '</option>'; });
+  }
+}
+
+async function createClass() {
+  if (!sbClient || !currentUser) { openAuth(); return; }
+  var name = document.getElementById('tdClassName');
+  var subject = document.getElementById('tdClassSubject');
+  if (!name || !name.value.trim()) { showToast('error', '&#x26A0;', 'Missing name', 'Enter a class name'); return; }
+
+  var code = Math.random().toString(36).substring(2, 8).toUpperCase();
+  var result = await sbClient.from('classes').insert({
+    teacher_id: currentUser.id,
+    name: name.value.trim(),
+    subject: subject ? subject.value : 'General',
+    join_code: code
+  });
+
+  if (result.error) { showToast('error', '&#x26A0;', 'Error', result.error.message); return; }
+  name.value = '';
+  showToast('success', '&#x2705;', 'Class Created!', 'Share code: ' + code);
+  await loadClasses();
+}
+
+async function viewClassStudents(classId) {
+  tdTab(document.querySelectorAll('.td-tab')[2], 'students');
+  var list = document.getElementById('tdStudentList');
+  if (!list || !sbClient) return;
+  list.innerHTML = '<div style="text-align:center;padding:20px;color:#5a5040;font-size:12px">Loading students...</div>';
+
+  var membersResult = await sbClient.from('class_members').select('user_id').eq('class_id', classId);
+  var members = membersResult.data || [];
+  if (members.length === 0) { list.innerHTML = '<div style="text-align:center;padding:30px;color:#5a5040;font-size:12px">No students have joined yet. Share the class code with your students.</div>'; return; }
+
+  list.innerHTML = '';
+  for (var i = 0; i < members.length; i++) {
+    var pResult = await sbClient.from('profiles').select('display_name, avatar_url, total_xp, level, current_streak, total_sessions').eq('id', members[i].user_id).single();
+    var p = pResult.data;
+    if (!p) continue;
+    var initial = (p.display_name || 'S')[0].toUpperCase();
+    var avatarHtml = p.avatar_url ? '<img src="' + p.avatar_url + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />' : initial;
+    list.innerHTML += '<div class="td-student-row">'
+      + '<div class="td-student-avatar">' + avatarHtml + '</div>'
+      + '<div class="td-student-name">' + (p.display_name || 'Student') + '</div>'
+      + '<div class="td-student-stat">LVL ' + (p.level||1) + ' &middot; ' + (p.total_xp||0) + ' XP &middot; ' + (p.total_sessions||0) + ' sessions</div>'
+      + '</div>';
+  }
+}
+
+async function createAssignment() {
+  if (!sbClient || !currentUser) { openAuth(); return; }
+  var classId = document.getElementById('tdAssignClass');
+  var title = document.getElementById('tdAssignTitle');
+  var tool = document.getElementById('tdAssignTool');
+  var prompt = document.getElementById('tdAssignPrompt');
+  var due = document.getElementById('tdAssignDue');
+  if (!classId || !classId.value) { showToast('error', '&#x26A0;', 'Select a class', ''); return; }
+  if (!title || !title.value.trim()) { showToast('error', '&#x26A0;', 'Enter a title', ''); return; }
+
+  var result = await sbClient.from('assignments').insert({
+    class_id: classId.value,
+    teacher_id: currentUser.id,
+    title: title.value.trim(),
+    tool: tool ? tool.value : 'general',
+    prompt: prompt ? prompt.value.trim() : '',
+    due_date: due && due.value ? new Date(due.value).toISOString() : null,
+    xp_reward: 25
+  });
+
+  if (result.error) { showToast('error', '&#x26A0;', 'Error', result.error.message); return; }
+  if (title) title.value = '';
+  if (prompt) prompt.value = '';
+  showToast('success', '&#x2705;', 'Assignment Created!', 'Students will see it on their dashboard');
+  await loadTeacherAssignments();
+}
+
+async function loadTeacherAssignments() {
+  if (!sbClient || !currentUser) return;
+  var result = await sbClient.from('assignments').select('*, classes(name)').eq('teacher_id', currentUser.id).order('created_at', { ascending: false });
+  teacherAssignments = result.data || [];
+  var list = document.getElementById('tdAssignList');
+  if (!list) return;
+  if (teacherAssignments.length === 0) { list.innerHTML = '<div style="text-align:center;padding:30px;color:#5a5040;font-size:12px">No assignments yet.</div>'; return; }
+
+  list.innerHTML = '';
+  teacherAssignments.forEach(function(a) {
+    var className = a.classes ? a.classes.name : 'Unknown';
+    var due = a.due_date ? new Date(a.due_date).toLocaleDateString() : 'No due date';
+    var toolName = PAGE_NAMES[a.tool] || a.tool;
+    list.innerHTML += '<div class="td-assign-card">'
+      + '<div class="td-assign-title">' + a.title + '</div>'
+      + '<div class="td-assign-meta">' + className + ' &middot; ' + toolName + ' &middot; Due: ' + due + ' &middot; ' + a.xp_reward + ' XP</div>'
+      + '</div>';
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   STUDENT: Join Class + View Assignments
+══════════════════════════════════════════════════════ */
+async function joinClass(code) {
+  if (!sbClient || !currentUser) { openAuth(); return; }
+  code = (code || '').trim().toUpperCase();
+  if (code.length < 4) { showToast('error', '&#x26A0;', 'Invalid code', 'Enter the 6-character class code'); return; }
+
+  var classResult = await sbClient.from('classes').select('id, name').eq('join_code', code).single();
+  if (!classResult.data) { showToast('error', '&#x26A0;', 'Class not found', 'Check the code and try again'); return; }
+
+  var result = await sbClient.from('class_members').insert({ class_id: classResult.data.id, user_id: currentUser.id });
+  if (result.error && result.error.code === '23505') { showToast('achievement', '&#x1F44D;', 'Already joined', 'You are already in ' + classResult.data.name); return; }
+  if (result.error) { showToast('error', '&#x26A0;', 'Error', result.error.message); return; }
+  showToast('success', '&#x2705;', 'Joined Class!', classResult.data.name);
+}
+
+async function loadStudentAssignments() {
+  if (!sbClient || !currentUser) return [];
+  var memberships = await sbClient.from('class_members').select('class_id').eq('user_id', currentUser.id);
+  if (!memberships.data || memberships.data.length === 0) return [];
+  var classIds = memberships.data.map(function(m) { return m.class_id; });
+  var result = await sbClient.from('assignments').select('*, classes(name)').in('class_id', classIds).order('due_date', { ascending: true });
+  return result.data || [];
+}
+
+/* ══════════════════════════════════════════════════════
+   AUTH HOOKS — Landing page + teacher dashboard
+══════════════════════════════════════════════════════ */
+var _origOnSignIn = onSignIn;
+onSignIn = function(user) {
+  _origOnSignIn(user);
+  hideLanding();
+};
+
+var _origOnSignOut = onSignOut;
+onSignOut = function() {
+  _origOnSignOut();
+  showLanding();
+};
+
+/* ══════════════════════════════════════════════════════
+   NAVIGATE HOOKS — Teacher dashboard
+══════════════════════════════════════════════════════ */
+var _navHook3 = navigate;
+navigate = function(pageId) {
+  _navHook3(pageId);
+  try { if (pageId === 'teacherdash') loadTeacherDashboard(); } catch(e) {}
+};
+
+// Show landing if not signed in on load
+if (!currentUser) { try { showLanding(); } catch(e) {} }
 
 try { loadDailyChallenge(); } catch(e) {}
 
