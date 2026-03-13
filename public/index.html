@@ -421,7 +421,7 @@
     .tier-name{font-size:14px;font-weight:600;color:#e8e0cc;margin:8px 0 6px}
     .tier-feat{font-size:11px;color:#8a8070;line-height:1.8;text-align:left}
     /* --- LANDING PAGE --- */
-    .landing{display:none}.landing.visible{display:block}
+    .landing{display:none;position:fixed;inset:0;z-index:200;background:var(--black-deep);overflow-y:auto}.landing.visible{display:block}
     .landing-hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
     .landing-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.06),transparent 70%);pointer-events:none}
     .landing-logo{width:80px;height:80px;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(201,168,76,0.3))}
