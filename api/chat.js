@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { message, page, vars, history, image } = req.body;
+    const { message, page, vars, history, image, model } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Message is required' });
@@ -85,8 +85,11 @@ module.exports = async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
+    // Select model based on request
+    const modelId = model === 'opus' ? 'claude-opus-4-20250514' : 'claude-sonnet-4-20250514';
+
     const stream = await client.messages.stream({
-      model: 'claude-sonnet-4-20250514',
+      model: modelId,
       max_tokens: 2500,
       system: systemPrompt,
       messages: messages,

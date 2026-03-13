@@ -1848,10 +1848,23 @@
         <h2 class="sp-title"><span class="gold-text">Advanced</span> Math</h2>
         <p class="sp-subtitle">Algebra through calculus with step-by-step solutions</p>
       </div>
-      <span class="sp-model-badge" style="background:var(--math-subtle);color:var(--math-color);border:1px solid rgba(91,156,246,0.25);">Claude Sonnet &middot; Math</span>
+      <span class="sp-model-badge" id="mathModelBadge" style="background:var(--math-subtle);color:var(--math-color);border:1px solid rgba(91,156,246,0.25);">Claude Sonnet &middot; Calculus</span>
     </div>
     <div class="sp-chat-panel">
       <div class="sp-toolbar">
+        <select id="mathTypeSelect" onchange="mathTypeChange(this)" style="background:var(--black-card);color:#c8b88a;border:1px solid var(--black-border);border-radius:6px;padding:5px 10px;font-size:11px;font-family:var(--font-ui);cursor:pointer;outline:none;min-width:120px">
+          <option value="algebra">Algebra</option>
+          <option value="geometry">Geometry</option>
+          <option value="trig">Trigonometry</option>
+          <option value="precalc">Pre-Calculus</option>
+          <option value="calculus" selected>Calculus</option>
+          <option value="multivariable">Multivariable Calc</option>
+          <option value="linalg">Linear Algebra</option>
+          <option value="diffeq">Differential Equations</option>
+          <option value="statistics">Statistics</option>
+          <option value="discrete">Discrete Math</option>
+        </select>
+        <div style="width:1px;height:20px;background:var(--black-border);margin:0 4px"></div>
         <button class="sp-tool-btn active" onclick="mathMode(this,'solve')">Solve</button>
         <button class="sp-tool-btn" onclick="mathMode(this,'explain')">Explain</button>
         <button class="sp-tool-btn" onclick="mathMode(this,'graph')">Graph</button>
@@ -1864,7 +1877,7 @@
           <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('math',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion('math',this)">Explain derivatives</button></div>
         </div>
       </div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag">MATH AI &middot; CLAUDE SONNET</span></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -2803,7 +2816,7 @@ function sendPageMsg(pg) {
   input.value=''; input.style.height='auto'; var sbtn = document.getElementById(pg+'SendBtn'); if(sbtn) sbtn.disabled=true;
 
   var vars = {};
-  if (pg==='math') vars.mode = mathModeState;
+  if (pg==='math') { vars.mode = mathModeState; vars.mathType = mathType; vars.model = mathModel; }
   if (pg==='essay') { vars.mode = essayModeState; var ht = document.getElementById('humanizerToggle'); vars.humanizer = ht ? ht.checked : false; var gs = document.getElementById('essayGradeSelect'); vars.grade = gs ? gs.value : '11th'; }
   if (pg==='study') vars.method = studyMethod || 'flashcards';
   if (pg==='notes') vars.mode = notesModeState;
@@ -2846,7 +2859,7 @@ function handlePageAttach(pg, inputEl) {
 
     // Build vars
     var vars = {};
-    if (pg === 'math') vars.mode = mathModeState;
+    if (pg === 'math') { vars.mode = mathModeState; vars.mathType = mathType; vars.model = mathModel; }
     if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle') ? document.getElementById('humanizerToggle').checked : false; vars.grade = document.getElementById('essayGradeSelect') ? document.getElementById('essayGradeSelect').value : '11th'; }
     if (pg === 'study') vars.method = studyMethod || 'flashcards';
     if (pg === 'grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect') ? document.getElementById('gradingScaleSelect').value : 'letter'; }
@@ -2863,6 +2876,33 @@ function handlePageAttach(pg, inputEl) {
    TOOLBAR MODES
 ══════════════════════════════════════════════════════ */
 let mathModeState='solve', essayModeState='draft', notesModeState='transcribe';
+let mathType='calculus', mathModel='sonnet';
+
+var MATH_MODELS = {
+  algebra:'sonnet', geometry:'sonnet', trig:'sonnet', precalc:'sonnet',
+  calculus:'opus', multivariable:'opus', linalg:'opus', diffeq:'opus',
+  statistics:'sonnet', discrete:'opus'
+};
+var MATH_LABELS = {
+  algebra:'Algebra', geometry:'Geometry', trig:'Trigonometry', precalc:'Pre-Calculus',
+  calculus:'Calculus', multivariable:'Multivariable Calc', linalg:'Linear Algebra',
+  diffeq:'Differential Equations', statistics:'Statistics', discrete:'Discrete Math'
+};
+
+function mathTypeChange(sel) {
+  mathType = sel.value;
+  mathModel = MATH_MODELS[mathType] || 'sonnet';
+  var label = MATH_LABELS[mathType] || mathType;
+  var modelName = mathModel === 'opus' ? 'Claude Opus' : 'Claude Sonnet';
+  var badge = document.getElementById('mathModelBadge');
+  if (badge) badge.textContent = modelName + ' \u00b7 ' + label;
+  var tag = document.getElementById('mathModelTag');
+  if (tag) tag.textContent = 'MATH AI \u00b7 ' + modelName.toUpperCase();
+  // Update subtitle
+  var sub = document.querySelector('#page-math .sp-subtitle');
+  if (sub) sub.textContent = label + ' with step-by-step solutions' + (mathModel === 'opus' ? ' (advanced model)' : '');
+}
+
 function mathMode(btn,mode) { mathModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={solve:'Enter a math problem...',explain:'What concept to explain?',graph:'Describe the function...',practice:'What topic for practice?'}; document.getElementById('mathChatInput').placeholder=p[mode]||''; }
 function essayMode(btn,mode) { essayModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={draft:'Describe your essay topic...',outline:'What topic to outline?',thesis:'What needs a thesis?',proofread:'Paste text to proofread...'}; document.getElementById('essayChatInput').placeholder=p[mode]||''; }
 function notesMode(btn,mode) { notesModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={transcribe:'Describe the lecture...',summarize:'Paste or describe to summarize...',keypoints:'What to extract key points from?',questions:'What to generate questions for?'}; document.getElementById('notesChatInput').placeholder=p[mode]||''; }
@@ -2911,7 +2951,7 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
   chatHistory[historyKey].push({ role: 'user', content: message });
 
   try {
-    var body = { message: message, page: page, vars: vars, history: chatHistory[historyKey].slice(-10) };
+    var body = { message: message, page: page, vars: vars, history: chatHistory[historyKey].slice(-10), model: vars.model || 'sonnet' };
     if (imageData) body.image = imageData;
 
     var res = await fetch('/api/chat', {
