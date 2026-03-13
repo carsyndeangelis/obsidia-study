@@ -325,79 +325,60 @@
     .feature-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 900px) { .feature-split { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .feature-col-grid { grid-template-columns: 1fr; } }
-    /* ─── ANCIENT SCROLL ───────────────────────────────────── */
-    .scroll-zone{position:absolute;left:0;top:0;bottom:0;width:44px;z-index:20;pointer-events:none}
-    .scroll-zone *{pointer-events:auto}
-    .scroll-rod-wrap{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:42px;height:420px;cursor:grab;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center}
-    .scroll-rod-wrap:active{cursor:grabbing}
-    .scroll-shaft{width:18px;height:100%;border-radius:9px;position:relative;
-      background: linear-gradient(90deg, #6b4422, #a06830, #c08040, #a06830, #7a4e28);
-      border: 1px solid #4a2e14;
-      box-shadow: inset 2px 0 4px rgba(0,0,0,0.3), inset -2px 0 4px rgba(0,0,0,0.2);
-    }
-    .scroll-shaft::after{content:'';position:absolute;left:5px;top:3%;width:3px;height:94%;background:linear-gradient(180deg,rgba(210,170,100,0.25),rgba(210,170,100,0.08),rgba(210,170,100,0.2));border-radius:2px}
-    .scroll-cap{position:absolute;left:-6px;width:30px;height:20px;border-radius:5px;
-      background: linear-gradient(180deg, #8a5c2e, #6b4422, #5a3818);
-      border: 1px solid #3d2410;
-    }
-    .scroll-cap-t{top:-6px;border-radius:6px 6px 3px 3px}
-    .scroll-cap-b{bottom:-6px;border-radius:3px 3px 6px 6px}
-    .scroll-cap-ring{position:absolute;left:3px;right:3px;height:3px;background:linear-gradient(90deg,#4a2e14,#8a6835,#4a2e14);border-radius:1px}
-    .scroll-cap-ring-t{top:5px}
-    .scroll-cap-ring-b{bottom:5px}
-    .scroll-cord{position:absolute;left:-3px;right:-3px;height:8px;background:#4a2e14;border-radius:4px;opacity:0.5}
-    .scroll-cord-t{top:30px}
-    .scroll-cord-b{bottom:30px}
-    .scroll-hint-text{position:absolute;left:52px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(160,104,48,0.5);letter-spacing:0.06em;white-space:nowrap;font-family:var(--font-display);font-style:italic;pointer-events:none;transition:opacity 0.3s}
-    .scroll-parchment{position:absolute;left:23px;top:50%;transform:translateY(-50%);height:400px;width:0;overflow:hidden;z-index:15}
-    .scroll-parch-inner{width:520px;height:100%;position:relative;padding:28px 40px 28px 16px;display:flex;flex-direction:column;justify-content:center;
-      background: #c8a55a;
-      background-image:
-        radial-gradient(ellipse at 10% 10%, rgba(180,140,70,0.5), transparent 40%),
-        radial-gradient(ellipse at 90% 85%, rgba(140,95,35,0.4), transparent 45%),
-        radial-gradient(ellipse at 50% 50%, rgba(200,170,100,0.3), transparent 55%),
-        radial-gradient(ellipse at 25% 75%, rgba(120,80,25,0.2), transparent 35%),
-        radial-gradient(ellipse at 75% 25%, rgba(160,120,55,0.15), transparent 30%);
-    }
-    .scroll-parch-inner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:22px;
-      background:linear-gradient(90deg,rgba(80,50,18,0.5),rgba(60,35,12,0.2),transparent);
-    }
-    .scroll-parch-inner::after{content:'';position:absolute;inset:0;
-      background:url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.65' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-      pointer-events:none;mix-blend-mode:multiply;
-    }
-    .scroll-edge-top{position:absolute;top:-1px;left:0;right:16px;height:8px;
-      background:linear-gradient(180deg,rgba(100,65,22,0.35),rgba(100,65,22,0.08),transparent);
-      mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='8'%3E%3Cpath d='M0,2 Q10,0 20,3 Q35,7 50,2 Q65,0 80,4 Q100,7 120,2 Q140,0 160,3 Q180,6 200,1 Q220,0 240,4 Q260,7 280,2 Q300,0 320,3 Q340,6 360,2 Q380,0 400,4 Q420,7 440,1 Q460,0 480,3 Q500,6 520,2 L520,8 L0,8 Z' fill='white'/%3E%3C/svg%3E");
-      -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='8'%3E%3Cpath d='M0,2 Q10,0 20,3 Q35,7 50,2 Q65,0 80,4 Q100,7 120,2 Q140,0 160,3 Q180,6 200,1 Q220,0 240,4 Q260,7 280,2 Q300,0 320,3 Q340,6 360,2 Q380,0 400,4 Q420,7 440,1 Q460,0 480,3 Q500,6 520,2 L520,8 L0,8 Z' fill='white'/%3E%3C/svg%3E");
-    }
-    .scroll-edge-bot{position:absolute;bottom:-1px;left:0;right:16px;height:8px;
-      background:linear-gradient(0deg,rgba(100,65,22,0.35),rgba(100,65,22,0.08),transparent);
-      mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='8'%3E%3Cpath d='M0,6 Q15,8 30,5 Q45,1 60,6 Q80,8 100,4 Q120,1 140,5 Q160,8 180,6 Q200,2 220,5 Q240,8 260,4 Q280,1 300,6 Q320,8 340,4 Q360,1 380,5 Q400,8 420,6 Q440,2 460,5 Q480,8 500,4 Q510,1 520,6 L520,0 L0,0 Z' fill='white'/%3E%3C/svg%3E");
-      -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='8'%3E%3Cpath d='M0,6 Q15,8 30,5 Q45,1 60,6 Q80,8 100,4 Q120,1 140,5 Q160,8 180,6 Q200,2 220,5 Q240,8 260,4 Q280,1 300,6 Q320,8 340,4 Q360,1 380,5 Q400,8 420,6 Q440,2 460,5 Q480,8 500,4 Q510,1 520,6 L520,0 L0,0 Z' fill='white'/%3E%3C/svg%3E");
-    }
-    .scroll-foxing{position:absolute;border-radius:50%;background:radial-gradient(ellipse,rgba(110,70,20,0.15),transparent 70%)}
-    .scroll-burn{position:absolute;background:rgba(80,45,10,0.15);border-radius:40%}
-    .scroll-crease{position:absolute;height:1px;background:rgba(80,50,15,0.12)}
-    .scroll-glyph{position:absolute;z-index:1;opacity:0.08;color:#5a3815;font-family:var(--font-display);writing-mode:vertical-rl}
-    .scroll-tome-title{font-family:var(--font-display);font-size:15px;font-weight:700;color:#3d2210;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;text-align:center;position:relative;z-index:1}
-    .scroll-tome-sub{font-family:var(--font-display);font-size:9px;color:#6b4e28;letter-spacing:0.2em;text-transform:uppercase;text-align:center;margin-bottom:10px;position:relative;z-index:1}
-    .scroll-rule{height:1px;margin:0 20px 10px;position:relative;z-index:1;background:linear-gradient(90deg,transparent,#7a5520 15%,#7a5520 50%,#7a5520 85%,transparent);opacity:0.3}
-    .scroll-rule::before,.scroll-rule::after{content:'';position:absolute;top:-3px;width:7px;height:7px;border:1px solid rgba(122,85,32,0.35);transform:rotate(45deg)}
-    .scroll-rule::before{left:calc(50% - 20px)}
-    .scroll-rule::after{left:calc(50% + 13px)}
-    .scroll-row{display:flex;gap:9px;padding:4px 0;align-items:flex-start;position:relative;z-index:1}
-    .scroll-num{color:#6b4422;font-family:var(--font-display);font-size:13px;font-weight:700;flex-shrink:0;width:24px;text-align:right;line-height:1.45;opacity:0.6}
-    .scroll-txt{font-size:11px;color:#3d2b12;line-height:1.5;font-family:Georgia,'Times New Roman',serif;opacity:0.8}
-    .scroll-txt b{color:#1a0e04;font-weight:700;opacity:1}
-    .scroll-seal{position:absolute;bottom:14px;right:34px;width:40px;height:40px;border-radius:50%;z-index:2;background:radial-gradient(circle at 38% 32%,#8b2e1a,#5a1410);border:2px solid #2e0a08}
-    .scroll-seal-inner{position:absolute;inset:4px;border-radius:50%;border:0.5px solid rgba(200,160,80,0.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:13px;font-weight:700;color:rgba(200,160,80,0.65)}
-    .scroll-seal-drip{position:absolute;border-radius:0 0 50% 50%;background:radial-gradient(ellipse at top,#5a1410,transparent)}
-    .scroll-curl{position:absolute;right:-2px;top:0;bottom:0;width:18px;
-      background:linear-gradient(90deg,transparent,rgba(90,55,18,0.2),rgba(60,35,10,0.4));
-      border-radius:0 4px 4px 0;
-    }
-    @media (max-width: 740px) { .scroll-zone { display: none; } }
+    /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
+    .slab-zone{position:absolute;left:0;top:0;bottom:0;width:44px;z-index:20;pointer-events:none}
+    .slab-zone *{pointer-events:auto}
+    .slab-handle{width:40px;height:100%;cursor:grab;z-index:10;position:absolute;left:0;top:0}
+    .slab-handle:active{cursor:grabbing}
+    .slab-edge{position:absolute;top:0;right:0;width:18px;height:100%;background:linear-gradient(90deg,#050505,#0e0e0e,#141210,#0e0c0a,#050505);border-radius:2px;overflow:hidden}
+    .slab-edge-glow{position:absolute;top:-20%;right:1px;width:4px;height:40%;background:linear-gradient(180deg,transparent,rgba(232,201,106,0.4),rgba(201,168,76,0.6),rgba(232,201,106,0.4),transparent);border-radius:2px;animation:slabEdgeTravel 2.5s ease-in-out infinite}
+    @keyframes slabEdgeTravel{0%{top:-40%}100%{top:100%}}
+    .slab-grip{position:absolute;top:50%;right:4px;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px}
+    .slab-grip-dot{width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,0.15);box-shadow:0 0 6px rgba(201,168,76,0.2);animation:slabDotPulse 2s ease-in-out infinite}
+    .slab-grip-dot:nth-child(2){animation-delay:0.3s}.slab-grip-dot:nth-child(3){animation-delay:0.6s}.slab-grip-dot:nth-child(4){animation-delay:0.9s}.slab-grip-dot:nth-child(5){animation-delay:1.2s}
+    @keyframes slabDotPulse{0%,100%{background:rgba(201,168,76,0.1);box-shadow:0 0 4px rgba(201,168,76,0.1)}50%{background:rgba(232,201,106,0.5);box-shadow:0 0 10px rgba(232,201,106,0.4)}}
+    .slab-reveal{position:absolute;left:25px;top:50%;transform:translateY(-50%);height:440px;width:0;overflow:hidden;z-index:15}
+    .slab-inner{width:600px;height:100%;position:relative}
+    .slab-stone{width:100%;height:100%;position:relative;padding:26px 40px 26px 22px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;background:#080808}
+    .slab-stone::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='500' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='1.8' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none}
+    .slab-shimmer{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    .slab-shimmer-wave{position:absolute;width:300%;height:300%;top:-100%;left:-100%;background:conic-gradient(from 0deg,transparent 0%,rgba(232,201,106,0.03) 10%,transparent 20%,rgba(201,168,76,0.04) 30%,transparent 40%,rgba(232,201,106,0.02) 50%,transparent 60%,rgba(201,168,76,0.03) 70%,transparent 80%,rgba(232,201,106,0.02) 90%,transparent 100%);animation:slabShimSpin 12s linear infinite}
+    @keyframes slabShimSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .slab-shimmer-sweep{position:absolute;top:0;left:-50%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.03),rgba(201,168,76,0.06),rgba(232,201,106,0.03),transparent);animation:slabSweep 4s ease-in-out infinite;transform:skewX(-15deg)}
+    @keyframes slabSweep{0%{left:-50%}100%{left:150%}}
+    .slab-glow-orb{position:absolute;border-radius:50%;pointer-events:none}
+    .slab-glow-orb.go1{top:10%;left:15%;width:220px;height:220px;background:radial-gradient(circle,rgba(232,201,106,0.06),transparent 65%);animation:slabOrb 5s ease-in-out infinite}
+    .slab-glow-orb.go2{bottom:5%;right:10%;width:250px;height:250px;background:radial-gradient(circle,rgba(201,168,76,0.05),transparent 60%);animation:slabOrb 7s ease-in-out infinite;animation-delay:-3s}
+    .slab-glow-orb.go3{top:40%;left:40%;width:300px;height:300px;background:radial-gradient(circle,rgba(232,201,106,0.04),transparent 55%);animation:slabOrb 6s ease-in-out infinite;animation-delay:-1.5s}
+    @keyframes slabOrb{0%,100%{transform:scale(0.8);opacity:0.4}50%{transform:scale(1.2);opacity:1}}
+    .slab-vein{position:absolute;height:1px;pointer-events:none;animation:slabVein 3s ease-in-out infinite}
+    @keyframes slabVein{0%,100%{opacity:0.04}50%{opacity:0.12}}
+    .slab-el{position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(90deg,rgba(201,168,76,0.08),transparent)}
+    .slab-er{position:absolute;right:0;top:0;bottom:0;width:10px;background:linear-gradient(270deg,rgba(0,0,0,0.8),transparent)}
+    .slab-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
+    .slab-p{position:absolute;border-radius:50%}
+    @keyframes slabRise{0%{opacity:0;transform:translateY(0) scale(0)}15%{opacity:1;transform:translateY(-5px) scale(1)}70%{opacity:0.5}100%{opacity:0;transform:translateY(-50px) scale(0)}}
+    @keyframes slabDrift{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:0.8}50%{opacity:0.4;transform:translate(15px,-20px) scale(0.8)}100%{opacity:0;transform:translate(30px,-45px) scale(0)}}
+    .slab-re{position:relative;z-index:1}
+    .slab-title{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;text-align:center;margin-bottom:3px;color:#e8c96a;text-shadow:0 0 40px rgba(232,201,106,0.6),0 0 80px rgba(201,168,76,0.3),0 0 6px rgba(232,201,106,0.9),0 0 120px rgba(201,168,76,0.15);animation:slabTitlePulse 3s ease-in-out infinite}
+    @keyframes slabTitlePulse{0%,100%{text-shadow:0 0 40px rgba(232,201,106,0.6),0 0 80px rgba(201,168,76,0.3),0 0 6px rgba(232,201,106,0.9)}50%{text-shadow:0 0 50px rgba(232,201,106,0.8),0 0 100px rgba(201,168,76,0.5),0 0 8px rgba(232,201,106,1),0 0 150px rgba(201,168,76,0.2)}}
+    .slab-sub{font-family:var(--font-display);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;text-align:center;margin-bottom:12px;color:rgba(232,201,106,0.3);text-shadow:0 0 15px rgba(201,168,76,0.15)}
+    .slab-divider{height:1px;margin:0 16px 10px;position:relative;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.4) 20%,rgba(201,168,76,0.6) 50%,rgba(232,201,106,0.4) 80%,transparent);box-shadow:0 0 12px rgba(201,168,76,0.2),0 0 4px rgba(232,201,106,0.3)}
+    .slab-divider::before,.slab-divider::after{content:'';position:absolute;top:-4px;width:9px;height:9px;border:1px solid rgba(232,201,106,0.35);transform:rotate(45deg);background:rgba(201,168,76,0.06);box-shadow:0 0 8px rgba(201,168,76,0.15)}
+    .slab-divider::before{left:calc(50% - 24px)}.slab-divider::after{left:calc(50% + 15px)}
+    .slab-row{display:flex;gap:10px;padding:4px 0;align-items:flex-start}
+    .slab-rn{font-family:var(--font-display);font-size:13px;font-weight:700;flex-shrink:0;width:24px;text-align:right;line-height:1.5;color:rgba(232,201,106,0.35);text-shadow:0 0 14px rgba(201,168,76,0.25)}
+    .slab-rx{font-size:11px;line-height:1.55;font-family:Georgia,serif;color:rgba(210,190,140,0.45);letter-spacing:0.01em}
+    .slab-rx b{color:rgba(232,201,106,0.8);font-weight:600;text-shadow:0 0 16px rgba(201,168,76,0.35),0 0 4px rgba(232,201,106,0.2)}
+    .slab-seal{position:absolute;bottom:12px;right:30px;width:44px;height:44px;z-index:2}
+    .slab-seal-ring{width:100%;height:100%;border-radius:50%;border:1.5px solid rgba(232,201,106,0.2);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(201,168,76,0.1),0 0 40px rgba(201,168,76,0.05),inset 0 0 12px rgba(201,168,76,0.06);animation:slabSealPulse 4s ease-in-out infinite}
+    @keyframes slabSealPulse{0%,100%{box-shadow:0 0 20px rgba(201,168,76,0.1),0 0 40px rgba(201,168,76,0.05),inset 0 0 12px rgba(201,168,76,0.06)}50%{box-shadow:0 0 30px rgba(232,201,106,0.2),0 0 60px rgba(201,168,76,0.1),inset 0 0 18px rgba(201,168,76,0.1)}}
+    .slab-seal-ring::before{content:'';position:absolute;inset:5px;border-radius:50%;border:0.5px solid rgba(232,201,106,0.12)}
+    .slab-seal-o{font-family:var(--font-display);font-size:18px;font-weight:700;color:#e8c96a;text-shadow:0 0 20px rgba(232,201,106,0.5),0 0 6px rgba(232,201,106,0.8)}
+    .slab-gc{position:absolute;z-index:1;writing-mode:vertical-rl;font-family:var(--font-display);font-size:11px;letter-spacing:8px;color:rgba(201,168,76,0.04);text-shadow:0 0 10px rgba(201,168,76,0.03)}
+    .slab-hint{position:absolute;left:52px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(232,201,106,0.2);font-family:var(--font-display);font-style:italic;pointer-events:none;transition:opacity 0.3s;animation:slabHintPulse 2.5s ease-in-out infinite;white-space:nowrap}
+    @keyframes slabHintPulse{0%,100%{opacity:0.1;text-shadow:0 0 8px rgba(201,168,76,0)}50%{opacity:0.4;text-shadow:0 0 12px rgba(201,168,76,0.2)}}
+    @media (max-width: 740px) { .slab-zone { display: none; } }
 
     .mini-hero { display: flex; align-items: center; gap: 16px; padding: 20px 0 12px; }
     .mini-hero-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 0.04em; }
@@ -1572,42 +1553,35 @@
 ═══════════════════════════════════════════════════ -->
 <div class="page active" id="page-home" style="position:relative">
 
-  <!-- Ancient Scroll -->
-  <div class="scroll-zone">
-    <div class="scroll-hint-text" id="scrollHint">~ drag to unravel ~</div>
-    <div class="scroll-parchment" id="scrollParchment">
-      <div class="scroll-parch-inner">
-        <div class="scroll-edge-top"></div>
-        <div class="scroll-edge-bot"></div>
-        <div class="scroll-crease" style="top:15%;left:30%;width:70px;transform:rotate(6deg)"></div>
-        <div class="scroll-crease" style="bottom:22%;right:25%;width:50px;transform:rotate(-4deg)"></div>
-        <div class="scroll-foxing" style="left:20%;top:8%;width:55px;height:45px"></div>
-        <div class="scroll-foxing" style="right:18%;bottom:10%;width:65px;height:50px"></div>
-        <div class="scroll-foxing" style="left:55%;top:50%;width:40px;height:35px"></div>
-        <div class="scroll-burn" style="right:14px;top:10%;width:7px;height:12px;transform:rotate(-15deg)"></div>
-        <div class="scroll-burn" style="right:16px;bottom:14%;width:9px;height:9px;transform:rotate(18deg)"></div>
-        <div class="scroll-glyph" style="left:5px;top:25px;font-size:11px">&#9758; &#9670; &#9758;</div>
-        <div class="scroll-glyph" style="right:26px;bottom:55px;font-size:9px">&#9672; &#9674; &#9672;</div>
-        <div class="scroll-tome-title">Tome of Obsidia</div>
-        <div class="scroll-tome-sub">A Guide for the Seeker of Knowledge</div>
-        <div class="scroll-rule"></div>
-        <div class="scroll-row"><div class="scroll-num">I.</div><div class="scroll-txt"><b>Choose thine instrument</b> from the grimoire at left &mdash; the Oracle of Numbers for equations, the Sacred Quill for essays, the Codex for study rites.</div></div>
-        <div class="scroll-row"><div class="scroll-num">II.</div><div class="scroll-txt"><b>Present thy labour</b> by inscription or relic. Affix parchment via the ancient clip sigil, or invoke the Scan to divine its nature.</div></div>
-        <div class="scroll-row"><div class="scroll-num">III.</div><div class="scroll-txt"><b>Select the enchantment</b> from the rune bar above. Each instrument bears many arts &mdash; to Solve, to Explain, to Visualise, to Challenge.</div></div>
-        <div class="scroll-row"><div class="scroll-num">IV.</div><div class="scroll-txt"><b>Heed the revelation</b> with patience &mdash; the Oracle reveals its method step by step. Question further to plumb the depths.</div></div>
-        <div class="scroll-row"><div class="scroll-num">V.</div><div class="scroll-txt"><b>Consult the sanctum</b> upon returning home. Thy accuracy, hours devoted, and mastered disciplines are inscribed in the eternal ledger.</div></div>
-        <div class="scroll-row"><div class="scroll-num">VI.</div><div class="scroll-txt"><b>Guard thy flame</b> &mdash; unbroken daily communion preserves the sacred streak. Ascend through the ranks and claim the ancient honours.</div></div>
-        <div class="scroll-seal"><div class="scroll-seal-inner">O</div><div class="scroll-seal-drip" style="bottom:-6px;left:12px;width:8px;height:10px"></div><div class="scroll-seal-drip" style="bottom:-4px;right:10px;width:5px;height:7px"></div></div>
-        <div class="scroll-curl"></div>
-      </div>
+  <!-- Obsidian Slab -->
+  <div class="slab-zone">
+    <div class="slab-hint" id="slabHint">~ drag to reveal ~</div>
+    <div class="slab-handle" id="slabHandle">
+      <div class="slab-edge"><div class="slab-edge-glow"></div></div>
+      <div class="slab-grip"><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div><div class="slab-grip-dot"></div></div>
     </div>
-    <div class="scroll-rod-wrap" id="scrollRod">
-      <div class="scroll-shaft">
-        <div class="scroll-cap scroll-cap-t"><div class="scroll-cap-ring scroll-cap-ring-t"></div></div>
-        <div class="scroll-cap scroll-cap-b"><div class="scroll-cap-ring scroll-cap-ring-b"></div></div>
-        <div class="scroll-cord scroll-cord-t"></div>
-        <div class="scroll-cord scroll-cord-b"></div>
-      </div>
+    <div class="slab-reveal" id="slabReveal">
+      <div class="slab-inner"><div class="slab-stone">
+        <div class="slab-shimmer"><div class="slab-shimmer-wave"></div><div class="slab-shimmer-sweep"></div></div>
+        <div class="slab-glow-orb go1"></div><div class="slab-glow-orb go2"></div><div class="slab-glow-orb go3"></div>
+        <div class="slab-el"></div><div class="slab-er"></div>
+        <div class="slab-vein" style="top:20%;left:5%;width:45%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.08),transparent);transform:rotate(2deg)"></div>
+        <div class="slab-vein" style="top:55%;left:18%;width:55%;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.06),transparent);transform:rotate(-1deg);animation-delay:-1.5s"></div>
+        <div class="slab-vein" style="top:82%;left:3%;width:30%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.07),transparent);transform:rotate(3deg);animation-delay:-0.8s"></div>
+        <div class="slab-gc" style="left:4px;top:18px">&#9670; &#9674; &#9670;</div>
+        <div class="slab-gc" style="right:18px;bottom:35px">&#9758; &#9672; &#9758;</div>
+        <div class="slab-particles" id="slabParticles"></div>
+        <div class="slab-re slab-title" id="sre0">Tome of Obsidia</div>
+        <div class="slab-re slab-sub" id="sre1">Inscriptions for the Seeker</div>
+        <div class="slab-re slab-divider" id="sre2"></div>
+        <div class="slab-re slab-row" id="sre3"><div class="slab-rn">I.</div><div class="slab-rx"><b>Choose thine instrument</b> from the grimoire at left &mdash; the Oracle of Numbers, the Sacred Quill, the Codex.</div></div>
+        <div class="slab-re slab-row" id="sre4"><div class="slab-rn">II.</div><div class="slab-rx"><b>Present thy labour</b> by inscription or relic. Affix via the clip sigil, or invoke the Scan to divine its nature.</div></div>
+        <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Select the enchantment</b> from the rune bar. Each instrument bears many arts &mdash; Solve, Explain, Visualise.</div></div>
+        <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Heed the revelation</b> &mdash; the Oracle shows its workings step by step. Question further to plumb the depths.</div></div>
+        <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>Consult the sanctum</b> upon returning home. Accuracy, hours, and mastered arts inscribed in the eternal ledger.</div></div>
+        <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>Guard thy flame</b> &mdash; daily communion preserves the sacred streak. Ascend and claim the ancient honours.</div></div>
+        <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
+      </div></div>
     </div>
   </div>
 
@@ -3543,18 +3517,57 @@ function toggleMobileSidebar() {
 })();
 
 /* ══════════════════════════════════════════════════════
-   ANCIENT SCROLL — Drag to Unravel
+   OBSIDIAN SLAB — Drag to Reveal Glowing Runes
 ══════════════════════════════════════════════════════ */
 (function(){
-  var rod=document.getElementById('scrollRod'),parch=document.getElementById('scrollParchment'),hint=document.getElementById('scrollHint');
-  if(!rod||!parch) return;
-  var dragging=false,startX=0,maxW=520,curW=0,af=null;
-  function set(w){w=Math.max(0,Math.min(maxW,w));curW=w;parch.style.width=w+'px';rod.style.left=(4+w)+'px';hint.style.left=(52+w)+'px';hint.style.opacity=w<12?0.6:0;}
-  function snap(){if(dragging)return;function t(){curW*=0.86;if(curW<0.8){curW=0;set(0);return;}set(curW);af=requestAnimationFrame(t);}if(af)cancelAnimationFrame(af);t();}
-  rod.addEventListener('mousedown',function(e){dragging=true;startX=e.clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
+  var handle=document.getElementById('slabHandle'),reveal=document.getElementById('slabReveal'),hint=document.getElementById('slabHint'),pf=document.getElementById('slabParticles');
+  if(!handle||!reveal) return;
+  var dragging=false,startX=0,maxW=600,curW=0,af=null;
+  var els=[];for(var i=0;i<=8;i++){var e=document.getElementById('sre'+i);if(e)els.push(e);}
+  var seeds=[];
+  els.forEach(function(_,i){seeds.push({ox:(Math.random()-0.5)*240,oy:(Math.random()-0.5)*140,rot:(Math.random()-0.5)*30,sc:0.2+Math.random()*0.3,delay:i*0.055});});
+  for(var i=0;i<30;i++){
+    var p=document.createElement('div');p.className='slab-p';
+    p.style.left=Math.round(Math.random()*92+4)+'%';p.style.top=Math.round(Math.random()*88+6)+'%';
+    var sz=(1+Math.random()*3).toFixed(1);p.style.width=p.style.height=sz+'px';
+    var bright=Math.random();
+    p.style.background=bright>0.7?'rgba(232,201,106,0.7)':'rgba(201,168,76,0.4)';
+    p.style.boxShadow=bright>0.7?'0 0 6px rgba(232,201,106,0.5)':'0 0 3px rgba(201,168,76,0.3)';
+    var anim=Math.random()>0.5?'slabRise':'slabDrift';
+    p.style.animation=anim+' '+(2+Math.random()*4).toFixed(1)+'s ease-out infinite';
+    p.style.animationDelay=(Math.random()*5).toFixed(1)+'s';
+    pf.appendChild(p);
+  }
+  function set(w){
+    w=Math.max(0,Math.min(maxW,w));curW=w;
+    reveal.style.width=w+'px';
+    hint.style.opacity=w<12?1:0;
+    var t=w/maxW;
+    els.forEach(function(el,i){
+      var s=seeds[i];
+      var raw=(t-s.delay)/0.65;
+      var progress=Math.max(0,Math.min(1,raw));
+      var ease=progress<0.5?4*progress*progress*progress:1-Math.pow(-2*progress+2,3)/2;
+      var tx=s.ox*(1-ease);var ty=s.oy*(1-ease);var r=s.rot*(1-ease);var sc=s.sc+(1-s.sc)*ease;
+      el.style.opacity=progress*progress;
+      el.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) rotate('+r.toFixed(1)+'deg) scale('+sc.toFixed(3)+')';
+      var blur=progress<0.6?(3*(1-progress/0.6)).toFixed(1):0;
+      el.style.filter=blur>0.1?'blur('+blur+'px)':'none';
+      if(el.classList.contains('slab-title')){
+        var glow=Math.round(40+progress*40);
+        el.style.textShadow='0 0 '+glow+'px rgba(232,201,106,'+(0.3+progress*0.5).toFixed(2)+'), 0 0 '+(glow*2)+'px rgba(201,168,76,'+(0.1+progress*0.3).toFixed(2)+'), 0 0 '+(4+progress*4).toFixed(0)+'px rgba(232,201,106,'+(0.5+progress*0.5).toFixed(2)+')';
+      }
+    });
+  }
+  function snap(){
+    if(dragging)return;
+    function t(){curW*=0.9;if(curW<1){curW=0;set(0);return;}set(curW);af=requestAnimationFrame(t);}
+    if(af)cancelAnimationFrame(af);t();
+  }
+  handle.addEventListener('mousedown',function(e){dragging=true;startX=e.clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
   document.addEventListener('mousemove',function(e){if(!dragging)return;set(e.clientX-startX);});
   document.addEventListener('mouseup',function(){if(!dragging)return;dragging=false;snap();});
-  rod.addEventListener('touchstart',function(e){dragging=true;startX=e.touches[0].clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
+  handle.addEventListener('touchstart',function(e){dragging=true;startX=e.touches[0].clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
   document.addEventListener('touchmove',function(e){if(!dragging)return;set(e.touches[0].clientX-startX);});
   document.addEventListener('touchend',function(){if(!dragging)return;dragging=false;snap();});
 })();
