@@ -332,6 +332,25 @@
     @media (max-width: 900px) { .feature-split { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .feature-col-grid { grid-template-columns: 1fr; } }
 
+
+    /* ─── STANDARDS ALIGNMENT BADGES ──────────────────── */
+    .std-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .std-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: 0.04em; font-family: var(--font-ui); cursor: help; transition: all 0.15s; }
+    .std-badge-cc { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
+    .std-badge-ap { background: rgba(244,63,94,0.1); color: #fb7185; border: 1px solid rgba(244,63,94,0.2); }
+    .std-badge-ngss { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .std-badge:hover { transform: translateY(-1px); }
+    .std-tooltip { position: absolute; bottom: 100%; left: 0; background: var(--black-panel); border: 1px solid var(--black-border); border-radius: 6px; padding: 8px 10px; font-size: 11px; color: #c8b88a; line-height: 1.4; white-space: normal; max-width: 280px; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100; display: none; pointer-events: none; }
+    .std-badge:hover .std-tooltip { display: block; }
+    /* ─── CURRICULUM PAGE ─────────────────────────────── */
+    .curr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .curr-card { background: var(--black-panel); border: 1px solid var(--black-border); border-radius: 10px; padding: 14px; }
+    .curr-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .curr-card-code { font-size: 11px; font-weight: 700; font-family: var(--font-display); letter-spacing: 0.06em; }
+    .curr-card-name { font-size: 12px; color: #c8b88a; }
+    .curr-card-desc { font-size: 11px; color: #5a5040; line-height: 1.5; }
+    .curr-card-progress { height: 4px; background: var(--black-card); border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .curr-card-fill { height: 100%; border-radius: 99px; transition: width 0.5s; }
     /* ─── TOAST NOTIFICATIONS ─────────────────────────── */
     .toast-container { position: fixed; top: 80px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
     .toast { pointer-events: auto; background: var(--black-panel); border: 1px solid var(--black-border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); animation: toastIn 0.3s ease, toastOut 0.3s ease 4.7s forwards; min-width: 260px; max-width: 380px; }
@@ -3158,6 +3177,24 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
       } catch(e) {}
     }
 
+    // Parse and render standards badges from AI response
+    var stdMatch = fullText.match(/Standards?:\s*(.+?)(?:\n|$)/i);
+    if (stdMatch) {
+      var stdCodes = stdMatch[1].split(/[,;]/).map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 3; });
+      if (stdCodes.length > 0) {
+        var badgeHtml = '<div class="std-badges">';
+        stdCodes.forEach(function(code) {
+          var type = 'cc';
+          if (code.startsWith('AP')) type = 'ap';
+          else if (code.startsWith('HS-') || code.startsWith('MS-')) type = 'ngss';
+          var desc = STANDARDS_DB[code] || code;
+          badgeHtml += '<span class="std-badge std-badge-' + type + '" style="position:relative">' + code + '<span class="std-tooltip">' + desc + '</span></span>';
+        });
+        badgeHtml += '</div>';
+        bubble.innerHTML = bubble.innerHTML.replace(/Standards?:\s*.+?(?:<br>|$)/i, '') + badgeHtml;
+      }
+    }
+
     // Wire copy button
     copyBtn.onclick = function() {
       navigator.clipboard.writeText(fullText).then(function() {
@@ -3978,6 +4015,59 @@ navigate = function(pageId) {
 /* ══════════════════════════════════════════════════════
    LIVE HISTORY — Load from Supabase
 ══════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════
+   STANDARDS DATABASE — Common Core, AP, NGSS
+══════════════════════════════════════════════════════ */
+var STANDARDS_DB = {
+  // Common Core Math - High School
+  'CCSS.Math.Content.HSA.REI.B.4': 'Solve quadratic equations (HS Algebra)',
+  'CCSS.Math.Content.HSA.REI.A.1': 'Explain solving equations as a reasoning process (HS Algebra)',
+  'CCSS.Math.Content.HSA.CED.A.1': 'Create equations in one variable (HS Algebra)',
+  'CCSS.Math.Content.HSA.SSE.A.2': 'Use structure of expressions to rewrite them (HS Algebra)',
+  'CCSS.Math.Content.HSA.APR.B.3': 'Identify zeros of polynomials (HS Algebra)',
+  'CCSS.Math.Content.HSF.IF.A.1': 'Understand function notation (HS Functions)',
+  'CCSS.Math.Content.HSF.IF.B.4': 'Interpret key features of graphs (HS Functions)',
+  'CCSS.Math.Content.HSF.BF.A.1': 'Write functions from relationships (HS Functions)',
+  'CCSS.Math.Content.HSG.SRT.B.5': 'Use similarity criteria for triangles (HS Geometry)',
+  'CCSS.Math.Content.HSG.CO.A.1': 'Precise definitions of geometric terms (HS Geometry)',
+  'CCSS.Math.Content.HSS.ID.A.1': 'Represent data with plots (HS Statistics)',
+  'CCSS.Math.Content.HSS.IC.A.1': 'Understand statistics as inference (HS Statistics)',
+  // Common Core Math - Middle School
+  'CCSS.Math.Content.8.EE.A.1': 'Properties of integer exponents (Grade 8)',
+  'CCSS.Math.Content.8.EE.B.5': 'Graph proportional relationships (Grade 8)',
+  'CCSS.Math.Content.7.RP.A.1': 'Compute unit rates with fractions (Grade 7)',
+  'CCSS.Math.Content.6.RP.A.1': 'Understand ratio concepts (Grade 6)',
+  // Common Core ELA
+  'CCSS.ELA-Literacy.W.11-12.1': 'Write arguments with claims and evidence (Grades 11-12)',
+  'CCSS.ELA-Literacy.W.11-12.2': 'Write informative/explanatory texts (Grades 11-12)',
+  'CCSS.ELA-Literacy.W.9-10.1': 'Write arguments with claims and evidence (Grades 9-10)',
+  'CCSS.ELA-Literacy.RI.11-12.1': 'Cite textual evidence for analysis (Grades 11-12)',
+  'CCSS.ELA-Literacy.RI.9-10.6': 'Determine author purpose and rhetoric (Grades 9-10)',
+  'CCSS.ELA-Literacy.L.11-12.1': 'Demonstrate command of grammar (Grades 11-12)',
+  'CCSS.ELA-Literacy.SL.11-12.4': 'Present information clearly (Grades 11-12)',
+  // AP Standards
+  'AP.Calc.AB.1.1': 'Limits and Continuity (AP Calculus AB)',
+  'AP.Calc.AB.2.1': 'Definition of the Derivative (AP Calculus AB)',
+  'AP.Calc.AB.3.1': 'Differentiation Rules (AP Calculus AB)',
+  'AP.Calc.AB.4.1': 'Contextual Applications of Derivatives (AP Calculus AB)',
+  'AP.Calc.AB.6.1': 'Integration and Accumulation (AP Calculus AB)',
+  'AP.Calc.BC.7.1': 'Parametric and Polar Functions (AP Calculus BC)',
+  'AP.Bio.1.1': 'Structure of Water and Carbon (AP Biology)',
+  'AP.Bio.3.1': 'Cell Communication (AP Biology)',
+  'AP.Chem.1.1': 'Atomic Structure and Properties (AP Chemistry)',
+  'AP.Physics.1.1': 'Kinematics (AP Physics 1)',
+  'AP.USH.1.1': 'European Colonization (AP US History)',
+  'AP.Lang.1.1': 'Rhetorical Situation (AP Language)',
+  // NGSS
+  'HS-LS1-1': 'Construct a model of transcription and translation (HS Life Science)',
+  'HS-LS1-2': 'Develop a model of the cell cycle (HS Life Science)',
+  'HS-PS1-1': 'Use the periodic table to predict properties (HS Physical Science)',
+  'HS-PS2-1': "Analyze data on Newton's second law (HS Physical Science)",
+  'HS-ESS1-1': 'Develop a model of the Big Bang theory (HS Earth Science)',
+  'MS-LS1-1': 'Conduct investigation on cell function (MS Life Science)',
+  'MS-PS1-1': 'Develop models of atomic composition (MS Physical Science)',
+};
+
 var TOOL_COLORS = {math:'var(--math-color)',essay:'var(--ela-color)',study:'var(--sci-color)',notes:'#fbbf24',doublecheck:'#22d3ee',grading:'var(--gold-bright)',testprep:'#f43f5e',teacher:'#6366f1',home:'#64748b',smartscan:'#06b6d4'};
 var TOOL_BG = {math:'var(--math-subtle)',essay:'var(--ela-subtle)',study:'var(--sci-subtle)',notes:'rgba(251,191,36,0.12)',doublecheck:'rgba(34,211,238,0.10)',grading:'var(--gold-subtle)',testprep:'rgba(244,63,94,0.10)',teacher:'rgba(99,102,241,0.12)',home:'rgba(100,116,139,0.10)',smartscan:'rgba(6,182,212,0.10)'};
 
