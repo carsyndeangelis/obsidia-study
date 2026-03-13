@@ -276,11 +276,11 @@
     .sidebar-drag { position: absolute; top: 0; right: -3px; bottom: 0; width: 6px; cursor: col-resize; z-index: 55; }
     .sidebar-drag:hover, .sidebar-drag.active { background: rgba(201,168,76,0.3); }
     .main-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .main-topbar { height: 64px; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--black-border); gap: 12px; flex-shrink: 0; position: relative; }
+    .main-topbar { height: 68px; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--black-border); gap: 12px; flex-shrink: 0; position: relative; }
     .main-topbar-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-    .main-topbar-logo { width: 48px; height: 48px; flex-shrink: 0; cursor: pointer; filter: drop-shadow(0 0 8px rgba(201,168,76,0.2)); transition: filter 0.3s; }
-    .main-topbar-logo:hover { filter: drop-shadow(0 0 14px rgba(201,168,76,0.4)); }
-    .main-topbar-brand { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; }
+    .main-topbar-logo { width: 56px; height: 56px; flex-shrink: 0; cursor: pointer; filter: drop-shadow(0 0 10px rgba(201,168,76,0.25)); transition: filter 0.3s; }
+    .main-topbar-logo:hover { filter: drop-shadow(0 0 18px rgba(201,168,76,0.5)); }
+    .main-topbar-brand { font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: 0.1em; }
     .main-topbar-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
     .main-topbar-tagline { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 13px; color: rgba(200,180,130,0.5); letter-spacing: 0.02em; white-space: nowrap; }
     .main-topbar-right { display: flex; gap: 8px; margin-left: auto; align-items: center; }
@@ -332,7 +332,7 @@
     @media (max-width: 600px) { .feature-col-grid { grid-template-columns: 1fr; } }
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
     .main-panel{position:relative}
-    .slab-zone{position:absolute;left:0;top:64px;bottom:0;width:44px;z-index:20;pointer-events:none}
+    .slab-zone{position:absolute;left:0;top:68px;bottom:0;width:44px;z-index:20;pointer-events:none}
     .slab-zone *{pointer-events:auto}
     .slab-handle{position:absolute;left:0;top:50%;transform:translateY(-50%);width:40px;height:420px;cursor:grab;z-index:10}
     .slab-handle:active{cursor:grabbing}
@@ -1353,32 +1353,40 @@
   <div class="main-topbar">
     <button class="mtb mob-btn" onclick="toggleMobileSidebar()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     <div class="main-topbar-left" onclick="navigate('home')" style="cursor:pointer">
-      <svg class="main-topbar-logo" viewBox="0 0 72 72" fill="none">
+      <svg class="main-topbar-logo" viewBox="0 0 90 90" fill="none">
         <defs>
-          <radialGradient id="hS" cx="34%" cy="26%" r="68%"><stop offset="0%" stop-color="#707070"/><stop offset="15%" stop-color="#484848"/><stop offset="35%" stop-color="#2a2a2a"/><stop offset="60%" stop-color="#121212"/><stop offset="100%" stop-color="#050505"/></radialGradient>
-          <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="25%" stop-color="#c9a84c"/><stop offset="50%" stop-color="#8a6a28"/><stop offset="75%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#e8c96a"/></linearGradient>
-          <radialGradient id="hG" cx="32%" cy="28%" r="35%"><stop offset="0%" stop-color="rgba(255,255,255,0.18)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
-          <radialGradient id="hG2" cx="65%" cy="60%" r="25%"><stop offset="0%" stop-color="rgba(255,255,255,0.04)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
-          <linearGradient id="hF" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.06"/><stop offset="50%" stop-color="#e8c96a" stop-opacity="0.12"/><stop offset="100%" stop-color="#8a6a28" stop-opacity="0.04"/></linearGradient>
-          <linearGradient id="hV1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="50%" stop-color="rgba(201,168,76,0.06)"/><stop offset="100%" stop-color="transparent"/></linearGradient>
+          <radialGradient id="hS" cx="32%" cy="24%" r="70%"><stop offset="0%" stop-color="#787878"/><stop offset="10%" stop-color="#585858"/><stop offset="25%" stop-color="#353535"/><stop offset="45%" stop-color="#1a1a1a"/><stop offset="70%" stop-color="#0c0c0c"/><stop offset="100%" stop-color="#040404"/></radialGradient>
+          <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0d878"/><stop offset="20%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="60%" stop-color="#8a6a28"/><stop offset="80%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#f0d878"/></linearGradient>
+          <radialGradient id="hG" cx="30%" cy="25%" r="32%"><stop offset="0%" stop-color="rgba(255,255,255,0.22)"/><stop offset="60%" stop-color="rgba(255,255,255,0.04)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="hG2" cx="62%" cy="58%" r="22%"><stop offset="0%" stop-color="rgba(255,255,255,0.05)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <radialGradient id="hG3" cx="50%" cy="20%" r="30%"><stop offset="0%" stop-color="rgba(201,168,76,0.04)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <linearGradient id="hV1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="50%" stop-color="rgba(201,168,76,0.07)"/><stop offset="100%" stop-color="transparent"/></linearGradient>
+          <linearGradient id="hV2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="transparent"/><stop offset="50%" stop-color="rgba(160,140,100,0.05)"/><stop offset="100%" stop-color="transparent"/></linearGradient>
         </defs>
-        <circle cx="36" cy="33" r="26" fill="url(#hS)"/>
-        <circle cx="36" cy="33" r="26" fill="url(#hG)"/>
-        <circle cx="36" cy="33" r="26" fill="url(#hG2)"/>
-        <circle cx="36" cy="33" r="25.5" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="0.5"/>
-        <path d="M18 30 Q26 18 36 16 Q46 18 54 30" fill="none" stroke="url(#hF)" stroke-width="12" opacity="0.6"/>
-        <ellipse cx="28" cy="26" r="4" fill="rgba(255,255,255,0.04)"/>
-        <ellipse cx="44" cy="40" r="2.5" fill="rgba(255,255,255,0.02)"/>
-        <path d="M20 33 Q28 28 36 30 Q44 32 52 29" fill="none" stroke="url(#hV1)" stroke-width="0.5"/>
-        <path d="M22 38 Q30 35 40 37 Q48 39 54 36" fill="none" stroke="url(#hV1)" stroke-width="0.3"/>
-        <ellipse cx="36" cy="39" rx="32" ry="10" stroke="url(#hR)" stroke-width="3.5" fill="none" opacity="0.7"/>
-        <ellipse cx="36" cy="39" rx="30" ry="9" stroke="rgba(232,201,106,0.1)" stroke-width="0.8" fill="none"/>
-        <ellipse cx="36" cy="39" rx="34" ry="11" stroke="rgba(201,168,76,0.05)" stroke-width="0.5" fill="none"/>
-        <ellipse cx="36" cy="39" rx="28" ry="8" stroke="rgba(201,168,76,0.04)" stroke-width="0.3" fill="none"/>
-        <circle cx="14" cy="39" r="1.5" fill="rgba(232,201,106,0.12)"/>
-        <circle cx="58" cy="39" r="1.5" fill="rgba(232,201,106,0.12)"/>
-        <line x1="14" y1="39" x2="18" y2="37" stroke="rgba(201,168,76,0.08)" stroke-width="0.3"/>
-        <line x1="58" y1="39" x2="54" y2="37" stroke="rgba(201,168,76,0.08)" stroke-width="0.3"/>
+        <circle cx="45" cy="40" r="32" fill="url(#hS)"/>
+        <circle cx="45" cy="40" r="32" fill="url(#hG)"/>
+        <circle cx="45" cy="40" r="32" fill="url(#hG2)"/>
+        <circle cx="45" cy="40" r="32" fill="url(#hG3)"/>
+        <circle cx="45" cy="40" r="31.5" fill="none" stroke="rgba(201,168,76,0.05)" stroke-width="0.5"/>
+        <path d="M22 37 Q32 22 45 20 Q58 22 68 37" fill="none" stroke="rgba(232,201,106,0.06)" stroke-width="14" opacity="0.7"/>
+        <ellipse cx="34" cy="30" r="5.5" fill="rgba(255,255,255,0.05)"/>
+        <ellipse cx="56" cy="50" r="3.5" fill="rgba(255,255,255,0.025)"/>
+        <ellipse cx="38" cy="44" r="2" fill="rgba(255,255,255,0.015)"/>
+        <path d="M24 40 Q34 35 45 38 Q56 41 66 36" fill="none" stroke="url(#hV1)" stroke-width="0.6"/>
+        <path d="M28 48 Q38 44 50 47 Q60 50 68 45" fill="none" stroke="url(#hV2)" stroke-width="0.4"/>
+        <path d="M30 33 Q38 30 48 32 Q55 34 62 31" fill="none" stroke="url(#hV2)" stroke-width="0.3"/>
+        <path d="M35 52 Q42 50 50 51 Q56 53 60 50" fill="none" stroke="rgba(201,168,76,0.03)" stroke-width="0.3"/>
+        <ellipse cx="45" cy="48" rx="40" ry="13" stroke="url(#hR)" stroke-width="4.5" fill="none" opacity="0.75"/>
+        <ellipse cx="45" cy="48" rx="38" ry="12" stroke="rgba(232,201,106,0.12)" stroke-width="1" fill="none"/>
+        <ellipse cx="45" cy="48" rx="42" ry="14" stroke="rgba(201,168,76,0.06)" stroke-width="0.5" fill="none"/>
+        <ellipse cx="45" cy="48" rx="36" ry="11" stroke="rgba(201,168,76,0.04)" stroke-width="0.4" fill="none"/>
+        <ellipse cx="45" cy="48" rx="44" ry="15" stroke="rgba(201,168,76,0.03)" stroke-width="0.3" fill="none"/>
+        <circle cx="13" cy="48" r="2" fill="rgba(232,201,106,0.15)"/>
+        <circle cx="77" cy="48" r="2" fill="rgba(232,201,106,0.15)"/>
+        <line x1="13" y1="48" x2="19" y2="45" stroke="rgba(201,168,76,0.1)" stroke-width="0.4"/>
+        <line x1="77" y1="48" x2="71" y2="45" stroke="rgba(201,168,76,0.1)" stroke-width="0.4"/>
+        <circle cx="13" cy="48" r="3.5" fill="none" stroke="rgba(232,201,106,0.06)" stroke-width="0.3"/>
+        <circle cx="77" cy="48" r="3.5" fill="none" stroke="rgba(232,201,106,0.06)" stroke-width="0.3"/>
       </svg>
       <div class="main-topbar-brand"><span class="gold-text">OBSIDIA</span> <span style="color:#5a5040;font-weight:600">AI</span></div>
     </div>
@@ -2723,7 +2731,8 @@ setTimeout(animateCounters, 200);
 /* ══════════════════════════════════════════════════════
    QUICK SNAP
 ══════════════════════════════════════════════════════ */
-document.getElementById('quickSnapInput').addEventListener('change', function() {
+var _qsi = document.getElementById('quickSnapInput');
+if (_qsi) _qsi.addEventListener('change', function() {
   const file = this.files[0];
   if (!file) return;
   navigate('home');
@@ -2740,13 +2749,15 @@ const dzError = document.getElementById('dzError');
 const ALLOWED_TYPES = ['image/jpeg','image/png','image/webp','application/pdf'];
 const MAX_SIZE = 10 * 1024 * 1024;
 let dragCounter = 0;
-dropzone.addEventListener('click', () => dzFileInput.click());
-dropzone.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); dzFileInput.click(); } });
-dropzone.addEventListener('dragenter', e => { e.preventDefault(); dragCounter++; dropzone.classList.add('drag-over'); });
-dropzone.addEventListener('dragleave', e => { e.preventDefault(); dragCounter--; if(dragCounter<=0){dragCounter=0;dropzone.classList.remove('drag-over');} });
-dropzone.addEventListener('dragover', e => e.preventDefault());
-dropzone.addEventListener('drop', e => { e.preventDefault(); dragCounter=0; dropzone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) handleDroppedFile(e.dataTransfer.files[0]); });
-dzFileInput.addEventListener('change', () => { if(dzFileInput.files[0]) handleDroppedFile(dzFileInput.files[0]); dzFileInput.value=''; });
+if (dropzone) {
+  dropzone.addEventListener('click', () => dzFileInput.click());
+  dropzone.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); dzFileInput.click(); } });
+  dropzone.addEventListener('dragenter', e => { e.preventDefault(); dragCounter++; dropzone.classList.add('drag-over'); });
+  dropzone.addEventListener('dragleave', e => { e.preventDefault(); dragCounter--; if(dragCounter<=0){dragCounter=0;dropzone.classList.remove('drag-over');} });
+  dropzone.addEventListener('dragover', e => e.preventDefault());
+  dropzone.addEventListener('drop', e => { e.preventDefault(); dragCounter=0; dropzone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) handleDroppedFile(e.dataTransfer.files[0]); });
+}
+if (dzFileInput) dzFileInput.addEventListener('change', () => { if(dzFileInput.files[0]) handleDroppedFile(dzFileInput.files[0]); dzFileInput.value=''; });
 document.addEventListener('paste', e => {
   if (currentPage !== 'home') return;
   const items = e.clipboardData?.items;
@@ -2755,9 +2766,9 @@ document.addEventListener('paste', e => {
 });
 
 function handleDroppedFile(file) {
-  dzError.textContent = '';
-  if (!ALLOWED_TYPES.includes(file.type)) { dzError.textContent = 'Unsupported format. Use JPEG, PNG, WebP, or PDF.'; return; }
-  if (file.size > MAX_SIZE) { dzError.textContent = 'File too large. Maximum size is 10 MB.'; return; }
+  if (dzError) dzError.textContent = '';
+  if (!ALLOWED_TYPES.includes(file.type)) { if(dzError) dzError.textContent = 'Unsupported format. Use JPEG, PNG, WebP, or PDF.'; return; }
+  if (file.size > MAX_SIZE) { if(dzError) dzError.textContent = 'File too large. Maximum size is 10 MB.'; return; }
   const reader = new FileReader();
   reader.onload = ev => {
     const welcome = document.getElementById('homeWelcome');
