@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ─── DESIGN TOKENS ─────────────────────────────────────── */
@@ -276,8 +276,13 @@
     .sidebar-drag { position: absolute; top: 0; right: -3px; bottom: 0; width: 6px; cursor: col-resize; z-index: 55; }
     .sidebar-drag:hover, .sidebar-drag.active { background: rgba(201,168,76,0.3); }
     .main-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .main-topbar { height: 52px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--black-border); gap: 10px; flex-shrink: 0; }
-    .main-page-title { font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0.04em; }
+    .main-topbar { height: 58px; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid var(--black-border); gap: 12px; flex-shrink: 0; position: relative; }
+    .main-topbar-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .main-topbar-logo { width: 38px; height: 38px; flex-shrink: 0; cursor: pointer; filter: drop-shadow(0 0 6px rgba(201,168,76,0.15)); transition: filter 0.3s; }
+    .main-topbar-logo:hover { filter: drop-shadow(0 0 10px rgba(201,168,76,0.3)); }
+    .main-topbar-brand { font-family: var(--font-display); font-size: 14px; font-weight: 700; letter-spacing: 0.1em; }
+    .main-topbar-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); text-align: center; pointer-events: none; }
+    .main-topbar-tagline { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 13px; color: rgba(200,180,130,0.5); letter-spacing: 0.02em; white-space: nowrap; }
     .main-topbar-right { display: flex; gap: 8px; margin-left: auto; align-items: center; }
     .mtb { width: 32px; height: 32px; border-radius: 8px; background: none; border: 1px solid var(--black-border); color: #5a5040; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
     .mtb:hover { border-color: var(--gold-muted); color: var(--gold-bright); }
@@ -380,9 +385,6 @@
     @keyframes slabHintPulse{0%,100%{opacity:0.1;text-shadow:0 0 8px rgba(201,168,76,0)}50%{opacity:0.4;text-shadow:0 0 12px rgba(201,168,76,0.2)}}
     @media (max-width: 740px) { .slab-zone { display: none; } }
 
-    .mini-hero { display: flex; align-items: center; gap: 16px; padding: 20px 0 12px; }
-    .mini-hero-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 0.04em; }
-    .mini-hero-tagline { font-size: 12px; font-style: italic; color: #7a7060; margin-top: 2px; }
     [data-theme="light"] .sidebar { background: #f8f6f1; border-right-color: #ddd8cc; }
     [data-theme="light"] .sidebar-section { color: #b0a890; }
     [data-theme="light"] .sb-i { color: #8a8070; }
@@ -1349,7 +1351,29 @@
 <div class="main-panel">
   <div class="main-topbar">
     <button class="mtb mob-btn" onclick="toggleMobileSidebar()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-    <div class="main-page-title"><span class="gold-text" id="mainPageTitle">Home</span></div>
+    <div class="main-topbar-left" onclick="navigate('home')" style="cursor:pointer">
+      <svg class="main-topbar-logo" viewBox="0 0 60 60" fill="none">
+        <defs>
+          <radialGradient id="hS" cx="36%" cy="28%" r="65%"><stop offset="0%" stop-color="#606060"/><stop offset="20%" stop-color="#3a3a3a"/><stop offset="50%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#060606"/></radialGradient>
+          <linearGradient id="hR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a6a28"/><stop offset="100%" stop-color="#e8c96a"/></linearGradient>
+          <radialGradient id="hG" cx="35%" cy="30%" r="40%"><stop offset="0%" stop-color="rgba(255,255,255,0.12)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+          <linearGradient id="hF" x1="20%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="0.08"/><stop offset="50%" stop-color="#e8c96a" stop-opacity="0.15"/><stop offset="100%" stop-color="#8a6a28" stop-opacity="0.05"/></linearGradient>
+        </defs>
+        <circle cx="30" cy="27" r="21" fill="url(#hS)"/>
+        <circle cx="30" cy="27" r="21" fill="url(#hG)"/>
+        <circle cx="30" cy="27" r="20.5" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="0.5"/>
+        <ellipse cx="30" cy="32" rx="26" ry="8" stroke="url(#hR)" stroke-width="2.5" fill="none" opacity="0.65"/>
+        <ellipse cx="30" cy="32" rx="24" ry="7" stroke="rgba(232,201,106,0.08)" stroke-width="0.5" fill="none"/>
+        <ellipse cx="30" cy="32" rx="28" ry="9" stroke="rgba(201,168,76,0.04)" stroke-width="0.5" fill="none"/>
+        <path d="M16 27 Q22 18 30 17 Q38 18 44 27" fill="none" stroke="url(#hF)" stroke-width="8" opacity="0.5"/>
+        <circle cx="24" cy="23" r="3" fill="rgba(255,255,255,0.03)"/>
+        <line x1="18" y1="32" x2="42" y2="32" stroke="rgba(201,168,76,0.06)" stroke-width="0.3"/>
+      </svg>
+      <div class="main-topbar-brand"><span class="gold-text">OBSIDIA</span> <span style="color:#5a5040;font-weight:600">AI</span></div>
+    </div>
+    <div class="main-topbar-center">
+      <div class="main-topbar-tagline">"AI made by a student, for students"</div>
+    </div>
     <div class="main-topbar-right">
       <button class="mtb" onclick="toggleTheme()" title="Toggle theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
       <button class="mtb" onclick="document.getElementById('quickSnapInput').click()" title="Quick Snap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
@@ -1582,13 +1606,6 @@
         <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>Guard thy flame</b> &mdash; daily communion preserves the sacred streak. Ascend and claim the ancient honours.</div></div>
         <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
       </div></div>
-    </div>
-  </div>
-
-  <div style="max-width:1080px;margin:0 auto;padding:0 18px">
-    <div class="mini-hero">
-      <svg class="logo-breathe" width="46" height="46" viewBox="0 0 54 54" fill="none" style="flex-shrink:0"><defs><radialGradient id="mhS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient><linearGradient id="mhR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="27" cy="25" r="19" fill="url(#mhS)"/><ellipse cx="27" cy="29" rx="23" ry="7" stroke="url(#mhR)" stroke-width="2.8" fill="none" opacity="0.6"/></svg>
-      <div><div class="mini-hero-title"><span class="gold-text">Obsidia</span> AI <span style="font-size:10px;font-weight:600;color:var(--gold-muted);letter-spacing:0.08em;vertical-align:middle;margin-left:6px">v3.0 BETA</span></div><div class="mini-hero-tagline">"AI made by a student, for students"</div></div>
     </div>
   </div>
 
