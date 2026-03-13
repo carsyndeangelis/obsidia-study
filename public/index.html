@@ -331,6 +331,37 @@
     .feature-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 900px) { .feature-split { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .feature-col-grid { grid-template-columns: 1fr; } }
+
+    /* ─── TOAST NOTIFICATIONS ─────────────────────────── */
+    .toast-container { position: fixed; top: 80px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast { pointer-events: auto; background: var(--black-panel); border: 1px solid var(--black-border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); animation: toastIn 0.3s ease, toastOut 0.3s ease 4.7s forwards; min-width: 260px; max-width: 380px; }
+    .toast-achievement { border-color: var(--gold-muted); }
+    .toast-error { border-color: #f43f5e; }
+    .toast-success { border-color: var(--sci-color); }
+    .toast-emoji { font-size: 24px; flex-shrink: 0; }
+    .toast-body { flex: 1; }
+    .toast-title { font-size: 12px; font-weight: 600; color: #e8e0cc; }
+    .toast-desc { font-size: 11px; color: #7a7060; margin-top: 2px; }
+    .toast-btn { font-size: 10px; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--black-border); background: none; color: var(--gold-bright); cursor: pointer; font-family: var(--font-ui); flex-shrink: 0; }
+    @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-10px); } }
+    /* ─── DAILY CHALLENGE ─────────────────────────────── */
+    .daily-challenge { max-width: 1080px; margin: 0 auto; padding: 0 18px 16px; }
+    .dc-card { background: linear-gradient(135deg, #0c0c0c, #14100a); border: 1px solid #2a2218; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: border-color 0.3s; }
+    .dc-card:hover { border-color: var(--gold-muted); }
+    .dc-emoji { font-size: 28px; flex-shrink: 0; }
+    .dc-body { flex: 1; }
+    .dc-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-muted); font-family: var(--font-display); margin-bottom: 2px; }
+    .dc-title { font-size: 14px; font-weight: 600; color: #e8e0cc; }
+    .dc-sub { font-size: 11px; color: #5a5040; margin-top: 2px; }
+    .dc-xp { font-size: 11px; font-weight: 700; color: var(--gold-bright); font-family: var(--font-display); white-space: nowrap; }
+    /* ─── CONTINUE SESSION BANNER ─────────────────────── */
+    .continue-banner { background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.15); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: border-color 0.2s; }
+    .continue-banner:hover { border-color: var(--gold-muted); }
+    .continue-banner-icon { color: var(--gold-bright); flex-shrink: 0; }
+    .continue-banner-text { font-size: 12px; color: #c8b88a; }
+    .continue-banner-title { font-weight: 600; }
+    .continue-banner-dismiss { background: none; border: none; color: #5a5040; font-size: 16px; cursor: pointer; margin-left: auto; padding: 0 4px; }
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
     .main-panel{position:relative}
     .slab-zone{position:absolute;left:0;top:72px;bottom:0;width:44px;z-index:20;pointer-events:none}
@@ -1699,6 +1730,19 @@
     </div>
   </div>
 
+  <!-- Daily Challenge -->
+  <div class="daily-challenge" id="dailyChallengeWrap" style="display:none">
+    <div class="dc-card" id="dailyChallengeCard" onclick="startDailyChallenge()">
+      <div class="dc-emoji" id="dcEmoji">&#x1F9E0;</div>
+      <div class="dc-body">
+        <div class="dc-label">Daily Challenge</div>
+        <div class="dc-title" id="dcTitle">Loading today's challenge...</div>
+        <div class="dc-sub" id="dcSub">Complete for bonus XP</div>
+      </div>
+      <div class="dc-xp">2x XP</div>
+    </div>
+  </div>
+
   <!-- Feature Cards: Two-Column Layout -->
   <div class="features">
     <div class="features-section">AI Tools</div>
@@ -2232,9 +2276,9 @@
             <div class="settings-badge">&#x1F525; 7 Day Streak &middot; Level 12</div>
           </div>
         </div>
-        <div class="settings-row"><div><div class="settings-label">Display Name</div></div><input class="settings-input" value="Student" /></div>
-        <div class="settings-row"><div><div class="settings-label">Email</div></div><input class="settings-input" value="student@school.edu" /></div>
-        <div class="settings-row"><div><div class="settings-label">Grade Level</div></div><select class="settings-input" style="width:140px"><option>9th Grade</option><option>10th Grade</option><option selected>11th Grade</option><option>12th Grade</option><option>College Freshman</option><option>College Sophomore</option></select></div>
+        <div class="settings-row"><div><div class="settings-label">Display Name</div></div><input class="settings-input" id="setDisplayName" value="Student" /></div>
+        <div class="settings-row"><div><div class="settings-label">Email</div></div><input class="settings-input" id="setEmail" value="" disabled style="opacity:0.5" /></div>
+        <div class="settings-row"><div><div class="settings-label">Grade Level</div></div><select class="settings-input" id="setGradeLevel" style="width:140px"><option>9th Grade</option><option>10th Grade</option><option selected>11th Grade</option><option>12th Grade</option><option>College Freshman</option><option>College Sophomore</option></select></div>
       </div>
 
       <!-- Study Goals -->
@@ -2242,19 +2286,19 @@
         <div class="settings-card-title">Study Goals</div>
         <div class="settings-row">
           <div><div class="settings-label">Daily Sessions Goal</div><div class="settings-sublabel">How many AI sessions per day</div></div>
-          <select class="settings-input" style="width:80px"><option>3</option><option selected>5</option><option>7</option><option>10</option></select>
+          <select class="settings-input" id="setDailyGoal" style="width:80px"><option>3</option><option selected>5</option><option>7</option><option>10</option></select>
         </div>
         <div class="settings-row">
           <div><div class="settings-label">Weekly XP Target</div><div class="settings-sublabel">Experience points to earn per week</div></div>
-          <select class="settings-input" style="width:80px"><option>500</option><option selected>1000</option><option>2000</option><option>3000</option></select>
+          <select class="settings-input" id="setWeeklyXP" style="width:80px"><option>500</option><option selected>1000</option><option>2000</option><option>3000</option></select>
         </div>
         <div class="settings-row">
           <div><div class="settings-label">Focus Subjects</div><div class="settings-sublabel">Prioritized in your dashboard</div></div>
-          <select class="settings-input"><option>Math &amp; Science</option><option>English &amp; History</option><option selected>All Subjects</option></select>
+          <select class="settings-input" id="setFocusSubjects"><option>Math &amp; Science</option><option>English &amp; History</option><option selected>All Subjects</option></select>
         </div>
         <div class="settings-row">
           <div><div class="settings-label">Test Prep Mode</div><div class="settings-sublabel">Optimize for upcoming exam</div></div>
-          <select class="settings-input"><option>None</option><option>ACT</option><option selected>SAT</option><option>AP Exams</option></select>
+          <select class="settings-input" id="setTestPrepMode"><option>None</option><option>ACT</option><option selected>SAT</option><option>AP Exams</option></select>
         </div>
       </div>
 
@@ -2263,7 +2307,7 @@
         <div class="settings-card-title">Preferences</div>
         <div class="settings-row">
           <div><div class="settings-label">AI Response Style</div><div class="settings-sublabel">How detailed AI answers should be</div></div>
-          <select class="settings-input"><option>Concise</option><option selected>Balanced</option><option>Detailed</option></select>
+          <select class="settings-input" id="setResponseStyle"><option>Concise</option><option selected>Balanced</option><option>Detailed</option></select>
         </div>
         <div class="settings-row">
           <div><div class="settings-label">Auto-Humanizer</div><div class="settings-sublabel">Default essays to human-like tone</div></div>
@@ -2352,14 +2396,14 @@
       <div class="sp-icon" style="background:rgba(139,92,246,0.10);color:#8b5cf6;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Study</span> Analytics</h2><p class="sp-subtitle">Track your learning patterns and progress over time</p></div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
-      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:#8b5cf6">23h</div><div class="stat-label">This Week</div></div></div>
-      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:var(--math-color)">Math</div><div class="stat-label">Top Subject</div></div></div>
-      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:var(--sci-color)">+12%</div><div class="stat-label">Improvement</div></div></div>
-      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:var(--gold-bright)">4.2</div><div class="stat-label">Avg Sessions/Day</div></div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px" id="analyticsStats">
+      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:#8b5cf6" id="anWeek">--</div><div class="stat-label">This Week</div></div></div>
+      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:var(--math-color)" id="anTopTool">--</div><div class="stat-label">Top Subject</div></div></div>
+      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:var(--sci-color)" id="anTotal">--</div><div class="stat-label">Total Sessions</div></div></div>
+      <div class="stat-card"><div class="stat-info" style="text-align:center;width:100%"><div class="stat-value" style="color:var(--gold-bright)" id="anXP">--</div><div class="stat-label">Total XP</div></div></div>
     </div>
     <div class="settings-grid">
-      <div class="settings-card"><div class="settings-card-title">Weekly Study Time</div><div style="height:200px;display:flex;align-items:flex-end;gap:8px;padding:10px 0" id="weeklyChart">
+      <div class="settings-card"><div class="settings-card-title">Weekly Activity</div><div style="height:200px;display:flex;align-items:flex-end;gap:8px;padding:10px 0" id="weeklyChart">
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="background:var(--math-subtle);border-top:3px solid var(--math-color);border-radius:4px 4px 0 0;width:100%;height:80px"></div><span style="font-size:10px;color:#5a5040">Mon</span></div>
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="background:var(--math-subtle);border-top:3px solid var(--math-color);border-radius:4px 4px 0 0;width:100%;height:120px"></div><span style="font-size:10px;color:#5a5040">Tue</span></div>
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="background:var(--math-subtle);border-top:3px solid var(--math-color);border-radius:4px 4px 0 0;width:100%;height:60px"></div><span style="font-size:10px;color:#5a5040">Wed</span></div>
@@ -2369,7 +2413,7 @@
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="background:var(--ela-subtle);border-top:3px solid var(--ela-color);border-radius:4px 4px 0 0;width:100%;height:50px"></div><span style="font-size:10px;color:#5a5040">Sun</span></div>
       </div></div>
       <div class="settings-card"><div class="settings-card-title">Subject Breakdown</div>
-        <div style="display:flex;flex-direction:column;gap:10px;padding:10px 0">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:10px 0" id="subjectBreakdown">
           <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:#c8b88a">Math</span><span style="color:var(--math-color)">38%</span></div><div style="height:6px;background:var(--black-card);border-radius:99px;overflow:hidden"><div style="height:100%;width:38%;background:var(--math-color);border-radius:99px"></div></div></div>
           <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:#c8b88a">Essay Writing</span><span style="color:var(--ela-color)">24%</span></div><div style="height:6px;background:var(--black-card);border-radius:99px;overflow:hidden"><div style="height:100%;width:24%;background:var(--ela-color);border-radius:99px"></div></div></div>
           <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:#c8b88a">Study Guide</span><span style="color:var(--sci-color)">18%</span></div><div style="height:6px;background:var(--black-card);border-radius:99px;overflow:hidden"><div style="height:100%;width:18%;background:var(--sci-color);border-radius:99px"></div></div></div>
@@ -2615,6 +2659,7 @@
   New version available! <button onclick="updateApp()">Update Now</button>
 </div>
 
+<div class="toast-container" id="toastContainer"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* Error handler — shows JS errors on screen for debugging */
@@ -3857,6 +3902,229 @@ function toggleMobileSidebar() {
   show();
   setInterval(show,8000);
 })();
+
+/* ══════════════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+══════════════════════════════════════════════════════ */
+function showToast(type, emoji, title, desc, btnText, btnAction) {
+  var c = document.getElementById('toastContainer');
+  if (!c) return;
+  var t = document.createElement('div');
+  t.className = 'toast toast-' + type;
+  var html = '';
+  if (emoji) html += '<div class="toast-emoji">' + emoji + '</div>';
+  html += '<div class="toast-body"><div class="toast-title">' + title + '</div>';
+  if (desc) html += '<div class="toast-desc">' + desc + '</div>';
+  html += '</div>';
+  if (btnText) html += '<button class="toast-btn" id="toastBtn">' + btnText + '</button>';
+  t.innerHTML = html;
+  c.appendChild(t);
+  if (btnText && btnAction) { var btn = t.querySelector('#toastBtn'); if (btn) { btn.removeAttribute('id'); btn.onclick = function() { btnAction(); t.remove(); }; } }
+  setTimeout(function() { if (t.parentNode) t.remove(); }, 5000);
+}
+
+/* ══════════════════════════════════════════════════════
+   ACHIEVEMENT TOASTS
+══════════════════════════════════════════════════════ */
+var _origCheckAch = checkAchievements;
+checkAchievements = async function() {
+  if (!sbClient || !currentUser || !userProfile) return;
+  try {
+    var existing = await sbClient.from('achievements').select('achievement_id').eq('user_id', currentUser.id);
+    var earnedIds = new Set((existing.data||[]).map(function(a){ return a.achievement_id; }));
+    for (var i = 0; i < ACHIEVEMENTS.length; i++) {
+      var a = ACHIEVEMENTS[i];
+      if (!earnedIds.has(a.id) && a.check(userProfile)) {
+        await sbClient.from('achievements').insert({ user_id: currentUser.id, achievement_id: a.id });
+        showToast('achievement', a.emoji, 'Achievement Unlocked!', a.name + ' \u2014 ' + a.desc);
+      }
+    }
+  } catch(e) { console.error('Achievement check error:', e); }
+};
+
+/* ══════════════════════════════════════════════════════
+   SETTINGS — Full Supabase Persistence
+══════════════════════════════════════════════════════ */
+function populateSettings() {
+  if (!userProfile) return;
+  var p = userProfile;
+  var el;
+  el = document.getElementById('setDisplayName'); if (el) el.value = p.display_name || 'Student';
+  el = document.getElementById('setEmail'); if (el) el.value = p.email || '';
+  var sa = document.querySelector('.settings-avatar'); if (sa) { if (p.avatar_url) sa.innerHTML = '<img src="'+p.avatar_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />'; else sa.textContent = (p.display_name||'S')[0].toUpperCase(); }
+  var su = document.querySelector('.settings-username'); if (su) su.textContent = p.display_name || 'Student';
+  var sse = document.querySelector('.settings-email'); if (sse) sse.textContent = p.email || '';
+  var ssb = document.querySelector('.settings-badge'); if (ssb) ssb.innerHTML = '&#x1F525; ' + (p.current_streak||0) + ' Day Streak &middot; Level ' + (p.level||1);
+  function setSelect(id, val) { el = document.getElementById(id); if (el && val) { for (var i=0;i<el.options.length;i++) { if (el.options[i].value===val||el.options[i].text===val) { el.selectedIndex=i; break; } } } }
+  setSelect('setGradeLevel', p.grade_level);
+  setSelect('setDailyGoal', String(p.daily_goal));
+  setSelect('setWeeklyXP', String(p.weekly_xp_target));
+  setSelect('setFocusSubjects', p.focus_subjects);
+  setSelect('setTestPrepMode', p.test_prep_mode);
+  setSelect('setResponseStyle', p.ai_response_style);
+  var toggles = document.querySelectorAll('#page-settings .sp-toggle input');
+  if (toggles[0]) toggles[0].checked = p.auto_humanizer !== false;
+  if (toggles[1]) toggles[1].checked = p.sound_effects !== false;
+  if (toggles[2]) toggles[2].checked = p.streak_reminders !== false;
+}
+
+// Override saveSettings
+saveSettings = function() {
+  var updates = {};
+  var el;
+  el = document.getElementById('setDisplayName'); if (el) updates.display_name = el.value.trim() || 'Student';
+  el = document.getElementById('setGradeLevel'); if (el) updates.grade_level = el.options[el.selectedIndex].text;
+  el = document.getElementById('setDailyGoal'); if (el) updates.daily_goal = parseInt(el.value) || 5;
+  el = document.getElementById('setWeeklyXP'); if (el) updates.weekly_xp_target = parseInt(el.value) || 1000;
+  el = document.getElementById('setFocusSubjects'); if (el) updates.focus_subjects = el.options[el.selectedIndex].text;
+  el = document.getElementById('setTestPrepMode'); if (el) updates.test_prep_mode = el.options[el.selectedIndex].text;
+  el = document.getElementById('setResponseStyle'); if (el) updates.ai_response_style = el.options[el.selectedIndex].text;
+  var toggles = document.querySelectorAll('#page-settings .sp-toggle input');
+  if (toggles[0]) updates.auto_humanizer = toggles[0].checked;
+  if (toggles[1]) updates.sound_effects = toggles[1].checked;
+  if (toggles[2]) updates.streak_reminders = toggles[2].checked;
+  if (sbClient && currentUser) {
+    sbClient.from('profiles').update(updates).eq('id', currentUser.id).then(function() {
+      if (userProfile) Object.assign(userProfile, updates);
+      updateUIWithProfile(userProfile || updates);
+    });
+  }
+  var status = document.getElementById('settingsSaved');
+  if (status) { status.style.display = 'inline'; setTimeout(function() { status.style.display = 'none'; }, 3000); }
+  showToast('success', '\u2705', 'Settings Saved', 'Your preferences have been updated');
+};
+
+/* ══════════════════════════════════════════════════════
+   LIVE ANALYTICS
+══════════════════════════════════════════════════════ */
+async function loadAnalytics() {
+  if (!sbClient || !currentUser) return;
+  try {
+    var result = await sbClient.from('chat_sessions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    var sessions = result.data || [];
+    var now = new Date();
+    var weekAgo = new Date(now.getTime() - 7*86400000);
+    var thisWeek = sessions.filter(function(s) { return new Date(s.created_at) >= weekAgo; });
+    var totalXP = sessions.reduce(function(sum, s) { return sum + (s.xp_earned||0); }, 0);
+
+    var aw = document.getElementById('anWeek'); if (aw) aw.textContent = thisWeek.length;
+    var ao = document.getElementById('anTotal'); if (ao) ao.textContent = sessions.length;
+    var ax = document.getElementById('anXP'); if (ax) ax.textContent = totalXP.toLocaleString();
+
+    var toolCounts = {};
+    sessions.forEach(function(s) { toolCounts[s.page] = (toolCounts[s.page]||0) + 1; });
+    var topTool = Object.keys(toolCounts).sort(function(a,b) { return toolCounts[b]-toolCounts[a]; })[0];
+    var at = document.getElementById('anTopTool'); if (at) at.textContent = PAGE_NAMES[topTool] || topTool || '--';
+
+    var chart = document.getElementById('weeklyChart');
+    if (chart) {
+      var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var dayCounts = [0,0,0,0,0,0,0];
+      thisWeek.forEach(function(s) { dayCounts[new Date(s.created_at).getDay()]++; });
+      var maxC = Math.max.apply(null, dayCounts) || 1;
+      var td = now.getDay();
+      chart.innerHTML = '';
+      for (var i = 0; i < 7; i++) {
+        var di = (td - 6 + i + 7) % 7;
+        var h = Math.max(8, Math.round(dayCounts[di] / maxC * 180));
+        var isT = i === 6;
+        chart.innerHTML += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="font-size:9px;color:#5a5040;margin-bottom:auto">' + (dayCounts[di]||'') + '</div><div style="background:' + (isT?'var(--gold-subtle)':'var(--math-subtle)') + ';border-top:3px solid ' + (isT?'var(--gold-bright)':'var(--math-color)') + ';border-radius:4px 4px 0 0;width:100%;height:' + h + 'px"></div><span style="font-size:10px;color:' + (isT?'var(--gold-bright)':'#5a5040') + ';font-weight:' + (isT?'700':'400') + '">' + days[di] + '</span></div>';
+      }
+    }
+
+    var bd = document.getElementById('subjectBreakdown');
+    if (bd && Object.keys(toolCounts).length > 0) {
+      var total = sessions.length;
+      bd.innerHTML = '';
+      Object.keys(toolCounts).sort(function(a,b){ return toolCounts[b]-toolCounts[a]; }).slice(0,6).forEach(function(tool) {
+        var pct = Math.round(toolCounts[tool]/total*100);
+        var color = TOOL_COLORS[tool]||'#64748b';
+        bd.innerHTML += '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:#c8b88a">'+(PAGE_NAMES[tool]||tool)+'</span><span style="color:'+color+'">'+pct+'%</span></div><div style="height:6px;background:var(--black-card);border-radius:99px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:'+color+';border-radius:99px;transition:width 0.5s"></div></div></div>';
+      });
+    }
+  } catch(e) { console.error('Analytics error:', e); }
+}
+
+/* ══════════════════════════════════════════════════════
+   DAILY CHALLENGE
+══════════════════════════════════════════════════════ */
+var DAILY_SUBJECTS = [
+  { emoji: '&#x1F9EE;', subject: 'Math', tool: 'math', prompts: ['Solve: If f(x) = 3x\u00b2 - 5x + 2, find f\'(x) and determine where f has a minimum.', 'Simplify: (2x+3)(x-4) - (x+1)\u00b2', 'Find the area under y = x\u00b3 from x=0 to x=2'] },
+  { emoji: '&#x1F4DD;', subject: 'Writing', tool: 'essay', prompts: ['Write a thesis statement arguing whether social media has improved or harmed education.', 'Analyze 3 rhetorical strategies used in Martin Luther King Jr.\'s I Have a Dream speech.'] },
+  { emoji: '&#x1F9EC;', subject: 'Science', tool: 'study', prompts: ['Explain the difference between mitosis and meiosis. When does each occur?', 'Describe 3 ways climate change affects ocean ecosystems.'] },
+  { emoji: '&#x1F4DA;', subject: 'History', tool: 'essay', prompts: ['Compare and contrast the causes of World War I and World War II.', 'Explain how the Industrial Revolution changed daily life for workers.'] },
+  { emoji: '&#x1F9E0;', subject: 'Mixed', tool: 'doublecheck', prompts: ['True or false: The Great Wall of China is visible from space. Verify this claim.', 'Fact-check: Lightning never strikes the same place twice.'] },
+];
+
+function loadDailyChallenge() {
+  var wrap = document.getElementById('dailyChallengeWrap');
+  if (!wrap) return;
+  var today = new Date();
+  var dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0)) / 86400000);
+  var subj = DAILY_SUBJECTS[dayOfYear % DAILY_SUBJECTS.length];
+  var prompt = subj.prompts[dayOfYear % subj.prompts.length];
+  var completedKey = 'dc_' + today.toISOString().slice(0,10);
+  if (localStorage.getItem(completedKey)) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  var emoji = document.getElementById('dcEmoji'); if (emoji) emoji.innerHTML = subj.emoji;
+  var title = document.getElementById('dcTitle'); if (title) title.textContent = subj.subject + ': ' + prompt.slice(0, 65) + (prompt.length > 65 ? '...' : '');
+  var sub = document.getElementById('dcSub'); if (sub) sub.textContent = 'Tap to start \u2022 Earn 2x XP today';
+  window._dailyChallenge = { tool: subj.tool, prompt: prompt, key: completedKey };
+}
+function startDailyChallenge() {
+  if (!window._dailyChallenge) return;
+  var dc = window._dailyChallenge;
+  navigate(dc.tool);
+  setTimeout(function() {
+    var input = document.getElementById(dc.tool + 'ChatInput');
+    if (input) { input.value = dc.prompt; input.dispatchEvent(new Event('input')); input.focus(); }
+  }, 300);
+  localStorage.setItem(dc.key, '1');
+  var wrap = document.getElementById('dailyChallengeWrap'); if (wrap) wrap.style.display = 'none';
+  showToast('achievement', '&#x1F3AF;', 'Daily Challenge Started!', 'Complete it for 2x XP');
+}
+
+/* ══════════════════════════════════════════════════════
+   SMART SCAN — Route to correct tool with image
+══════════════════════════════════════════════════════ */
+handleScan = function(inputEl) {
+  var file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+  document.getElementById('scanResult').style.display = 'block';
+  var container = document.getElementById('scanMessages');
+  container.innerHTML = '';
+  appendMsg('scanMessages', 'user', 'Scanning: ' + file.name);
+  var typingEl = appendTypingTo('scanMessages');
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var imageData = ev.target.result;
+    setTimeout(function() {
+      typingEl.remove();
+      typeMsg('scanMessages', 'ai', 'Detected content in your image. Routing to Math AI for analysis...');
+      setTimeout(function() {
+        navigate('math');
+        setTimeout(function() {
+          appendImageMsg('mathMessages', imageData, file.name);
+          streamAIResponse('mathMessages', 'I uploaded a photo of my homework. Please analyze what you see and help me solve it step by step.', 'math', { mode: mathModeState, mathType: mathType, model: mathModel }, 'math', imageData);
+        }, 300);
+      }, 1500);
+    }, 1000);
+  };
+  reader.readAsDataURL(file);
+};
+
+/* ══════════════════════════════════════════════════════
+   NAVIGATE HOOKS — Analytics, Settings, Challenge
+══════════════════════════════════════════════════════ */
+var _navHook2 = navigate;
+navigate = function(pageId) {
+  _navHook2(pageId);
+  try { if (pageId === 'analytics') loadAnalytics(); } catch(e) {}
+  try { if (pageId === 'settings') populateSettings(); } catch(e) {}
+};
+
+try { loadDailyChallenge(); } catch(e) {}
 
 navigate('home');
 </script>
