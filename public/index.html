@@ -287,6 +287,50 @@
     .mobile-drawer-overlay, .mobile-drawer { display: none !important; }
     .sidebar-overlay { position: fixed; inset: 0; z-index: 49; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+    /* ─── ANCIENT SCROLL ───────────────────────────────────── */
+    .scroll-zone{position:absolute;left:0;top:0;bottom:0;width:44px;z-index:20;pointer-events:none}
+    .scroll-zone *{pointer-events:auto}
+    .scroll-rod-wrap{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:38px;height:420px;cursor:grab;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .scroll-rod-wrap:active{cursor:grabbing}
+    .scroll-shaft{width:10px;height:100%;background:#1e1408;border-radius:5px;position:relative;border:1px solid #0e0a04}
+    .scroll-shaft::after{content:'';position:absolute;left:2px;top:5%;width:2px;height:90%;background:linear-gradient(180deg,rgba(80,50,15,0.2),rgba(80,50,15,0.05),rgba(80,50,15,0.2));border-radius:1px}
+    .scroll-cap{position:absolute;left:-9px;width:28px;height:28px;background:#1e1408;border:1px solid #0e0a04;display:flex;align-items:center;justify-content:center}
+    .scroll-cap-t{top:-10px;border-radius:4px 4px 2px 2px}
+    .scroll-cap-b{bottom:-10px;border-radius:2px 2px 4px 4px}
+    .scroll-cap::before{content:'';width:12px;height:12px;border:1px solid rgba(140,100,40,0.25);border-radius:2px;transform:rotate(45deg)}
+    .scroll-cap::after{content:'';position:absolute;width:6px;height:6px;background:#2a1c0a;border:1px solid rgba(140,100,40,0.2);border-radius:50%}
+    .scroll-cord{position:absolute;left:-4px;right:-4px;height:12px;background:repeating-linear-gradient(90deg,#2a1c0a 0px,#3d2b12 2px,#2a1c0a 4px);border-radius:2px;opacity:0.6}
+    .scroll-cord-t{top:24px}
+    .scroll-cord-b{bottom:24px}
+    .scroll-nick{position:absolute;width:3px;height:6px;background:rgba(0,0,0,0.2);border-radius:1px}
+    .scroll-hint-text{position:absolute;left:52px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(90,61,26,0.5);letter-spacing:0.06em;white-space:nowrap;font-family:var(--font-display);font-style:italic;pointer-events:none;transition:opacity 0.3s}
+    .scroll-parchment{position:absolute;left:25px;top:50%;transform:translateY(-50%);height:400px;width:0;overflow:hidden;z-index:15}
+    .scroll-parch-inner{width:520px;height:100%;position:relative;padding:26px 40px 26px 16px;display:flex;flex-direction:column;justify-content:center;background:#a08448;background-image:radial-gradient(ellipse at 15% 10%,rgba(60,35,8,0.35),transparent 40%),radial-gradient(ellipse at 85% 90%,rgba(50,28,5,0.4),transparent 45%),radial-gradient(ellipse at 50% 40%,rgba(170,140,80,0.2),transparent 60%),radial-gradient(ellipse at 30% 70%,rgba(40,22,4,0.2),transparent 35%),radial-gradient(ellipse at 70% 20%,rgba(40,22,4,0.15),transparent 30%)}
+    .scroll-parch-inner::before{content:'';position:absolute;left:0;top:0;bottom:0;width:20px;background:linear-gradient(90deg,rgba(15,8,2,0.5),rgba(30,18,5,0.15),transparent)}
+    .scroll-parch-inner::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");pointer-events:none;mix-blend-mode:multiply}
+    .scroll-crack{position:absolute;height:1px;background:rgba(40,20,4,0.2)}
+    .scroll-crack::after{content:'';position:absolute;width:25px;height:1px;background:rgba(40,20,4,0.15)}
+    .scroll-foxing{position:absolute;border-radius:50%;background:radial-gradient(ellipse,rgba(70,40,8,0.18),transparent 70%)}
+    .scroll-burn{position:absolute;background:rgba(30,12,2,0.2);border-radius:40%}
+    .scroll-edge-wear{position:absolute;left:0;right:18px;height:3px}
+    .scroll-moth{position:absolute;width:5px;height:7px;border-radius:50% 50% 50% 0;background:rgba(80,55,20,0.06);border:0.5px solid rgba(80,55,20,0.08)}
+    .scroll-glyph{position:absolute;z-index:1;opacity:0.12;color:#3d2210;font-family:var(--font-display);writing-mode:vertical-rl}
+    .scroll-tome-title{font-family:var(--font-display);font-size:14px;font-weight:700;color:#1a0e04;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:2px;text-align:center;position:relative;z-index:1;text-shadow:0 0 8px rgba(160,130,60,0.15)}
+    .scroll-tome-sub{font-family:var(--font-display);font-size:9px;color:#5a3d1a;letter-spacing:0.25em;text-transform:uppercase;text-align:center;margin-bottom:10px;position:relative;z-index:1}
+    .scroll-rule{height:1px;margin:0 20px 10px;position:relative;z-index:1;background:linear-gradient(90deg,transparent,#6b4e28 15%,#6b4e28 50%,#6b4e28 85%,transparent);opacity:0.25}
+    .scroll-rule::before,.scroll-rule::after{content:'';position:absolute;top:-3px;width:7px;height:7px;border:1px solid rgba(107,78,40,0.3);transform:rotate(45deg)}
+    .scroll-rule::before{left:calc(50% - 20px)}
+    .scroll-rule::after{left:calc(50% + 13px)}
+    .scroll-row{display:flex;gap:9px;padding:4px 0;align-items:flex-start;position:relative;z-index:1}
+    .scroll-num{color:#5a3d1a;font-family:var(--font-display);font-size:13px;font-weight:700;flex-shrink:0;width:24px;text-align:right;line-height:1.45;opacity:0.7}
+    .scroll-txt{font-size:11px;color:#2a1c0a;line-height:1.5;font-family:Georgia,'Times New Roman',serif;opacity:0.85}
+    .scroll-txt b{color:#0e0804;font-weight:700}
+    .scroll-seal{position:absolute;bottom:14px;right:34px;width:40px;height:40px;border-radius:50%;z-index:2;background:radial-gradient(circle at 38% 32%,#6b1a1a,#3a0808);border:2px solid #1e0404}
+    .scroll-seal-inner{position:absolute;inset:4px;border-radius:50%;border:0.5px solid rgba(160,120,50,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:13px;font-weight:700;color:rgba(180,140,60,0.7)}
+    .scroll-seal-drip{position:absolute;border-radius:0 0 50% 50%;background:radial-gradient(ellipse at top,#4a0e0e,transparent)}
+    .scroll-curl{position:absolute;right:-2px;top:0;bottom:0;width:16px;background:linear-gradient(90deg,transparent,rgba(50,30,8,0.25),rgba(30,15,3,0.45));border-radius:0 3px 3px 0}
+    @media (max-width: 740px) { .scroll-zone { display: none; } }
+
     .mini-hero { display: flex; align-items: center; gap: 16px; padding: 20px 0 12px; }
     .mini-hero-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 0.04em; }
     .mini-hero-tagline { font-size: 12px; font-style: italic; color: #7a7060; margin-top: 2px; }
@@ -1458,7 +1502,52 @@
 <!-- ═══════════════════════════════════════════════════
      PAGE: HOME
 ═══════════════════════════════════════════════════ -->
-<div class="page active" id="page-home">
+<div class="page active" id="page-home" style="position:relative">
+
+  <!-- Ancient Scroll -->
+  <div class="scroll-zone">
+    <div class="scroll-hint-text" id="scrollHint">~ drag to unravel ~</div>
+    <div class="scroll-parchment" id="scrollParchment">
+      <div class="scroll-parch-inner">
+        <div class="scroll-edge-wear" style="top:0;background:linear-gradient(90deg,rgba(30,15,3,0.4) 0%,rgba(30,15,3,0.1) 30%,transparent 50%,rgba(30,15,3,0.08) 80%,rgba(30,15,3,0.3) 100%)"></div>
+        <div class="scroll-edge-wear" style="bottom:0;background:linear-gradient(90deg,rgba(30,15,3,0.35) 0%,transparent 40%,rgba(30,15,3,0.06) 60%,rgba(30,15,3,0.25) 100%)"></div>
+        <div class="scroll-crack" style="top:12%;left:35%;width:60px;transform:rotate(8deg)"></div>
+        <div class="scroll-crack" style="bottom:20%;right:30%;width:40px;transform:rotate(-5deg)"></div>
+        <div class="scroll-foxing" style="left:25%;top:6%;width:50px;height:40px"></div>
+        <div class="scroll-foxing" style="right:20%;bottom:8%;width:60px;height:45px"></div>
+        <div class="scroll-foxing" style="left:60%;top:55%;width:35px;height:30px"></div>
+        <div class="scroll-burn" style="right:14px;top:8%;width:8px;height:14px;transform:rotate(-20deg)"></div>
+        <div class="scroll-burn" style="right:18px;bottom:12%;width:10px;height:10px;transform:rotate(15deg)"></div>
+        <div class="scroll-burn" style="right:12px;top:45%;width:6px;height:18px;transform:rotate(-8deg)"></div>
+        <div class="scroll-moth" style="top:18%;left:42%"></div>
+        <div class="scroll-moth" style="bottom:28%;right:28%;border-radius:0 50% 50% 50%"></div>
+        <div class="scroll-glyph" style="left:6px;top:30px;font-size:11px">&#9758; &#9670; &#9758;</div>
+        <div class="scroll-glyph" style="right:28px;bottom:50px;font-size:9px">&#9672; &#9674; &#9672;</div>
+        <div class="scroll-tome-title">Tome of Obsidia</div>
+        <div class="scroll-tome-sub">A Guide for the Seeker of Knowledge</div>
+        <div class="scroll-rule"></div>
+        <div class="scroll-row"><div class="scroll-num">I.</div><div class="scroll-txt"><b>Choose thine instrument</b> from the grimoire at left &mdash; the Oracle of Numbers for equations, the Sacred Quill for essays, the Codex for study rites.</div></div>
+        <div class="scroll-row"><div class="scroll-num">II.</div><div class="scroll-txt"><b>Present thy labour</b> by inscription or relic. Affix parchment via the ancient clip sigil, or invoke the Scan to divine its nature.</div></div>
+        <div class="scroll-row"><div class="scroll-num">III.</div><div class="scroll-txt"><b>Select the enchantment</b> from the rune bar above. Each instrument bears many arts &mdash; to Solve, to Explain, to Visualise, to Challenge.</div></div>
+        <div class="scroll-row"><div class="scroll-num">IV.</div><div class="scroll-txt"><b>Heed the revelation</b> with patience &mdash; the Oracle reveals its method step by step. Question further to plumb the depths.</div></div>
+        <div class="scroll-row"><div class="scroll-num">V.</div><div class="scroll-txt"><b>Consult the sanctum</b> upon returning home. Thy accuracy, hours devoted, and mastered disciplines are inscribed in the eternal ledger.</div></div>
+        <div class="scroll-row"><div class="scroll-num">VI.</div><div class="scroll-txt"><b>Guard thy flame</b> &mdash; unbroken daily communion preserves the sacred streak. Ascend through the ranks and claim the ancient honours.</div></div>
+        <div class="scroll-seal"><div class="scroll-seal-inner">O</div><div class="scroll-seal-drip" style="bottom:-6px;left:12px;width:8px;height:10px"></div><div class="scroll-seal-drip" style="bottom:-4px;right:10px;width:5px;height:7px"></div></div>
+        <div class="scroll-curl"></div>
+      </div>
+    </div>
+    <div class="scroll-rod-wrap" id="scrollRod">
+      <div class="scroll-shaft">
+        <div class="scroll-cap scroll-cap-t"></div>
+        <div class="scroll-cap scroll-cap-b"></div>
+        <div class="scroll-cord scroll-cord-t"></div>
+        <div class="scroll-cord scroll-cord-b"></div>
+        <div class="scroll-nick" style="top:35%;left:2px;transform:rotate(10deg)"></div>
+        <div class="scroll-nick" style="top:60%;right:1px;transform:rotate(-15deg)"></div>
+        <div class="scroll-nick" style="top:80%;left:1px;transform:rotate(5deg)"></div>
+      </div>
+    </div>
+  </div>
 
   <div style="max-width:1080px;margin:0 auto;padding:0 18px">
     <div class="mini-hero">
@@ -3465,6 +3554,23 @@ function toggleMobileSidebar() {
   drag.addEventListener('touchstart', function(e) { dragging = true; drag.classList.add('active'); e.preventDefault(); });
   document.addEventListener('touchmove', function(e) { if (!dragging) return; var w = Math.max(60, Math.min(340, e.touches[0].clientX)); sb.style.width = w + 'px'; sb.classList.toggle('collapsed', w < 100); });
   document.addEventListener('touchend', function() { if (!dragging) return; dragging = false; drag.classList.remove('active'); });
+})();
+
+/* ══════════════════════════════════════════════════════
+   ANCIENT SCROLL — Drag to Unravel
+══════════════════════════════════════════════════════ */
+(function(){
+  var rod=document.getElementById('scrollRod'),parch=document.getElementById('scrollParchment'),hint=document.getElementById('scrollHint');
+  if(!rod||!parch) return;
+  var dragging=false,startX=0,maxW=520,curW=0,af=null;
+  function set(w){w=Math.max(0,Math.min(maxW,w));curW=w;parch.style.width=w+'px';rod.style.left=(6+w)+'px';hint.style.left=(52+w)+'px';hint.style.opacity=w<12?0.6:0;}
+  function snap(){if(dragging)return;function t(){curW*=0.86;if(curW<0.8){curW=0;set(0);return;}set(curW);af=requestAnimationFrame(t);}if(af)cancelAnimationFrame(af);t();}
+  rod.addEventListener('mousedown',function(e){dragging=true;startX=e.clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
+  document.addEventListener('mousemove',function(e){if(!dragging)return;set(e.clientX-startX);});
+  document.addEventListener('mouseup',function(){if(!dragging)return;dragging=false;snap();});
+  rod.addEventListener('touchstart',function(e){dragging=true;startX=e.touches[0].clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
+  document.addEventListener('touchmove',function(e){if(!dragging)return;set(e.touches[0].clientX-startX);});
+  document.addEventListener('touchend',function(){if(!dragging)return;dragging=false;snap();});
 })();
 
 navigate('home');
