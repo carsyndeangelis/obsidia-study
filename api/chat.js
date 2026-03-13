@@ -43,8 +43,30 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Message is required' });
     }
 
+    // Validate vars against allowlists to prevent prompt injection
+    const ALLOWED_PAGES = ['general','math','essay','study','notes','doublecheck','grading','testprep','teacher'];
+    const ALLOWED_MODES = ['solve','explain','graph','practice','draft','outline','thesis','proofread','transcribe','summarize','keypoints','questions','verify','sources','compare','bias','grade','rubric','feedback'];
+    const ALLOWED_MATH_TYPES = ['algebra','geometry','trig','precalc','calculus','multivariable','linalg','diffeq','statistics','discrete'];
+    const ALLOWED_SECTIONS = ['act-math','act-english','act-science','sat-math','sat-rw','strategy'];
+    const ALLOWED_TOOLS = ['lesson','rubric','quizgen','stfeedback','differentiate','parentemail'];
+    const ALLOWED_METHODS = ['flashcards','cornell','mindmap','spaced','outline','quiz'];
+
+    const safeVars = {};
+    const rv = vars || {};
+    if (rv.mode && ALLOWED_MODES.includes(rv.mode)) safeVars.mode = rv.mode;
+    if (rv.mathType && ALLOWED_MATH_TYPES.includes(rv.mathType)) safeVars.mathType = rv.mathType;
+    if (rv.section && ALLOWED_SECTIONS.includes(rv.section)) safeVars.section = rv.section;
+    if (rv.tool && ALLOWED_TOOLS.includes(rv.tool)) safeVars.tool = rv.tool;
+    if (rv.method && ALLOWED_METHODS.includes(rv.method)) safeVars.method = rv.method;
+    if (rv.humanizer) safeVars.humanizer = !!rv.humanizer;
+    if (rv.grade) safeVars.grade = String(rv.grade).slice(0, 20);
+    if (rv.scale) safeVars.scale = String(rv.scale).slice(0, 20);
+    if (rv.skillContext && typeof rv.skillContext === 'string') safeVars.skillContext = rv.skillContext.slice(0, 500);
+    if (rv.documentContext && typeof rv.documentContext === 'string') safeVars.documentContext = rv.documentContext.slice(0, 8000);
+
     const trimmedMessage = message.slice(0, 4000);
-    const systemPrompt = buildPrompt(page || 'general', vars || {});
+    const safePage = ALLOWED_PAGES.includes(page) ? page : 'general';
+    const systemPrompt = buildPrompt(safePage, safeVars);
 
     // Build conversation history
     const messages = [];

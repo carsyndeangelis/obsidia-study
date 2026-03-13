@@ -1,15 +1,28 @@
 {
   "name": "obsidia-study",
-  "version": "2.1.0",
+  "version": "6.2.0",
   "description": "Obsidia AI — Academic assistance platform built by a student, for students",
   "private": true,
   "scripts": {
     "dev": "vercel dev",
     "build": "echo 'Static site — no build step needed'",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint api/ tests/ --ext .js",
+    "format": "prettier --write 'api/**/*.js' 'tests/**/*.js'"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.78.0"
+    "@anthropic-ai/sdk": "^0.78.0",
+    "pdf-parse": "^2.4.5"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.3.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "supertest": "^7.0.0"
   },
   "engines": {
     "node": ">=18"

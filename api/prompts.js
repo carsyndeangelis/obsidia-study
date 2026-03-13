@@ -156,12 +156,24 @@ Selected tool: {{tool}}
 function buildPrompt(page, vars = {}) {
   let prompt = PROMPTS[page] || PROMPTS.general;
   for (const [key, value] of Object.entries(vars)) {
+    if (key === 'skillContext' || key === 'documentContext') continue;
     prompt = prompt.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), String(value));
   }
   prompt = prompt.replace(/\{\{#if (\w+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g,
     (_, varName, ifTrue, ifFalse) => vars[varName] ? ifTrue : ifFalse
   );
   prompt = prompt.replace(/\{\{.*?\}\}/g, '');
+
+  // Adaptive difficulty context
+  if (vars.skillContext) {
+    prompt += `\n\nSTUDENT SKILL PROFILE:\n${vars.skillContext}\nAdapt your difficulty and explanations to match this student's current level.`;
+  }
+
+  // PDF/document context
+  if (vars.documentContext) {
+    prompt += `\n\nDOCUMENT CONTEXT (uploaded by student):\n${vars.documentContext}\nReference this document when answering the student's question.`;
+  }
+
   return prompt.trim();
 }
 
