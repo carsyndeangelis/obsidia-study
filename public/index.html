@@ -2048,69 +2048,9 @@
 
     <!-- Conversation List -->
     <div id="historyList" style="display:flex;flex-direction:column;gap:8px">
-      <div class="activity-item" onclick="navigate('math')" data-tool="math" data-search="calculus integration derivatives">
-        <div class="activity-dot" style="background:var(--math-color)"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Calculus Integration Practice</div><span style="font-size:10px;color:var(--math-color);background:var(--math-subtle);padding:2px 8px;border-radius:99px">Math AI</span></div>
-          <div class="activity-desc">Solved 3 integration by parts problems with step-by-step explanations</div>
-          <div class="activity-time">Today, 2:34 PM &middot; 6 messages &middot; +15 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('essay')" data-tool="essay" data-search="cold war history essay outline">
-        <div class="activity-dot" style="background:var(--ela-color)"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Cold War Essay Draft</div><span style="font-size:10px;color:var(--ela-color);background:var(--ela-subtle);padding:2px 8px;border-radius:99px">Essay Writer</span></div>
-          <div class="activity-desc">Completed outline and thesis for Cold War impact essay</div>
-          <div class="activity-time">Today, 9:15 AM &middot; 8 messages &middot; +25 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('study')" data-tool="study" data-search="biology cell division flashcards">
-        <div class="activity-dot" style="background:var(--sci-color)"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Biology Flashcards</div><span style="font-size:10px;color:var(--sci-color);background:var(--sci-subtle);padding:2px 8px;border-radius:99px">Study Guide</span></div>
-          <div class="activity-desc">Generated 24 flashcards covering mitosis, meiosis, and cell cycle regulation</div>
-          <div class="activity-time">Yesterday, 4:20 PM &middot; 4 messages &middot; +20 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('testprep')" data-tool="testprep" data-search="sat math algebra practice">
-        <div class="activity-dot" style="background:#f43f5e"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">SAT Math Practice</div><span style="font-size:10px;color:#f43f5e;background:rgba(244,63,94,0.10);padding:2px 8px;border-radius:99px">Test Prep</span></div>
-          <div class="activity-desc">Scored 7/10 on algebra section, reviewed wrong answers</div>
-          <div class="activity-time">Yesterday, 11:00 AM &middot; 12 messages &middot; +30 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('notes')" data-tool="notes" data-search="chemistry lecture organic compounds">
-        <div class="activity-dot" style="background:#fbbf24"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Chemistry Lecture Notes</div><span style="font-size:10px;color:#fbbf24;background:rgba(251,191,36,0.12);padding:2px 8px;border-radius:99px">Notes</span></div>
-          <div class="activity-desc">Transcribed and summarized 45-min organic chemistry lecture</div>
-          <div class="activity-time">2 days ago &middot; 5 messages &middot; +35 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('doublecheck')" data-tool="doublecheck" data-search="fact check verify photosynthesis">
-        <div class="activity-dot" style="background:#22d3ee"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Photosynthesis Fact Check</div><span style="font-size:10px;color:#22d3ee;background:rgba(34,211,238,0.10);padding:2px 8px;border-radius:99px">Double Check</span></div>
-          <div class="activity-desc">Verified 5 claims about photosynthesis from textbook notes</div>
-          <div class="activity-time">3 days ago &middot; 7 messages &middot; +20 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('grading')" data-tool="grading" data-search="grade essay lab report evaluation">
-        <div class="activity-dot" style="background:var(--gold-bright)"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Lab Report Evaluation</div><span style="font-size:10px;color:var(--gold-bright);background:var(--gold-subtle);padding:2px 8px;border-radius:99px">Grading</span></div>
-          <div class="activity-desc">Graded chemistry lab report: 87/100 with detailed feedback</div>
-          <div class="activity-time">4 days ago &middot; 3 messages &middot; +15 XP</div>
-        </div>
-      </div>
-      <div class="activity-item" onclick="navigate('teacher')" data-tool="teacher" data-search="lesson plan rubric quiz">
-        <div class="activity-dot" style="background:#6366f1"></div>
-        <div class="activity-info" style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">Algebra Lesson Plan</div><span style="font-size:10px;color:#6366f1;background:rgba(99,102,241,0.12);padding:2px 8px;border-radius:99px">Teacher</span></div>
-          <div class="activity-desc">Created 45-minute lesson plan on quadratic equations with differentiation</div>
-          <div class="activity-time">5 days ago &middot; 4 messages &middot; +25 XP</div>
-        </div>
+      <div id="historyEmpty" style="text-align:center;padding:40px 20px;color:#5a5040">
+        <div style="font-size:13px;margin-bottom:4px">No sessions yet</div>
+        <div style="font-size:11px;color:#3a342a">Use any AI tool to start recording your study history</div>
       </div>
     </div>
 
@@ -3185,6 +3125,8 @@ async function onSignIn() {
       if (!data.onboarding_complete) showOnboarding();
     }
   }
+  // Load recent activity for right sidebar
+  try { loadRecentActivity(); } catch(e) {}
 }
 
 function onSignOut() {
@@ -3201,10 +3143,15 @@ function onSignOut() {
 function updateUIWithProfile(p) {
   var initial = (p.display_name || 'S').charAt(0).toUpperCase();
   var avatar = document.getElementById('navAvatar');
-  if (p.avatar_url) avatar.innerHTML = '<img src="'+p.avatar_url+'" alt="Avatar" />';
-  else avatar.textContent = initial;
-  document.getElementById('menuUserName').textContent = p.display_name || 'Student';
-  document.getElementById('menuUserEmail').textContent = p.email || '';
+  if (avatar) {
+    if (p.avatar_url) avatar.innerHTML = '<img src="'+p.avatar_url+'" alt="Avatar" />';
+    else avatar.textContent = initial;
+  }
+  var menuName = document.getElementById('menuUserName');
+  var menuEmail = document.getElementById('menuUserEmail');
+  if (menuName) menuName.textContent = p.display_name || 'Student';
+  if (menuEmail) menuEmail.textContent = p.email || '';
+
   // Header avatar
   var hAvatar = document.getElementById('headerUserAvatar');
   if (hAvatar) {
@@ -3212,33 +3159,52 @@ function updateUIWithProfile(p) {
     if (p.avatar_url) hAvatar.innerHTML = '<img src="'+p.avatar_url+'" style="width:100%;height:100%;object-fit:cover" alt="" />';
     else { hAvatar.innerHTML = ''; hAvatar.style.background = 'var(--gold-muted)'; hAvatar.style.display = 'flex'; hAvatar.style.alignItems = 'center'; hAvatar.style.justifyContent = 'center'; hAvatar.style.fontSize = '13px'; hAvatar.style.fontWeight = '700'; hAvatar.style.color = '#0a0a0a'; hAvatar.style.fontFamily = 'var(--font-display)'; hAvatar.textContent = initial; }
   }
-  // Update stats on home page
-  document.querySelectorAll('[data-count]').forEach(el => {
-    if (el.closest('.stat-card:nth-child(1)')) el.dataset.count = p.total_sessions || 0;
-    if (el.closest('.stat-card:nth-child(2)')) el.dataset.count = p.current_streak || 0;
-    if (el.closest('.stat-card:nth-child(3)')) el.dataset.count = p.total_xp || 0;
-  });
-  // Update XP bar
-  const level = p.level || 1;
-  const xpInLevel = (p.total_xp || 0) % 500;
-  const xpForNext = 500;
-  const pct = Math.round((xpInLevel / xpForNext) * 100);
-  const xpFill = document.getElementById('xpFill');
+
+  // Sidebar footer
+  var sbAv = document.getElementById('sbAvatar');
+  if (sbAv) {
+    if (p.avatar_url) sbAv.innerHTML = '<img src="'+p.avatar_url+'" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="" />';
+    else sbAv.textContent = initial;
+  }
+  var sbName = document.getElementById('sbUserName');
+  if (sbName) sbName.textContent = p.display_name || 'Student';
+  var sbSub = document.getElementById('sbUserSub');
+  if (sbSub) sbSub.textContent = 'LVL ' + (p.level || 1) + ' \u00b7 ' + (p.current_streak || 0) + ' day streak';
+
+  // Stats bar — direct updates
+  var statCards = document.querySelectorAll('.stat-card');
+  if (statCards[0]) { var v = statCards[0].querySelector('.stat-value'); if (v) { v.textContent = (p.total_sessions || 0); v.dataset.count = p.total_sessions || 0; } var l = statCards[0].querySelector('.stat-label'); if (l) l.textContent = 'Sessions'; }
+  if (statCards[1]) { var v = statCards[1].querySelector('.stat-value'); if (v) v.textContent = (p.total_sessions || 0) > 0 ? Math.round((p.total_sessions || 0) * 0.4) + 'h' : '0h'; var l = statCards[1].querySelector('.stat-label'); if (l) l.textContent = 'Studied'; }
+  if (statCards[2]) { var v = statCards[2].querySelector('.stat-value'); if (v) { v.textContent = (p.total_xp || 0); v.dataset.count = p.total_xp || 0; } var l = statCards[2].querySelector('.stat-label'); if (l) l.textContent = 'Total XP'; }
+  if (statCards[3]) { var v = statCards[3].querySelector('.stat-value'); if (v) { v.textContent = (p.current_streak || 0); v.dataset.count = p.current_streak || 0; } }
+
+  // XP bar
+  var level = p.level || 1;
+  var totalXp = p.total_xp || 0;
+  var xpInLevel = totalXp % 500;
+  var xpForNext = 500;
+  var pct = Math.round((xpInLevel / xpForNext) * 100);
+  var xpFill = document.getElementById('xpFill');
   if (xpFill) xpFill.style.width = pct + '%';
-  const xpLevel = document.querySelector('.xp-level');
+  var xpLevel = document.querySelector('.xp-level');
   if (xpLevel) xpLevel.textContent = 'LVL ' + level;
+  var xpLabel = document.querySelector('.xp-label');
+  if (xpLabel) { var ranks = ['Novice','Apprentice','Scholar','Sage','Oracle','Archmage','Grandmaster']; xpLabel.textContent = ranks[Math.min(level-1, ranks.length-1)] || 'Scholar'; }
+  var xpAmt = document.querySelector('.xp-amount');
+  if (xpAmt) xpAmt.textContent = xpInLevel.toLocaleString() + ' / ' + xpForNext.toLocaleString() + ' XP';
+
   // Apply saved theme
   if (p.theme) setTheme(p.theme);
   animateCounters();
 }
 
 // Record session after AI conversation ends
-async function recordSession(page, messageCount) {
+async function recordSession(page, messageCount, title) {
   if (!sbClient || !currentUser) return;
   try {
     const { data } = await sbClient.rpc('record_session', {
       p_page: page,
-      p_title: page.charAt(0).toUpperCase() + page.slice(1) + ' session',
+      p_title: title || (page.charAt(0).toUpperCase() + page.slice(1) + ' session'),
       p_message_count: messageCount
     });
     if (data) {
@@ -3377,25 +3343,23 @@ function resetSettings() {
 ══════════════════════════════════════════════════════ */
 let historyToolFilter = 'all';
 function filterHistory() {
-  const query = (document.getElementById('historySearch').value || '').toLowerCase();
-  const items = document.querySelectorAll('#historyList .activity-item');
-  let anyVisible = false;
-  items.forEach(item => {
-    const search = (item.dataset.search || '').toLowerCase();
-    const tool = item.dataset.tool || '';
-    const matchSearch = !query || search.includes(query);
-    const matchTool = historyToolFilter === 'all' || tool === historyToolFilter;
-    const show = matchSearch && matchTool;
+  var query = (document.getElementById('historySearch').value || '').toLowerCase();
+  var items = document.querySelectorAll('#historyList .activity-item');
+  var anyVisible = false;
+  items.forEach(function(item) {
+    var search = (item.dataset.search || '') + ' ' + (item.textContent || '');
+    var show = !query || search.toLowerCase().includes(query);
     item.style.display = show ? '' : 'none';
     if (show) anyVisible = true;
   });
-  document.getElementById('historyEmpty').style.display = anyVisible ? 'none' : 'block';
+  var empty = document.getElementById('historyEmpty');
+  if (empty) empty.style.display = anyVisible ? 'none' : 'block';
 }
 function filterHistoryByTool(btn, tool) {
   historyToolFilter = tool;
-  btn.closest('div').querySelectorAll('.sp-tool-btn').forEach(b => b.classList.remove('active'));
+  btn.closest('div').querySelectorAll('.sp-tool-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
-  filterHistory();
+  loadHistory(tool);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -3549,13 +3513,92 @@ navigate = function(pageId) {
     // Record session if leaving a page with messages
     const leavingPage = currentPage;
     if (msgCounts[leavingPage] > 0) {
-      recordSession(leavingPage, msgCounts[leavingPage]);
+      // Use first user message as title
+      var firstMsg = (chatHistory[leavingPage] && chatHistory[leavingPage][0]) ? chatHistory[leavingPage][0].content : '';
+      var title = firstMsg ? firstMsg.slice(0, 80) : (PAGE_NAMES[leavingPage] || leavingPage) + ' session';
+      recordSession(leavingPage, msgCounts[leavingPage], title);
       msgCounts[leavingPage] = 0;
     }
   } catch(e) { console.error('Session recording failed:', e); }
   _origNavigate(pageId);
   try { if (pageId === 'achievements') renderAchievements(); } catch(e) {}
+  try { if (pageId === 'history') loadHistory(); } catch(e) {}
 };
+
+/* ══════════════════════════════════════════════════════
+   LIVE HISTORY — Load from Supabase
+══════════════════════════════════════════════════════ */
+var TOOL_COLORS = {math:'var(--math-color)',essay:'var(--ela-color)',study:'var(--sci-color)',notes:'#fbbf24',doublecheck:'#22d3ee',grading:'var(--gold-bright)',testprep:'#f43f5e',teacher:'#6366f1',home:'#64748b',smartscan:'#06b6d4'};
+var TOOL_BG = {math:'var(--math-subtle)',essay:'var(--ela-subtle)',study:'var(--sci-subtle)',notes:'rgba(251,191,36,0.12)',doublecheck:'rgba(34,211,238,0.10)',grading:'var(--gold-subtle)',testprep:'rgba(244,63,94,0.10)',teacher:'rgba(99,102,241,0.12)',home:'rgba(100,116,139,0.10)',smartscan:'rgba(6,182,212,0.10)'};
+
+function timeAgo(dateStr) {
+  var d = new Date(dateStr); var now = new Date(); var diff = Math.floor((now - d) / 1000);
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  if (diff < 172800) return 'Yesterday';
+  return Math.floor(diff/86400) + ' days ago';
+}
+
+async function loadHistory(filter) {
+  if (!sbClient || !currentUser) {
+    var el = document.getElementById('historyEmpty');
+    if (el) el.innerHTML = '<div style="font-size:13px;margin-bottom:4px">Sign in to see your history</div>';
+    return;
+  }
+  var list = document.getElementById('historyList');
+  if (!list) return;
+  list.innerHTML = '<div style="text-align:center;padding:20px;color:#5a5040;font-size:12px">Loading...</div>';
+  try {
+    var query = sbClient.from('chat_sessions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(50);
+    if (filter && filter !== 'all') query = query.eq('page', filter);
+    var { data, error } = await query;
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      list.innerHTML = '<div id="historyEmpty" style="text-align:center;padding:40px 20px;color:#5a5040"><div style="font-size:13px;margin-bottom:4px">No sessions yet</div><div style="font-size:11px;color:#3a342a">Use any AI tool to start recording your study history</div></div>';
+      return;
+    }
+    list.innerHTML = '';
+    data.forEach(function(s) {
+      var color = TOOL_COLORS[s.page] || '#64748b';
+      var bg = TOOL_BG[s.page] || 'rgba(100,116,139,0.10)';
+      var name = PAGE_NAMES[s.page] || s.page;
+      var div = document.createElement('div');
+      div.className = 'activity-item';
+      div.setAttribute('data-tool', s.page);
+      div.setAttribute('data-search', (s.title || '').toLowerCase());
+      div.onclick = function() { navigate(s.page); };
+      div.innerHTML = '<div class="activity-dot" style="background:'+color+'"></div>'
+        + '<div class="activity-info" style="flex:1">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">'+(s.title || name + ' session')+'</div><span style="font-size:10px;color:'+color+';background:'+bg+';padding:2px 8px;border-radius:99px">'+name+'</span></div>'
+        + '<div class="activity-time">'+timeAgo(s.created_at)+' \u00b7 '+s.message_count+' messages \u00b7 +'+s.xp_earned+' XP</div>'
+        + '</div>';
+      list.appendChild(div);
+    });
+  } catch(e) {
+    console.error('loadHistory error:', e);
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:#f43f5e;font-size:12px">Failed to load history</div>';
+  }
+}
+
+async function loadRecentActivity() {
+  if (!sbClient || !currentUser) return;
+  try {
+    var { data } = await sbClient.from('chat_sessions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(5);
+    if (!data || data.length === 0) return;
+    var rList = document.getElementById('rightActivityList');
+    if (!rList) return;
+    rList.innerHTML = '';
+    data.forEach(function(s) {
+      var color = TOOL_COLORS[s.page] || '#64748b';
+      var div = document.createElement('div');
+      div.className = 'rsb-item';
+      div.onclick = function() { navigate(s.page); };
+      div.innerHTML = '<div class="rsb-dot" style="background:'+color+'"></div><div><div class="rsb-title">'+(s.title || PAGE_NAMES[s.page] || s.page)+'</div><div class="rsb-desc">'+s.message_count+' messages</div><div class="rsb-time">'+timeAgo(s.created_at)+' \u00b7 +'+s.xp_earned+' XP</div></div>';
+      rList.appendChild(div);
+    });
+  } catch(e) { console.error('loadRecentActivity error:', e); }
+}
 
 
 /* ══════════════════════════════════════════════════════
