@@ -287,6 +287,44 @@
     .mobile-drawer-overlay, .mobile-drawer { display: none !important; }
     .sidebar-overlay { position: fixed; inset: 0; z-index: 49; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+
+    /* ─── RIGHT SIDEBAR (Activity) ─────────────────────────── */
+    .right-sidebar { width: 240px; min-width: 200px; max-width: 300px; background: #0c0c0c; border-left: 1px solid #1e1e1e; display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; }
+    .right-sidebar-head { padding: 14px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #1e1e1e; min-height: 52px; }
+    .right-sidebar-title { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-bright); }
+    .right-sidebar-body { flex: 1; overflow-y: auto; padding: 8px; }
+    .rsb-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; margin-bottom: 4px; background: #111; border: 1px solid #1e1e1e; border-radius: 8px; cursor: pointer; transition: border-color 0.15s; }
+    .rsb-item:hover { border-color: #333; }
+    .rsb-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .rsb-title { font-size: 11px; font-weight: 500; color: #c8b88a; }
+    .rsb-desc { font-size: 10px; color: #5a5040; }
+    .rsb-time { font-size: 9px; color: #3a342a; margin-top: 1px; }
+    [data-theme="light"] .right-sidebar { background: #f8f6f1; border-left-color: #ddd8cc; }
+    [data-theme="light"] .rsb-item { background: #fff; border-color: #e8e0cc; }
+    @media (max-width: 1000px) { .right-sidebar { display: none; } }
+
+    /* ─── PROMPT-CRAFT AD ─────────────────────────────────── */
+    .pc-ad { background: linear-gradient(135deg, #0c0c0c 0%, #14100a 50%, #0c0c0c 100%); border: 1px solid #2a2218; border-radius: 14px; padding: 22px 20px; position: relative; overflow: hidden; cursor: pointer; transition: border-color 0.3s, transform 0.2s; }
+    .pc-ad:hover { border-color: var(--gold-muted); transform: translateY(-2px); }
+    .pc-ad-glow { position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%); pointer-events: none; }
+    .pc-ad-badge { display: inline-block; font-size: 8px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: rgba(201,168,76,0.1); color: var(--gold-bright); border: 1px solid rgba(201,168,76,0.15); margin-bottom: 10px; font-family: var(--font-display); }
+    .pc-ad-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; letter-spacing: 0.04em; line-height: 1.3; margin-bottom: 6px; }
+    .pc-ad-desc { font-size: 11.5px; color: #8a8070; line-height: 1.5; margin-bottom: 14px; }
+    .pc-ad-features { display: flex; gap: 12px; margin-bottom: 14px; }
+    .pc-ad-feat { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #6a6050; }
+    .pc-ad-feat svg { width: 12px; height: 12px; color: var(--gold-muted); flex-shrink: 0; }
+    .pc-ad-cta { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: linear-gradient(135deg, #c9a84c, #8a6a28); color: #0a0a0a; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; border-radius: 8px; border: none; cursor: pointer; font-family: var(--font-display); transition: opacity 0.2s; }
+    .pc-ad-cta:hover { opacity: 0.9; }
+    .pc-ad-by { position: absolute; bottom: 10px; right: 14px; font-size: 8px; color: #3a342a; letter-spacing: 0.06em; }
+
+    /* ─── TWO-COLUMN FEATURE SPLIT ────────────────────────── */
+    .feature-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 1080px; margin: 0 auto; padding: 4px 18px 16px; }
+    .feature-col { }
+    .feature-col-head { display: flex; align-items: center; gap: 10px; padding: 6px 0 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-bright); font-family: var(--font-display); }
+    .feature-col-head::before, .feature-col-head::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-muted), transparent); opacity: 0.4; }
+    .feature-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 900px) { .feature-split { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .feature-col-grid { grid-template-columns: 1fr; } }
     /* ─── ANCIENT SCROLL ───────────────────────────────────── */
     .scroll-zone{position:absolute;left:0;top:0;bottom:0;width:44px;z-index:20;pointer-events:none}
     .scroll-zone *{pointer-events:auto}
@@ -1611,166 +1649,90 @@
     </div>
   </div>
 
-  <!-- Feature Navigation Cards -->
+  <!-- Feature Cards: Two-Column Layout -->
   <div class="features">
     <div class="features-section">AI Tools</div>
     <div class="feature-card anim-stagger" style="--fc-color:var(--math-color)" onclick="navigate('math')">
-      <div class="feature-icon" style="background:var(--math-subtle);color:var(--math-color);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-      </div>
-      <div class="feature-name">Advanced Math</div>
-      <div class="feature-desc">Algebra through calculus, step-by-step solutions with explanations</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:var(--math-subtle);color:var(--math-color);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+      <div class="feature-name">Advanced Math</div><div class="feature-desc">Algebra through calculus, step-by-step</div><div class="feature-arrow">Open &#8594;</div>
     </div>
     <div class="feature-card anim-stagger" style="--fc-color:var(--ela-color)" onclick="navigate('essay')">
-      <div class="feature-icon" style="background:var(--ela-subtle);color:var(--ela-color);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      </div>
-      <div class="feature-name">Essay Writer</div>
-      <div class="feature-desc">AI drafting with humanizer toggle and grade-level calibration</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:var(--ela-subtle);color:var(--ela-color);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+      <div class="feature-name">Essay Writer</div><div class="feature-desc">Drafting with humanizer &amp; grade calibration</div><div class="feature-arrow">Open &#8594;</div>
     </div>
     <div class="feature-card anim-stagger" style="--fc-color:var(--sci-color)" onclick="navigate('study')">
-      <div class="feature-icon" style="background:var(--sci-subtle);color:var(--sci-color);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-      </div>
-      <div class="feature-name">Study Guide</div>
-      <div class="feature-desc">Flashcards, Cornell notes, mind maps and spaced review</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:var(--sci-subtle);color:var(--sci-color);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div>
+      <div class="feature-name">Study Guide</div><div class="feature-desc">Flashcards, Cornell notes, mind maps</div><div class="feature-arrow">Open &#8594;</div>
     </div>
     <div class="feature-card anim-stagger" style="--fc-color:#fbbf24" onclick="navigate('notes')">
-      <div class="feature-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-      </div>
-      <div class="feature-name">Lecture Notes</div>
-      <div class="feature-desc">Record or upload lectures for AI transcription and summaries</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></div>
+      <div class="feature-name">Lecture Notes</div><div class="feature-desc">AI transcription &amp; summaries</div><div class="feature-arrow">Open &#8594;</div>
     </div>
 
     <div class="features-section">Capture &amp; Verify</div>
     <div class="feature-card anim-stagger" style="--fc-color:#22d3ee" onclick="navigate('doublecheck')">
-      <div class="feature-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/><polyline points="20 12 9 23 4 18" opacity="0.5"/></svg>
-      </div>
-      <div class="feature-name">Double Check</div>
-      <div class="feature-desc">Verify facts and cross-reference AI responses</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:rgba(34,211,238,0.10);color:#22d3ee;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="feature-name">Double Check</div><div class="feature-desc">Verify facts &amp; cross-reference</div><div class="feature-arrow">Open &#8594;</div>
     </div>
     <div class="feature-card anim-stagger" style="--fc-color:var(--gold-bright)" onclick="navigate('grading')">
-      <div class="feature-icon" style="background:var(--gold-subtle);color:var(--gold-bright);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      <div class="feature-name">Grading</div>
-      <div class="feature-desc">Upload work for AI-powered grading with custom scales</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:var(--gold-subtle);color:var(--gold-bright);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg></div>
+      <div class="feature-name">Grading</div><div class="feature-desc">AI grading with custom scales</div><div class="feature-arrow">Open &#8594;</div>
     </div>
     <div class="feature-card anim-stagger" style="--fc-color:#f43f5e" onclick="navigate('testprep')">
-      <div class="feature-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-      </div>
-      <div class="feature-name">ACT / SAT Prep</div>
-      <div class="feature-desc">Practice problems, strategy guides &amp; score analysis</div>
-      <div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:rgba(244,63,94,0.10);color:#f43f5e;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/></svg></div>
+      <div class="feature-name">ACT / SAT Prep</div><div class="feature-desc">Practice problems &amp; strategy</div><div class="feature-arrow">Open &#8594;</div>
     </div>
     <div class="feature-card anim-stagger" style="--fc-color:#6366f1" onclick="navigate('teacher')">
-      <div class="feature-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-      </div>
-      <div class="feature-name">Teacher Tools</div>
-      <div class="feature-desc">Lesson plans, rubrics, quizzes &amp; assessments</div>
-      <div class="feature-arrow">Open &#8594;</div>
-    </div>
-
-    <div class="features-section">Account</div>
-    <div class="feature-card anim-stagger" style="--fc-color:#64748b" onclick="navigate('history')">
-      <div class="feature-icon" style="background:rgba(100,116,139,0.12);color:#64748b;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      </div>
-      <div class="feature-name">History</div>
-      <div class="feature-desc">Browse and revisit past conversations</div>
-      <div class="feature-arrow">Open &#8594;</div>
-    </div>
-    <div class="feature-card anim-stagger" style="--fc-color:#f97316" onclick="navigate('feedback')">
-      <div class="feature-icon" style="background:rgba(249,115,22,0.10);color:#f97316;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      </div>
-      <div class="feature-name">Feedback</div>
-      <div class="feature-desc">Rate responses and report issues</div>
-      <div class="feature-arrow">Open &#8594;</div>
-    </div>
-
-    <div class="features-section">New in v3.0</div>
-    <div class="feature-card anim-stagger" style="--fc-color:#06b6d4" onclick="navigate('smartscan')">
-      <div class="feature-icon" style="background:rgba(6,182,212,0.10);color:#06b6d4;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-      <div class="feature-name">Smart Scan</div><div class="feature-desc">OCR homework scanner with auto-routing</div><div class="feature-arrow">Open &#8594;</div>
-    </div>
-    <div class="feature-card anim-stagger" style="--fc-color:#8b5cf6" onclick="navigate('analytics')">
-      <div class="feature-icon" style="background:rgba(139,92,246,0.10);color:#8b5cf6;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-      <div class="feature-name">Study Analytics</div><div class="feature-desc">Charts, insights &amp; strength mapping</div><div class="feature-arrow">Open &#8594;</div>
-    </div>
-    <div class="feature-card anim-stagger" style="--fc-color:#10b981" onclick="navigate('studygroups')">
-      <div class="feature-icon" style="background:rgba(16,185,129,0.10);color:#10b981;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg></div>
-      <div class="feature-name">Study Groups</div><div class="feature-desc">Shared decks &amp; group collaboration</div><div class="feature-arrow">Open &#8594;</div>
-    </div>
-    <div class="feature-card anim-stagger" style="--fc-color:#ec4899" onclick="navigate('themes')">
-      <div class="feature-icon" style="background:rgba(236,72,153,0.10);color:#ec4899;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/></svg></div>
-      <div class="feature-name">Custom Themes</div><div class="feature-desc">Accent colors, fonts &amp; accessibility</div><div class="feature-arrow">Open &#8594;</div>
-    </div>
-    <div class="feature-card anim-stagger" style="--fc-color:#ef4444" onclick="navigate('reminders')">
-      <div class="feature-icon" style="background:rgba(239,68,68,0.10);color:#ef4444;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
-      <div class="feature-name">Smart Reminders</div><div class="feature-desc">Streak alerts, exam &amp; review nudges</div><div class="feature-arrow">Open &#8594;</div>
+      <div class="feature-icon" style="background:rgba(99,102,241,0.12);color:#6366f1;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div>
+      <div class="feature-name">Teacher Tools</div><div class="feature-desc">Lesson plans, rubrics, quizzes</div><div class="feature-arrow">Open &#8594;</div>
     </div>
   </div>
+
+  <!-- Two-Column Split: Smart Tools + Study & Review -->
+  <div class="feature-split">
+    <div class="feature-col">
+      <div class="feature-col-head">Smart Tools</div>
+      <div class="feature-col-grid">
+        <div class="feature-card anim-stagger" style="--fc-color:#06b6d4" onclick="navigate('smartscan')">
+          <div class="feature-icon" style="background:rgba(6,182,212,0.10);color:#06b6d4;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="feature-name">Smart Scan</div><div class="feature-desc">OCR homework scanner</div><div class="feature-arrow">Open &#8594;</div>
+        </div>
+        <div class="feature-card anim-stagger" style="--fc-color:#ef4444" onclick="navigate('reminders')">
+          <div class="feature-icon" style="background:rgba(239,68,68,0.10);color:#ef4444;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+          <div class="feature-name">Smart Reminders</div><div class="feature-desc">Streak &amp; exam alerts</div><div class="feature-arrow">Open &#8594;</div>
+        </div>
+      </div>
+    </div>
+    <div class="feature-col">
+      <div class="feature-col-head">Study &amp; Review</div>
+      <div class="feature-col-grid">
+        <div class="feature-card anim-stagger" style="--fc-color:#8b5cf6" onclick="navigate('analytics')">
+          <div class="feature-icon" style="background:rgba(139,92,246,0.10);color:#8b5cf6;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+          <div class="feature-name">Study Analytics</div><div class="feature-desc">Charts &amp; strength mapping</div><div class="feature-arrow">Open &#8594;</div>
+        </div>
+        <div class="feature-card anim-stagger" style="--fc-color:#10b981" onclick="navigate('studygroups')">
+          <div class="feature-icon" style="background:rgba(16,185,129,0.10);color:#10b981;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div class="feature-name">Study Groups</div><div class="feature-desc">Shared decks &amp; collab</div><div class="feature-arrow">Open &#8594;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="dashboard" style="grid-template-columns:1fr 1fr">
 
-    <!-- Activity Feed (NEW) -->
-    <div class="panel activity-panel">
-      <div class="panel-header">
-        <span class="panel-title">Recent Activity</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#4a4438"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <!-- Prompt Craft Ad -->
+    <div class="pc-ad" onclick="window.open('https://github.com/carsyndeangelis/prompt-craft','_blank')">
+      <div class="pc-ad-glow"></div>
+      <div class="pc-ad-badge">From the Obsidia Ecosystem</div>
+      <div class="pc-ad-title"><span class="gold-text">Prompt Craft</span></div>
+      <div class="pc-ad-desc">Build the perfect AI prompt. Tell us what you need, answer a few questions, and get an expert-level prompt tailored to ChatGPT, Claude, Gemini, or any AI platform.</div>
+      <div class="pc-ad-features">
+        <div class="pc-ad-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Step-by-step builder</div>
+        <div class="pc-ad-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Multi-platform</div>
+        <div class="pc-ad-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Expert-level output</div>
       </div>
-      <div class="activity-list" id="activityList">
-        <div class="activity-item" onclick="navigate('math')">
-          <div class="activity-dot" style="background:var(--math-color)"></div>
-          <div class="activity-info">
-            <div class="activity-title">Calculus Integration</div>
-            <div class="activity-desc">Solved 3 integration by parts problems</div>
-            <div class="activity-time">2 hours ago &middot; +15 XP</div>
-          </div>
-        </div>
-        <div class="activity-item" onclick="navigate('essay')">
-          <div class="activity-dot" style="background:var(--ela-color)"></div>
-          <div class="activity-info">
-            <div class="activity-title">History Essay Draft</div>
-            <div class="activity-desc">Completed outline for Cold War essay</div>
-            <div class="activity-time">5 hours ago &middot; +25 XP</div>
-          </div>
-        </div>
-        <div class="activity-item" onclick="navigate('study')">
-          <div class="activity-dot" style="background:var(--sci-color)"></div>
-          <div class="activity-info">
-            <div class="activity-title">Bio Flashcards</div>
-            <div class="activity-desc">Generated 24 flashcards on cell division</div>
-            <div class="activity-time">Yesterday &middot; +20 XP</div>
-          </div>
-        </div>
-        <div class="activity-item" onclick="navigate('testprep')">
-          <div class="activity-dot" style="background:#f43f5e"></div>
-          <div class="activity-info">
-            <div class="activity-title">SAT Math Practice</div>
-            <div class="activity-desc">Scored 7/10 on algebra section</div>
-            <div class="activity-time">Yesterday &middot; +30 XP</div>
-          </div>
-        </div>
-        <div class="activity-item" onclick="navigate('notes')">
-          <div class="activity-dot" style="background:#fbbf24"></div>
-          <div class="activity-info">
-            <div class="activity-title">Chemistry Lecture</div>
-            <div class="activity-desc">Transcribed and summarized 45-min lecture</div>
-            <div class="activity-time">2 days ago &middot; +35 XP</div>
-          </div>
-        </div>
-      </div>
+      <button class="pc-ad-cta">Try Prompt Craft <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      <div class="pc-ad-by">by Carsyn DeAngelis</div>
     </div>
 
     <!-- Basic Chat -->
