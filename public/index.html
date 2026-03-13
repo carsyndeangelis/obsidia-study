@@ -334,7 +334,7 @@
     .main-panel{position:relative}
     .slab-zone{position:absolute;left:0;top:72px;bottom:0;width:44px;z-index:20;pointer-events:none}
     .slab-zone *{pointer-events:auto}
-    .slab-handle{position:absolute;left:0;top:50%;transform:translateY(-50%);width:40px;height:420px;cursor:grab;z-index:10}
+    .slab-handle{position:absolute;left:0;top:50%;transform:translateY(-50%);width:40px;height:calc(100% - 160px);max-height:700px;cursor:grab;z-index:10}
     .slab-handle:active{cursor:grabbing}
     .slab-edge{position:absolute;top:0;right:0;width:18px;height:100%;background:linear-gradient(90deg,#050505,#0e0e0e,#141210,#0e0c0a,#050505);border-radius:2px;overflow:hidden}
     .slab-edge-glow{position:absolute;top:-20%;right:1px;width:4px;height:40%;background:linear-gradient(180deg,transparent,rgba(232,201,106,0.4),rgba(201,168,76,0.6),rgba(232,201,106,0.4),transparent);border-radius:2px;animation:slabEdgeTravel 2.5s ease-in-out infinite}
@@ -343,15 +343,15 @@
     .slab-grip-dot{width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,0.15);box-shadow:0 0 6px rgba(201,168,76,0.2);animation:slabDotPulse 2s ease-in-out infinite}
     .slab-grip-dot:nth-child(2){animation-delay:0.3s}.slab-grip-dot:nth-child(3){animation-delay:0.6s}.slab-grip-dot:nth-child(4){animation-delay:0.9s}.slab-grip-dot:nth-child(5){animation-delay:1.2s}
     @keyframes slabDotPulse{0%,100%{background:rgba(201,168,76,0.1);box-shadow:0 0 4px rgba(201,168,76,0.1)}50%{background:rgba(232,201,106,0.5);box-shadow:0 0 10px rgba(232,201,106,0.4)}}
-    .slab-reveal{position:absolute;left:25px;top:50%;transform:translateY(-50%);height:440px;width:0;overflow:hidden;z-index:15}
-    .slab-inner{width:600px;height:100%;position:relative}
+    .slab-reveal{position:absolute;left:25px;top:50%;transform:translateY(-50%);height:calc(100% - 160px);max-height:700px;width:0;overflow:hidden;z-index:15}
+    .slab-inner{width:100%;height:100%;position:relative}
     .slab-stone{width:100%;height:100%;position:relative;padding:26px 40px 26px 22px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;background:#080808}
     .slab-stone::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='500' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='1.8' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none}
     .slab-shimmer{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-    .slab-shimmer-wave{position:absolute;width:300%;height:300%;top:-100%;left:-100%;background:conic-gradient(from 0deg,transparent 0%,rgba(232,201,106,0.03) 10%,transparent 20%,rgba(201,168,76,0.04) 30%,transparent 40%,rgba(232,201,106,0.02) 50%,transparent 60%,rgba(201,168,76,0.03) 70%,transparent 80%,rgba(232,201,106,0.02) 90%,transparent 100%);animation:slabShimSpin 12s linear infinite}
-    @keyframes slabShimSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-    .slab-shimmer-sweep{position:absolute;top:0;left:-50%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.03),rgba(201,168,76,0.06),rgba(232,201,106,0.03),transparent);animation:slabSweep 4s ease-in-out infinite;transform:skewX(-15deg)}
-    @keyframes slabSweep{0%{left:-50%}100%{left:150%}}
+    .slab-shimmer-fleck{position:absolute;border-radius:50%;background:rgba(232,201,106,0.12);animation:shimFleck 4s ease-in-out infinite}
+    @keyframes shimFleck{0%,100%{opacity:0;transform:scale(0.5)}30%{opacity:1;transform:scale(1)}70%{opacity:0.6;transform:scale(0.8)}100%{opacity:0;transform:scale(0.5)}}
+    .slab-shimmer-band{position:absolute;height:1px;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.06),rgba(201,168,76,0.1),rgba(232,201,106,0.06),transparent);animation:shimBand 6s ease-in-out infinite}
+    @keyframes shimBand{0%,100%{opacity:0;transform:scaleX(0.3)}50%{opacity:1;transform:scaleX(1)}}
     .slab-glow-orb{position:absolute;border-radius:50%;pointer-events:none}
     .slab-glow-orb.go1{top:10%;left:15%;width:220px;height:220px;background:radial-gradient(circle,rgba(232,201,106,0.06),transparent 65%);animation:slabOrb 5s ease-in-out infinite}
     .slab-glow-orb.go2{bottom:5%;right:10%;width:250px;height:250px;background:radial-gradient(circle,rgba(201,168,76,0.05),transparent 60%);animation:slabOrb 7s ease-in-out infinite;animation-delay:-3s}
@@ -1288,6 +1288,11 @@
     }
 
     /* ─── FOOTER (NEW) ─────────────────────────────────────── */
+    /* ─── INSPIRATIONAL QUOTES ──────────────────────────── */
+    .quotes-zone { max-width: 1080px; margin: 0 auto; padding: 20px 18px 8px; text-align: center; min-height: 60px; display: flex; align-items: center; justify-content: center; }
+    .quote-text { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 14px; color: rgba(200,180,130,0.35); line-height: 1.6; transition: opacity 1.2s ease; }
+    .quote-attr { font-family: var(--font-ui); font-size: 10px; color: rgba(138,106,40,0.25); margin-top: 4px; letter-spacing: 0.06em; transition: opacity 1.2s ease; }
+
     .site-footer {
       max-width: 1080px; margin: 0 auto;
       padding: 20px 18px 32px;
@@ -1408,7 +1413,7 @@
     </div>
     <div class="slab-reveal" id="slabReveal">
       <div class="slab-inner"><div class="slab-stone">
-        <div class="slab-shimmer"><div class="slab-shimmer-wave"></div><div class="slab-shimmer-sweep"></div></div>
+        <div class="slab-shimmer" id="slabShimmer"></div>
         <div class="slab-glow-orb go1"></div><div class="slab-glow-orb go2"></div><div class="slab-glow-orb go3"></div>
         <div class="slab-el"></div><div class="slab-er"></div>
         <div class="slab-vein" style="top:20%;left:5%;width:45%;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.08),transparent);transform:rotate(2deg)"></div>
@@ -1797,6 +1802,14 @@
           <span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Inspirational Quotes -->
+  <div class="quotes-zone">
+    <div id="quoteContainer">
+      <div class="quote-text" id="quoteText"></div>
+      <div class="quote-attr" id="quoteAttr"></div>
     </div>
   </div>
 
@@ -3570,12 +3583,14 @@ function toggleMobileSidebar() {
    OBSIDIAN SLAB — Drag to Reveal Glowing Runes
 ══════════════════════════════════════════════════════ */
 (function(){
-  var handle=document.getElementById('slabHandle'),reveal=document.getElementById('slabReveal'),hint=document.getElementById('slabHint'),pf=document.getElementById('slabParticles');
+  var handle=document.getElementById('slabHandle'),reveal=document.getElementById('slabReveal'),hint=document.getElementById('slabHint'),pf=document.getElementById('slabParticles'),shim=document.getElementById('slabShimmer');
   if(!handle||!reveal) return;
-  var dragging=false,startX=0,maxW=600,curW=0,af=null;
+  var dragging=false,startX=0,curW=0,af=null;
+  function getMaxW(){ var mp=document.querySelector('.main-scroll'); return mp?mp.clientWidth-50:800; }
   var els=[];for(var i=0;i<=8;i++){var e=document.getElementById('sre'+i);if(e)els.push(e);}
   var seeds=[];
   els.forEach(function(_,i){seeds.push({ox:(Math.random()-0.5)*240,oy:(Math.random()-0.5)*140,rot:(Math.random()-0.5)*30,sc:0.2+Math.random()*0.3,delay:i*0.055});});
+
   for(var i=0;i<30;i++){
     var p=document.createElement('div');p.className='slab-p';
     p.style.left=Math.round(Math.random()*92+4)+'%';p.style.top=Math.round(Math.random()*88+6)+'%';
@@ -3588,7 +3603,30 @@ function toggleMobileSidebar() {
     p.style.animationDelay=(Math.random()*5).toFixed(1)+'s';
     pf.appendChild(p);
   }
+
+  if(shim){
+    for(var i=0;i<18;i++){
+      var f=document.createElement('div');f.className='slab-shimmer-fleck';
+      f.style.left=Math.round(Math.random()*90+5)+'%';
+      f.style.top=Math.round(Math.random()*90+5)+'%';
+      f.style.width=f.style.height=(2+Math.random()*4).toFixed(1)+'px';
+      f.style.animationDelay=(Math.random()*4).toFixed(1)+'s';
+      f.style.animationDuration=(3+Math.random()*3).toFixed(1)+'s';
+      shim.appendChild(f);
+    }
+    for(var i=0;i<6;i++){
+      var b=document.createElement('div');b.className='slab-shimmer-band';
+      b.style.top=Math.round(10+Math.random()*80)+'%';
+      b.style.left=Math.round(Math.random()*30)+'%';
+      b.style.width=Math.round(40+Math.random()*50)+'%';
+      b.style.animationDelay=(Math.random()*6).toFixed(1)+'s';
+      b.style.animationDuration=(5+Math.random()*4).toFixed(1)+'s';
+      shim.appendChild(b);
+    }
+  }
+
   function set(w){
+    var maxW=getMaxW();
     w=Math.max(0,Math.min(maxW,w));curW=w;
     reveal.style.width=w+'px';
     hint.style.opacity=w<12?1:0;
@@ -3620,6 +3658,42 @@ function toggleMobileSidebar() {
   handle.addEventListener('touchstart',function(e){dragging=true;startX=e.touches[0].clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
   document.addEventListener('touchmove',function(e){if(!dragging)return;set(e.touches[0].clientX-startX);});
   document.addEventListener('touchend',function(){if(!dragging)return;dragging=false;snap();});
+})();
+
+/* ══════════════════════════════════════════════════════
+   INSPIRATIONAL QUOTES — Fade cycle
+══════════════════════════════════════════════════════ */
+(function(){
+  var quotes = [
+    {text:'Education is the most powerful weapon which you can use to change the world.',attr:'Nelson Mandela'},
+    {text:'The beautiful thing about learning is that no one can take it away from you.',attr:'B.B. King'},
+    {text:'Artificial intelligence is the new electricity.',attr:'Andrew Ng'},
+    {text:'The capacity to learn is a gift; the ability to learn is a skill; the willingness to learn is a choice.',attr:'Brian Herbert'},
+    {text:'Tell me and I forget. Teach me and I remember. Involve me and I learn.',attr:'Benjamin Franklin'},
+    {text:'The only way to do great work is to love what you do.',attr:'Steve Jobs'},
+    {text:'Technology is best when it brings people together.',attr:'Matt Mullenweg'},
+    {text:'The mind is not a vessel to be filled, but a fire to be kindled.',attr:'Plutarch'},
+    {text:'Intelligence is the ability to adapt to change.',attr:'Stephen Hawking'},
+    {text:'The roots of education are bitter, but the fruit is sweet.',attr:'Aristotle'},
+    {text:'Live as if you were to die tomorrow. Learn as if you were to live forever.',attr:'Mahatma Gandhi'},
+    {text:'The future belongs to those who learn more skills and combine them in creative ways.',attr:'Robert Greene'},
+    {text:'Any sufficiently advanced technology is indistinguishable from magic.',attr:'Arthur C. Clarke'},
+    {text:'Study hard what interests you the most in the most undisciplined, irreverent and original manner possible.',attr:'Richard Feynman'}
+  ];
+  var qt=document.getElementById('quoteText'),qa=document.getElementById('quoteAttr');
+  if(!qt||!qa)return;
+  var idx=Math.floor(Math.random()*quotes.length);
+  function show(){
+    qt.style.opacity=0;qa.style.opacity=0;
+    setTimeout(function(){
+      qt.textContent='\u201C'+quotes[idx].text+'\u201D';
+      qa.textContent='\u2014 '+quotes[idx].attr;
+      qt.style.opacity=1;qa.style.opacity=1;
+      idx=(idx+1)%quotes.length;
+    },1200);
+  }
+  show();
+  setInterval(show,8000);
 })();
 
 navigate('home');
