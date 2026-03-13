@@ -1,10 +1,9 @@
 const Anthropic = require('@anthropic-ai/sdk');
 const { buildPrompt } = require('./prompts');
 
-// Rate limiting: simple in-memory store (resets per cold start, which is fine for basic protection)
 const rateLimits = new Map();
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const RATE_LIMIT_MAX = 15; // max requests per minute per IP
+const RATE_LIMIT_WINDOW = 60 * 1000;
+const RATE_LIMIT_MAX = 15;
 
 function checkRateLimit(ip) {
   const now = Date.now();
@@ -19,7 +18,6 @@ function checkRateLimit(ip) {
 }
 
 module.exports = async function handler(req, res) {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -27,33 +25,28 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Check API key is configured
   if (!process.env.ANTHROPIC_API_KEY) {
     return res.status(500).json({
       error: 'API key not configured. Add ANTHROPIC_API_KEY to your Vercel environment variables.'
     });
   }
 
-  // Rate limiting
   const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || 'unknown';
   if (!checkRateLimit(ip)) {
     return res.status(429).json({ error: 'Too many requests. Please wait a moment and try again.' });
   }
 
   try {
-    const { message, page, vars, history } = req.body;
+    const { message, page, vars, history, image } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Message is required' });
     }
 
-    // Cap message length
     const trimmedMessage = message.slice(0, 4000);
-
-    // Build system prompt for this specific tool/page
     const systemPrompt = buildPrompt(page || 'general', vars || {});
 
-    // Build conversation history (keep last 10 messages to stay within context limits)
+    // Build conversation history
     const messages = [];
     if (Array.isArray(history)) {
       const recentHistory = history.slice(-10);
@@ -66,19 +59,35 @@ module.exports = async function handler(req, res) {
         }
       }
     }
-    messages.push({ role: 'user', content: trimmedMessage });
 
-    // Initialize Anthropic client
+    // Build user message content (text + optional image)
+    const userContent = [];
+    if (image && typeof image === 'string' && image.startsWith('data:image/')) {
+      // Extract base64 data and media type
+      const match = image.match(/^data:(image\/[a-z+]+);base64,(.+)$/i);
+      if (match) {
+        userContent.push({
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: match[1],
+            data: match[2]
+          }
+        });
+      }
+    }
+    userContent.push({ type: 'text', text: trimmedMessage });
+    messages.push({ role: 'user', content: userContent });
+
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-    // Streaming response
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
     const stream = await client.messages.stream({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 1500,
+      max_tokens: 2500,
       system: systemPrompt,
       messages: messages,
     });
@@ -89,14 +98,11 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    // Signal stream is done
     res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
     res.end();
 
   } catch (err) {
     console.error('Chat API error:', err);
-
-    // If we already started streaming, send error in stream format
     if (res.headersSent) {
       res.write(`data: ${JSON.stringify({ error: 'Something went wrong. Please try again.' })}\n\n`);
       res.end();

@@ -12,6 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <style>
     /* ─── DESIGN TOKENS ─────────────────────────────────────── */
     :root {
@@ -972,6 +974,17 @@
     .msg.user .msg-bubble { background: rgba(201,168,76,0.10); border: 1px solid rgba(201,168,76,0.22); border-bottom-right-radius: 4px; }
     .msg-time { font-size: 10px; color: #3a342a; margin-top: 3px; padding: 0 3px; }
     .msg.user .msg-time { text-align: right; }
+    .msg-actions { display: flex; gap: 6px; margin-top: 4px; }
+    .msg-action-btn { background: none; border: 1px solid var(--black-border); color: #5a5040; font-size: 10px; padding: 3px 8px; border-radius: 4px; cursor: pointer; font-family: var(--font-ui); display: flex; align-items: center; gap: 4px; transition: var(--transition); }
+    .msg-action-btn:hover { border-color: var(--gold-muted); color: var(--gold-bright); }
+    .msg-action-btn.copied { border-color: var(--sci-color); color: var(--sci-color); }
+    .msg-img-preview { max-width: 200px; max-height: 150px; border-radius: 8px; margin-bottom: 6px; border: 1px solid var(--black-border); }
+    .flashcard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 10px 0; }
+    .flashcard { background: var(--black-card); border: 1px solid var(--black-border); border-radius: 10px; padding: 16px; cursor: pointer; min-height: 100px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; line-height: 1.5; transition: transform 0.3s, border-color 0.3s; position: relative; }
+    .flashcard:hover { border-color: var(--gold-muted); transform: translateY(-2px); }
+    .flashcard.flipped { background: rgba(201,168,76,0.06); border-color: var(--gold-muted); }
+    .flashcard-label { position: absolute; top: 6px; left: 10px; font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-muted); font-family: var(--font-display); }
+    .flashcard-count { text-align: center; font-size: 11px; color: #5a5040; margin: 6px 0; }
     .msg-img { max-width: 200px; max-height: 160px; border-radius: 8px; object-fit: cover; display: block; }
 
     /* Typing */
@@ -2782,23 +2795,22 @@ pages.forEach(pg => {
 });
 
 function sendPageMsg(pg) {
-  const input = document.getElementById(pg+'ChatInput');
-  const msgContainer = pg+'Messages';
-  const text = input.value.trim(); if (!text) return;
-  const welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
+  var input = document.getElementById(pg+'ChatInput');
+  var msgContainer = pg+'Messages';
+  var text = input.value.trim(); if (!text) return;
+  var welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
   appendMsg(msgContainer,'user',text);
-  input.value=''; input.style.height='auto'; document.getElementById(pg+'SendBtn').disabled=true;
+  input.value=''; input.style.height='auto'; var sbtn = document.getElementById(pg+'SendBtn'); if(sbtn) sbtn.disabled=true;
 
-  // Gather per-page variables for the system prompt
-  const vars = {};
+  var vars = {};
   if (pg==='math') vars.mode = mathModeState;
-  if (pg==='essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle').checked; vars.grade = document.getElementById('essayGradeSelect').value; }
-  if (pg==='study') vars.method = studyMethod || 'none';
+  if (pg==='essay') { vars.mode = essayModeState; var ht = document.getElementById('humanizerToggle'); vars.humanizer = ht ? ht.checked : false; var gs = document.getElementById('essayGradeSelect'); vars.grade = gs ? gs.value : '11th'; }
+  if (pg==='study') vars.method = studyMethod || 'flashcards';
   if (pg==='notes') vars.mode = notesModeState;
   if (pg==='doublecheck') vars.mode = dcModeState;
-  if (pg==='grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect').value; }
-  if (pg==='testprep') vars.section = testSection || 'none';
-  if (pg==='teacher') vars.tool = teacherTool || 'none';
+  if (pg==='grading') { vars.mode = gradingModeState; var sc = document.getElementById('gradingScaleSelect'); vars.scale = sc ? sc.value : 'letter'; }
+  if (pg==='testprep') vars.section = testSection || 'strategy';
+  if (pg==='teacher') vars.tool = teacherTool || 'lesson';
 
   streamAIResponse(msgContainer, text, pg, vars, pg);
 }
@@ -2808,13 +2820,13 @@ function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatIn
    PER-PAGE FILE ATTACHMENT
 ══════════════════════════════════════════════════════ */
 function handlePageAttach(pg, inputEl) {
-  const file = inputEl.files[0];
+  var file = inputEl.files[0];
   if (!file) return;
   inputEl.value = '';
 
-  const ALLOWED = ['image/jpeg','image/png','image/webp','image/gif','application/pdf'];
+  var ALLOWED = ['image/jpeg','image/png','image/webp','image/gif'];
   if (!ALLOWED.includes(file.type)) {
-    alert('Unsupported format. Use JPEG, PNG, WebP, GIF, or PDF.');
+    alert('Unsupported format. Use JPEG, PNG, WebP, or GIF images.');
     return;
   }
   if (file.size > 10 * 1024 * 1024) {
@@ -2822,29 +2834,27 @@ function handlePageAttach(pg, inputEl) {
     return;
   }
 
-  const msgContainer = pg === 'home' ? 'homeChatMessages' : pg + 'Messages';
-  const welcome = document.getElementById(pg === 'home' ? 'homeWelcome' : pg + 'Welcome');
+  var msgContainer = pg === 'home' ? 'homeChatMessages' : pg + 'Messages';
+  var welcome = document.getElementById(pg === 'home' ? 'homeWelcome' : pg + 'Welcome');
   if (welcome) welcome.classList.add('hidden');
 
-  const reader = new FileReader();
-  reader.onload = ev => {
-    if (file.type.startsWith('image/')) {
-      appendImageMsg(msgContainer, ev.target.result, file.name);
-    } else {
-      appendMsg(msgContainer, 'user', 'Uploaded: ' + file.name);
-    }
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var imageData = ev.target.result;
+    // Show image preview in chat
+    appendImageMsg(msgContainer, imageData, file.name);
 
-    const typingEl = appendTypingTo(msgContainer);
-    setTimeout(() => {
-      typingEl.remove();
-      const vars = {};
-      if (pg === 'math') vars.mode = mathModeState;
-      if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle').checked; vars.grade = document.getElementById('essayGradeSelect').value; }
-      if (pg === 'grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect').value; }
+    // Build vars
+    var vars = {};
+    if (pg === 'math') vars.mode = mathModeState;
+    if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle') ? document.getElementById('humanizerToggle').checked : false; vars.grade = document.getElementById('essayGradeSelect') ? document.getElementById('essayGradeSelect').value : '11th'; }
+    if (pg === 'study') vars.method = studyMethod || 'flashcards';
+    if (pg === 'grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect') ? document.getElementById('gradingScaleSelect').value : 'letter'; }
+    if (pg === 'doublecheck') vars.mode = dcModeState;
+    if (pg === 'notes') vars.mode = notesModeState;
 
-      const prompt = 'I uploaded an image of my work: "' + file.name + '". Please analyze it and help me with it.';
-      streamAIResponse(msgContainer, prompt, pg === 'home' ? 'general' : pg, vars, pg === 'home' ? 'home' : pg);
-    }, 800);
+    var prompt = 'I uploaded an image of my work ("' + file.name + '"). Please analyze what you see and help me with it.';
+    streamAIResponse(msgContainer, prompt, pg === 'home' ? 'general' : pg, vars, pg === 'home' ? 'home' : pg, imageData);
   };
   reader.readAsDataURL(file);
 }
@@ -2894,108 +2904,157 @@ const chatHistory = {};
 allPages.forEach(p => chatHistory[p] = []);
 
 /* ── Streaming AI Response Engine ── */
-async function streamAIResponse(containerId, message, page, vars, historyKey) {
-  const container = document.getElementById(containerId);
-  const typingEl = appendTypingTo(containerId);
+async function streamAIResponse(containerId, message, page, vars, historyKey, imageData) {
+  var container = document.getElementById(containerId);
+  var typingEl = appendTypingTo(containerId);
 
-  // Track in conversation history
   chatHistory[historyKey].push({ role: 'user', content: message });
 
   try {
-    const res = await fetch('/api/chat', {
+    var body = { message: message, page: page, vars: vars, history: chatHistory[historyKey].slice(-10) };
+    if (imageData) body.image = imageData;
+
+    var res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message,
-        page,
-        vars,
-        history: chatHistory[historyKey].slice(-10)
-      })
+      body: JSON.stringify(body)
     });
 
     typingEl.remove();
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: 'Connection failed' }));
+      var err = await res.json().catch(function() { return { error: 'Connection failed' }; });
       appendMsg(containerId, 'ai', err.error || 'Something went wrong. Please try again.');
       return;
     }
 
-    // Create the AI message bubble for streaming into
-    const timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    const msg = document.createElement('div'); msg.className = 'msg ai';
-    const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
-    const bubble = document.createElement('div'); bubble.className = 'msg-bubble';
-    const time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
-    const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;';
-    wrap.appendChild(bubble); wrap.appendChild(time);
+    var timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    var msg = document.createElement('div'); msg.className = 'msg ai';
+    var av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
+    var bubble = document.createElement('div'); bubble.className = 'msg-bubble';
+    var time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+    var actions = document.createElement('div'); actions.className = 'msg-actions';
+    var copyBtn = document.createElement('button'); copyBtn.className = 'msg-action-btn';
+    copyBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy';
+    actions.appendChild(copyBtn);
+    var wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;';
+    wrap.appendChild(bubble); wrap.appendChild(actions); wrap.appendChild(time);
     msg.appendChild(av); msg.appendChild(wrap);
     container.appendChild(msg);
 
-    // Read the SSE stream
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let fullText = '';
-    let buffer = '';
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var fullText = '';
+    var buffer = '';
 
     while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop(); // Keep incomplete line in buffer
-
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
+      var chunk = await reader.read();
+      if (chunk.done) break;
+      buffer += decoder.decode(chunk.value, { stream: true });
+      var lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (var li = 0; li < lines.length; li++) {
+        if (!lines[li].startsWith('data: ')) continue;
         try {
-          const data = JSON.parse(line.slice(6));
-          if (data.error) { bubble.textContent += '\n\n⚠ ' + data.error; break; }
+          var data = JSON.parse(lines[li].slice(6));
+          if (data.error) { bubble.textContent += '\n\n\u26a0 ' + data.error; break; }
           if (data.done) break;
           if (data.text) {
             fullText += data.text;
-            // Render markdown-light: bold, italic, code, headers
             bubble.innerHTML = renderMarkdown(fullText);
             container.scrollTop = container.scrollHeight;
           }
-        } catch(e) { /* skip malformed chunks */ }
+        } catch(e) {}
       }
     }
 
-    // Save assistant response to history
+    // Check if response is flashcard JSON (study guide mode)
+    if (page === 'study' && vars.method === 'flashcards') {
+      try {
+        var jsonMatch = fullText.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          var cards = JSON.parse(jsonMatch[0]);
+          if (Array.isArray(cards) && cards.length > 0 && cards[0].front) {
+            bubble.innerHTML = renderFlashcards(cards);
+            container.scrollTop = container.scrollHeight;
+          }
+        }
+      } catch(e) { /* Not valid JSON, keep markdown render */ }
+    }
+
+    // Wire copy button
+    copyBtn.onclick = function() {
+      navigator.clipboard.writeText(fullText).then(function() {
+        copyBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(function() { copyBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    };
+
     chatHistory[historyKey].push({ role: 'assistant', content: fullText });
-    // Track message count for session recording
     msgCounts[historyKey] = (msgCounts[historyKey] || 0) + 1;
 
   } catch (err) {
     typingEl.remove();
-    // Fallback to demo mode if API is not available
-    const fallback = getFallbackResponse(page, message, vars);
+    var fallback = getFallbackResponse(page, message, vars);
     typeMsg(containerId, 'ai', fallback);
     chatHistory[historyKey].push({ role: 'assistant', content: fallback });
   }
 }
 
-/* ── Lightweight Markdown Renderer ── */
+/* ── Flashcard Renderer ── */
+function renderFlashcards(cards) {
+  var html = '<div class="flashcard-count">' + cards.length + ' flashcards generated \u2014 click to flip</div><div class="flashcard-grid">';
+  cards.forEach(function(card, i) {
+    html += '<div class="flashcard" onclick="this.classList.toggle(\'flipped\');this.querySelector(\'.fc-content\').textContent=this.classList.contains(\'flipped\')?this.dataset.back:this.dataset.front" data-front="' + card.front.replace(/"/g,'&quot;') + '" data-back="' + card.back.replace(/"/g,'&quot;') + '"><span class="flashcard-label">' + (i+1) + '</span><span class="fc-content">' + card.front.replace(/</g,'&lt;') + '</span></div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+/* ── Markdown Renderer with KaTeX Math ── */
 function renderMarkdown(text) {
-  return text
-    // Code blocks
-    .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre style="background:var(--black-card);border:1px solid var(--black-border);border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto;font-size:12px;font-family:monospace;color:#c8b88a"><code>$2</code></pre>')
-    // Inline code
+  // Protect code blocks
+  var codeBlocks = [];
+  text = text.replace(/```(\w*)\n([\s\S]*?)```/g, function(m, lang, code) {
+    codeBlocks.push('<pre style="background:var(--black-card);border:1px solid var(--black-border);border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto;font-size:12px;font-family:monospace;color:#c8b88a"><code>' + code.replace(/</g,'&lt;') + '</code></pre>');
+    return '%%CODEBLOCK' + (codeBlocks.length - 1) + '%%';
+  });
+
+  // KaTeX display math $$...$$
+  if (window.katex) {
+    text = text.replace(/\$\$([\s\S]*?)\$\$/g, function(m, expr) {
+      try { return katex.renderToString(expr.trim(), { displayMode: true, throwOnError: false }); } catch(e) { return m; }
+    });
+    // KaTeX inline math $...$
+    text = text.replace(/\$([^\$\n]+?)\$/g, function(m, expr) {
+      try { return katex.renderToString(expr.trim(), { displayMode: false, throwOnError: false }); } catch(e) { return m; }
+    });
+    // \[...\] and \(...\)
+    text = text.replace(/\\\[([\s\S]*?)\\\]/g, function(m, expr) {
+      try { return katex.renderToString(expr.trim(), { displayMode: true, throwOnError: false }); } catch(e) { return m; }
+    });
+    text = text.replace(/\\\(([\s\S]*?)\\\)/g, function(m, expr) {
+      try { return katex.renderToString(expr.trim(), { displayMode: false, throwOnError: false }); } catch(e) { return m; }
+    });
+  }
+
+  text = text
     .replace(/`([^`]+)`/g, '<code style="background:var(--black-card);padding:1px 5px;border-radius:4px;font-size:12px;font-family:monospace;color:#c8b88a">$1</code>')
-    // Bold
     .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#e8e0cc;font-weight:600">$1</strong>')
-    // Italic
     .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    // Headers
     .replace(/^### (.+)$/gm, '<div style="font-weight:600;color:#e8e0cc;margin:10px 0 4px;font-size:13px">$1</div>')
     .replace(/^## (.+)$/gm, '<div style="font-weight:600;color:var(--gold-bright);margin:12px 0 6px;font-size:14px">$1</div>')
-    // Bullet lists
-    .replace(/^[-*] (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">• $1</div>')
-    // Numbered lists
+    .replace(/^> (.+)$/gm, '<div style="border-left:3px solid var(--gold-muted);padding:4px 12px;margin:6px 0;color:#a89870;font-style:italic">$1</div>')
+    .replace(/^[-*] (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">\u2022 $1</div>')
     .replace(/^(\d+)\. (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">$1. $2</div>')
-    // Line breaks
     .replace(/\n/g, '<br>');
+
+  // Restore code blocks
+  codeBlocks.forEach(function(block, i) {
+    text = text.replace('%%CODEBLOCK' + i + '%%', block);
+  });
+  return text;
 }
 
 /* Word-by-word typing animation (fallback for demo mode) */
