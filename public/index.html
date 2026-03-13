@@ -2812,9 +2812,11 @@ function handleDroppedFile(file) {
 ══════════════════════════════════════════════════════ */
 const homeChatInput = document.getElementById('homeChatInput');
 const homeSendBtn = document.getElementById('homeSendBtn');
-homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; homeSendBtn.disabled=homeChatInput.value.trim()===''; });
-homeChatInput.addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); if(!homeSendBtn.disabled) sendHomeMsg(); } });
-homeSendBtn.addEventListener('click', sendHomeMsg);
+if (homeChatInput) {
+  homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; if(homeSendBtn) homeSendBtn.disabled=homeChatInput.value.trim()===''; });
+  homeChatInput.addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); if(homeSendBtn&&!homeSendBtn.disabled) sendHomeMsg(); } });
+}
+if (homeSendBtn) homeSendBtn.addEventListener('click', sendHomeMsg);
 
 function sendHomeMsg() {
   const text = homeChatInput.value.trim(); if (!text) return;
