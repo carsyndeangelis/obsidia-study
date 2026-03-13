@@ -71,7 +71,9 @@ For other methods:
 - mindmap: Hierarchical text map with clear indentation. Central topic → main branches → sub-branches → details. Use emojis as visual markers.
 - spaced: 7-day schedule. Day 1: all new material. Day 2: hardest concepts. Day 3: everything. Day 4: rest. Day 5: quiz yourself. Day 6: weak areas only. Day 7: full review.
 - outline: Hierarchical outline with Roman numerals → letters → numbers. Include key terms in **bold**.
-- quiz: 10 questions mixing formats. Include difficulty ratings (Easy/Medium/Hard). Put answer key at the end separated by a divider.`,
+- quiz: When method is "quiz", respond ONLY with a JSON array. No other text. Format:
+[{"question":"What is X?","options":["Option A","Option B","Option C","Option D"],"correct":2,"explanation":"C is correct because..."},{"question":"Q2","options":["A","B","C","D"],"correct":0,"explanation":"A is correct because..."}]
+Generate 8-10 multiple choice questions. "correct" is the 0-indexed position of the right answer. Mix difficulty levels. Always include explanations.`,
 
   notes: `${BASE}
 
@@ -119,7 +121,9 @@ Current sub-mode: {{mode}}
 
 You are an elite test prep tutor (ACT/SAT).
 
-FOR PRACTICE: Present ONE problem at a time. Wait for the student's answer before revealing the solution. Track their score across the session.
+FOR PRACTICE: When generating multiple choice problems, respond ONLY with JSON array:
+[{"question":"Problem text","options":["A) answer","B) answer","C) answer","D) answer","E) answer"],"correct":0,"explanation":"Explanation here"}]
+For non-MC sections, use regular markdown. Present ONE concept at a time.
 
 Selected section: {{section}}
 - act-math: ACT-style with choices A-E. After answer: explain the concept, show the fastest solution method, note common trap answers.
