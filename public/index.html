@@ -3128,18 +3128,18 @@ function getFallbackResponse(page, input, vars) {
 ══════════════════════════════════════════════════════ */
 const SUPABASE_URL = window.OBSIDIA_SUPABASE_URL || 'https://hyrcwqjnhcychrxbumcl.supabase.co';
 const SUPABASE_ANON_KEY = window.OBSIDIA_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5cmN3cWpuaGN5Y2hyeGJ1bWNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNzIxNjAsImV4cCI6MjA4ODk0ODE2MH0.WEOPRFPpMHUMQ--ZHYpn5GpHrRkbnQWGgBvBlFDu8ws';
-let supabase = null;
+let sbClient = null;
 let currentUser = null;
 let userProfile = null;
 
 function initSupabase() {
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) return;
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  supabase.auth.onAuthStateChange((event, session) => {
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  sbClient.auth.onAuthStateChange((event, session) => {
     if (session?.user) { currentUser = session.user; onSignIn(); }
     else { currentUser = null; userProfile = null; onSignOut(); }
   });
-  supabase.auth.getSession().then(({ data }) => {
+  sbClient.auth.getSession().then(({ data }) => {
     if (data.session?.user) { currentUser = data.session.user; onSignIn(); }
   });
 }
@@ -3151,8 +3151,8 @@ function openAuth() { document.getElementById('authOverlay').classList.add('open
 function closeAuth() { document.getElementById('authOverlay').classList.remove('open'); }
 
 async function signInWithGoogle() {
-  if (!supabase) { alert('Supabase not configured. Add your Supabase URL and anon key to the code.'); return; }
-  const { error } = await supabase.auth.signInWithOAuth({
+  if (!sbClient) { alert('Supabase not configured. Add your Supabase URL and anon key to the code.'); return; }
+  const { error } = await sbClient.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin }
   });
@@ -3160,7 +3160,7 @@ async function signInWithGoogle() {
 }
 
 async function signOut() {
-  if (supabase) await supabase.auth.signOut();
+  if (sbClient) await sbClient.auth.signOut();
   currentUser = null; userProfile = null;
   onSignOut();
   document.getElementById('navUserMenu').classList.remove('open');
@@ -3171,8 +3171,8 @@ async function onSignIn() {
   document.getElementById('navSignedOut').style.display = 'none';
   document.getElementById('navSignedIn').style.display = 'block';
   // Load profile
-  if (supabase) {
-    const { data } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+  if (sbClient) {
+    const { data } = await sbClient.from('profiles').select('*').eq('id', currentUser.id).single();
     if (data) {
       userProfile = data;
       updateUIWithProfile(data);
@@ -3215,16 +3215,16 @@ function updateUIWithProfile(p) {
 
 // Record session after AI conversation ends
 async function recordSession(page, messageCount) {
-  if (!supabase || !currentUser) return;
+  if (!sbClient || !currentUser) return;
   try {
-    const { data } = await supabase.rpc('record_session', {
+    const { data } = await sbClient.rpc('record_session', {
       p_page: page,
       p_title: page.charAt(0).toUpperCase() + page.slice(1) + ' session',
       p_message_count: messageCount
     });
     if (data) {
       // Refresh profile
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+      const { data: profile } = await sbClient.from('profiles').select('*').eq('id', currentUser.id).single();
       if (profile) { userProfile = profile; updateUIWithProfile(profile); }
       // Check achievements
       checkAchievements();
@@ -3244,8 +3244,8 @@ function toggleTheme() {
   const next = current === 'dark' ? 'light' : 'dark';
   setTheme(next);
   try { localStorage.setItem('obsidia-theme', next); } catch(e) {}
-  if (supabase && currentUser) {
-    supabase.from('profiles').update({ theme: next }).eq('id', currentUser.id);
+  if (sbClient && currentUser) {
+    sbClient.from('profiles').update({ theme: next }).eq('id', currentUser.id);
   }
 }
 // Apply saved theme on load
@@ -3266,8 +3266,8 @@ function nextOnboardingStep() {
   onboardingStep++;
   if (onboardingStep >= 3) {
     document.getElementById('onboardingOverlay').classList.remove('open');
-    if (supabase && currentUser) {
-      supabase.from('profiles').update({ onboarding_complete: true }).eq('id', currentUser.id);
+    if (sbClient && currentUser) {
+      sbClient.from('profiles').update({ onboarding_complete: true }).eq('id', currentUser.id);
     }
     return;
   }
@@ -3336,13 +3336,13 @@ function saveSettings() {
   const status = document.getElementById('settingsSaved');
   status.style.display = 'inline';
   setTimeout(() => { status.style.display = 'none'; }, 3000);
-  if (supabase && currentUser) {
+  if (sbClient && currentUser) {
     // Gather settings from form
     const updates = {
       display_name: document.querySelector('.settings-card input[value="Student"]')?.value,
       ai_response_style: document.querySelector('.settings-card select')?.value,
     };
-    supabase.from('profiles').update(updates).eq('id', currentUser.id);
+    sbClient.from('profiles').update(updates).eq('id', currentUser.id);
   }
 }
 function resetSettings() {
@@ -3470,12 +3470,12 @@ function renderAchievements() {
 }
 
 async function checkAchievements() {
-  if (!supabase || !currentUser || !userProfile) return;
-  const { data: existing } = await supabase.from('achievements').select('achievement_id').eq('user_id', currentUser.id);
+  if (!sbClient || !currentUser || !userProfile) return;
+  const { data: existing } = await sbClient.from('achievements').select('achievement_id').eq('user_id', currentUser.id);
   const earnedIds = new Set((existing||[]).map(a => a.achievement_id));
   for (const a of ACHIEVEMENTS) {
     if (!earnedIds.has(a.id) && a.check(userProfile)) {
-      await supabase.from('achievements').insert({ user_id: currentUser.id, achievement_id: a.id });
+      await sbClient.from('achievements').insert({ user_id: currentUser.id, achievement_id: a.id });
     }
   }
 }
