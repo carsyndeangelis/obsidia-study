@@ -2142,7 +2142,7 @@
         <button class="sp-tool-btn" onclick="essayMode(this,'thesis')">Thesis</button>
         <button class="sp-tool-btn" onclick="essayMode(this,'proofread')">Proofread</button>
         <div class="sp-toggle-row"><span class="sp-toggle-label">Humanizer</span><label class="sp-toggle"><input type="checkbox" id="humanizerToggle" checked /><span class="sp-slider"></span></label></div>
-        <select class="sp-select" id="essayGradeSelect"><option>High School</option><option>Undergraduate</option><option>Graduate</option><option>Professional</option></select>
+        <select class="sp-select" id="essayGradeSelect"><option>6th Grade</option><option>7th Grade</option><option>8th Grade</option><option>9th Grade</option><option>10th Grade</option><option selected>11th Grade</option><option>12th Grade</option><option>College</option><option>Professional</option></select>
       </div>
       <div class="sp-messages" id="essayMessages" role="log" aria-live="polite">
         <div class="chat-welcome" id="essayWelcome"><h2 class="welcome-title">Essay Writer AI</h2><p class="welcome-sub">Describe your essay topic or paste existing text. I'll help you draft, outline, or proofread.</p>
@@ -3153,7 +3153,7 @@ function sendPageMsg(pg) {
 
   var vars = {};
   if (pg==='math') { vars.mode = mathModeState; vars.mathType = mathType; vars.model = mathModel; }
-  if (pg==='essay') { vars.mode = essayModeState; var ht = document.getElementById('humanizerToggle'); vars.humanizer = ht ? ht.checked : false; var gs = document.getElementById('essayGradeSelect'); vars.grade = gs ? gs.value : '11th'; }
+  if (pg==='essay') { vars.mode = essayModeState; var ht = document.getElementById('humanizerToggle'); vars.humanizer = ht ? ht.checked : false; var gs = document.getElementById('essayGradeSelect'); vars.grade = gs ? gs.value : '11th Grade'; }
   if (pg==='study') vars.method = studyMethod || 'flashcards';
   if (pg==='notes') vars.mode = notesModeState;
   if (pg==='doublecheck') vars.mode = dcModeState;
@@ -3196,7 +3196,7 @@ function handlePageAttach(pg, inputEl) {
     // Build vars
     var vars = {};
     if (pg === 'math') { vars.mode = mathModeState; vars.mathType = mathType; vars.model = mathModel; }
-    if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle') ? document.getElementById('humanizerToggle').checked : false; vars.grade = document.getElementById('essayGradeSelect') ? document.getElementById('essayGradeSelect').value : '11th'; }
+    if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle') ? document.getElementById('humanizerToggle').checked : false; vars.grade = document.getElementById('essayGradeSelect') ? document.getElementById('essayGradeSelect').value : '11th Grade'; }
     if (pg === 'study') vars.method = studyMethod || 'flashcards';
     if (pg === 'grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect') ? document.getElementById('gradingScaleSelect').value : 'letter'; }
     if (pg === 'doublecheck') vars.mode = dcModeState;
