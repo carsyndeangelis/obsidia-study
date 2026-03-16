@@ -110,6 +110,90 @@ module.exports = async function handler(req, res) {
     // Select model based on request
     const modelId = model === 'opus' ? 'claude-opus-4-20250514' : 'claude-sonnet-4-20250514';
 
+    // ── Humanizer validation loop for essay pages ──
+    if (safePage === 'essay' && safeVars.humanizer) {
+      const MAX_LOOPS = 3;
+      let draft = '';
+
+      // Step A: Generate initial draft (non-streamed)
+      res.write(`data: ${JSON.stringify({ status: 'Generating initial draft...' })}\n\n`);
+      const initial = await client.messages.create({
+        model: modelId,
+        max_tokens: 2500,
+        system: systemPrompt,
+        messages: messages,
+      });
+      draft = initial.content.map(b => b.text || '').join('');
+
+      // Step B & C: Check and rewrite loop
+      const CHECKER_PROMPT = `You are a strict AI-content detector similar to Turnitin and GPTZero. Analyze the following essay for signs of AI-generated writing.
+
+Check for these AI markers:
+1. Low perplexity (overly predictable word choices)
+2. Uniform sentence length and structure
+3. Lack of burstiness (human writing alternates between short punchy sentences and long complex ones)
+4. Overused AI transitional phrases: "Furthermore", "Moreover", "In conclusion", "It is important to note", "It's worth noting", "Delving into", "In today's world"
+5. Overly balanced paragraph structure (each paragraph roughly same length)
+6. Generic hedging language ("It can be argued", "One might say")
+7. Lack of personal voice, anecdotes, or idiosyncratic word choices
+
+Respond with ONLY a JSON object in this exact format, no other text:
+{"verdict":"PASS","feedback":""}
+or
+{"verdict":"FAIL","feedback":"Specific issues found: ..."}
+
+A PASS means the essay reads as convincingly human-written. A FAIL means AI markers were detected.`;
+
+      for (let attempt = 0; attempt < MAX_LOOPS; attempt++) {
+        res.write(`data: ${JSON.stringify({ status: `Checking against AI detectors... (attempt ${attempt + 1}/${MAX_LOOPS})` })}\n\n`);
+
+        const checkResult = await client.messages.create({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          system: CHECKER_PROMPT,
+          messages: [{ role: 'user', content: draft }],
+        });
+        const checkText = checkResult.content.map(b => b.text || '').join('');
+
+        let verdict = 'PASS';
+        let feedback = '';
+        try {
+          const parsed = JSON.parse(checkText.match(/\{[\s\S]*\}/)?.[0] || '{}');
+          verdict = parsed.verdict || 'PASS';
+          feedback = parsed.feedback || '';
+        } catch (e) {
+          // If parsing fails, assume pass
+          break;
+        }
+
+        if (verdict === 'PASS') break;
+
+        // Step C: Rewrite with checker feedback
+        res.write(`data: ${JSON.stringify({ status: `Rewriting to bypass detectors... (attempt ${attempt + 1}/${MAX_LOOPS})` })}\n\n`);
+
+        const rewriteResult = await client.messages.create({
+          model: modelId,
+          max_tokens: 2500,
+          system: systemPrompt + `\n\nCRITICAL REWRITE INSTRUCTION: An AI detector flagged your previous draft. Here is its feedback:\n${feedback}\n\nYou MUST rewrite the essay to fix every issue listed above. Make it sound genuinely human: vary sentence lengths dramatically, use contractions, add slight imperfections, use colloquial transitions, break the predictable paragraph structure, and inject personal voice. Do NOT just rearrange — fundamentally change the rhythm and word choices.`,
+          messages: [{ role: 'user', content: `Rewrite this essay to pass AI detection. Keep the same arguments and evidence but make it sound completely human-written:\n\n${draft}` }],
+        });
+        draft = rewriteResult.content.map(b => b.text || '').join('');
+      }
+
+      // Stream the final draft to the client
+      res.write(`data: ${JSON.stringify({ status: 'Delivering final essay...' })}\n\n`);
+      // Send in chunks to simulate streaming
+      const chunkSize = 20;
+      for (let i = 0; i < draft.length; i += chunkSize) {
+        res.write(`data: ${JSON.stringify({ text: draft.slice(i, i + chunkSize) })}\n\n`);
+      }
+
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+      res.end();
+      return;
+    }
+
+    // ── Standard streaming path ──
     const stream = await client.messages.stream({
       model: modelId,
       max_tokens: 2500,

@@ -3344,9 +3344,8 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
       body: JSON.stringify(body)
     });
 
-    typingEl.remove();
-
     if (!res.ok) {
+      typingEl.remove();
       var err = await res.json().catch(function() { return { error: 'Connection failed' }; });
       var errMsg = err.error || 'Something went wrong.';
       appendMsg(containerId, 'ai', errMsg);
@@ -3366,7 +3365,7 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
     var wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;';
     wrap.appendChild(bubble); wrap.appendChild(actions); wrap.appendChild(time);
     msg.appendChild(av); msg.appendChild(wrap);
-    container.appendChild(msg);
+    var typingRemoved = false;
 
     var reader = res.body.getReader();
     var decoder = new TextDecoder();
@@ -3383,9 +3382,15 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
         if (!lines[li].startsWith('data: ')) continue;
         try {
           var data = JSON.parse(lines[li].slice(6));
-          if (data.error) { bubble.textContent += '\n\n\u26a0 ' + data.error; break; }
+          if (data.status) {
+            if (typingEl._statusText) typingEl._statusText.textContent = data.status;
+            container.scrollTop = container.scrollHeight;
+            continue;
+          }
+          if (data.error) { if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); } bubble.textContent += '\n\n\u26a0 ' + data.error; break; }
           if (data.done) break;
           if (data.text) {
+            if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); }
             fullText += data.text;
             bubble.innerHTML = renderMarkdown(fullText);
             container.scrollTop = container.scrollHeight;
@@ -3393,6 +3398,9 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
         } catch(e) {}
       }
     }
+
+    // Ensure typing indicator is removed and message bubble is in DOM
+    if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); }
 
     // Check if response is flashcard JSON (study guide mode)
     if (page === 'study' && vars.method === 'flashcards') {
@@ -3467,7 +3475,7 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
     msgCounts[historyKey] = (msgCounts[historyKey] || 0) + 1;
 
   } catch (err) {
-    typingEl.remove();
+    try { typingEl.remove(); } catch(_) {}
     var fallback = getFallbackResponse(page, message, vars);
     typeMsg(containerId, 'ai', fallback);
     chatHistory[historyKey].push({ role: 'assistant', content: fallback });
@@ -3789,7 +3797,9 @@ function appendTypingTo(containerId) {
   const av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
   const dots = document.createElement('div'); dots.className = 'typing-dots'; dots.setAttribute('role','status'); dots.setAttribute('aria-label','AI is typing');
   for (let i=0;i<3;i++) { const d = document.createElement('div'); d.className = 'typing-dot'; dots.appendChild(d); }
-  wrap.appendChild(av); wrap.appendChild(dots);
+  const statusText = document.createElement('div'); statusText.className = 'typing-status'; statusText.style.cssText = 'font-size:11px;color:#a89860;margin-left:8px;font-style:italic;';
+  wrap.appendChild(av); wrap.appendChild(dots); wrap.appendChild(statusText);
+  wrap._statusText = statusText;
   container.appendChild(wrap); container.scrollTop = container.scrollHeight;
   return wrap;
 }
