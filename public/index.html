@@ -466,7 +466,7 @@
     .slab-reveal{position:absolute;left:25px;top:50%;transform:translateY(-40%);height:55%;max-height:500px;width:0;overflow:hidden;z-index:15}
     .slab-inner{width:100%;height:100%;position:relative}
     .slab-stone{width:100%;height:100%;position:relative;padding:26px 40px 26px 22px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;background:#080808}
-    .slab-stone::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='500' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='1.8' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none}
+    .slab-stone::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='500' height='500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='1.8' numOctaves='6' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;will-change:transform;transform:translateZ(0)}
     .slab-shimmer{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
     .slab-shimmer-fleck{position:absolute;border-radius:50%;background:rgba(232,201,106,0.12);animation:shimFleck 4s ease-in-out infinite}
     @keyframes shimFleck{0%,100%{opacity:0;transform:scale(0.5)}30%{opacity:1;transform:scale(1)}70%{opacity:0.6;transform:scale(0.8)}100%{opacity:0;transform:scale(0.5)}}
@@ -486,8 +486,8 @@
     @keyframes slabRise{0%{opacity:0;transform:translateY(0) scale(0)}15%{opacity:1;transform:translateY(-5px) scale(1)}70%{opacity:0.5}100%{opacity:0;transform:translateY(-50px) scale(0)}}
     @keyframes slabDrift{0%{opacity:0;transform:translate(0,0) scale(0)}20%{opacity:0.8}50%{opacity:0.4;transform:translate(15px,-20px) scale(0.8)}100%{opacity:0;transform:translate(30px,-45px) scale(0)}}
     .slab-re{position:relative;z-index:1}
-    .slab-title{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;text-align:center;margin-bottom:3px;color:#e8c96a;text-shadow:0 0 40px rgba(232,201,106,0.6),0 0 80px rgba(201,168,76,0.3),0 0 6px rgba(232,201,106,0.9),0 0 120px rgba(201,168,76,0.15);animation:slabTitlePulse 3s ease-in-out infinite}
-    @keyframes slabTitlePulse{0%,100%{text-shadow:0 0 40px rgba(232,201,106,0.6),0 0 80px rgba(201,168,76,0.3),0 0 6px rgba(232,201,106,0.9)}50%{text-shadow:0 0 50px rgba(232,201,106,0.8),0 0 100px rgba(201,168,76,0.5),0 0 8px rgba(232,201,106,1),0 0 150px rgba(201,168,76,0.2)}}
+    .slab-title{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;text-align:center;margin-bottom:3px;color:#e8c96a;text-shadow:0 0 20px rgba(232,201,106,0.6),0 0 6px rgba(232,201,106,0.9);animation:slabTitlePulse 3s ease-in-out infinite;will-change: text-shadow;}
+    @keyframes slabTitlePulse{0%,100%{text-shadow:0 0 20px rgba(232,201,106,0.6),0 0 6px rgba(232,201,106,0.9)}50%{text-shadow:0 0 30px rgba(232,201,106,0.8),0 0 8px rgba(232,201,106,1)}}
     .slab-sub{font-family:var(--font-display);font-size:9px;letter-spacing:0.3em;text-transform:uppercase;text-align:center;margin-bottom:12px;color:rgba(232,201,106,0.3);text-shadow:0 0 15px rgba(201,168,76,0.15)}
     .slab-divider{height:1px;margin:0 16px 10px;position:relative;background:linear-gradient(90deg,transparent,rgba(232,201,106,0.4) 20%,rgba(201,168,76,0.6) 50%,rgba(232,201,106,0.4) 80%,transparent);box-shadow:0 0 12px rgba(201,168,76,0.2),0 0 4px rgba(232,201,106,0.3)}
     .slab-divider::before,.slab-divider::after{content:'';position:absolute;top:-4px;width:9px;height:9px;border:1px solid rgba(232,201,106,0.35);transform:rotate(45deg);background:rgba(201,168,76,0.06);box-shadow:0 0 8px rgba(201,168,76,0.15)}
@@ -542,6 +542,7 @@
         rgba(201,168,76,0.012) 80px, rgba(201,168,76,0.012) 81px
       );
       pointer-events: none; z-index: 0;
+      contain: paint; will-change: transform; transform: translateZ(0);
     }
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -565,6 +566,7 @@
       background: rgba(8,8,8,0.94);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--black-border);
+      will-change: transform; transform: translateZ(0);
     }
     .nav-logo {
       display: flex; align-items: center; gap: 9px;
@@ -720,10 +722,10 @@
 
     /* ─── BREATHING LOGO ───────────────────────────────────── */
     @keyframes breathe {
-      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(201,168,76,0)); }
-      50% { transform: scale(1.05); filter: drop-shadow(0 0 10px rgba(201,168,76,0.25)); }
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-    .logo-breathe { animation: breathe 4s cubic-bezier(0.4,0,0.6,1) infinite; }
+    .logo-breathe { animation: breathe 4s cubic-bezier(0.4,0,0.6,1) infinite; will-change: transform; }
 
     /* ─── STAGGERED ENTRANCE ANIMATIONS ────────────────────── */
     @keyframes fadeSlideUp {
@@ -1532,7 +1534,7 @@
     <svg class="landing-logo" viewBox="0 0 100 100" fill="none"><defs><radialGradient id="lS" cx="32%" cy="30%" r="68%"><stop offset="0%" stop-color="#808080"/><stop offset="25%" stop-color="#383838"/><stop offset="60%" stop-color="#0c0c0c"/><stop offset="100%" stop-color="#040404"/></radialGradient><linearGradient id="lR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0d878"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a6a28"/><stop offset="100%" stop-color="#f0d878"/></linearGradient></defs><circle cx="50" cy="50" r="36" fill="url(#lS)"/><ellipse cx="50" cy="50" rx="45" ry="16" stroke="url(#lR)" stroke-width="5" fill="none" opacity="0.8"/></svg>
     <div class="landing-h1"><span class="gold-text">Obsidia</span> Study</div>
     <div class="landing-sub">AI-powered tutoring that adapts to every student. Math, writing, science, test prep &#8212; all backed by real curriculum standards.</div>
-    <div><button class="landing-cta" onclick="openAuth()">Get Started Free</button><button class="landing-cta-ghost" onclick="document.getElementById('lPricing').scrollIntoView({behavior:'smooth'})">View Pricing</button></div>
+    <div><button class="landing-cta" onclick="openAuth()">Get Started Free</button><button class="landing-cta-ghost" onclick="document.getElementById('lPricing').scrollIntoView({behavior:'smooth'})">View Pricing</button><button class="landing-cta-ghost" onclick="openAuth()" style="margin-left:12px;border-color:rgba(201,168,76,0.5)">Sign In</button></div>
   </div>
   <div class="landing-features">
     <div class="landing-feat"><div class="landing-feat-icon">&#x1F9EE;</div><div class="landing-feat-title">AI Math Tutor</div><div class="landing-feat-desc">Algebra through calculus with step-by-step LaTeX solutions. Switches to advanced model for complex topics.</div></div>
@@ -4972,10 +4974,19 @@ onSignOut = function() {
 ══════════════════════════════════════════════════════ */
 // _navHook3 consolidated into main navigate()
 
-// Show landing if not signed in on load
-if (!currentUser) { try { showLanding(); } catch(e) {} }
-
-try { loadDailyChallenge(); } catch(e) {}
+// Show landing if not signed in — wait for Supabase session check first
+(async function() {
+  try {
+    if (sbClient) {
+      var { data } = await sbClient.auth.getSession();
+      if (data && data.session && data.session.user) {
+        currentUser = data.session.user;
+      }
+    }
+  } catch(e) { console.error('Session check failed:', e); }
+  if (!currentUser) { try { showLanding(); } catch(e) {} }
+  try { loadDailyChallenge(); } catch(e) {}
+})();
 
 /* ── PERF: IntersectionObserver for stagger animations ── */
 (function() {
