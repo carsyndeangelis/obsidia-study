@@ -2135,7 +2135,7 @@
         <div style="width:1px;height:20px;background:var(--black-border);margin:0 4px"></div>
         <button class="sp-tool-btn active" onclick="mathMode(this,'solve')">Solve</button>
         <button class="sp-tool-btn" onclick="mathMode(this,'explain')">Explain</button>
-        <button class="sp-tool-btn" onclick="mathMode(this,'graph')">Graph</button>
+        <button class="sp-tool-btn" onclick="mathMode(this,'graph');openDesmosModal()">Graph</button>
         <button class="sp-tool-btn" onclick="mathMode(this,'practice')">Practice</button>
         <div style="width:1px;height:20px;background:var(--black-border);margin:0 4px"></div>
         <select id="mathDetailSelect" class="math-detail-select">
@@ -2909,6 +2909,19 @@
 </div>
 
 <!-- ══════════════════════════════════════════════════
+     DESMOS GRAPH MODAL
+══════════════════════════════════════════════════ -->
+<div class="auth-overlay" id="desmosModalOverlay" onclick="if(event.target===this)closeDesmosModal()" style="z-index:310;">
+  <div style="width:90vw;max-width:900px;height:80vh;background:var(--black-deep);border:1px solid var(--black-border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--black-border);">
+      <div style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--gold-bright);letter-spacing:0.06em;">Desmos Graphing Calculator</div>
+      <button onclick="closeDesmosModal()" style="background:none;border:1px solid var(--black-border);color:#8a8070;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+    <div id="desmosModalContainer" style="flex:1;"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
      ERROR MODAL
 ══════════════════════════════════════════════════ -->
 <div class="auth-overlay" id="errorModalOverlay" onclick="if(event.target===this)dismissError()">
@@ -3196,7 +3209,9 @@ function sendHomeMsg() {
   const welcome = document.getElementById('homeWelcome'); if (welcome) welcome.classList.add('hidden');
   appendMsg('homeChatMessages','user',text);
   homeChatInput.value=''; homeChatInput.style.height='auto'; homeSendBtn.disabled=true;
-  streamAIResponse('homeChatMessages', text, 'general', {}, 'home');
+  var pastedImg = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage['home']) ? _pendingPasteImage['home'] : null;
+  if (pastedImg) { delete _pendingPasteImage['home']; homeChatInput.placeholder = ''; }
+  streamAIResponse('homeChatMessages', text, 'general', {}, 'home', pastedImg || undefined);
 }
 function homeUseSuggestion(el) { homeChatInput.value=el.textContent; homeChatInput.dispatchEvent(new Event('input')); homeChatInput.focus(); }
 
@@ -3231,7 +3246,9 @@ function sendPageMsg(pg) {
   if (pg==='testprep') vars.section = testSection || 'strategy';
   if (pg==='teacher') vars.tool = teacherTool || 'lesson';
 
-  streamAIResponse(msgContainer, text, pg, vars, pg);
+  var pastedImg = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage[pg]) ? _pendingPasteImage[pg] : null;
+  if (pastedImg) { delete _pendingPasteImage[pg]; input.placeholder = ''; }
+  streamAIResponse(msgContainer, text, pg, vars, pg, pastedImg || undefined);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
 
@@ -3365,6 +3382,58 @@ function submitCanvasToAI() {
   streamAIResponse('mathMessages', 'I drew a math problem on the whiteboard. Please analyze my sketch and help me solve it step by step.', 'math', vars, 'math', imageData);
   clearMathCanvas();
 }
+
+/* ── Desmos Graph Modal ── */
+var _desmosCalcInstance = null;
+function openDesmosModal() {
+  var overlay = document.getElementById('desmosModalOverlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  setTimeout(function() {
+    if (typeof Desmos === 'undefined') return;
+    var container = document.getElementById('desmosModalContainer');
+    if (!container) return;
+    if (_desmosCalcInstance) { try { _desmosCalcInstance.destroy(); } catch(e) {} }
+    _desmosCalcInstance = Desmos.GraphingCalculator(container, { expressions: true, settingsMenu: true, zoomButtons: true });
+  }, 100);
+}
+function closeDesmosModal() {
+  var overlay = document.getElementById('desmosModalOverlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+/* ── Universal Image Paste ── */
+var _pendingPasteImage = {};
+document.addEventListener('paste', function(e) {
+  var el = document.activeElement;
+  if (!el || !el.classList.contains('chat-textarea')) return;
+  var items = (e.clipboardData || e.originalEvent.clipboardData || {}).items;
+  if (!items) return;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') === 0) {
+      e.preventDefault();
+      var file = items[i].getAsFile();
+      if (!file || file.size > 10 * 1024 * 1024) return;
+      var pg = null;
+      var inputId = el.id || '';
+      if (inputId === 'homeChatInput') pg = 'home';
+      else if (inputId.endsWith('ChatInput')) pg = inputId.replace('ChatInput', '');
+      if (!pg) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var imageData = ev.target.result;
+        var msgContainer = pg === 'home' ? 'homeChatMessages' : pg + 'Messages';
+        var welcome = document.getElementById(pg === 'home' ? 'homeWelcome' : pg + 'Welcome');
+        if (welcome) welcome.classList.add('hidden');
+        appendImageMsg(msgContainer, imageData, 'pasted-image.png');
+        _pendingPasteImage[pg] = imageData;
+        el.placeholder = 'Image pasted! Type a message and press Enter to send with image...';
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+  }
+});
 
 function essayMode(btn,mode) { essayModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={draft:'Describe your essay topic...',outline:'What topic to outline?',thesis:'What needs a thesis?',proofread:'Paste text to proofread...'}; document.getElementById('essayChatInput').placeholder=p[mode]||''; }
 function notesMode(btn,mode) { notesModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={transcribe:'Describe the lecture...',summarize:'Paste or describe to summarize...',keypoints:'What to extract key points from?',questions:'What to generate questions for?'}; document.getElementById('notesChatInput').placeholder=p[mode]||''; }
