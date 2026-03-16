@@ -11,9 +11,9 @@
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" /></noscript>
+  <!-- KaTeX loaded on demand by ensureKatex() -->
   <style>
     /* ─── DESIGN TOKENS ─────────────────────────────────────── */
     :root {
@@ -95,10 +95,13 @@
     /* ─── LOGIN MODAL ──────────────────────────────────────── */
     .auth-overlay {
       position: fixed; inset: 0; z-index: 250;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.85);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
+    @supports (backdrop-filter: blur(1px)) { @media (min-width: 768px) {
+      .auth-overlay { background: rgba(0,0,0,0.75); backdrop-filter: blur(10px); }
+    }}
     .auth-overlay.open { opacity: 1; pointer-events: auto; }
     .auth-card {
       background: var(--black-panel); border: 1px solid var(--black-border);
@@ -128,10 +131,13 @@
     /* ─── ONBOARDING MODAL ─────────────────────────────────── */
     .onboarding-overlay {
       position: fixed; inset: 0; z-index: 260;
-      background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.88);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
+    @supports (backdrop-filter: blur(1px)) { @media (min-width: 768px) {
+      .onboarding-overlay { background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); }
+    }}
     .onboarding-overlay.open { opacity: 1; pointer-events: auto; }
     .onboarding-card {
       background: var(--black-panel); border: 1px solid var(--black-border);
@@ -500,6 +506,10 @@
     @keyframes slabHintPulse{0%,100%{opacity:0.1;text-shadow:0 0 8px rgba(201,168,76,0)}50%{opacity:0.4;text-shadow:0 0 12px rgba(201,168,76,0.2)}}
     @media (max-width: 740px) { .slab-zone { display: none; } }
 
+    /* ─── PERF: Pause slab animations when not dragging ──── */
+    .slab-stone * { animation-play-state: paused !important; }
+    .slab-stone.slab-active * { animation-play-state: running !important; }
+
     [data-theme="light"] .sidebar { background: #f8f6f1; border-right-color: #ddd8cc; }
     [data-theme="light"] .sidebar-section { color: #b0a890; }
     [data-theme="light"] .sb-i { color: #8a8070; }
@@ -553,7 +563,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 28px;
       background: rgba(8,8,8,0.94);
-      backdrop-filter: blur(24px);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--black-border);
     }
     .nav-logo {
@@ -696,9 +706,16 @@
       display: none; opacity: 0;
       transform: translateX(20px);
       transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      content-visibility: auto;
+      contain-intrinsic-size: 0 600px;
     }
     .page.active {
       display: block; opacity: 1; transform: translateX(0);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .page.page-leaving {
+      opacity: 0; transform: translateX(-16px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
     }
 
     /* ─── BREATHING LOGO ───────────────────────────────────── */
@@ -721,7 +738,9 @@
       from { opacity: 0; transform: scale(0.8); }
       to { opacity: 1; transform: scale(1); }
     }
-    .anim-stagger { opacity: 0; animation: fadeSlideUp 0.5s ease forwards; }
+    .anim-stagger { opacity: 0; animation: fadeSlideUp 0.5s ease forwards; will-change: opacity, transform; }
+    .anim-stagger.anim-paused { animation-play-state: paused; }
+    .anim-stagger.anim-visible { animation-play-state: running; }
     .anim-stagger:nth-child(1) { animation-delay: 0.05s; }
     .anim-stagger:nth-child(2) { animation-delay: 0.1s; }
     .anim-stagger:nth-child(3) { animation-delay: 0.15s; }
@@ -1226,12 +1245,14 @@
     /* ─── KEYBOARD SHORTCUTS OVERLAY ───────────────────────── */
     .kb-overlay {
       position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.82);
       display: flex; align-items: center; justify-content: center;
       opacity: 0; pointer-events: none;
       transition: opacity 0.25s ease;
     }
+    @supports (backdrop-filter: blur(1px)) { @media (min-width: 768px) {
+      .kb-overlay { background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); }
+    }}
     .kb-overlay.open { opacity: 1; pointer-events: auto; }
     .kb-panel {
       background: var(--black-panel);
@@ -2931,28 +2952,46 @@ allPages.forEach(p => inputStates[p] = '');
 
 function navigate(pageId) {
   if (pageId === currentPage) return;
+
+  /* ── Pre-navigate hooks (session recording) ── */
+  try {
+    var leavingPage = currentPage;
+    if (typeof msgCounts !== 'undefined' && msgCounts[leavingPage] > 0) {
+      var firstMsg = (chatHistory[leavingPage] && chatHistory[leavingPage][0]) ? chatHistory[leavingPage][0].content : '';
+      var title = firstMsg ? firstMsg.slice(0, 80) : ((typeof PAGE_NAMES !== 'undefined' ? PAGE_NAMES[leavingPage] : null) || leavingPage) + ' session';
+      if (typeof recordSession === 'function') recordSession(leavingPage, msgCounts[leavingPage], title);
+      msgCounts[leavingPage] = 0;
+    }
+  } catch(e) { console.error('Session recording failed:', e); }
+
   const curInput = document.getElementById(currentPage + 'ChatInput') || document.getElementById('homeChatInput');
   if (curInput) inputStates[currentPage] = curInput.value;
   const currentEl = document.getElementById('page-' + currentPage);
   const nextEl = document.getElementById('page-' + pageId);
   if (!nextEl) return;
-  currentEl.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-  currentEl.style.opacity = '0'; currentEl.style.transform = 'translateX(-20px)';
-  setTimeout(() => {
-    currentEl.classList.remove('active');
-    currentEl.style.opacity = ''; currentEl.style.transform = ''; currentEl.style.transition = '';
-    nextEl.style.opacity = '0'; nextEl.style.transform = 'translateX(20px)';
+
+  /* ── Page transition using CSS classes ── */
+  currentEl.classList.add('page-leaving');
+  var onLeave = function() {
+    currentEl.removeEventListener('transitionend', onLeave);
+    currentEl.classList.remove('active', 'page-leaving');
     nextEl.classList.add('active');
-    nextEl.offsetHeight;
-    nextEl.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    nextEl.style.opacity = '1'; nextEl.style.transform = 'translateX(0)';
-    setTimeout(() => { nextEl.style.transition = ''; nextEl.style.opacity = ''; nextEl.style.transform = ''; }, 310);
     currentPage = pageId;
     const nextInput = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
     if (nextInput) { nextInput.value = inputStates[pageId] || ''; nextInput.dispatchEvent(new Event('input')); }
-    document.querySelectorAll('.sb-i').forEach(function(b){b.classList.toggle('active',b.dataset&&b.dataset.page===pageId);}); var _pt=document.getElementById('mainPageTitle'); if(_pt) _pt.textContent=(PAGE_NAMES||{})[pageId]||pageId;
+    document.querySelectorAll('.sb-i').forEach(function(b){b.classList.toggle('active',b.dataset&&b.dataset.page===pageId);}); var _pt=document.getElementById('mainPageTitle'); if(_pt) _pt.textContent=(typeof PAGE_NAMES!=='undefined'?(PAGE_NAMES[pageId]||pageId):pageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, 210);
+
+    /* ── Post-navigate hooks ── */
+    try { if (pageId === 'achievements' && typeof renderAchievements === 'function') renderAchievements(); } catch(e) {}
+    try { if (pageId === 'history' && typeof loadHistory === 'function') loadHistory(); } catch(e) {}
+    try { if (pageId === 'analytics' && typeof loadAnalytics === 'function') loadAnalytics(); } catch(e) {}
+    try { if (pageId === 'settings' && typeof populateSettings === 'function') populateSettings(); } catch(e) {}
+    try { if (pageId === 'teacherdash' && typeof loadTeacherDashboard === 'function') loadTeacherDashboard(); } catch(e) {}
+  };
+  currentEl.addEventListener('transitionend', onLeave, { once: true });
+  /* Fallback if transitionend doesn't fire (e.g. display:none) */
+  setTimeout(function() { if (currentEl.classList.contains('page-leaving')) onLeave(); }, 250);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -3237,8 +3276,28 @@ function appendMsg(containerId, role, text) {
 const chatHistory = {};
 allPages.forEach(p => chatHistory[p] = []);
 
+/* ── Lazy KaTeX Loader ── */
+var _katexPromise = null;
+function ensureKatex() {
+  if (window.katex) return Promise.resolve();
+  if (_katexPromise) return _katexPromise;
+  _katexPromise = new Promise(function(resolve) {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css';
+    document.head.appendChild(css);
+    var js = document.createElement('script');
+    js.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+    js.onload = resolve;
+    js.onerror = resolve;
+    document.head.appendChild(js);
+  });
+  return _katexPromise;
+}
+
 /* ── Streaming AI Response Engine ── */
 async function streamAIResponse(containerId, message, page, vars, historyKey, imageData) {
+  if (page === 'math' || page === 'study') { await ensureKatex(); }
   var container = document.getElementById(containerId);
   var typingEl = appendTypingTo(containerId);
 
@@ -4164,24 +4223,7 @@ try { initSupabase(); } catch(e) { console.error('Supabase init failed:', e); }
 const msgCounts = {};
 allPages.forEach(p => msgCounts[p] = 0);
 
-// Override navigate to render achievements when visiting that page
-const _origNavigate = navigate;
-navigate = function(pageId) {
-  try {
-    // Record session if leaving a page with messages
-    const leavingPage = currentPage;
-    if (msgCounts[leavingPage] > 0) {
-      // Use first user message as title
-      var firstMsg = (chatHistory[leavingPage] && chatHistory[leavingPage][0]) ? chatHistory[leavingPage][0].content : '';
-      var title = firstMsg ? firstMsg.slice(0, 80) : (PAGE_NAMES[leavingPage] || leavingPage) + ' session';
-      recordSession(leavingPage, msgCounts[leavingPage], title);
-      msgCounts[leavingPage] = 0;
-    }
-  } catch(e) { console.error('Session recording failed:', e); }
-  _origNavigate(pageId);
-  try { if (pageId === 'achievements') renderAchievements(); } catch(e) {}
-  try { if (pageId === 'history') loadHistory(); } catch(e) {}
-};
+// Navigate hooks consolidated into main navigate() function
 
 /* ══════════════════════════════════════════════════════
    LIVE HISTORY — Load from Supabase
@@ -4426,12 +4468,15 @@ function toggleMobileSidebar() {
     function t(){curW*=0.9;if(curW<1){curW=0;set(0);return;}set(curW);af=requestAnimationFrame(t);}
     if(af)cancelAnimationFrame(af);t();
   }
-  handle.addEventListener('mousedown',function(e){dragging=true;startX=e.clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
+  var slabStone=document.querySelector('.slab-stone');
+  function slabActivate(){if(slabStone)slabStone.classList.add('slab-active');}
+  function slabDeactivate(){if(slabStone)slabStone.classList.remove('slab-active');}
+  handle.addEventListener('mousedown',function(e){dragging=true;startX=e.clientX-curW;if(af)cancelAnimationFrame(af);slabActivate();e.preventDefault();});
   document.addEventListener('mousemove',function(e){if(!dragging)return;set(e.clientX-startX);});
-  document.addEventListener('mouseup',function(){if(!dragging)return;dragging=false;snap();});
-  handle.addEventListener('touchstart',function(e){dragging=true;startX=e.touches[0].clientX-curW;if(af)cancelAnimationFrame(af);e.preventDefault();});
+  document.addEventListener('mouseup',function(){if(!dragging)return;dragging=false;slabDeactivate();snap();});
+  handle.addEventListener('touchstart',function(e){dragging=true;startX=e.touches[0].clientX-curW;if(af)cancelAnimationFrame(af);slabActivate();e.preventDefault();});
   document.addEventListener('touchmove',function(e){if(!dragging)return;set(e.touches[0].clientX-startX);});
-  document.addEventListener('touchend',function(){if(!dragging)return;dragging=false;snap();});
+  document.addEventListener('touchend',function(){if(!dragging)return;dragging=false;slabDeactivate();snap();});
 })();
 
 /* ══════════════════════════════════════════════════════
@@ -4684,12 +4729,7 @@ handleScan = function(inputEl) {
 /* ══════════════════════════════════════════════════════
    NAVIGATE HOOKS — Analytics, Settings, Challenge
 ══════════════════════════════════════════════════════ */
-var _navHook2 = navigate;
-navigate = function(pageId) {
-  _navHook2(pageId);
-  try { if (pageId === 'analytics') loadAnalytics(); } catch(e) {}
-  try { if (pageId === 'settings') populateSettings(); } catch(e) {}
-};
+// _navHook2 consolidated into main navigate()
 
 /* ══════════════════════════════════════════════════════
    LANDING PAGE — Show for unauthenticated visitors
@@ -4919,16 +4959,33 @@ onSignOut = function() {
 /* ══════════════════════════════════════════════════════
    NAVIGATE HOOKS — Teacher dashboard
 ══════════════════════════════════════════════════════ */
-var _navHook3 = navigate;
-navigate = function(pageId) {
-  _navHook3(pageId);
-  try { if (pageId === 'teacherdash') loadTeacherDashboard(); } catch(e) {}
-};
+// _navHook3 consolidated into main navigate()
 
 // Show landing if not signed in on load
 if (!currentUser) { try { showLanding(); } catch(e) {} }
 
 try { loadDailyChallenge(); } catch(e) {}
+
+/* ── PERF: IntersectionObserver for stagger animations ── */
+(function() {
+  var els = document.querySelectorAll('.anim-stagger');
+  if (!els.length) return;
+  els.forEach(function(el) { el.classList.add('anim-paused'); });
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('anim-paused');
+          entry.target.classList.add('anim-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    els.forEach(function(el) { obs.observe(el); });
+  } else {
+    els.forEach(function(el) { el.classList.remove('anim-paused'); el.classList.add('anim-visible'); });
+  }
+})();
 
 navigate('home');
 </script>
