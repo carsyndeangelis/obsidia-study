@@ -1416,6 +1416,51 @@
     .method-name { font-size: 12px; font-weight: 600; color: #c8b88a; }
     .method-hint { font-size: 10px; color: #5a5040; margin-top: 3px; }
 
+    /* Study workspaces */
+    .ws-wrap { padding: 0 14px 14px; }
+    .ws-back { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#8a8070; cursor:pointer; border:none; background:none; font-family:var(--font-ui); padding:6px 0; margin-bottom:10px; }
+    .ws-back:hover { color:var(--gold-bright); }
+    .ws-input-area { background:var(--black-card); border:1px solid var(--black-border); border-radius:8px; padding:12px; margin-bottom:14px; }
+    .ws-input-area textarea { width:100%; min-height:60px; background:var(--black-deep); border:1px solid var(--black-border); border-radius:6px; color:#c8b88a; padding:8px 10px; font-size:12px; font-family:var(--font-ui); resize:vertical; }
+    .ws-input-area .ws-actions { display:flex; gap:8px; margin-top:8px; align-items:center; }
+    .ws-btn { font-family:var(--font-ui); font-size:11px; font-weight:500; padding:6px 14px; border-radius:6px; border:1px solid var(--black-border); background:var(--black-card); color:#8a8070; cursor:pointer; }
+    .ws-btn:hover { border-color:var(--gold-muted); color:#c8b88a; }
+    .ws-btn-primary { background:var(--gold-subtle); border-color:rgba(201,168,76,0.3); color:var(--gold-bright); }
+    .ws-btn-primary:hover { background:rgba(201,168,76,0.2); }
+    .ws-btn-gold { background:linear-gradient(135deg,var(--gold-bright),var(--gold-mid)); color:#0a0a0a; border:none; font-weight:600; padding:10px 24px; font-size:13px; border-radius:8px; }
+    .ws-btn-gold:hover { opacity:0.9; }
+    .ws-editor { min-height:200px; }
+    .ws-status { font-size:11px; color:#5a5040; font-style:italic; margin-left:auto; }
+    /* Flashcard editor */
+    .fc-editor-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .fc-edit-card { background:var(--black-card); border:1px solid var(--black-border); border-radius:8px; padding:10px; position:relative; }
+    .fc-edit-card .fc-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#5a5040; margin-bottom:4px; }
+    .fc-edit-card [contenteditable] { min-height:40px; font-size:12px; color:#c8b88a; outline:none; line-height:1.5; }
+    .fc-edit-card [contenteditable]:focus { border-bottom:1px solid var(--gold-muted); }
+    .fc-del-btn { position:absolute; top:6px; right:6px; background:none; border:none; color:#5a5040; cursor:pointer; font-size:14px; line-height:1; }
+    .fc-del-btn:hover { color:#f43f5e; }
+    /* Cornell */
+    .cornell-layout { display:grid; grid-template-columns:200px 1fr; grid-template-rows:1fr auto; gap:1px; background:var(--black-border); border:1px solid var(--black-border); border-radius:8px; overflow:hidden; min-height:300px; }
+    .cornell-pane { background:var(--black-card); padding:10px; }
+    .cornell-pane [contenteditable] { min-height:60px; font-size:12px; color:#c8b88a; outline:none; line-height:1.6; }
+    .cornell-pane .fc-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#5a5040; margin-bottom:6px; }
+    .cornell-summary { grid-column:1/-1; }
+    /* Mind map / Outline */
+    .ws-editable-area { background:var(--black-card); border:1px solid var(--black-border); border-radius:8px; padding:12px; min-height:250px; font-size:12px; color:#c8b88a; line-height:1.7; outline:none; }
+    /* Quiz editor */
+    .quiz-edit-block { background:var(--black-card); border:1px solid var(--black-border); border-radius:8px; padding:12px; margin-bottom:10px; position:relative; }
+    .quiz-edit-block .fc-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#5a5040; margin-bottom:6px; }
+    .quiz-edit-q { font-size:13px; color:#c8b88a; min-height:20px; outline:none; margin-bottom:8px; font-weight:500; }
+    .quiz-edit-opt { display:flex; align-items:center; gap:8px; padding:4px 0; font-size:12px; color:#8a8070; }
+    .quiz-edit-opt input[type=radio] { accent-color:var(--sci-color); }
+    .quiz-edit-opt [contenteditable] { flex:1; outline:none; min-height:16px; }
+    /* Spaced review */
+    .spaced-schedule { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+    .spaced-day { background:var(--black-card); border:1px solid var(--black-border); border-radius:8px; padding:10px 8px; text-align:center; }
+    .spaced-day-num { font-size:18px; font-weight:700; color:var(--gold-bright); }
+    .spaced-day-label { font-size:10px; color:#5a5040; margin-top:2px; }
+    .spaced-day-task { font-size:10px; color:#8a8070; margin-top:6px; min-height:20px; outline:none; }
+
     /* ─── SETTINGS PAGE (NEW) ──────────────────────────────── */
     .settings-grid {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -2202,19 +2247,137 @@
       <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Study Guide</span> Creator</h2><p class="sp-subtitle">Choose a study method and paste your material</p></div>
       <span class="sp-model-badge" style="background:var(--sci-subtle);color:var(--sci-color);border:1px solid rgba(52,211,153,0.25);">Claude Sonnet &middot; Study</span>
     </div>
-    <div class="method-grid">
-      <div class="method-card" onclick="selectStudyMethod('flashcards')"><div class="method-emoji">&#x1F0CF;</div><div class="method-name">Flashcards</div><div class="method-hint">AI-generated Q&amp;A cards</div></div>
-      <div class="method-card" onclick="selectStudyMethod('cornell')"><div class="method-emoji">&#x1F4DD;</div><div class="method-name">Cornell Notes</div><div class="method-hint">Structured note format</div></div>
-      <div class="method-card" onclick="selectStudyMethod('mindmap')"><div class="method-emoji">&#x1F578;&#xFE0F;</div><div class="method-name">Mind Map</div><div class="method-hint">Visual concept mapping</div></div>
-      <div class="method-card" onclick="selectStudyMethod('spaced')"><div class="method-emoji">&#x1F501;</div><div class="method-name">Spaced Review</div><div class="method-hint">Optimized repetition</div></div>
-      <div class="method-card" onclick="selectStudyMethod('outline')"><div class="method-emoji">&#x1F4CB;</div><div class="method-name">Outline</div><div class="method-hint">Hierarchical study outline</div></div>
-      <div class="method-card" onclick="selectStudyMethod('quiz')"><div class="method-emoji">&#x2753;</div><div class="method-name">Self-Quiz</div><div class="method-hint">Practice test with answers</div></div>
+    <div class="method-grid" id="studyMethodGrid">
+      <div class="method-card" onclick="openStudyWorkspace('flashcards')"><div class="method-emoji">&#x1F0CF;</div><div class="method-name">Flashcards</div><div class="method-hint">AI-generated Q&amp;A cards</div></div>
+      <div class="method-card" onclick="openStudyWorkspace('cornell')"><div class="method-emoji">&#x1F4DD;</div><div class="method-name">Cornell Notes</div><div class="method-hint">Structured note format</div></div>
+      <div class="method-card" onclick="openStudyWorkspace('mindmap')"><div class="method-emoji">&#x1F578;&#xFE0F;</div><div class="method-name">Mind Map</div><div class="method-hint">Visual concept mapping</div></div>
+      <div class="method-card" onclick="openStudyWorkspace('spaced')"><div class="method-emoji">&#x1F501;</div><div class="method-name">Spaced Review</div><div class="method-hint">Optimized repetition</div></div>
+      <div class="method-card" onclick="openStudyWorkspace('outline')"><div class="method-emoji">&#x1F4CB;</div><div class="method-name">Outline</div><div class="method-hint">Hierarchical study outline</div></div>
+      <div class="method-card" onclick="openStudyWorkspace('quiz')"><div class="method-emoji">&#x2753;</div><div class="method-name">Self-Quiz</div><div class="method-hint">Practice test with answers</div></div>
     </div>
-    <div class="sp-chat-panel">
-      <div class="sp-messages" id="studyMessages" role="log" aria-live="polite"><div class="chat-welcome" id="studyWelcome"><h2 class="welcome-title">Select a study method above</h2><p class="welcome-sub">Choose your format, then paste your notes or describe the topic.</p>
-        <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('study',this)">Make flashcards for biology</button><button class="chip" onclick="spUseSuggestion('study',this)">Create a mind map for WWII</button><button class="chip" onclick="spUseSuggestion('study',this)">Quiz me on chemistry</button></div>
-      </div></div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('studyFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="studyFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('study',this)" /><textarea class="chat-textarea" id="studyChatInput" placeholder="Paste your notes or describe the topic..." rows="1"></textarea><button class="chat-send" id="studySendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">STUDY AI &middot; CLAUDE SONNET</span></div></div>
+
+    <!-- ── FLASHCARD WORKSPACE ── -->
+    <div id="workspace-flashcards" class="ws-wrap" style="display:none;">
+      <button class="ws-back" onclick="closeStudyWorkspace()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Methods</button>
+      <div class="ws-input-area">
+        <textarea id="wsFlashcardsInput" placeholder="Paste your notes, key terms, or Q&amp;As here..."></textarea>
+        <div class="ws-actions">
+          <button class="ws-btn" onclick="document.getElementById('wsFlashcardsFile').click()">Upload Image</button>
+          <input type="file" id="wsFlashcardsFile" accept="image/*" style="display:none" onchange="wsAttachImage('flashcards',this)" />
+          <button class="ws-btn ws-btn-primary" onclick="wsGenerate('flashcards')">Generate Cards</button>
+          <span class="ws-status" id="wsFlashcardsStatus"></span>
+        </div>
+      </div>
+      <div class="ws-editor" id="wsFlashcardsEditor">
+        <div style="text-align:center;padding:40px;color:#5a5040;font-size:12px;">Paste your material above and click "Generate Cards" to create editable flashcards.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+        <button class="ws-btn" onclick="wsAddFlashcard()">+ Add Card</button>
+        <div style="flex:1"></div>
+        <button class="ws-btn ws-btn-gold" onclick="saveStudyMaterial('flashcards')">Done &amp; Save</button>
+      </div>
+    </div>
+
+    <!-- ── CORNELL WORKSPACE ── -->
+    <div id="workspace-cornell" class="ws-wrap" style="display:none;">
+      <button class="ws-back" onclick="closeStudyWorkspace()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Methods</button>
+      <div class="ws-input-area">
+        <textarea id="wsCornellInput" placeholder="Paste lecture notes or describe the topic..."></textarea>
+        <div class="ws-actions">
+          <button class="ws-btn" onclick="document.getElementById('wsCornellFile').click()">Upload Image</button>
+          <input type="file" id="wsCornellFile" accept="image/*" style="display:none" onchange="wsAttachImage('cornell',this)" />
+          <button class="ws-btn ws-btn-primary" onclick="wsGenerate('cornell')">Generate Notes</button>
+          <span class="ws-status" id="wsCornellStatus"></span>
+        </div>
+      </div>
+      <div class="ws-editor" id="wsCornellEditor">
+        <div class="cornell-layout">
+          <div class="cornell-pane"><div class="fc-label">Cue Questions</div><div contenteditable="true" id="cornellCues">Click to edit cues...</div></div>
+          <div class="cornell-pane"><div class="fc-label">Notes</div><div contenteditable="true" id="cornellNotes">Click to edit notes...</div></div>
+          <div class="cornell-pane cornell-summary"><div class="fc-label">Summary</div><div contenteditable="true" id="cornellSummary">Click to write summary...</div></div>
+        </div>
+      </div>
+      <div style="text-align:right;margin-top:12px;"><button class="ws-btn ws-btn-gold" onclick="saveStudyMaterial('cornell')">Done &amp; Save</button></div>
+    </div>
+
+    <!-- ── MIND MAP WORKSPACE ── -->
+    <div id="workspace-mindmap" class="ws-wrap" style="display:none;">
+      <button class="ws-back" onclick="closeStudyWorkspace()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Methods</button>
+      <div class="ws-input-area">
+        <textarea id="wsMindmapInput" placeholder="Describe the topic for your mind map..."></textarea>
+        <div class="ws-actions">
+          <button class="ws-btn" onclick="document.getElementById('wsMindmapFile').click()">Upload Image</button>
+          <input type="file" id="wsMindmapFile" accept="image/*" style="display:none" onchange="wsAttachImage('mindmap',this)" />
+          <button class="ws-btn ws-btn-primary" onclick="wsGenerate('mindmap')">Generate Map</button>
+          <span class="ws-status" id="wsMindmapStatus"></span>
+        </div>
+      </div>
+      <div class="ws-editor"><div class="ws-editable-area" contenteditable="true" id="wsMindmapEditor">Mind map will appear here...</div></div>
+      <div style="text-align:right;margin-top:12px;"><button class="ws-btn ws-btn-gold" onclick="saveStudyMaterial('mindmap')">Done &amp; Save</button></div>
+    </div>
+
+    <!-- ── SPACED REVIEW WORKSPACE ── -->
+    <div id="workspace-spaced" class="ws-wrap" style="display:none;">
+      <button class="ws-back" onclick="closeStudyWorkspace()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Methods</button>
+      <div class="ws-input-area">
+        <textarea id="wsSpacedInput" placeholder="What topic do you need a review schedule for?"></textarea>
+        <div class="ws-actions">
+          <button class="ws-btn" onclick="document.getElementById('wsSpacedFile').click()">Upload Image</button>
+          <input type="file" id="wsSpacedFile" accept="image/*" style="display:none" onchange="wsAttachImage('spaced',this)" />
+          <button class="ws-btn ws-btn-primary" onclick="wsGenerate('spaced')">Generate Schedule</button>
+          <span class="ws-status" id="wsSpacedStatus"></span>
+        </div>
+      </div>
+      <div class="ws-editor" id="wsSpacedEditor">
+        <div class="spaced-schedule" id="spacedScheduleGrid">
+          <div class="spaced-day"><div class="spaced-day-num">1</div><div class="spaced-day-label">Day 1</div><div class="spaced-day-task" contenteditable="true">All new material</div></div>
+          <div class="spaced-day"><div class="spaced-day-num">2</div><div class="spaced-day-label">Day 2</div><div class="spaced-day-task" contenteditable="true">Hardest concepts</div></div>
+          <div class="spaced-day"><div class="spaced-day-num">3</div><div class="spaced-day-label">Day 3</div><div class="spaced-day-task" contenteditable="true">Full review</div></div>
+          <div class="spaced-day"><div class="spaced-day-num">4</div><div class="spaced-day-label">Day 4</div><div class="spaced-day-task" contenteditable="true">Rest day</div></div>
+          <div class="spaced-day"><div class="spaced-day-num">5</div><div class="spaced-day-label">Day 5</div><div class="spaced-day-task" contenteditable="true">Self-quiz</div></div>
+          <div class="spaced-day"><div class="spaced-day-num">6</div><div class="spaced-day-label">Day 6</div><div class="spaced-day-task" contenteditable="true">Weak areas only</div></div>
+          <div class="spaced-day"><div class="spaced-day-num">7</div><div class="spaced-day-label">Day 7</div><div class="spaced-day-task" contenteditable="true">Final review</div></div>
+        </div>
+      </div>
+      <div style="text-align:right;margin-top:12px;"><button class="ws-btn ws-btn-gold" onclick="saveStudyMaterial('spaced')">Done &amp; Save</button></div>
+    </div>
+
+    <!-- ── OUTLINE WORKSPACE ── -->
+    <div id="workspace-outline" class="ws-wrap" style="display:none;">
+      <button class="ws-back" onclick="closeStudyWorkspace()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Methods</button>
+      <div class="ws-input-area">
+        <textarea id="wsOutlineInput" placeholder="Paste notes or describe the topic for your outline..."></textarea>
+        <div class="ws-actions">
+          <button class="ws-btn" onclick="document.getElementById('wsOutlineFile').click()">Upload Image</button>
+          <input type="file" id="wsOutlineFile" accept="image/*" style="display:none" onchange="wsAttachImage('outline',this)" />
+          <button class="ws-btn ws-btn-primary" onclick="wsGenerate('outline')">Generate Outline</button>
+          <span class="ws-status" id="wsOutlineStatus"></span>
+        </div>
+      </div>
+      <div class="ws-editor"><div class="ws-editable-area" contenteditable="true" id="wsOutlineEditor">Outline will appear here...</div></div>
+      <div style="text-align:right;margin-top:12px;"><button class="ws-btn ws-btn-gold" onclick="saveStudyMaterial('outline')">Done &amp; Save</button></div>
+    </div>
+
+    <!-- ── QUIZ WORKSPACE ── -->
+    <div id="workspace-quiz" class="ws-wrap" style="display:none;">
+      <button class="ws-back" onclick="closeStudyWorkspace()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Methods</button>
+      <div class="ws-input-area">
+        <textarea id="wsQuizInput" placeholder="Paste notes or describe the topic for your quiz..."></textarea>
+        <div class="ws-actions">
+          <button class="ws-btn" onclick="document.getElementById('wsQuizFile').click()">Upload Image</button>
+          <input type="file" id="wsQuizFile" accept="image/*" style="display:none" onchange="wsAttachImage('quiz',this)" />
+          <button class="ws-btn ws-btn-primary" onclick="wsGenerate('quiz')">Generate Quiz</button>
+          <span class="ws-status" id="wsQuizStatus"></span>
+        </div>
+      </div>
+      <div class="ws-editor" id="wsQuizEditor">
+        <div style="text-align:center;padding:40px;color:#5a5040;font-size:12px;">Paste your material above and click "Generate Quiz" to create editable questions.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+        <button class="ws-btn" onclick="wsAddQuizQuestion()">+ Add Question</button>
+        <div style="flex:1"></div>
+        <button class="ws-btn ws-btn-gold" onclick="saveStudyMaterial('quiz')">Done &amp; Save</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3239,7 +3402,6 @@ function sendPageMsg(pg) {
   var vars = {};
   if (pg==='math') { vars.mode = mathModeState; vars.mathType = mathType; vars.model = mathModel; var ds = document.getElementById('mathDetailSelect'); vars.detail = ds ? ds.value : 'full'; }
   if (pg==='essay') { vars.mode = essayModeState; var ht = document.getElementById('humanizerToggle'); vars.humanizer = ht ? ht.checked : false; var gs = document.getElementById('essayGradeSelect'); vars.grade = gs ? gs.value : '11th Grade'; }
-  if (pg==='study') vars.method = studyMethod || 'flashcards';
   if (pg==='notes') vars.mode = notesModeState;
   if (pg==='doublecheck') vars.mode = dcModeState;
   if (pg==='grading') { vars.mode = gradingModeState; var sc = document.getElementById('gradingScaleSelect'); vars.scale = sc ? sc.value : 'letter'; }
@@ -3284,7 +3446,6 @@ function handlePageAttach(pg, inputEl) {
     var vars = {};
     if (pg === 'math') { vars.mode = mathModeState; vars.mathType = mathType; vars.model = mathModel; var ds2 = document.getElementById('mathDetailSelect'); vars.detail = ds2 ? ds2.value : 'full'; }
     if (pg === 'essay') { vars.mode = essayModeState; vars.humanizer = document.getElementById('humanizerToggle') ? document.getElementById('humanizerToggle').checked : false; vars.grade = document.getElementById('essayGradeSelect') ? document.getElementById('essayGradeSelect').value : '11th Grade'; }
-    if (pg === 'study') vars.method = studyMethod || 'flashcards';
     if (pg === 'grading') { vars.mode = gradingModeState; vars.scale = document.getElementById('gradingScaleSelect') ? document.getElementById('gradingScaleSelect').value : 'letter'; }
     if (pg === 'doublecheck') vars.mode = dcModeState;
     if (pg === 'notes') vars.mode = notesModeState;
@@ -3439,7 +3600,365 @@ function essayMode(btn,mode) { essayModeState=mode; btn.closest('.sp-toolbar').q
 function notesMode(btn,mode) { notesModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={transcribe:'Describe the lecture...',summarize:'Paste or describe to summarize...',keypoints:'What to extract key points from?',questions:'What to generate questions for?'}; document.getElementById('notesChatInput').placeholder=p[mode]||''; }
 
 let studyMethod=null;
-function selectStudyMethod(method) { studyMethod=method; document.querySelectorAll('#page-study .method-card').forEach(c=>{c.style.borderColor='';c.style.background='';}); event.currentTarget.style.borderColor='var(--sci-color)'; event.currentTarget.style.background='var(--sci-subtle)'; const prompts={flashcards:'Create flashcards from:\n\n',cornell:'Convert to Cornell Notes:\n\n',mindmap:'Create a mind map for: ',spaced:'Build spaced repetition for: ',outline:'Create study outline for: ',quiz:'Create self-quiz for: '}; const input=document.getElementById('studyChatInput'); input.value=prompts[method]||''; input.dispatchEvent(new Event('input')); input.focus(); }
+let _wsActiveMethod = null;
+let _wsPendingImage = {};
+
+function openStudyWorkspace(method) {
+  _wsActiveMethod = method;
+  studyMethod = method;
+  document.getElementById('studyMethodGrid').style.display = 'none';
+  // Hide all workspaces first
+  document.querySelectorAll('#page-study .ws-wrap').forEach(function(w) { w.style.display = 'none'; });
+  // Show the selected workspace
+  var ws = document.getElementById('workspace-' + method);
+  if (ws) ws.style.display = 'block';
+}
+
+function closeStudyWorkspace() {
+  _wsActiveMethod = null;
+  document.querySelectorAll('#page-study .ws-wrap').forEach(function(w) { w.style.display = 'none'; });
+  document.getElementById('studyMethodGrid').style.display = '';
+}
+
+function wsAttachImage(method, inputEl) {
+  var file = inputEl.files[0];
+  if (!file) return;
+  inputEl.value = '';
+  var ALLOWED = ['image/jpeg','image/png','image/webp','image/gif'];
+  if (!ALLOWED.includes(file.type)) { alert('Unsupported format. Use JPEG, PNG, WebP, or GIF.'); return; }
+  if (file.size > 10 * 1024 * 1024) { alert('File too large. Max 10 MB.'); return; }
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    _wsPendingImage[method] = ev.target.result;
+    var status = document.getElementById('ws' + method.charAt(0).toUpperCase() + method.slice(1) + 'Status');
+    if (status) status.textContent = 'Image attached';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function wsGenerate(method) {
+  var capMethod = method.charAt(0).toUpperCase() + method.slice(1);
+  var input = document.getElementById('ws' + capMethod + 'Input');
+  var status = document.getElementById('ws' + capMethod + 'Status');
+  var text = input ? input.value.trim() : '';
+  if (!text && !_wsPendingImage[method]) { alert('Please enter a topic or paste your notes first.'); return; }
+
+  if (status) status.textContent = 'Generating...';
+  // Disable button during generation
+  var btns = document.querySelectorAll('#workspace-' + method + ' .ws-btn-primary');
+  btns.forEach(function(b) { b.disabled = true; });
+
+  try {
+    var body = {
+      message: text || 'Generate study material from the attached image.',
+      page: 'study',
+      vars: { method: method },
+      history: [],
+      model: 'sonnet'
+    };
+    if (_wsPendingImage[method]) {
+      body.image = _wsPendingImage[method];
+      delete _wsPendingImage[method];
+    }
+
+    var res = await fetch('/api/chat.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      var err = await res.json().catch(function() { return { error: 'Connection failed' }; });
+      if (status) status.textContent = err.error || 'Error';
+      btns.forEach(function(b) { b.disabled = false; });
+      return;
+    }
+
+    // Read SSE stream
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var fullText = '';
+    var buffer = '';
+
+    while (true) {
+      var chunk = await reader.read();
+      if (chunk.done) break;
+      buffer += decoder.decode(chunk.value, { stream: true });
+      var lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (var i = 0; i < lines.length; i++) {
+        if (!lines[i].startsWith('data: ')) continue;
+        try {
+          var data = JSON.parse(lines[i].slice(6));
+          if (data.status && status) { status.textContent = data.status; continue; }
+          if (data.error) { if (status) status.textContent = data.error; break; }
+          if (data.done) break;
+          if (data.text) fullText += data.text;
+        } catch(e) {}
+      }
+    }
+
+    if (status) status.textContent = '';
+    wsRenderResult(method, fullText);
+  } catch(e) {
+    if (status) status.textContent = 'Network error';
+  }
+  btns.forEach(function(b) { b.disabled = false; });
+}
+
+function wsRenderResult(method, fullText) {
+  if (method === 'flashcards') {
+    wsRenderFlashcards(fullText);
+  } else if (method === 'quiz') {
+    wsRenderQuiz(fullText);
+  } else if (method === 'cornell') {
+    wsRenderCornell(fullText);
+  } else if (method === 'mindmap') {
+    var el = document.getElementById('wsMindmapEditor');
+    if (el) el.innerHTML = renderMarkdown(fullText);
+  } else if (method === 'spaced') {
+    wsRenderSpaced(fullText);
+  } else if (method === 'outline') {
+    var el2 = document.getElementById('wsOutlineEditor');
+    if (el2) el2.innerHTML = renderMarkdown(fullText);
+  }
+}
+
+function wsRenderFlashcards(fullText) {
+  var editor = document.getElementById('wsFlashcardsEditor');
+  if (!editor) return;
+  try {
+    var jsonMatch = fullText.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) { editor.innerHTML = '<div style="padding:20px;">' + renderMarkdown(fullText) + '</div>'; return; }
+    var cards = JSON.parse(jsonMatch[0]);
+    if (!Array.isArray(cards) || cards.length === 0) { editor.innerHTML = '<div style="padding:20px;">' + renderMarkdown(fullText) + '</div>'; return; }
+    var html = '<div class="fc-editor-grid">';
+    cards.forEach(function(card, i) {
+      html += '<div class="fc-edit-card" data-index="' + i + '">'
+        + '<div class="fc-label">Front</div>'
+        + '<div contenteditable="true" class="fc-edit-front">' + escHtml(card.front || '') + '</div>'
+        + '<div class="fc-label">Back</div>'
+        + '<div contenteditable="true" class="fc-edit-back">' + escHtml(card.back || '') + '</div>'
+        + '<button class="ws-btn" onclick="this.closest(\'.fc-edit-card\').remove()" style="font-size:10px;margin-top:4px;color:#c44;">Remove</button>'
+        + '</div>';
+    });
+    html += '</div>';
+    editor.innerHTML = html;
+  } catch(e) {
+    editor.innerHTML = '<div style="padding:20px;">' + renderMarkdown(fullText) + '</div>';
+  }
+}
+
+function wsRenderQuiz(fullText) {
+  var editor = document.getElementById('wsQuizEditor');
+  if (!editor) return;
+  try {
+    var jsonMatch = fullText.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) { editor.innerHTML = '<div style="padding:20px;">' + renderMarkdown(fullText) + '</div>'; return; }
+    var questions = JSON.parse(jsonMatch[0]);
+    if (!Array.isArray(questions) || questions.length === 0) { editor.innerHTML = '<div style="padding:20px;">' + renderMarkdown(fullText) + '</div>'; return; }
+    var html = '';
+    questions.forEach(function(q, i) {
+      html += '<div class="quiz-edit-block" data-index="' + i + '">'
+        + '<div class="fc-label">Question ' + (i + 1) + '</div>'
+        + '<div contenteditable="true" class="quiz-edit-q">' + escHtml(q.question || '') + '</div>'
+        + '<div class="fc-label">Options</div>';
+      (q.options || []).forEach(function(opt, oi) {
+        html += '<div style="display:flex;gap:6px;align-items:center;margin:2px 0;">'
+          + '<input type="radio" name="wsQuiz' + i + '" ' + (oi === q.correct ? 'checked' : '') + ' data-oi="' + oi + '" />'
+          + '<div contenteditable="true" class="quiz-edit-opt" style="flex:1">' + escHtml(opt) + '</div>'
+          + '</div>';
+      });
+      html += '<div class="fc-label">Explanation</div>'
+        + '<div contenteditable="true" class="quiz-edit-exp">' + escHtml(q.explanation || '') + '</div>'
+        + '<button class="ws-btn" onclick="this.closest(\'.quiz-edit-block\').remove()" style="font-size:10px;margin-top:4px;color:#c44;">Remove</button>'
+        + '</div>';
+    });
+    editor.innerHTML = html;
+  } catch(e) {
+    editor.innerHTML = '<div style="padding:20px;">' + renderMarkdown(fullText) + '</div>';
+  }
+}
+
+function wsRenderCornell(fullText) {
+  // Parse AI response — expect sections like Cues, Notes, Summary
+  var cuesEl = document.getElementById('cornellCues');
+  var notesEl = document.getElementById('cornellNotes');
+  var summaryEl = document.getElementById('cornellSummary');
+  if (!cuesEl || !notesEl || !summaryEl) return;
+
+  // Try to split by headers or sections
+  var cuesMatch = fullText.match(/(?:cue|question)s?\s*[:：]\s*([\s\S]*?)(?=\n\s*(?:notes?|summary)|\n#{1,3}\s|$)/i);
+  var notesMatch = fullText.match(/notes?\s*[:：]\s*([\s\S]*?)(?=\n\s*(?:summary|cue)|\n#{1,3}\s|$)/i);
+  var summaryMatch = fullText.match(/summary\s*[:：]\s*([\s\S]*?)$/i);
+
+  if (cuesMatch) cuesEl.innerHTML = renderMarkdown(cuesMatch[1].trim());
+  else cuesEl.innerHTML = '';
+  if (notesMatch) notesEl.innerHTML = renderMarkdown(notesMatch[1].trim());
+  else notesEl.innerHTML = renderMarkdown(fullText);
+  if (summaryMatch) summaryEl.innerHTML = renderMarkdown(summaryMatch[1].trim());
+  else summaryEl.innerHTML = '';
+}
+
+function wsRenderSpaced(fullText) {
+  var days = document.querySelectorAll('#spacedScheduleGrid .spaced-day-task');
+  // Try to parse day-by-day from AI response
+  var dayMatches = fullText.match(/day\s*(\d)\s*[:：]\s*([^\n]+)/gi);
+  if (dayMatches && dayMatches.length > 0) {
+    dayMatches.forEach(function(m) {
+      var parts = m.match(/day\s*(\d)\s*[:：]\s*(.*)/i);
+      if (parts) {
+        var dayNum = parseInt(parts[1]) - 1;
+        if (days[dayNum]) days[dayNum].innerHTML = renderMarkdown(parts[2].trim());
+      }
+    });
+  } else {
+    // Fallback: put full text in first day cell
+    if (days[0]) days[0].innerHTML = renderMarkdown(fullText);
+  }
+}
+
+function wsAddFlashcard() {
+  var editor = document.getElementById('wsFlashcardsEditor');
+  if (!editor) return;
+  // Remove placeholder if present
+  var placeholder = editor.querySelector('div[style*="text-align:center"]');
+  if (placeholder) placeholder.remove();
+  // Ensure grid exists
+  var grid = editor.querySelector('.fc-editor-grid');
+  if (!grid) {
+    grid = document.createElement('div');
+    grid.className = 'fc-editor-grid';
+    editor.appendChild(grid);
+  }
+  var idx = grid.children.length;
+  var card = document.createElement('div');
+  card.className = 'fc-edit-card';
+  card.setAttribute('data-index', idx);
+  card.innerHTML = '<div class="fc-label">Front</div>'
+    + '<div contenteditable="true" class="fc-edit-front">Type question here...</div>'
+    + '<div class="fc-label">Back</div>'
+    + '<div contenteditable="true" class="fc-edit-back">Type answer here...</div>'
+    + '<button class="ws-btn" onclick="this.closest(\'.fc-edit-card\').remove()" style="font-size:10px;margin-top:4px;color:#c44;">Remove</button>';
+  grid.appendChild(card);
+  card.querySelector('.fc-edit-front').focus();
+}
+
+function wsAddQuizQuestion() {
+  var editor = document.getElementById('wsQuizEditor');
+  if (!editor) return;
+  // Remove placeholder
+  var placeholder = editor.querySelector('div[style*="text-align:center"]');
+  if (placeholder) placeholder.remove();
+  var idx = editor.querySelectorAll('.quiz-edit-block').length;
+  var block = document.createElement('div');
+  block.className = 'quiz-edit-block';
+  block.setAttribute('data-index', idx);
+  block.innerHTML = '<div class="fc-label">Question ' + (idx + 1) + '</div>'
+    + '<div contenteditable="true" class="quiz-edit-q">Type question here...</div>'
+    + '<div class="fc-label">Options</div>'
+    + '<div style="display:flex;gap:6px;align-items:center;margin:2px 0;"><input type="radio" name="wsQuiz' + idx + '" checked data-oi="0" /><div contenteditable="true" class="quiz-edit-opt" style="flex:1">Option A</div></div>'
+    + '<div style="display:flex;gap:6px;align-items:center;margin:2px 0;"><input type="radio" name="wsQuiz' + idx + '" data-oi="1" /><div contenteditable="true" class="quiz-edit-opt" style="flex:1">Option B</div></div>'
+    + '<div style="display:flex;gap:6px;align-items:center;margin:2px 0;"><input type="radio" name="wsQuiz' + idx + '" data-oi="2" /><div contenteditable="true" class="quiz-edit-opt" style="flex:1">Option C</div></div>'
+    + '<div style="display:flex;gap:6px;align-items:center;margin:2px 0;"><input type="radio" name="wsQuiz' + idx + '" data-oi="3" /><div contenteditable="true" class="quiz-edit-opt" style="flex:1">Option D</div></div>'
+    + '<div class="fc-label">Explanation</div>'
+    + '<div contenteditable="true" class="quiz-edit-exp">Explain the correct answer...</div>'
+    + '<button class="ws-btn" onclick="this.closest(\'.quiz-edit-block\').remove()" style="font-size:10px;margin-top:4px;color:#c44;">Remove</button>';
+  editor.appendChild(block);
+  block.querySelector('.quiz-edit-q').focus();
+}
+
+function saveStudyMaterial(type) {
+  var data = null;
+  var title = '';
+  var inputEl = document.getElementById('ws' + type.charAt(0).toUpperCase() + type.slice(1) + 'Input');
+  var topic = inputEl ? inputEl.value.trim().slice(0, 100) : 'Study Material';
+
+  if (type === 'flashcards') {
+    var cards = [];
+    document.querySelectorAll('#wsFlashcardsEditor .fc-edit-card').forEach(function(card) {
+      var front = card.querySelector('.fc-edit-front');
+      var back = card.querySelector('.fc-edit-back');
+      if (front && back) cards.push({ front: front.textContent.trim(), back: back.textContent.trim() });
+    });
+    if (cards.length === 0) { alert('No flashcards to save.'); return; }
+    data = cards;
+    title = 'Flashcards: ' + topic;
+  } else if (type === 'quiz') {
+    var questions = [];
+    document.querySelectorAll('#wsQuizEditor .quiz-edit-block').forEach(function(block) {
+      var q = block.querySelector('.quiz-edit-q');
+      var opts = [];
+      var correct = 0;
+      block.querySelectorAll('.quiz-edit-opt').forEach(function(opt, oi) {
+        opts.push(opt.textContent.trim());
+        var radio = opt.parentElement.querySelector('input[type=radio]');
+        if (radio && radio.checked) correct = oi;
+      });
+      var exp = block.querySelector('.quiz-edit-exp');
+      questions.push({ question: q ? q.textContent.trim() : '', options: opts, correct: correct, explanation: exp ? exp.textContent.trim() : '' });
+    });
+    if (questions.length === 0) { alert('No quiz questions to save.'); return; }
+    data = questions;
+    title = 'Quiz: ' + topic;
+  } else if (type === 'cornell') {
+    data = {
+      cues: (document.getElementById('cornellCues') || {}).innerHTML || '',
+      notes: (document.getElementById('cornellNotes') || {}).innerHTML || '',
+      summary: (document.getElementById('cornellSummary') || {}).innerHTML || ''
+    };
+    title = 'Cornell Notes: ' + topic;
+  } else if (type === 'mindmap') {
+    data = (document.getElementById('wsMindmapEditor') || {}).innerHTML || '';
+    title = 'Mind Map: ' + topic;
+  } else if (type === 'spaced') {
+    var days = [];
+    document.querySelectorAll('#spacedScheduleGrid .spaced-day-task').forEach(function(d) {
+      days.push(d.innerHTML);
+    });
+    data = days;
+    title = 'Spaced Review: ' + topic;
+  } else if (type === 'outline') {
+    data = (document.getElementById('wsOutlineEditor') || {}).innerHTML || '';
+    title = 'Outline: ' + topic;
+  }
+
+  if (!data) { alert('Nothing to save.'); return; }
+
+  // Save to localStorage
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem('obsidiaStudyMaterials') || '[]'); } catch(e) { saved = []; }
+  saved.unshift({
+    id: Date.now(),
+    type: type,
+    title: title,
+    data: data,
+    createdAt: new Date().toISOString()
+  });
+  // Keep max 50 items
+  if (saved.length > 50) saved = saved.slice(0, 50);
+  localStorage.setItem('obsidiaStudyMaterials', JSON.stringify(saved));
+
+  // Show toast
+  wsShowToast('Saved! "' + title + '"');
+
+  // Navigate to history page
+  setTimeout(function() { navigate('history'); }, 800);
+}
+
+function wsShowToast(msg) {
+  var toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#2a2520;color:#e8c067;padding:12px 24px;border-radius:12px;font-size:13px;z-index:99999;box-shadow:0 4px 20px rgba(0,0,0,0.4);border:1px solid rgba(232,192,103,0.3);transition:opacity 0.3s;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 2000);
+}
+
+function escHtml(str) {
+  var div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 
 let dcModeState='verify';
 function dcMode(btn,mode) { dcModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={verify:'Paste a claim to verify...',sources:'What needs sources?',compare:'Paste two answers...',bias:'Paste text to check...'}; document.getElementById('doublecheckChatInput').placeholder=p[mode]||''; }
