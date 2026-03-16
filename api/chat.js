@@ -61,6 +61,8 @@ module.exports = async function handler(req, res) {
     if (rv.humanizer) safeVars.humanizer = !!rv.humanizer;
     if (rv.grade) safeVars.grade = String(rv.grade).slice(0, 20);
     if (rv.scale) safeVars.scale = String(rv.scale).slice(0, 20);
+    const ALLOWED_DETAILS = ['full', 'hints', 'answer'];
+    if (rv.detail && ALLOWED_DETAILS.includes(rv.detail)) safeVars.detail = rv.detail;
     if (rv.skillContext && typeof rv.skillContext === 'string') safeVars.skillContext = rv.skillContext.slice(0, 500);
     if (rv.documentContext && typeof rv.documentContext === 'string') safeVars.documentContext = rv.documentContext.slice(0, 8000);
 
