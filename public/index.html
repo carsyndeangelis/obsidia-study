@@ -2882,7 +2882,7 @@
 <!-- ══════════════════════════════════════════════════
      ONBOARDING MODAL
 ══════════════════════════════════════════════════ -->
-<div class="onboarding-overlay" id="onboardingOverlay">
+<div class="onboarding-overlay" id="onboardingOverlay" onclick="if(event.target===this){document.getElementById('onboardingOverlay').classList.remove('open');}">
   <div class="onboarding-card">
     <div class="onboarding-step active" data-step="0">
       <div class="onboarding-emoji">&#x1F393;</div>
@@ -3963,16 +3963,27 @@ function toggleTheme() {
    ONBOARDING
 ══════════════════════════════════════════════════════ */
 let onboardingStep = 0;
-function showOnboarding() { document.getElementById('onboardingOverlay').classList.add('open'); }
+function showOnboarding() {
+  // Check localStorage — stop showing after completed or dismissed 3 times
+  try {
+    var done = localStorage.getItem('obsidia_onboard_done');
+    if (done === 'true') return;
+    var dismissCount = parseInt(localStorage.getItem('obsidia_onboard_dismiss') || '0', 10);
+    if (dismissCount >= 3) { localStorage.setItem('obsidia_onboard_done', 'true'); return; }
+    localStorage.setItem('obsidia_onboard_dismiss', String(dismissCount + 1));
+  } catch(e) {}
+  document.getElementById('onboardingOverlay').classList.add('open');
+}
+function completeOnboarding() {
+  document.getElementById('onboardingOverlay').classList.remove('open');
+  try { localStorage.setItem('obsidia_onboard_done', 'true'); } catch(e) {}
+  if (sbClient && currentUser) {
+    sbClient.from('profiles').update({ onboarding_complete: true }).eq('id', currentUser.id);
+  }
+}
 function nextOnboardingStep() {
   onboardingStep++;
-  if (onboardingStep >= 3) {
-    document.getElementById('onboardingOverlay').classList.remove('open');
-    if (sbClient && currentUser) {
-      sbClient.from('profiles').update({ onboarding_complete: true }).eq('id', currentUser.id);
-    }
-    return;
-  }
+  if (onboardingStep >= 3) { completeOnboarding(); return; }
   document.querySelectorAll('.onboarding-step').forEach(s => s.classList.remove('active'));
   document.querySelector('.onboarding-step[data-step="'+onboardingStep+'"]').classList.add('active');
   document.querySelectorAll('.onboarding-dot').forEach((d,i) => d.classList.toggle('active', i===onboardingStep));
