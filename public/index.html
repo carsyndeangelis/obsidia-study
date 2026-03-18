@@ -162,6 +162,80 @@
     }
     .onboarding-btn:hover {  transform: translateY(-1px); }
 
+    /* ─── PERSONAL INTELLIGENCE QUIZ ───────────────────────── */
+    .piq-overlay {
+      position: fixed; inset: 0; z-index: 270;
+      background: rgba(0,0,0,0.90);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    @supports (backdrop-filter: blur(1px)) { @media (min-width: 768px) {
+      .piq-overlay { background: rgba(0,0,0,0.82); backdrop-filter: blur(14px); }
+    }}
+    .piq-overlay.open { opacity: 1; pointer-events: auto; }
+    .piq-card {
+      background: var(--black-panel); border: 1px solid var(--black-border);
+      border-radius: var(--radius-xl); padding: 36px 32px;
+      max-width: 480px; width: 92%; text-align: center;
+      max-height: 90vh; overflow-y: auto;
+      transform: scale(0.95); transition: transform 0.3s ease;
+    }
+    .piq-overlay.open .piq-card { transform: scale(1); }
+    .piq-step { display: none; }
+    .piq-step.active { display: block; }
+    .piq-emoji { font-size: 44px; margin-bottom: 12px; }
+    .piq-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.04em; }
+    .piq-desc { font-size: 12px; color: #6a6050; line-height: 1.6; margin-bottom: 20px; max-width: 360px; margin-left: auto; margin-right: auto; }
+    .piq-label { display: block; text-align: left; font-size: 11px; font-weight: 600; color: #8a7e6a; margin-bottom: 5px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .piq-input, .piq-select, .piq-textarea {
+      width: 100%; padding: 10px 12px; margin-bottom: 14px;
+      background: var(--black-deep); border: 1px solid var(--black-border); border-radius: 8px;
+      color: #c8b88a; font-family: var(--font-ui); font-size: 13px;
+      outline: none; transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .piq-input:focus, .piq-select:focus, .piq-textarea:focus { border-color: var(--gold-bright); }
+    .piq-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='%238a7e6a'%3E%3Cpath d='M0 0l5 6 5-6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px; }
+    .piq-textarea { min-height: 60px; resize: vertical; }
+    .piq-progress { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+    .piq-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--black-border); transition: var(--transition); }
+    .piq-dot.active { background: var(--gold-bright); width: 22px; border-radius: 99px; }
+    .piq-dot.done { background: #5a9a6a; }
+    .piq-actions { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+    .piq-btn {
+      font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      padding: 10px 28px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: var(--transition); border: none;
+      background: linear-gradient(135deg, var(--gold-shine), var(--gold-bright));
+      color: #0a0a0a; letter-spacing: 0.04em;
+    }
+    .piq-btn:hover { transform: translateY(-1px); }
+    .piq-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .piq-btn-ghost {
+      font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+      padding: 10px 20px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: var(--transition);
+      border: 1px solid var(--black-border); background: transparent; color: #6a6050;
+    }
+    .piq-btn-ghost:hover { color: var(--gold-bright); border-color: rgba(201,168,76,0.3); }
+    .piq-optional {
+      display: inline-block; font-size: 10px; color: #5a5040; background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.15); border-radius: 99px; padding: 2px 10px; margin-bottom: 14px;
+    }
+    .piq-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .piq-chip {
+      font-size: 11px; padding: 5px 12px; border-radius: 99px; cursor: pointer;
+      border: 1px solid var(--black-border); background: var(--black-deep); color: #8a7e6a;
+      transition: var(--transition); font-family: var(--font-ui);
+    }
+    .piq-chip:hover { border-color: rgba(201,168,76,0.3); color: #c8b88a; }
+    .piq-chip.selected { border-color: var(--gold-bright); background: rgba(201,168,76,0.12); color: var(--gold-bright); }
+    .piq-summary { text-align: left; background: rgba(201,168,76,0.06); border: 1px solid rgba(201,168,76,0.12); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+    .piq-summary-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; border-bottom: 1px solid rgba(201,168,76,0.06); }
+    .piq-summary-row:last-child { border-bottom: none; }
+    .piq-summary-label { color: #6a6050; }
+    .piq-summary-value { color: #c8b88a; font-weight: 600; text-align: right; max-width: 60%; }
+
     /* ─── ACHIEVEMENTS PAGE ────────────────────────────────── */
     .achievements-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
@@ -1664,7 +1738,7 @@
       <div class="sidebar-avatar" id="sbAvatar">S</div>
       <div class="sidebar-user"><div class="sidebar-user-name" id="sbUserName">Student</div><div class="sidebar-user-sub" id="sbUserSub">LVL 12 &middot; 7 day streak</div></div>
     </div>
-    <button onclick="window.location.reload(true)" style="margin-top:10px;padding:6px 10px;background:var(--black-border);color:#c8b88a;border:none;border-radius:6px;cursor:pointer;font-size:11px;width:100%;">&#x1F504; Hard Refresh</button>
+    <button onclick="performHardRefresh()" style="margin-top:10px;padding:6px 10px;background:var(--black-border);color:#c8b88a;border:none;border-radius:6px;cursor:pointer;font-size:11px;width:100%;">&#x1F504; Hard Refresh</button>
   </div>
   <div class="sidebar-drag" id="sidebarDrag"></div>
 </aside>
@@ -1743,7 +1817,8 @@
         <div class="slab-re slab-row" id="sre3"><div class="slab-rn">I.</div><div class="slab-rx"><b>The Core Instruments</b> &mdash; <b>Math AI:</b> Conquer numbers. Solve, Explain, Graph, or Practice algebra to calculus. <b>Essay Writer:</b> Perfect your prose. Set your exact grade level (6th&ndash;Pro) and toggle the Humanizer. <b>Study &amp; Notes:</b> Map concepts or transcribe lectures instantly.</div></div>
         <div class="slab-re slab-row" id="sre4"><div class="slab-rn">II.</div><div class="slab-rx"><b>Verify &amp; Grade</b> &mdash; <b>Double Check:</b> Trust, but verify facts and cross-reference. <b>Grading:</b> Submit a rubric and let the AI score with detailed feedback. <b>Test Prep:</b> Train for ACTs and SATs with realistic problems.</div></div>
         <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Productivity</b> &mdash; <b>Smart Scan (Quick Snap):</b> Press <b>Q</b> to upload photos of textbooks or worksheets. <b>Analytics &amp; Streaks:</b> Track XP, master topics, and maintain your daily flame.</div></div>
-        <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
+        <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Personal Intelligence</b> &mdash; Complete the one-time quiz so the AI knows your grade, state, classes, and learning style. Every answer becomes tailored to <b>your</b> exact curriculum.</div></div>
+        <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
         <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
       </div></div>
     </div>
@@ -3098,7 +3173,7 @@
     </div>
     <div style="display:flex;gap:8px;justify-content:center;">
       <button class="auth-skip" onclick="dismissError()" style="flex:1;">Dismiss</button>
-      <button class="google-btn" onclick="window.location.reload(true)" style="flex:1;justify-content:center;">&#x1F504; Hard Refresh</button>
+      <button class="google-btn" onclick="performHardRefresh()" style="flex:1;justify-content:center;">&#x1F504; Hard Refresh</button>
     </div>
   </div>
 </div>
@@ -3125,6 +3200,143 @@
     </div>
     <div class="onboarding-dots"><div class="onboarding-dot active"></div><div class="onboarding-dot"></div><div class="onboarding-dot"></div></div>
     <button class="onboarding-btn" onclick="nextOnboardingStep()">Next</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PERSONAL INTELLIGENCE QUIZ
+══════════════════════════════════════════════════ -->
+<div class="piq-overlay" id="piqOverlay" onclick="if(event.target===this)piqSkip()">
+  <div class="piq-card">
+
+    <!-- STEP 0: Welcome -->
+    <div class="piq-step active" data-piq="0">
+      <div class="piq-emoji">&#x1F9E0;</div>
+      <div class="piq-title"><span class="gold-text">Personal Intelligence</span></div>
+      <div class="piq-desc">Answer a few quick questions so Obsidia can tailor every answer to <em>your</em> exact grade, classes, and curriculum. This takes about 30 seconds.</div>
+      <div class="piq-optional">100% optional &mdash; skip anytime</div>
+      <div class="piq-progress"><div class="piq-dot active"></div><div class="piq-dot"></div><div class="piq-dot"></div><div class="piq-dot"></div><div class="piq-dot"></div></div>
+      <div class="piq-actions">
+        <button class="piq-btn-ghost" onclick="piqSkip()">Skip for Now</button>
+        <button class="piq-btn" onclick="piqNext()">Let's Go</button>
+      </div>
+    </div>
+
+    <!-- STEP 1: Grade Level -->
+    <div class="piq-step" data-piq="1">
+      <div class="piq-emoji">&#x1F4DA;</div>
+      <div class="piq-title"><span class="gold-text">What grade are you in?</span></div>
+      <div class="piq-desc">This helps Obsidia match vocabulary, complexity, and standards to your level.</div>
+      <div class="piq-progress"><div class="piq-dot done"></div><div class="piq-dot active"></div><div class="piq-dot"></div><div class="piq-dot"></div><div class="piq-dot"></div></div>
+      <label class="piq-label">Grade Level</label>
+      <select class="piq-select" id="piqGrade">
+        <option value="">Select your grade...</option>
+        <option>6th Grade</option><option>7th Grade</option><option>8th Grade</option>
+        <option>9th Grade (Freshman)</option><option>10th Grade (Sophomore)</option>
+        <option selected>11th Grade (Junior)</option><option>12th Grade (Senior)</option>
+        <option>College Freshman</option><option>College Sophomore</option>
+        <option>College Junior</option><option>College Senior</option>
+        <option>Graduate Student</option><option>Other</option>
+      </select>
+      <div class="piq-actions">
+        <button class="piq-btn-ghost" onclick="piqPrev()">Back</button>
+        <button class="piq-btn" onclick="piqNext()">Next</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Location -->
+    <div class="piq-step" data-piq="2">
+      <div class="piq-emoji">&#x1F4CD;</div>
+      <div class="piq-title"><span class="gold-text">Where are you located?</span></div>
+      <div class="piq-desc">State-specific standards vary widely (NY Regents, Texas STAAR, California frameworks). This lets the AI reference <em>your</em> exact curriculum.</div>
+      <div class="piq-progress"><div class="piq-dot done"></div><div class="piq-dot done"></div><div class="piq-dot active"></div><div class="piq-dot"></div><div class="piq-dot"></div></div>
+      <label class="piq-label">U.S. State or Country</label>
+      <select class="piq-select" id="piqLocation">
+        <option value="">Select your state or country...</option>
+        <option>Alabama</option><option>Alaska</option><option>Arizona</option><option>Arkansas</option>
+        <option>California</option><option>Colorado</option><option>Connecticut</option><option>Delaware</option>
+        <option>Florida</option><option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+        <option>Illinois</option><option>Indiana</option><option>Iowa</option><option>Kansas</option>
+        <option>Kentucky</option><option>Louisiana</option><option>Maine</option><option>Maryland</option>
+        <option>Massachusetts</option><option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+        <option>Missouri</option><option>Montana</option><option>Nebraska</option><option>Nevada</option>
+        <option>New Hampshire</option><option>New Jersey</option><option>New Mexico</option><option>New York</option>
+        <option>North Carolina</option><option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+        <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option><option>South Carolina</option>
+        <option>South Dakota</option><option>Tennessee</option><option>Texas</option><option>Utah</option>
+        <option>Vermont</option><option>Virginia</option><option>Washington</option><option>West Virginia</option>
+        <option>Wisconsin</option><option>Wyoming</option><option>Washington D.C.</option>
+        <option disabled>───────────</option>
+        <option>Canada</option><option>United Kingdom</option><option>Australia</option><option>India</option><option>Other Country</option>
+      </select>
+      <label class="piq-label" style="margin-top:4px;">School Name <span style="font-weight:400;text-transform:none;color:#5a5040;">(optional)</span></label>
+      <input class="piq-input" id="piqSchool" placeholder="e.g., Lincoln High School" maxlength="80" />
+      <div class="piq-actions">
+        <button class="piq-btn-ghost" onclick="piqPrev()">Back</button>
+        <button class="piq-btn" onclick="piqNext()">Next</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Classes -->
+    <div class="piq-step" data-piq="3">
+      <div class="piq-emoji">&#x1F4D3;</div>
+      <div class="piq-title"><span class="gold-text">What classes are you taking?</span></div>
+      <div class="piq-desc">List your current courses so the AI can reference the right material. Tap common ones below or type your own.</div>
+      <div class="piq-progress"><div class="piq-dot done"></div><div class="piq-dot done"></div><div class="piq-dot done"></div><div class="piq-dot active"></div><div class="piq-dot"></div></div>
+      <div class="piq-chips" id="piqClassChips">
+        <span class="piq-chip" onclick="piqToggleChip(this)">Algebra 2</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Pre-Calculus</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Calculus</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Statistics</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Biology</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Chemistry</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Physics</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP U.S. History</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP English Lit</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP English Lang</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP World History</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Computer Science</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">AP Psychology</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Geometry</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">English 11</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">U.S. History</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Chemistry</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Physics</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Biology</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Spanish</span>
+      </div>
+      <label class="piq-label">Other classes <span style="font-weight:400;text-transform:none;color:#5a5040;">(comma-separated)</span></label>
+      <input class="piq-input" id="piqCustomClasses" placeholder="e.g., Honors English, Music Theory" maxlength="200" />
+      <div class="piq-actions">
+        <button class="piq-btn-ghost" onclick="piqPrev()">Back</button>
+        <button class="piq-btn" onclick="piqNext()">Next</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Learning Style + Struggles + Review -->
+    <div class="piq-step" data-piq="4">
+      <div class="piq-emoji">&#x2728;</div>
+      <div class="piq-title"><span class="gold-text">Almost done!</span></div>
+      <div class="piq-desc">Tell the AI how you learn best and what you struggle with. This is completely optional.</div>
+      <div class="piq-progress"><div class="piq-dot done"></div><div class="piq-dot done"></div><div class="piq-dot done"></div><div class="piq-dot done"></div><div class="piq-dot active"></div></div>
+      <label class="piq-label">Learning Style</label>
+      <div class="piq-chips" id="piqStyleChips">
+        <span class="piq-chip" onclick="piqToggleChip(this)">Visual learner</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Learn by doing</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Need step-by-step</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Prefer big picture first</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Need lots of examples</span>
+        <span class="piq-chip" onclick="piqToggleChip(this)">Short attention span</span>
+      </div>
+      <label class="piq-label">Academic struggles or notes for the AI</label>
+      <textarea class="piq-textarea" id="piqStruggles" placeholder="e.g., I struggle with word problems, I'm a slow reader, I need extra time on math..." maxlength="300"></textarea>
+      <div id="piqReview" class="piq-summary" style="display:none;"></div>
+      <div class="piq-actions">
+        <button class="piq-btn-ghost" onclick="piqPrev()">Back</button>
+        <button class="piq-btn" onclick="piqFinish()">Save &amp; Start Learning</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -3185,6 +3397,22 @@ let currentPage = 'home';
 const inputStates = {};
 const allPages = ['home','math','essay','study','notes','doublecheck','grading','testprep','teacher','history','feedback','settings','achievements','smartscan','analytics','studygroups','themes','reminders'];
 allPages.forEach(p => inputStates[p] = '');
+
+function performHardRefresh() {
+  if (typeof currentPage !== 'undefined') {
+    localStorage.setItem('obsidia_last_page', currentPage);
+  }
+  window.location.reload(true);
+}
+
+// Restore page after hard refresh
+(function() {
+  var saved = localStorage.getItem('obsidia_last_page');
+  if (saved) {
+    localStorage.removeItem('obsidia_last_page');
+    requestAnimationFrame(function() { if (typeof navigate === 'function' && saved !== 'home') navigate(saved); });
+  }
+})();
 
 var _sidebarBtns = null;
 function navigate(pageId) {
@@ -3649,10 +3877,13 @@ async function wsGenerate(method) {
   btns.forEach(function(b) { b.disabled = true; });
 
   try {
+    var _wsProfileCtx = getStudentProfileContext();
+    var _wsVars = { method: method };
+    if (_wsProfileCtx) _wsVars.studentProfile = _wsProfileCtx;
     var body = {
       message: text || 'Generate study material from the attached image.',
       page: 'study',
-      vars: { method: method },
+      vars: _wsVars,
       history: [],
       model: 'sonnet'
     };
@@ -4022,6 +4253,8 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
 
   try {
     var body = { message: message, page: page, vars: vars, history: chatHistory[historyKey].slice(-10), model: vars.model || 'sonnet' };
+    var _profileCtx = getStudentProfileContext();
+    if (_profileCtx) { if (!body.vars) body.vars = {}; body.vars.studentProfile = _profileCtx; }
     if (imageData) body.image = imageData;
 
     var res = await fetch('/api/chat.js', {
@@ -4618,7 +4851,11 @@ function initSupabase() {
    AUTH FUNCTIONS
 ══════════════════════════════════════════════════════ */
 function openAuth() { document.getElementById('authOverlay').classList.add('open'); }
-function closeAuth() { document.getElementById('authOverlay').classList.remove('open'); }
+function closeAuth() {
+  document.getElementById('authOverlay').classList.remove('open');
+  // Show PIQ for anonymous users who skip login
+  setTimeout(function() { showPersonalIntelligenceQuiz(); }, 400);
+}
 
 async function signInWithGoogle() {
   if (!sbClient) { alert('Supabase not configured. Add your Supabase URL and anon key to the code.'); return; }
@@ -4650,6 +4887,7 @@ async function onSignIn() {
       userProfile = data;
       updateUIWithProfile(data);
       if (!data.onboarding_complete) showOnboarding();
+      else setTimeout(function() { showPersonalIntelligenceQuiz(); }, 500);
     }
   }
   // Load recent activity for right sidebar
@@ -4794,6 +5032,8 @@ function completeOnboarding() {
   if (sbClient && currentUser) {
     sbClient.from('profiles').update({ onboarding_complete: true }).eq('id', currentUser.id);
   }
+  // Chain into Personal Intelligence Quiz after onboarding
+  setTimeout(function() { showPersonalIntelligenceQuiz(); }, 400);
 }
 function nextOnboardingStep() {
   onboardingStep++;
@@ -4802,6 +5042,149 @@ function nextOnboardingStep() {
   document.querySelector('.onboarding-step[data-step="'+onboardingStep+'"]').classList.add('active');
   document.querySelectorAll('.onboarding-dot').forEach((d,i) => d.classList.toggle('active', i===onboardingStep));
   if (onboardingStep === 2) document.querySelector('.onboarding-btn').textContent = 'Get Started';
+}
+
+/* ══════════════════════════════════════════════════════
+   PERSONAL INTELLIGENCE QUIZ
+══════════════════════════════════════════════════════ */
+var _piqStep = 0;
+var _piqTotalSteps = 5;
+
+function showPersonalIntelligenceQuiz() {
+  // Don't show if already completed
+  try {
+    if (localStorage.getItem('obsidia_piq_done') === 'true') return;
+    var profile = localStorage.getItem('obsidia_user_profile');
+    if (profile && JSON.parse(profile).grade) return;
+  } catch(e) {}
+  _piqStep = 0;
+  document.querySelectorAll('.piq-step').forEach(function(s) { s.classList.remove('active'); });
+  var first = document.querySelector('.piq-step[data-piq="0"]');
+  if (first) first.classList.add('active');
+  document.getElementById('piqOverlay').classList.add('open');
+}
+
+function piqSkip() {
+  document.getElementById('piqOverlay').classList.remove('open');
+  try { localStorage.setItem('obsidia_piq_done', 'true'); } catch(e) {}
+}
+
+function piqNext() {
+  _piqStep++;
+  if (_piqStep >= _piqTotalSteps) { piqFinish(); return; }
+  piqShowStep(_piqStep);
+  // Build review on last step
+  if (_piqStep === 4) piqBuildReview();
+}
+
+function piqPrev() {
+  if (_piqStep <= 0) return;
+  _piqStep--;
+  piqShowStep(_piqStep);
+}
+
+function piqShowStep(step) {
+  document.querySelectorAll('.piq-step').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.querySelector('.piq-step[data-piq="' + step + '"]');
+  if (el) el.classList.add('active');
+}
+
+function piqToggleChip(el) {
+  el.classList.toggle('selected');
+}
+
+function piqGetSelectedChips(containerId) {
+  var chips = [];
+  document.querySelectorAll('#' + containerId + ' .piq-chip.selected').forEach(function(c) {
+    chips.push(c.textContent.trim());
+  });
+  return chips;
+}
+
+function piqBuildReview() {
+  var grade = (document.getElementById('piqGrade') || {}).value || '';
+  var location = (document.getElementById('piqLocation') || {}).value || '';
+  var school = (document.getElementById('piqSchool') || {}).value || '';
+  var classes = piqGetSelectedChips('piqClassChips');
+  var custom = (document.getElementById('piqCustomClasses') || {}).value || '';
+  if (custom.trim()) {
+    custom.split(',').forEach(function(c) { if (c.trim()) classes.push(c.trim()); });
+  }
+  var reviewEl = document.getElementById('piqReview');
+  if (!reviewEl) return;
+  var rows = '';
+  if (grade) rows += '<div class="piq-summary-row"><span class="piq-summary-label">Grade</span><span class="piq-summary-value">' + grade + '</span></div>';
+  if (location) rows += '<div class="piq-summary-row"><span class="piq-summary-label">Location</span><span class="piq-summary-value">' + location + '</span></div>';
+  if (school) rows += '<div class="piq-summary-row"><span class="piq-summary-label">School</span><span class="piq-summary-value">' + escHtml(school) + '</span></div>';
+  if (classes.length) rows += '<div class="piq-summary-row"><span class="piq-summary-label">Classes</span><span class="piq-summary-value">' + escHtml(classes.join(', ')) + '</span></div>';
+  if (rows) { reviewEl.innerHTML = rows; reviewEl.style.display = ''; }
+  else { reviewEl.style.display = 'none'; }
+}
+
+function piqFinish() {
+  var grade = (document.getElementById('piqGrade') || {}).value || '';
+  var location = (document.getElementById('piqLocation') || {}).value || '';
+  var school = (document.getElementById('piqSchool') || {}).value || '';
+  var classes = piqGetSelectedChips('piqClassChips');
+  var custom = (document.getElementById('piqCustomClasses') || {}).value || '';
+  if (custom.trim()) {
+    custom.split(',').forEach(function(c) { if (c.trim()) classes.push(c.trim()); });
+  }
+  var styles = piqGetSelectedChips('piqStyleChips');
+  var struggles = (document.getElementById('piqStruggles') || {}).value || '';
+
+  var profile = {
+    grade: grade,
+    location: location,
+    school: school,
+    classes: classes,
+    learningStyles: styles,
+    struggles: struggles.trim(),
+    updatedAt: new Date().toISOString()
+  };
+
+  // Save to localStorage
+  try {
+    localStorage.setItem('obsidia_user_profile', JSON.stringify(profile));
+    localStorage.setItem('obsidia_piq_done', 'true');
+  } catch(e) {}
+
+  // Save to Supabase if authenticated
+  if (typeof sbClient !== 'undefined' && sbClient && typeof currentUser !== 'undefined' && currentUser) {
+    try {
+      sbClient.from('profiles').update({
+        student_grade: grade,
+        student_location: location,
+        student_school: school,
+        student_classes: classes,
+        student_learning_styles: styles,
+        student_struggles: struggles.trim()
+      }).eq('id', currentUser.id);
+    } catch(e) {}
+  }
+
+  // Close overlay
+  document.getElementById('piqOverlay').classList.remove('open');
+
+  // Show confirmation toast
+  if (typeof wsShowToast === 'function') wsShowToast('Profile saved! The AI will now personalize every response for you.');
+}
+
+function getStudentProfileContext() {
+  try {
+    var raw = localStorage.getItem('obsidia_user_profile');
+    if (!raw) return '';
+    var p = JSON.parse(raw);
+    if (!p.grade && !p.location && !p.classes?.length) return '';
+    var parts = [];
+    if (p.grade) parts.push('Grade: ' + p.grade);
+    if (p.location) parts.push('Location: ' + p.location);
+    if (p.school) parts.push('School: ' + p.school);
+    if (p.classes && p.classes.length) parts.push('Current classes: ' + p.classes.join(', '));
+    if (p.learningStyles && p.learningStyles.length) parts.push('Learning style: ' + p.learningStyles.join(', '));
+    if (p.struggles) parts.push('Struggles/notes: ' + p.struggles);
+    return parts.join('. ') + '.';
+  } catch(e) { return ''; }
 }
 
 /* ══════════════════════════════════════════════════════

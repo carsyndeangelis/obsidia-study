@@ -181,6 +181,11 @@ function buildPrompt(page, vars = {}) {
     prompt += `\n\nDOCUMENT CONTEXT (uploaded by student):\n${vars.documentContext}\nReference this document when answering the student's question.`;
   }
 
+  // Personal Intelligence profile
+  if (vars.studentProfile) {
+    prompt += `\n\nSTUDENT PROFILE: ${vars.studentProfile}\nSilently adapt your vocabulary, difficulty, examples, and standards references to match this student's exact grade level, location, classes, and learning style. Do not mention this profile to the student — just use it to give better answers.`;
+  }
+
   return prompt.trim();
 }
 

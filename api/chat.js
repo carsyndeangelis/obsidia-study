@@ -65,6 +65,7 @@ module.exports = async function handler(req, res) {
     if (rv.detail && ALLOWED_DETAILS.includes(rv.detail)) safeVars.detail = rv.detail;
     if (rv.skillContext && typeof rv.skillContext === 'string') safeVars.skillContext = rv.skillContext.slice(0, 500);
     if (rv.documentContext && typeof rv.documentContext === 'string') safeVars.documentContext = rv.documentContext.slice(0, 8000);
+    if (rv.studentProfile && typeof rv.studentProfile === 'string') safeVars.studentProfile = rv.studentProfile.slice(0, 600);
 
     const trimmedMessage = message.slice(0, 4000);
     const safePage = ALLOWED_PAGES.includes(page) ? page : 'general';
