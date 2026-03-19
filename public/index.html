@@ -1507,6 +1507,9 @@
     .scratch-canvas-wrap { flex: 1; position: relative; overflow: hidden; background: #0e0e0e; }
     .scratch-canvas-wrap canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
     .scratch-attach { margin: 10px; padding: 10px; border-radius: 8px; }
+    .practice-box-btn { background: rgba(201,168,76,0.05); border: 1px solid rgba(201,168,76,0.2); color: #aaa090; border-radius: 8px; padding: 14px 16px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; flex: 1; min-width: 130px; }
+    .practice-box-btn:hover { background: rgba(201,168,76,0.1); color: #c8b88a; }
+    .practice-box-btn.active { background: rgba(201,168,76,0.15); border-color: var(--gold-mid); color: var(--gold-bright); box-shadow: 0 0 12px rgba(201,168,76,0.1); }
     @media (max-width: 900px) {
       .math-chat-row { flex-direction: column; }
       .math-scratch-column { width: 100%; height: 260px; border-left: none; border-top: 1px solid var(--black-border); }
@@ -3826,7 +3829,28 @@ function mathMode(btn, mode) {
   } else if (mode === 'graph') {
     welcome.innerHTML = '<h2 class="welcome-title">Interactive Graphing</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Visualize math instantly. Open the interactive Desmos calculator to plot equations, geometry, or data, then attach your graphs directly to the chat for AI analysis.</p><div><button class="btn-gold" onclick="openDesmosModal()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Open Graphing Calculator</button></div>';
   } else {
-    welcome.innerHTML = '<h2 class="welcome-title">Math Practice</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Generate practice problems tailored to your skill level. Select a topic and the AI will guide you through solving them step-by-step.</p><div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion(\'math\',this)">Generate algebra problems</button><button class="chip" onclick="spUseSuggestion(\'math\',this)">Test my calculus skills</button></div>';
+    welcome.innerHTML = '<h2 class="welcome-title">How would you like to practice?</h2><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:500px;margin:0 auto 24px;"><button class="practice-box-btn active" onclick="setPracticeType(this,\'multiple-choice\')">Multiple Choice</button><button class="practice-box-btn" onclick="setPracticeType(this,\'step-by-step\')">Step-by-step</button><button class="practice-box-btn" onclick="setPracticeType(this,\'flashcards\')">Vocab & Formulas</button></div><div style="max-width:440px;margin:0 auto;text-align:left;"><label style="font-size:12px;font-weight:600;color:#8a8070;margin-bottom:8px;display:block;letter-spacing:0.04em;">WHAT EXACT MATH TOPIC DO YOU WANT TO STUDY?</label><div style="display:flex;gap:8px;"><input type="text" id="practiceTopicInput" placeholder="e.g. Calculus integrals, Quadratic equations..." style="flex:1;background:var(--black-input);border:1px solid var(--black-border);border-radius:8px;padding:12px 14px;color:#e8e0cc;outline:none;font-family:var(--font-ui);" onkeypress="if(event.key===\'Enter\') startMathPractice()"><button class="btn-gold" onclick="startMathPractice()" style="padding:0 24px;border-radius:8px;font-weight:600;">Start</button></div></div>';
+  }
+}
+
+let _selectedPracticeType = 'multiple-choice';
+function setPracticeType(btn, type) {
+  _selectedPracticeType = type;
+  document.querySelectorAll('.practice-box-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+function startMathPractice() {
+  var topicInput = document.getElementById('practiceTopicInput');
+  var topic = topicInput ? topicInput.value.trim() : '';
+  if (!topic) { if (typeof showToast === 'function') showToast('warning', '', 'Missing Topic', 'Please enter a math topic to study.'); return; }
+  var promptMap = { 'multiple-choice': 'Generate a multiple-choice practice quiz for: ', 'step-by-step': 'Provide a step-by-step practice walkthrough for: ', 'flashcards': 'Test me on vocabulary and formulas related to: ' };
+  var finalPrompt = (promptMap[_selectedPracticeType] || '') + topic;
+  var chatInput = document.getElementById('mathChatInput');
+  if (chatInput) {
+    chatInput.value = finalPrompt;
+    chatInput.dispatchEvent(new Event('input'));
+    var sendBtn = document.getElementById('mathSendBtn');
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
   }
 }
 
