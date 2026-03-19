@@ -1447,6 +1447,11 @@
     .math-tooltip-card .tt-formula { font-size:13px; color:#c8b88a; }
     .math-tooltip-card .tt-desc { font-size:10px; color:#8a8070; margin-top:4px; }
 
+    /* Code block copy button */
+    .code-copy-btn { position:absolute; top:6px; right:6px; background:rgba(30,30,30,0.7); backdrop-filter:blur(8px); border:1px solid rgba(201,168,76,0.2); border-radius:6px; color:#8a8070; font-size:10px; font-weight:600; font-family:var(--font-ui); padding:3px 10px; cursor:pointer; transition:all 0.2s; letter-spacing:0.03em; z-index:1; }
+    .code-copy-btn:hover { background:rgba(201,168,76,0.12); color:var(--gold-bright); border-color:rgba(201,168,76,0.4); }
+    .code-copy-btn.copied { background:rgba(52,211,153,0.12); border-color:rgba(52,211,153,0.3); color:#34d399; }
+
     /* Generate similar problem button */
     .similar-problem-btn { display:inline-flex; align-items:center; gap:4px; margin-top:8px; padding:5px 12px; border-radius:6px; border:1px solid rgba(91,156,246,0.25); background:rgba(91,156,246,0.08); color:var(--math-color); font-size:11px; font-weight:500; cursor:pointer; font-family:var(--font-ui); }
     .similar-problem-btn:hover { background:rgba(91,156,246,0.15); border-color:rgba(91,156,246,0.4); }
@@ -5230,6 +5235,19 @@ function getFormulaRegex() {
   return _formulaRegex;
 }
 
+/* ── Code Block Copy Button ── */
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement;
+  var code = pre.querySelector('code');
+  if (!code) return;
+  var text = code.textContent || code.innerText;
+  navigator.clipboard.writeText(text.trim()).then(function() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
 /* ── Markdown Renderer with KaTeX Math ── */
 function renderMarkdown(text) {
   // Protect code blocks and extract desmos graphs
@@ -5241,7 +5259,8 @@ function renderMarkdown(text) {
       desmosBlocks.push({ id: id, equation: code.trim() });
       return '%%DESMOS' + (desmosBlocks.length - 1) + '%%';
     }
-    codeBlocks.push('<pre style="background:var(--black-card);border:1px solid var(--black-border);border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto;font-size:12px;font-family:monospace;color:#c8b88a"><code>' + code.replace(/</g,'&lt;') + '</code></pre>');
+    var escaped = code.replace(/</g,'&lt;');
+    codeBlocks.push('<pre class="code-block-wrap" style="position:relative;background:var(--black-card);border:1px solid var(--black-border);border-radius:8px;padding:10px 12px;margin:8px 0;overflow-x:auto;font-size:12px;font-family:monospace;color:#c8b88a"><button class="code-copy-btn" onclick="copyCodeBlock(this)">Copy</button><code>' + escaped + '</code></pre>');
     return '%%CODEBLOCK' + (codeBlocks.length - 1) + '%%';
   });
 
