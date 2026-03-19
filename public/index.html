@@ -3533,6 +3533,8 @@ function dismissError() {
 
 window.onerror = function(msg, url, line) {
   if (msg === 'Script error.' && line === 0) return true;
+  var msgStr = String(msg).toLowerCase();
+  if (msgStr.indexOf('katex') !== -1 || msgStr.indexOf('parse error') !== -1 || msgStr.indexOf('math') !== -1) return true;
   console.error('JS Error:', msg, 'line', line);
   showAppError('An unexpected application glitch occurred.', 'Please try a Hard Refresh (Ctrl+F5) to load the latest version of the app.');
 };
@@ -4850,7 +4852,7 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
           if (data.text) {
             if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); }
             fullText += data.text;
-            bubble.innerHTML = renderMarkdown(fullText);
+            try { bubble.innerHTML = renderMarkdown(fullText); } catch(_) {}
             container.scrollTop = container.scrollHeight;
           }
         } catch(e) {}
