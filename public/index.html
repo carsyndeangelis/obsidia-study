@@ -2325,7 +2325,7 @@
               <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('math',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion('math',this)">Explain derivatives</button></div>
             </div>
           </div>
-          <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
+          <div class="chat-input-wrap"><div id="mathAttachmentPreview" style="display:none;padding:0 16px 12px;transition:all 0.3s ease;"><div style="position:relative;display:inline-block;"><img id="mathPreviewImg" src="" style="height:64px;border-radius:6px;border:1px solid var(--black-border);background:var(--black-panel);box-shadow:0 4px 12px rgba(0,0,0,0.5);" alt="Attached Drawing" /><button onclick="undoScratchpadAttachment()" aria-label="Remove attachment" style="position:absolute;top:-6px;right:-6px;background:#f43f5e;color:#fff;border:1px solid #7f1d1d;border-radius:50%;width:18px;height:18px;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 4px rgba(0,0,0,0.4);">&times;</button></div></div><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
         </div>
         <div class="math-scratch-column">
           <div class="scratch-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Scratch Pad</div>
@@ -3904,6 +3904,9 @@ function attachScratchpadToMathChat() {
   if (btn) { btn.textContent = 'Attached! (Click to Undo)'; btn.style.background = '#f43f5e'; btn.setAttribute('onclick', 'undoScratchpadAttachment()'); }
   var input = document.getElementById('mathChatInput');
   if (input) { input.placeholder = 'Drawing attached! Type a message and hit Enter...'; input.focus(); }
+  var previewWrap = document.getElementById('mathAttachmentPreview');
+  var previewImg = document.getElementById('mathPreviewImg');
+  if (previewWrap && previewImg) { previewImg.src = dataUrl; previewWrap.style.display = 'block'; }
 }
 function undoScratchpadAttachment() {
   _pendingPasteImage['math'] = null;
@@ -3911,6 +3914,8 @@ function undoScratchpadAttachment() {
   if (btn) { btn.textContent = 'Attach to Chat'; btn.style.background = ''; btn.setAttribute('onclick', 'attachScratchpadToMathChat()'); }
   var input = document.getElementById('mathChatInput');
   if (input) input.placeholder = 'Enter a math problem or equation...';
+  var previewWrap = document.getElementById('mathAttachmentPreview');
+  if (previewWrap) previewWrap.style.display = 'none';
 }
 /* ── Desmos Graph Modal ── */
 var _desmosCalcInstance = null;
