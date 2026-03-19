@@ -53,7 +53,7 @@ const SELF_VERIFY = 'You are a world-class, critically-thinking AI assistant. Be
 // ── Anthropic streaming ──
 async function streamAnthropic(res, systemPrompt, messages, modelOverride) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-3-5-sonnet-20241022';
+  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-3-5-sonnet-latest';
 
   const stream = await client.messages.stream({
     model: modelId,
@@ -72,7 +72,7 @@ async function streamAnthropic(res, systemPrompt, messages, modelOverride) {
 // ── Anthropic humanizer loop (essay-specific) ──
 async function streamAnthropicHumanizer(res, systemPrompt, messages, modelOverride) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-3-5-sonnet-20241022';
+  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-3-5-sonnet-latest';
   const MAX_LOOPS = 3;
   let draft = '';
 
