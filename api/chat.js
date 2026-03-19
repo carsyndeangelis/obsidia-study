@@ -70,7 +70,8 @@ module.exports = async function handler(req, res) {
 
     const trimmedMessage = message.slice(0, 4000);
     const safePage = ALLOWED_PAGES.includes(page) ? page : 'general';
-    const systemPrompt = buildPrompt(safePage, safeVars);
+    const SELF_VERIFY = 'You are a world-class, critically-thinking AI assistant. Before outputting your final response to the user, you must internally double-check your own work. Rigorously evaluate your answer for absolute factual accuracy, logical consistency, and clarity. Ask yourself: \'Is this the absolute best, most helpful possible answer I can provide?\' If your initial thought process is flawed, correct it before responding. Remove any unnecessary fluff, do not hallucinate resources, and ensure you directly and comprehensively solve the user\'s exact problem. Always strive for the highest tier of mathematical and logical reasoning.';
+    const systemPrompt = SELF_VERIFY + '\n\n' + buildPrompt(safePage, safeVars);
 
     // Build conversation history
     const messages = [];
