@@ -1494,7 +1494,10 @@
     /* ─── MATH SCRATCH PAD ────────────────────────────────── */
     .math-chat-row { display: flex; flex: 1; overflow: hidden; }
     .math-chat-column { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .math-scratch-column { width: 420px; border-left: 1px solid var(--black-border); background: var(--black-panel); display: flex; flex-direction: column; flex-shrink: 0; }
+    .math-scratch-column { width: 50%; border-left: 1px solid var(--black-border); background: var(--black-panel); display: flex; flex-direction: column; flex-shrink: 0; }
+    .scratch-info-details summary::-webkit-details-marker { display: none; }
+    .scratch-info-details summary::after { content: ' \u25BC'; float: right; color: #5a5040; }
+    .scratch-info-details[open] summary::after { content: ' \u25B2'; }
     .scratch-header { padding: 12px 14px; font-size: 12px; font-weight: 600; color: #c8b88a; border-bottom: 1px solid var(--black-border); display: flex; align-items: center; gap: 8px; letter-spacing: 0.04em; }
     .scratch-header svg { width: 14px; height: 14px; color: var(--math-color); }
     .scratch-tools { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-bottom: 1px solid var(--black-border); }
@@ -2326,7 +2329,10 @@
         </div>
         <div class="math-scratch-column">
           <div class="scratch-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Scratch Pad</div>
-          <div style="padding:10px 14px;font-size:11px;line-height:1.5;color:#8a8070;border-bottom:1px solid var(--black-border);background:rgba(0,0,0,0.2);">Use this space to hand-write complex equations, draw geometry, or brainstorm concepts. When you're ready, attach it to your message and ask the AI for step-by-step help.</div>
+          <details class="scratch-info-details" style="border-bottom:1px solid var(--black-border);background:rgba(0,0,0,0.2);">
+            <summary style="padding:10px 14px;font-size:10px;color:var(--gold-muted);font-weight:700;letter-spacing:0.05em;cursor:pointer;outline:none;user-select:none;">HOW TO USE THE SCRATCH PAD</summary>
+            <div style="padding:0 14px 14px;font-size:11px;line-height:1.5;color:#8a8070;">Use this space to hand-write complex equations, draw geometry, or brainstorm concepts. When you're ready, attach it to your message and ask the AI for step-by-step help.</div>
+          </details>
           <div class="scratch-tools">
             <button class="scratch-tool-btn active" id="scratchPenBtn" onclick="setScratchTool('pen')">Pen</button>
             <button class="scratch-tool-btn" id="scratchEraserBtn" onclick="setScratchTool('eraser')">Eraser</button>
