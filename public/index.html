@@ -3754,7 +3754,7 @@ function sendPageMsg(pg) {
 
   var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage[pg] && _pendingPasteImage[pg].length) ? _pendingPasteImage[pg].slice() : null;
   if (pastedImgs) { clearImageAttachmentPreview(pg); }
-  if (pg === 'math' && typeof undoScratchpadAttachment === 'function') undoScratchpadAttachment();
+  if (pg === 'math') { _currentScratchAttachment = null; var _sb = document.getElementById('scratchAttachBtn'); if (_sb) { _sb.textContent = 'Attach to Chat'; _sb.style.background = ''; _sb.style.borderColor = ''; } }
   streamAIResponse(msgContainer, text, pg, vars, pg, pastedImgs || undefined);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
@@ -3822,6 +3822,7 @@ function mathMode(btn,mode) { mathModeState=mode; btn.closest('.sp-toolbar').que
 
 /* ── Scratch Pad (Math Tab) ── */
 var _scratchTool = 'pen';
+var _currentScratchAttachment = null;
 var _scratchInited = false;
 function initScratchPad() {
   if (_scratchInited) return;
@@ -3878,26 +3879,34 @@ function clearScratchPad() {
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  _currentScratchAttachment = null;
+  var btn = document.getElementById('scratchAttachBtn');
+  if (btn) { btn.textContent = 'Attach to Chat'; btn.style.background = ''; btn.style.borderColor = ''; }
 }
 function attachScratchpadToMathChat() {
   var canvas = document.getElementById('mathScratchPad');
   if (!canvas) return;
   var dataUrl = canvas.toDataURL('image/png');
-  // Check if canvas is blank
   var blank = document.createElement('canvas');
   blank.width = canvas.width; blank.height = canvas.height;
   if (canvas.toDataURL() === blank.toDataURL()) {
     showToast('warning', '', 'Empty Scratch Pad', 'Draw something first before attaching.');
     return;
   }
-  showImageAttachmentPreview('math', dataUrl);
+  if (_currentScratchAttachment) {
+    var index = _pendingPasteImage['math'] ? _pendingPasteImage['math'].indexOf(_currentScratchAttachment) : -1;
+    if (index > -1) {
+      _pendingPasteImage['math'][index] = dataUrl;
+      var pageEl = document.getElementById('page-math');
+      var previewEl = pageEl ? pageEl.querySelector('.global-attachment-preview') : null;
+      if (previewEl) { var imgs = previewEl.querySelectorAll('img'); if (imgs[index]) imgs[index].src = dataUrl; }
+    }
+  } else {
+    showImageAttachmentPreview('math', dataUrl);
+  }
+  _currentScratchAttachment = dataUrl;
   var btn = document.getElementById('scratchAttachBtn');
-  if (btn) { btn.textContent = 'Attached! (Click to Undo)'; btn.style.background = '#f43f5e'; btn.setAttribute('onclick', 'undoScratchpadAttachment()'); }
-}
-function undoScratchpadAttachment() {
-  clearImageAttachmentPreview('math');
-  var btn = document.getElementById('scratchAttachBtn');
-  if (btn) { btn.textContent = 'Attach to Chat'; btn.style.background = ''; btn.setAttribute('onclick', 'attachScratchpadToMathChat()'); }
+  if (btn) { btn.textContent = 'Attached! (Click to update edits)'; btn.style.background = '#5a5040'; btn.style.borderColor = '#5a5040'; }
 }
 
 /* ── Global Image Attachment Preview (multi-image) ── */
