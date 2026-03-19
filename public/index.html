@@ -2339,7 +2339,7 @@
             <button class="scratch-tool-btn" onclick="clearScratchPad()">Clear</button>
           </div>
           <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas></div>
-          <button class="btn-gold scratch-attach" onclick="attachScratchpadToMathChat()">Attach to Chat</button>
+          <button class="btn-gold scratch-attach" id="scratchAttachBtn" onclick="attachScratchpadToMathChat()">Attach to Chat</button>
         </div>
       </div>
     </div>
@@ -3749,6 +3749,7 @@ function sendPageMsg(pg) {
 
   var pastedImg = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage[pg]) ? _pendingPasteImage[pg] : null;
   if (pastedImg) { delete _pendingPasteImage[pg]; input.placeholder = ''; }
+  if (pg === 'math' && typeof undoScratchpadAttachment === 'function') undoScratchpadAttachment();
   streamAIResponse(msgContainer, text, pg, vars, pg, pastedImg || undefined);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
@@ -3898,12 +3899,18 @@ function attachScratchpadToMathChat() {
     showToast('warning', '', 'Empty Scratch Pad', 'Draw something first before attaching.');
     return;
   }
-  var welcome = document.getElementById('mathWelcome');
-  if (welcome) welcome.classList.add('hidden');
-  appendImageMsg('mathMessages', dataUrl, 'scratchpad.png');
   _pendingPasteImage['math'] = dataUrl;
+  var btn = document.getElementById('scratchAttachBtn');
+  if (btn) { btn.textContent = 'Attached! (Click to Undo)'; btn.style.background = '#f43f5e'; btn.setAttribute('onclick', 'undoScratchpadAttachment()'); }
   var input = document.getElementById('mathChatInput');
-  if (input) { input.placeholder = 'Scratch pad attached! Type a message and press Enter to send...'; input.focus(); }
+  if (input) { input.placeholder = 'Drawing attached! Type a message and hit Enter...'; input.focus(); }
+}
+function undoScratchpadAttachment() {
+  _pendingPasteImage['math'] = null;
+  var btn = document.getElementById('scratchAttachBtn');
+  if (btn) { btn.textContent = 'Attach to Chat'; btn.style.background = ''; btn.setAttribute('onclick', 'attachScratchpadToMathChat()'); }
+  var input = document.getElementById('mathChatInput');
+  if (input) input.placeholder = 'Enter a math problem or equation...';
 }
 /* ── Desmos Graph Modal ── */
 var _desmosCalcInstance = null;
