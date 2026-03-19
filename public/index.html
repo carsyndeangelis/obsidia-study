@@ -3687,16 +3687,17 @@ function handleDroppedFile(file) {
   if (dzError) dzError.textContent = '';
   if (!ALLOWED_TYPES.includes(file.type)) { if(dzError) dzError.textContent = 'Unsupported format. Use JPEG, PNG, WebP, or PDF.'; return; }
   if (file.size > MAX_SIZE) { if(dzError) dzError.textContent = 'File too large. Maximum size is 10 MB.'; return; }
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const welcome = document.getElementById('homeWelcome');
-    if (welcome) welcome.classList.add('hidden');
-    if (file.type.startsWith('image/')) appendImageMsg('homeChatMessages', ev.target.result, file.name);
-    else appendMsg('homeChatMessages','user','Uploaded: '+file.name);
-    const typingEl = appendTypingTo('homeChatMessages');
-    setTimeout(() => { typingEl.remove(); typeMsg('homeChatMessages','ai','I can see your uploaded file "'+file.name+'". What subject is this for, and how would you like me to help? I can solve problems, analyze content, or explain concepts.'); }, 1100+Math.random()*500);
-  };
-  reader.readAsDataURL(file);
+  if (file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      if (typeof showImageAttachmentPreview === 'function') {
+        showImageAttachmentPreview('home', ev.target.result);
+      } else {
+        _pendingPasteImage['home'] = ev.target.result;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -3762,25 +3763,28 @@ function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatIn
    PER-PAGE FILE ATTACHMENT
 ══════════════════════════════════════════════════════ */
 function handlePageAttach(pg, inputEl) {
+  if (!inputEl.files || !inputEl.files[0]) return;
   var file = inputEl.files[0];
-  if (!file) return;
-  inputEl.value = '';
 
-  var ALLOWED = ['image/jpeg','image/png','image/webp','image/gif'];
-  if (!ALLOWED.includes(file.type)) {
-    alert('Unsupported format. Use JPEG, PNG, WebP, or GIF images.');
-    return;
-  }
-  if (file.size > 10 * 1024 * 1024) {
-    alert('File too large. Maximum size is 10 MB.');
+  if (!file.type.startsWith('image/')) {
+    alert('For now, please upload an image file (JPG, PNG).');
+    inputEl.value = '';
     return;
   }
 
   var reader = new FileReader();
-  reader.onload = function(ev) {
-    showImageAttachmentPreview(pg, ev.target.result);
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+    if (typeof showImageAttachmentPreview === 'function') {
+      showImageAttachmentPreview(pg, dataUrl);
+    } else {
+      _pendingPasteImage[pg] = dataUrl;
+      var chatInput = document.getElementById(pg + 'ChatInput');
+      if (chatInput) { chatInput.placeholder = 'Attachment added...'; chatInput.focus(); }
+    }
   };
   reader.readAsDataURL(file);
+  inputEl.value = '';
 }
 
 /* ══════════════════════════════════════════════════════
