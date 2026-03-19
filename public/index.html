@@ -2312,7 +2312,7 @@
         <div style="width:1px;height:20px;background:var(--black-border);margin:0 4px"></div>
         <button class="sp-tool-btn active" onclick="mathMode(this,'solve')">Solve</button>
         <button class="sp-tool-btn" onclick="mathMode(this,'explain')">Explain</button>
-        <button class="sp-tool-btn" onclick="mathMode(this,'graph');openDesmosModal()">Graph</button>
+        <button class="sp-tool-btn" onclick="mathMode(this,'graph')">Graph</button>
         <button class="sp-tool-btn" onclick="mathMode(this,'practice')">Practice</button>
         <div style="width:1px;height:20px;background:var(--black-border);margin:0 4px"></div>
         <select id="mathDetailSelect" class="math-detail-select">
@@ -3835,21 +3835,13 @@ function mathMode(btn, mode) {
   var welcome = document.getElementById('mathWelcome');
   if (!welcome) return;
   if (mode === 'explain') {
-    welcome.innerHTML = '<h2 class="welcome-title">Visual Explanation</h2>'
-      + '<p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Upload or capture a photo of any complex problem, written equation, or diagram. I will analyze it visually and break it down step-by-step to ensure complete comprehension.</p>'
-      + '<div><button class="btn-gold" onclick="document.getElementById(\'mathCameraInput\').click()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;">'
-      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>'
-      + ' Take a Picture / Upload</button></div>';
+    welcome.innerHTML = '<h2 class="welcome-title">Visual Explanation</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Upload or capture a photo of any complex problem, written equation, or diagram. I will analyze it visually and break it down step-by-step to ensure complete comprehension.</p><div><button class="btn-gold" onclick="document.getElementById(\'mathCameraInput\').click()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Take a Picture / Upload</button></div>';
   } else if (mode === 'solve') {
-    welcome.innerHTML = '<h2 class="welcome-title">Step-by-step Solutions</h2>'
-      + '<p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Upload a photo of your math homework, a textbook equation, or a handwritten problem. I will instantly read the image and provide a highly detailed, step-by-step solution to help you find the correct answer.</p>'
-      + '<div><button class="btn-gold" onclick="document.getElementById(\'mathCameraInput\').click()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;">'
-      + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>'
-      + ' Take a Picture / Upload</button></div>';
+    welcome.innerHTML = '<h2 class="welcome-title">Step-by-step Solutions</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Upload a photo of your math homework, a textbook equation, or a handwritten problem. I will instantly read the image and provide a highly detailed, step-by-step solution to help you find the correct answer.</p><div><button class="btn-gold" onclick="document.getElementById(\'mathCameraInput\').click()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Take a Picture / Upload</button></div>';
+  } else if (mode === 'graph') {
+    welcome.innerHTML = '<h2 class="welcome-title">Interactive Graphing</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Visualize math instantly. Open the interactive Desmos calculator to plot equations, geometry, or data, then attach your graphs directly to the chat for AI analysis.</p><div><button class="btn-gold" onclick="openDesmosModal()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg> Open Graphing Calculator</button></div>';
   } else {
-    welcome.innerHTML = '<h2 class="welcome-title">Math AI</h2>'
-      + '<p class="welcome-sub">Enter a math problem, equation, or concept. I\'ll provide detailed step-by-step solutions with explanations.</p>'
-      + '<div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion(\'math\',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion(\'math\',this)">Explain derivatives</button></div>';
+    welcome.innerHTML = '<h2 class="welcome-title">Math Practice</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Generate practice problems tailored to your skill level. Select a topic and the AI will guide you through solving them step-by-step.</p><div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion(\'math\',this)">Generate algebra problems</button><button class="chip" onclick="spUseSuggestion(\'math\',this)">Test my calculus skills</button></div>';
   }
 }
 
