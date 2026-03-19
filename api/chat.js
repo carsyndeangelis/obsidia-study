@@ -50,20 +50,21 @@ function getProviderDisplayName(provider) {
 
 const SELF_VERIFY = 'You are a world-class, critically-thinking AI assistant. Before outputting your final response to the user, you must internally double-check your own work. Rigorously evaluate your answer for absolute factual accuracy, logical consistency, and clarity. Ask yourself: \'Is this the absolute best, most helpful possible answer I can provide?\' If your initial thought process is flawed, correct it before responding. Remove any unnecessary fluff, do not hallucinate resources, and ensure you directly and comprehensively solve the user\'s exact problem. Always strive for the highest tier of mathematical and logical reasoning.';
 
-// ── Anthropic streaming ──
+// ── Anthropic streaming (Messages API with stream: true) ──
 async function streamAnthropic(res, systemPrompt, messages, modelOverride) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-3-5-sonnet-latest';
+  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-sonnet-4-20250514';
 
-  const stream = await client.messages.stream({
+  const stream = await client.messages.create({
     model: modelId,
     max_tokens: 2500,
     system: systemPrompt,
     messages: messages,
+    stream: true,
   });
 
   for await (const event of stream) {
-    if (event.type === 'content_block_delta' && event.delta?.text) {
+    if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta' && event.delta.text) {
       res.write(`data: ${JSON.stringify({ text: event.delta.text })}\n\n`);
     }
   }
@@ -72,7 +73,7 @@ async function streamAnthropic(res, systemPrompt, messages, modelOverride) {
 // ── Anthropic humanizer loop (essay-specific) ──
 async function streamAnthropicHumanizer(res, systemPrompt, messages, modelOverride) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-3-5-sonnet-latest';
+  const modelId = modelOverride === 'opus' ? 'claude-opus-4-20250514' : 'claude-sonnet-4-20250514';
   const MAX_LOOPS = 3;
   let draft = '';
 
