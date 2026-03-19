@@ -358,8 +358,10 @@
     .sidebar-logo { width: 30px; height: 30px; flex-shrink: 0; }
     .sidebar-brand { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; white-space: nowrap; overflow: hidden; transition: opacity 0.15s; }
     .sidebar.collapsed .sidebar-brand { opacity: 0; width: 0; }
-    .sidebar-toggle { width: 28px; height: 28px; border-radius: 6px; background: none; border: 1px solid var(--black-border); color: #5a5040; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-left: auto; flex-shrink: 0; transition: var(--transition); }
-    .sidebar-toggle:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+    .edge-toggle-btn { position: absolute; right: 0; top: 65%; transform: translateY(-50%); width: 18px; height: 52px; background: #080808; border: 1px solid #272727; border-right: none; border-radius: 6px 0 0 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #6a6050; z-index: 60; transition: all 0.2s ease; padding: 0; }
+    .edge-toggle-btn:hover { background: #111; color: #c9a84c; width: 22px; border-color: rgba(201,168,76,0.3); }
+    .edge-toggle-btn svg { width: 14px; height: 14px; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .sidebar.collapsed .edge-toggle-btn svg { transform: rotate(180deg); }
     .sidebar-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 6px 8px; }
     .sidebar-section { display: flex; align-items: center; gap: 8px; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-muted); padding: 14px 4px 5px; white-space: nowrap; overflow: hidden; font-family: var(--font-display); }
     .sidebar-section::before, .sidebar-section::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.2), transparent); }
@@ -371,7 +373,6 @@
     .sb-i svg { flex-shrink: 0; width: 18px; height: 18px; }
     .sidebar.collapsed .sb-i { justify-content: center; padding: 10px; margin-bottom: 2px; }
     .sidebar.collapsed .sb-i span { display: none; }
-    .sidebar.collapsed .sidebar-toggle { margin: 0 auto; }
     .sidebar-foot { padding: 10px 12px; border-top: 1px solid #1e1e1e; display: flex; align-items: center; gap: 10px; }
     .sidebar.collapsed .sidebar-foot { justify-content: center; padding: 10px 6px; }
     .sidebar.collapsed .sidebar-avatar { margin: 0 auto; }
@@ -616,10 +617,13 @@
     [data-theme="light"] .sb-i:hover { background: rgba(201,168,76,0.08); color: #5a4a20; }
     [data-theme="light"] .sb-i.active { background: rgba(201,168,76,0.12); color: #8a6a28; }
     [data-theme="light"] .sidebar-head, [data-theme="light"] .sidebar-foot { border-color: #ddd8cc; }
+    [data-theme="light"] .edge-toggle-btn { background: #f0ede6; border-color: #ddd8cc; color: #8a8070; }
+    [data-theme="light"] .edge-toggle-btn:hover { background: #e8e0cc; color: #8a6a28; border-color: rgba(201,168,76,0.4); }
     @media (max-width: 740px) {
       .sidebar { position: fixed !important; top: 0; left: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 151; width: 260px !important; }
       .sidebar.mobile-open { transform: translateX(0); }
       .sidebar-drag { display: none; }
+      .edge-toggle-btn { display: none; }
       .mob-btn { display: flex !important; }
     }
     @media (min-width: 741px) { .mob-btn { display: none !important; } .sidebar-overlay { display: none; } }
@@ -1732,7 +1736,6 @@
   <div class="sidebar-head">
     <svg class="sidebar-logo" viewBox="0 0 34 34" fill="none"><defs><radialGradient id="sS" cx="37%" cy="31%" r="62%"><stop offset="0%" stop-color="#525252"/><stop offset="38%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#050505"/></radialGradient><linearGradient id="sR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="42%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="17" cy="16" r="12.5" fill="url(#sS)"/><ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#sR)" stroke-width="2" fill="none" opacity="0.6"/></svg>
     <span class="sidebar-brand gold-text">OBSIDIA AI</span>
-    <button class="sidebar-toggle" onclick="toggleSidebarCollapse()" title="Collapse sidebar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg></button>
   </div>
   <div class="sidebar-nav" id="sidebarNav">
     <div class="sidebar-section">AI tools</div>
@@ -1765,6 +1768,7 @@
     <div class="sidebar-avatar" id="sbAvatar">S</div>
     <div class="sidebar-user"><div class="sidebar-user-name" id="sbUserName">Student</div><div class="sidebar-user-sub" id="sbUserSub">LVL 12 &middot; 7 day streak</div></div>
   </div>
+  <button class="edge-toggle-btn" onclick="toggleSidebarCollapse()" aria-label="Toggle Sidebar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
   <div class="sidebar-drag" id="sidebarDrag"></div>
 </aside>
 <div class="main-panel">
