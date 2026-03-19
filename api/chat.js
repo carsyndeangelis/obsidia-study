@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Validate vars against allowlists to prevent prompt injection
-    const ALLOWED_PAGES = ['general','math','essay','study','notes','doublecheck','grading','testprep','teacher'];
+    const ALLOWED_PAGES = ['general','math','essay','study','notes','doublecheck','grading','testprep','teacher','admin_architect'];
     const ALLOWED_MODES = ['solve','explain','graph','practice','draft','outline','thesis','proofread','transcribe','summarize','keypoints','questions','verify','sources','compare','bias','grade','rubric','feedback'];
     const ALLOWED_MATH_TYPES = ['algebra','geometry','trig','precalc','calculus','multivariable','linalg','diffeq','statistics','discrete'];
     const ALLOWED_SECTIONS = ['act-math','act-english','act-science','sat-math','sat-rw','strategy'];
@@ -66,6 +66,7 @@ module.exports = async function handler(req, res) {
     if (rv.skillContext && typeof rv.skillContext === 'string') safeVars.skillContext = rv.skillContext.slice(0, 500);
     if (rv.documentContext && typeof rv.documentContext === 'string') safeVars.documentContext = rv.documentContext.slice(0, 8000);
     if (rv.studentProfile && typeof rv.studentProfile === 'string') safeVars.studentProfile = rv.studentProfile.slice(0, 600);
+    if (rv.systemOverride && typeof rv.systemOverride === 'string' && page === 'admin_architect') safeVars.systemOverride = rv.systemOverride.slice(0, 1000);
 
     const trimmedMessage = message.slice(0, 4000);
     const safePage = ALLOWED_PAGES.includes(page) ? page : 'general';

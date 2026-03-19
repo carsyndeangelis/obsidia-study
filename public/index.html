@@ -162,6 +162,27 @@
     }
     .onboarding-btn:hover {  transform: translateY(-1px); }
 
+    /* ─── REDUCE MOTION (LOW-END DEVICES) ─────────────────── */
+    .reduce-motion * { transition: none !important; animation: none !important; backdrop-filter: none !important; }
+    .reduce-motion .piq-card { transform: scale(1) !important; }
+    .reduce-motion .slab-stone * { filter: none !important; }
+
+    /* ─── ADMIN PANEL ─────────────────────────────────────── */
+    #adminPanelSection { display: none; }
+    #adminPanelSection.visible { display: block; }
+    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+    .admin-btn { padding: 12px 14px; background: var(--black-card); border: 1px solid var(--black-border); border-radius: var(--radius-sm); color: #c8b88a; font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); text-align: left; }
+    .admin-btn:hover { border-color: var(--gold-muted); background: var(--black-hover); }
+    .admin-btn span { display: block; font-size: 10px; color: #5a5040; font-weight: 400; margin-top: 4px; }
+    .admin-chat-box { background: var(--black-deep); border: 1px solid var(--black-border); border-radius: var(--radius-md); padding: 0; overflow: hidden; }
+    .admin-chat-msgs { height: 260px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .admin-chat-msgs .admin-msg { font-size: 12px; line-height: 1.6; padding: 8px 12px; border-radius: var(--radius-sm); max-width: 88%; }
+    .admin-chat-msgs .admin-msg.user { background: rgba(201,168,76,0.12); color: #c8b88a; align-self: flex-end; }
+    .admin-chat-msgs .admin-msg.ai { background: var(--black-card); color: #a09880; align-self: flex-start; }
+    .admin-chat-input-row { display: flex; border-top: 1px solid var(--black-border); }
+    .admin-chat-input-row input { flex: 1; background: transparent; border: none; padding: 10px 14px; color: #c8b88a; font-family: var(--font-ui); font-size: 13px; outline: none; }
+    .admin-chat-input-row button { background: var(--gold-bright); color: #0a0a0a; border: none; padding: 10px 18px; font-family: var(--font-ui); font-weight: 600; font-size: 12px; cursor: pointer; }
+
     /* ─── PERSONAL INTELLIGENCE QUIZ ───────────────────────── */
     .piq-overlay {
       position: fixed; inset: 0; z-index: 270;
@@ -1818,7 +1839,8 @@
         <div class="slab-re slab-row" id="sre4"><div class="slab-rn">II.</div><div class="slab-rx"><b>Verify &amp; Grade</b> &mdash; <b>Double Check:</b> Trust, but verify facts and cross-reference. <b>Grading:</b> Submit a rubric and let the AI score with detailed feedback. <b>Test Prep:</b> Train for ACTs and SATs with realistic problems.</div></div>
         <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Productivity</b> &mdash; <b>Smart Scan (Quick Snap):</b> Press <b>Q</b> to upload photos of textbooks or worksheets. <b>Analytics &amp; Streaks:</b> Track XP, master topics, and maintain your daily flame.</div></div>
         <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Personal Intelligence</b> &mdash; Complete the one-time quiz so the AI knows your grade, state, classes, and learning style. Every answer becomes tailored to <b>your</b> exact curriculum.</div></div>
-        <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
+        <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>Accessibility</b> &mdash; Toggle <b>Reduce Animations</b> in Settings to disable transitions and glow effects on older devices. Obsidia adapts to <b>you</b>.</div></div>
+        <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
         <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
       </div></div>
     </div>
@@ -2805,6 +2827,10 @@
           <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" checked /><span class="sp-slider"></span></label>
         </div>
         <div class="settings-row">
+          <div><div class="settings-label">Reduce Animations</div><div class="settings-sublabel">Turn off transitions and glow effects for a faster experience on older devices</div></div>
+          <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" id="toggleReduceMotion" onchange="toggleReduceAnimations(this.checked)" /><span class="sp-slider"></span></label>
+        </div>
+        <div class="settings-row">
           <div><div class="settings-label">Streak Reminders</div><div class="settings-sublabel">Get notified to keep your streak</div></div>
           <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" checked /><span class="sp-slider"></span></label>
         </div>
@@ -2847,6 +2873,30 @@
             <button class="btn-gold" onclick="settingsAddClass()" style="padding:4px 12px;font-size:11px;">+ Add Class</button>
           </div>
           <div id="settingsClassList" style="display:flex;flex-direction:column;gap:6px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Developer Options (Admin Only) -->
+    <div id="adminPanelSection">
+      <div class="settings-card" style="border:1px solid rgba(201,168,76,0.18);">
+        <div class="settings-card-title" style="color:var(--gold-bright);">Developer Options</div>
+        <p style="font-size:11px;color:#5a5040;margin-bottom:16px;">Admin-only tools for stress testing and AI prompt engineering.</p>
+
+        <div style="font-size:11px;font-weight:600;color:#8a7e6a;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:8px;">Stress Tests</div>
+        <div class="admin-grid">
+          <button class="admin-btn" onclick="adminStressTestMath()">Stress Test Math AI<span>Sends a hard calculus/physics vector problem to test LaTeX rendering</span></button>
+          <button class="admin-btn" onclick="adminStressTestEssay()">Stress Test Essay AI<span>Sends a massive constrained essay prompt to test humanizer output</span></button>
+        </div>
+
+        <div style="font-size:11px;font-weight:600;color:#8a7e6a;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:8px;">App Architect AI</div>
+        <p style="font-size:11px;color:#5a5040;margin-bottom:10px;">Chat with an elite AI engineer who analyzes your app and recommends prompt improvements.</p>
+        <div class="admin-chat-box">
+          <div class="admin-chat-msgs" id="adminChatMsgs"></div>
+          <div class="admin-chat-input-row">
+            <input type="text" id="adminChatInput" placeholder="Ask the App Architect..." onkeydown="if(event.key==='Enter')adminSendChat()" />
+            <button onclick="adminSendChat()">Send</button>
+          </div>
         </div>
       </div>
     </div>
@@ -3437,14 +3487,7 @@ function performHardRefresh() {
   window.location.reload(true);
 }
 
-// Restore page after hard refresh
-(function() {
-  var saved = localStorage.getItem('obsidia_last_page');
-  if (saved) {
-    localStorage.removeItem('obsidia_last_page');
-    requestAnimationFrame(function() { if (typeof navigate === 'function' && saved !== 'home') navigate(saved); });
-  }
-})();
+// Restore page after hard refresh — deferred to DOMContentLoaded at bottom of script
 
 var _sidebarBtns = null;
 function navigate(pageId) {
@@ -4871,6 +4914,7 @@ const SUPABASE_ANON_KEY = window.OBSIDIA_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1N
 let sbClient = null;
 let currentUser = null;
 let userProfile = null;
+const ADMIN_EMAILS = ['your.email@example.com', 'test@test.com'];
 
 function initSupabase() {
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) return;
@@ -4929,6 +4973,15 @@ async function onSignIn() {
   }
   // Load recent activity for right sidebar
   try { loadRecentActivity(); } catch(e) {}
+  // Reveal Admin Panel for authorized emails
+  try {
+    var adminSection = document.getElementById('adminPanelSection');
+    if (adminSection && currentUser && currentUser.email && ADMIN_EMAILS.includes(currentUser.email.toLowerCase())) {
+      adminSection.classList.add('visible');
+    } else if (adminSection) {
+      adminSection.classList.remove('visible');
+    }
+  } catch(e) {}
 }
 
 function onSignOut() {
@@ -4940,6 +4993,9 @@ function onSignOut() {
   // Hide header avatar
   var hAvatar = document.getElementById('headerUserAvatar');
   if (hAvatar) { hAvatar.style.display = 'none'; hAvatar.innerHTML = ''; }
+  // Hide Admin Panel on sign out
+  var adminSection = document.getElementById('adminPanelSection');
+  if (adminSection) adminSection.classList.remove('visible');
 }
 
 function updateUIWithProfile(p) {
@@ -6050,7 +6106,8 @@ function populateSettings() {
   var toggles = document.querySelectorAll('#page-settings .sp-toggle input');
   if (toggles[0]) toggles[0].checked = p.auto_humanizer !== false;
   if (toggles[1]) toggles[1].checked = p.sound_effects !== false;
-  if (toggles[2]) toggles[2].checked = p.streak_reminders !== false;
+  // toggles[2] is Reduce Animations — handled separately via id
+  if (toggles[3]) toggles[3].checked = p.streak_reminders !== false;
 }
 
 // Override saveSettings
@@ -6067,7 +6124,8 @@ saveSettings = function() {
   var toggles = document.querySelectorAll('#page-settings .sp-toggle input');
   if (toggles[0]) updates.auto_humanizer = toggles[0].checked;
   if (toggles[1]) updates.sound_effects = toggles[1].checked;
-  if (toggles[2]) updates.streak_reminders = toggles[2].checked;
+  // toggles[2] is Reduce Animations — handled separately
+  if (toggles[3]) updates.streak_reminders = toggles[3].checked;
   if (sbClient && currentUser) {
     sbClient.from('profiles').update(updates).eq('id', currentUser.id).then(function() {
       if (userProfile) Object.assign(userProfile, updates);
@@ -6468,6 +6526,156 @@ onSignOut = function() {
     els.forEach(function(el) { el.classList.remove('anim-paused'); el.classList.add('anim-visible'); });
   }
 })();
+
+/* ══════════════════════════════════════════════════════
+   REDUCE ANIMATIONS TOGGLE
+══════════════════════════════════════════════════════ */
+function toggleReduceAnimations(on) {
+  if (on) {
+    document.body.classList.add('reduce-motion');
+    localStorage.setItem('obsidia_reduce_motion', '1');
+  } else {
+    document.body.classList.remove('reduce-motion');
+    localStorage.removeItem('obsidia_reduce_motion');
+  }
+}
+// Load preference on startup
+(function() {
+  if (localStorage.getItem('obsidia_reduce_motion') === '1') {
+    document.body.classList.add('reduce-motion');
+    var tog = document.getElementById('toggleReduceMotion');
+    if (tog) tog.checked = true;
+  }
+})();
+
+/* ══════════════════════════════════════════════════════
+   ADMIN PANEL — Stress Tests & Meta Advisor
+══════════════════════════════════════════════════════ */
+function adminStressTestMath() {
+  navigate('math');
+  setTimeout(function() {
+    var prompt = 'Solve this problem with full step-by-step LaTeX reasoning:\n\n' +
+      'A particle moves along the curve r(t) = <e^t cos(t), e^t sin(t), e^t> for t in [0, 2pi].\n\n' +
+      '1) Compute the unit tangent vector T(t) and unit normal vector N(t) at t = pi/4.\n' +
+      '2) Find the curvature kappa(t) as a function of t.\n' +
+      '3) Evaluate the line integral of F(x,y,z) = <yz, xz, xy> along this curve using Stokes\' theorem.\n' +
+      '4) Determine whether F is conservative, and if so, find the potential function.\n\n' +
+      'Show every derivative, cross product, and integral in fully rendered LaTeX.';
+    var input = document.getElementById('mathInput');
+    if (input) { input.value = prompt; input.dispatchEvent(new Event('input')); }
+    streamAIResponse('mathMessages', prompt, 'math', { detail: 'full' }, 'math');
+  }, 300);
+}
+
+function adminStressTestEssay() {
+  navigate('essay');
+  setTimeout(function() {
+    var prompt = 'Write a 1000-word argumentative essay on the following topic:\n\n' +
+      '"Social media has done more harm than good to democratic institutions worldwide."\n\n' +
+      'STRICT CONSTRAINTS:\n' +
+      '- Use a high-school-level vocabulary (no GRE words)\n' +
+      '- NO passive voice whatsoever — every sentence must use active voice\n' +
+      '- Include exactly 5 body paragraphs with clear topic sentences\n' +
+      '- Cite at least 3 real-world examples (with dates)\n' +
+      '- Include a compelling hook in the introduction\n' +
+      '- End with a call to action\n' +
+      '- The tone should sound like a real 11th grader wrote it — natural, slightly informal, with personality\n' +
+      '- Do NOT use the words: "Furthermore", "Moreover", "In conclusion", "Delve", "Crucial"';
+    var input = document.getElementById('essayInput');
+    if (input) { input.value = prompt; input.dispatchEvent(new Event('input')); }
+    streamAIResponse('essayMessages', prompt, 'essay', { tone: 'humanizer', detail: 'full' }, 'essay');
+  }, 300);
+}
+
+var adminChatHistory = [];
+async function adminSendChat() {
+  var input = document.getElementById('adminChatInput');
+  var msgs = document.getElementById('adminChatMsgs');
+  if (!input || !msgs) return;
+  var text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  // Show user message
+  var userDiv = document.createElement('div');
+  userDiv.className = 'admin-msg user';
+  userDiv.textContent = text;
+  msgs.appendChild(userDiv);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  adminChatHistory.push({ role: 'user', content: text });
+
+  // Show typing indicator
+  var typingDiv = document.createElement('div');
+  typingDiv.className = 'admin-msg ai';
+  typingDiv.textContent = 'Thinking...';
+  msgs.appendChild(typingDiv);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  try {
+    var res = await fetch('/api/chat.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: text,
+        page: 'admin_architect',
+        vars: {
+          systemOverride: 'You are an elite AI engineer and prompt-engineering specialist advising the creator of Obsidia AI — a student-focused academic assistant SPA with Math, Essay, Study Guide, and Lecture Notes AI tools. Analyze their ideas, assess the strengths of the AI tools they built, and provide advanced prompt-engineering recommendations to make the Math, Essay, and Study AI bots significantly smarter, more accurate, and more personalized. Be direct, technical, and actionable. Reference specific prompt patterns (chain-of-thought, few-shot, structured output schemas, self-consistency) where relevant.'
+        },
+        history: adminChatHistory.slice(-10),
+        model: 'sonnet'
+      })
+    });
+
+    if (!res.ok) {
+      typingDiv.textContent = 'Error: ' + res.status;
+      return;
+    }
+
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var fullText = '';
+    typingDiv.textContent = '';
+
+    while (true) {
+      var chunk = await reader.read();
+      if (chunk.done) break;
+      var lines = decoder.decode(chunk.value, { stream: true }).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('data: ')) {
+          var data = lines[i].slice(6);
+          if (data === '[DONE]') break;
+          try {
+            var parsed = JSON.parse(data);
+            if (parsed.token) { fullText += parsed.token; typingDiv.textContent = fullText; }
+            if (parsed.text) { fullText = parsed.text; typingDiv.textContent = fullText; }
+          } catch(e) {
+            fullText += data;
+            typingDiv.textContent = fullText;
+          }
+        }
+      }
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    adminChatHistory.push({ role: 'assistant', content: fullText });
+  } catch(e) {
+    typingDiv.textContent = 'Connection error: ' + e.message;
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   HARD REFRESH — Restore page (deferred)
+══════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('obsidia_last_page');
+  if (saved) {
+    localStorage.removeItem('obsidia_last_page');
+    setTimeout(function() {
+      if (typeof navigate === 'function' && saved !== 'home') navigate(saved);
+    }, 150);
+  }
+});
 
 navigate('home');
 </script>

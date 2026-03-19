@@ -161,6 +161,14 @@ Selected tool: {{tool}}
 };
 
 function buildPrompt(page, vars = {}) {
+  // Admin Architect mode — use override prompt directly
+  if (page === 'admin_architect' && vars.systemOverride) {
+    let prompt = vars.systemOverride;
+    if (vars.studentProfile) {
+      prompt += `\n\nSTUDENT PROFILE: ${vars.studentProfile}`;
+    }
+    return prompt.trim();
+  }
   let prompt = PROMPTS[page] || PROMPTS.general;
   for (const [key, value] of Object.entries(vars)) {
     if (key === 'skillContext' || key === 'documentContext') continue;
