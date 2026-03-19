@@ -1699,9 +1699,14 @@
       background: var(--black-card); border: 1px solid var(--black-border);
       border-radius: 4px; font-size: 10px; font-weight: 600; color: #5a5040;
     }
+    #aiThinkingIndicator { position: fixed; top: 30px; left: 50%; transform: translateX(-50%) translateY(-150%); background: rgba(18,18,18,0.85); border: 1px solid var(--black-border); border-radius: 30px; padding: 10px 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 9999; opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); backdrop-filter: blur(8px); }
+    #aiThinkingIndicator.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .ai-spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.2); border-top-color: currentColor; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+<div id="aiThinkingIndicator"></div>
 
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
 <!-- LANDING PAGE -->
@@ -4745,10 +4750,35 @@ function ensureKatex() {
   return _katexPromise;
 }
 
+/* ── AI Thinking Indicator ── */
+const AI_PROVIDERS = {
+  'math': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
+  'essay': { name: 'Claude 3 Opus', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
+  'notes': { name: 'Gemini 1.5 Pro', color: '#8ab4f8', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>' },
+  'doublecheck': { name: 'Perplexity Sonar', color: '#22d3ee', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' },
+  'grading': { name: 'GPT-4o', color: '#10a37f', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>' },
+  'testprep': { name: 'GPT-4o', color: '#10a37f', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>' },
+  'teacher': { name: 'Claude 3 Opus', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
+  'study': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
+  'home': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' }
+};
+function showAIThinking(pageId) {
+  var indicator = document.getElementById('aiThinkingIndicator');
+  if (!indicator) return;
+  var ai = AI_PROVIDERS[pageId] || AI_PROVIDERS['home'];
+  indicator.innerHTML = '<div style="color:' + ai.color + ';">' + ai.logo + '</div><span style="color:#e8e0cc;font-size:13px;font-weight:600;letter-spacing:0.02em;">' + ai.name + ' <span style="color:#8a8070;font-weight:400;">is researching...</span></span><div class="ai-spinner" style="color:' + ai.color + ';margin-left:4px;"></div>';
+  indicator.classList.add('show');
+}
+function hideAIThinking() {
+  var indicator = document.getElementById('aiThinkingIndicator');
+  if (indicator) indicator.classList.remove('show');
+}
+
 /* ── Streaming AI Response Engine ── */
 async function streamAIResponse(containerId, message, page, vars, historyKey, imageData) {
   if (page === 'math' || page === 'study') { await ensureKatex(); }
   var container = document.getElementById(containerId);
+  showAIThinking(historyKey || page);
 
   // Display attached images in chat before typing indicator
   if (imageData && Array.isArray(imageData) && imageData.length) {
@@ -4928,8 +4958,10 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
 
     chatHistory[historyKey].push({ role: 'assistant', content: fullText });
     msgCounts[historyKey] = (msgCounts[historyKey] || 0) + 1;
+    hideAIThinking();
 
   } catch (err) {
+    hideAIThinking();
     try { typingEl.remove(); } catch(_) {}
     var fallback = getFallbackResponse(page, message, vars);
     typeMsg(containerId, 'ai', fallback);
