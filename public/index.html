@@ -1868,7 +1868,8 @@
         <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Productivity</b> &mdash; <b>Smart Scan (Quick Snap):</b> Press <b>Q</b> to upload photos of textbooks or worksheets. <b>Analytics &amp; Streaks:</b> Track XP, master topics, and maintain your daily flame.</div></div>
         <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Personal Intelligence</b> &mdash; Complete the one-time quiz so the AI knows your grade, state, classes, and learning style. Every answer becomes tailored to <b>your</b> exact curriculum.</div></div>
         <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>Accessibility</b> &mdash; Toggle <b>Reduce Animations</b> in Settings to disable transitions and glow effects on older devices. Obsidia adapts to <b>you</b>.</div></div>
-        <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
+        <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>Triple-Provider Intelligence</b> &mdash; Obsidia routes each task to the best AI: <b>o3-mini</b> for pure math reasoning, <b>Claude 3.5 Sonnet</b> for vision &amp; essays, <b>GPT-4o</b> for grading &amp; test prep, and <b>Gemini 1.5 Pro</b> for lecture audio processing.</div></div>
+        <div class="slab-re slab-row" id="sre9"><div class="slab-rn">VII.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
         <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
       </div></div>
     </div>
@@ -4752,20 +4753,22 @@ function ensureKatex() {
 
 /* ── AI Thinking Indicator ── */
 const AI_PROVIDERS = {
-  'math': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
-  'essay': { name: 'Claude 3 Opus', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
+  'math': { name: 'o3-mini', color: '#10a37f', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>' },
+  'math-vision': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
+  'essay': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
   'notes': { name: 'Gemini 1.5 Pro', color: '#8ab4f8', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>' },
-  'doublecheck': { name: 'Perplexity Sonar', color: '#22d3ee', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' },
+  'doublecheck': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
   'grading': { name: 'GPT-4o', color: '#10a37f', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>' },
   'testprep': { name: 'GPT-4o', color: '#10a37f', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>' },
-  'teacher': { name: 'Claude 3 Opus', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
+  'teacher': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
   'study': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
   'home': { name: 'Claude 3.5 Sonnet', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' }
 };
-function showAIThinking(pageId) {
+function showAIThinking(pageId, hasImages) {
   var indicator = document.getElementById('aiThinkingIndicator');
   if (!indicator) return;
-  var ai = AI_PROVIDERS[pageId] || AI_PROVIDERS['home'];
+  var lookupKey = (pageId === 'math' && hasImages) ? 'math-vision' : pageId;
+  var ai = AI_PROVIDERS[lookupKey] || AI_PROVIDERS['home'];
   indicator.innerHTML = '<div style="color:' + ai.color + ';">' + ai.logo + '</div><span style="color:#e8e0cc;font-size:13px;font-weight:600;letter-spacing:0.02em;">' + ai.name + ' <span style="color:#8a8070;font-weight:400;">is researching...</span></span><div class="ai-spinner" style="color:' + ai.color + ';margin-left:4px;"></div>';
   indicator.classList.add('show');
 }
@@ -4778,7 +4781,8 @@ function hideAIThinking() {
 async function streamAIResponse(containerId, message, page, vars, historyKey, imageData) {
   if (page === 'math' || page === 'study') { await ensureKatex(); }
   var container = document.getElementById(containerId);
-  showAIThinking(historyKey || page);
+  var _hasImgs = imageData && Array.isArray(imageData) && imageData.some(function(d) { return typeof d === 'string' && d.startsWith('data:image/'); });
+  showAIThinking(historyKey || page, _hasImgs);
 
   // Display attached images in chat before typing indicator
   if (imageData && Array.isArray(imageData) && imageData.length) {
