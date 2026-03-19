@@ -1459,6 +1459,23 @@
     .similar-problem-btn { display:inline-flex; align-items:center; gap:4px; margin-top:8px; padding:5px 12px; border-radius:6px; border:1px solid rgba(91,156,246,0.25); background:rgba(91,156,246,0.08); color:var(--math-color); font-size:11px; font-weight:500; cursor:pointer; font-family:var(--font-ui); }
     .similar-problem-btn:hover { background:rgba(91,156,246,0.15); border-color:rgba(91,156,246,0.4); }
 
+    /* History Viewer Modal */
+    .history-viewer-card { background: var(--black-deep); border: 1px solid var(--black-border); border-radius: 16px; width: 90%; max-width: 640px; max-height: 80vh; display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.25s cubic-bezier(0.2,0.8,0.2,1); }
+    .auth-overlay.open .history-viewer-card { transform: scale(1); }
+    .history-viewer-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--black-border); }
+    .history-viewer-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .history-viewer-title { font-size: 14px; font-weight: 600; color: #e8e0cc; }
+    .history-viewer-meta { font-size: 11px; color: #5a5040; margin-top: 2px; }
+    .history-viewer-close { background: none; border: none; color: #5a5040; font-size: 24px; cursor: pointer; padding: 0 4px; line-height: 1; transition: color 0.2s; }
+    .history-viewer-close:hover { color: #e8e0cc; }
+    .history-messages { flex: 1; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+    .history-messages .msg { display: flex; gap: 8px; align-items: flex-start; }
+    .history-messages .msg.user { flex-direction: row-reverse; }
+    .history-messages .hv-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.65; word-wrap: break-word; overflow-wrap: break-word; }
+    .history-messages .msg.ai .hv-bubble { background: var(--black-card); border: 1px solid var(--black-border); border-bottom-left-radius: 4px; color: #c8b88a; }
+    .history-messages .msg.user .hv-bubble { background: rgba(201,168,76,0.10); border: 1px solid rgba(201,168,76,0.22); border-bottom-right-radius: 4px; color: #e8e0cc; }
+    .history-empty-msg { text-align: center; padding: 40px 20px; color: #5a5040; font-size: 13px; }
+
     /* Toggle switch */
     .sp-toggle-row {
       display: flex; align-items: center; gap: 8px; margin-left: auto;
@@ -3324,6 +3341,25 @@
       <button class="auth-skip" onclick="dismissError()" style="flex:1;">Dismiss</button>
       <button class="google-btn" onclick="performHardRefresh()" style="flex:1;justify-content:center;">&#x1F504; Hard Refresh</button>
     </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     HISTORY VIEWER MODAL
+══════════════════════════════════════════════════ -->
+<div class="auth-overlay" id="historyViewerOverlay" onclick="if(event.target===this)closeHistoryViewer()">
+  <div class="history-viewer-card">
+    <div class="history-viewer-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="history-viewer-dot" id="historyViewerDot"></div>
+        <div>
+          <div class="history-viewer-title" id="historyViewerTitle">Chat Session</div>
+          <div class="history-viewer-meta" id="historyViewerMeta"></div>
+        </div>
+      </div>
+      <button class="history-viewer-close" onclick="closeHistoryViewer()">&times;</button>
+    </div>
+    <div class="sp-messages history-messages" id="historyViewerMessages"></div>
   </div>
 </div>
 
@@ -5571,6 +5607,17 @@ function updateUIWithProfile(p) {
 // Record session after AI conversation ends
 async function recordSession(page, messageCount, title) {
   if (!sbClient || !currentUser) return;
+  // Save chat messages to localStorage for history replay
+  try {
+    if (chatHistory[page] && chatHistory[page].length > 0) {
+      var key = 'obs_chat_' + currentUser.id + '_' + page + '_' + Date.now();
+      var saved = JSON.parse(localStorage.getItem('obs_chat_sessions') || '[]');
+      saved.unshift({ key: key, page: page, title: title, time: Date.now(), count: messageCount });
+      if (saved.length > 30) { var old = saved.splice(30); old.forEach(function(s) { try { localStorage.removeItem(s.key); } catch(e) {} }); }
+      localStorage.setItem('obs_chat_sessions', JSON.stringify(saved));
+      localStorage.setItem(key, JSON.stringify(chatHistory[page]));
+    }
+  } catch(e) { console.error('localStorage chat save error:', e); }
   try {
     const { data } = await sbClient.rpc('record_session', {
       p_page: page,
@@ -5585,6 +5632,57 @@ async function recordSession(page, messageCount, title) {
       checkAchievements();
     }
   } catch(e) { console.error('Record session error:', e); }
+}
+
+// ── History Viewer Modal ──
+function openHistoryViewer(session) {
+  var overlay = document.getElementById('historyViewerOverlay');
+  var titleEl = document.getElementById('historyViewerTitle');
+  var metaEl = document.getElementById('historyViewerMeta');
+  var dotEl = document.getElementById('historyViewerDot');
+  var msgEl = document.getElementById('historyViewerMessages');
+  if (!overlay || !msgEl) return;
+
+  var pageName = (typeof PAGE_NAMES !== 'undefined' ? PAGE_NAMES[session.page] : null) || session.page;
+  var color = (typeof TOOL_COLORS !== 'undefined' ? TOOL_COLORS[session.page] : null) || '#64748b';
+  titleEl.textContent = session.title || pageName + ' session';
+  metaEl.textContent = pageName + ' \u00b7 ' + (session.message_count || session.count || 0) + ' messages \u00b7 ' + timeAgo(session.created_at || session.time);
+  dotEl.style.background = color;
+
+  // Try to load messages from localStorage
+  var messages = null;
+  try {
+    var saved = JSON.parse(localStorage.getItem('obs_chat_sessions') || '[]');
+    // Find matching session by page + closest time
+    var match = null;
+    if (session.created_at) {
+      var sessionTime = new Date(session.created_at).getTime();
+      match = saved.find(function(s) { return s.page === session.page && Math.abs(s.time - sessionTime) < 120000; });
+    }
+    if (!match) match = saved.find(function(s) { return s.page === session.page && s.title === session.title; });
+    if (match) messages = JSON.parse(localStorage.getItem(match.key) || 'null');
+  } catch(e) {}
+
+  msgEl.innerHTML = '';
+  if (messages && messages.length > 0) {
+    messages.forEach(function(m) {
+      var row = document.createElement('div');
+      row.className = 'msg ' + (m.role === 'user' ? 'user' : 'ai');
+      var bubble = document.createElement('div');
+      bubble.className = 'hv-bubble';
+      try { bubble.innerHTML = renderMarkdown(String(m.content)); } catch(e) { bubble.textContent = m.content; }
+      row.appendChild(bubble);
+      msgEl.appendChild(row);
+    });
+  } else {
+    msgEl.innerHTML = '<div class="history-empty-msg">Chat messages are saved starting from your next session.<br>Future conversations will be fully replayable here.</div>';
+  }
+
+  overlay.classList.add('open');
+}
+function closeHistoryViewer() {
+  var overlay = document.getElementById('historyViewerOverlay');
+  if (overlay) overlay.classList.remove('open');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -6357,7 +6455,7 @@ async function loadHistory(filter) {
       div.className = 'activity-item';
       div.setAttribute('data-tool', s.page);
       div.setAttribute('data-search', (s.title || '').toLowerCase());
-      div.onclick = function() { navigate(s.page); };
+      div.onclick = function() { openHistoryViewer(s); };
       div.innerHTML = '<div class="activity-dot" style="background:'+color+'"></div>'
         + '<div class="activity-info" style="flex:1">'
         + '<div style="display:flex;justify-content:space-between;align-items:center"><div class="activity-title">'+(s.title || name + ' session')+'</div><span style="font-size:10px;color:'+color+';background:'+bg+';padding:2px 8px;border-radius:99px">'+name+'</span></div>'
@@ -6383,7 +6481,7 @@ async function loadRecentActivity() {
       var color = TOOL_COLORS[s.page] || '#64748b';
       var div = document.createElement('div');
       div.className = 'rsb-item';
-      div.onclick = function() { navigate(s.page); };
+      div.onclick = function() { openHistoryViewer(s); };
       div.innerHTML = '<div class="rsb-dot" style="background:'+color+'"></div><div><div class="rsb-title">'+(s.title || PAGE_NAMES[s.page] || s.page)+'</div><div class="rsb-desc">'+s.message_count+' messages</div><div class="rsb-time">'+timeAgo(s.created_at)+' \u00b7 +'+s.xp_earned+' XP</div></div>';
       rList.appendChild(div);
     });
