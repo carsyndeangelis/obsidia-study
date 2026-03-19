@@ -1435,11 +1435,6 @@
     .sp-tool-btn.active { background: var(--gold-subtle); border-color: rgba(201,168,76,0.3); color: var(--gold-bright); }
 
     /* Math canvas whiteboard */
-    .math-canvas-wrap { display:none; border:1px solid var(--black-border); border-radius:8px; margin:0 14px 10px; background:var(--black-card); position:relative; }
-    .math-canvas-wrap.open { display:block; }
-    .math-canvas-toolbar { display:flex; align-items:center; gap:6px; padding:6px 10px; border-bottom:1px solid var(--black-border); }
-    .math-canvas-toolbar button { font-family:var(--font-ui); font-size:10px; padding:4px 10px; border-radius:5px; border:1px solid var(--black-border); background:var(--black-card); color:#8a8070; cursor:pointer; }
-    .math-canvas-toolbar button:hover { border-color:var(--gold-muted); color:#c8b88a; }
     #mathCanvas { display:block; width:100%; height:200px; cursor:crosshair; border-radius:0 0 8px 8px; touch-action:none; }
 
     /* Math detail slider */
@@ -1499,7 +1494,7 @@
     /* ─── MATH SCRATCH PAD ────────────────────────────────── */
     .math-chat-row { display: flex; flex: 1; overflow: hidden; }
     .math-chat-column { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-    .math-scratch-column { width: 300px; border-left: 1px solid var(--black-border); background: var(--black-panel); display: flex; flex-direction: column; flex-shrink: 0; }
+    .math-scratch-column { width: 420px; border-left: 1px solid var(--black-border); background: var(--black-panel); display: flex; flex-direction: column; flex-shrink: 0; }
     .scratch-header { padding: 12px 14px; font-size: 12px; font-weight: 600; color: #c8b88a; border-bottom: 1px solid var(--black-border); display: flex; align-items: center; gap: 8px; letter-spacing: 0.04em; }
     .scratch-header svg { width: 14px; height: 14px; color: var(--math-color); }
     .scratch-tools { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-bottom: 1px solid var(--black-border); }
@@ -2317,18 +2312,9 @@
           <option value="hints">Step-by-Step Hints</option>
           <option value="answer">Final Answer Only</option>
         </select>
-        <button class="sp-tool-btn" onclick="toggleMathCanvas()" id="mathCanvasToggle" style="margin-left:auto">&#x270F; Sketch</button>
       </div>
       <div class="math-chat-row">
         <div class="math-chat-column">
-          <div class="math-canvas-wrap" id="mathCanvasWrap">
-            <div class="math-canvas-toolbar">
-              <button onclick="clearMathCanvas()">Clear</button>
-              <button onclick="submitCanvasToAI()" style="border-color:var(--math-color);color:var(--math-color);">Send to AI</button>
-              <span style="margin-left:auto;font-size:10px;color:#5a5040;">Draw your problem</span>
-            </div>
-            <canvas id="mathCanvas" width="800" height="200"></canvas>
-          </div>
           <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
             <div class="chat-welcome" id="mathWelcome">
               <h2 class="welcome-title">Math AI</h2>
@@ -2340,6 +2326,7 @@
         </div>
         <div class="math-scratch-column">
           <div class="scratch-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Scratch Pad</div>
+          <div style="padding:10px 14px;font-size:11px;line-height:1.5;color:#8a8070;border-bottom:1px solid var(--black-border);background:rgba(0,0,0,0.2);">Use this space to hand-write complex equations, draw geometry, or brainstorm concepts. When you're ready, attach it to your message and ask the AI for step-by-step help.</div>
           <div class="scratch-tools">
             <button class="scratch-tool-btn active" id="scratchPenBtn" onclick="setScratchTool('pen')">Pen</button>
             <button class="scratch-tool-btn" id="scratchEraserBtn" onclick="setScratchTool('eraser')">Eraser</button>
@@ -3834,61 +3821,6 @@ function mathTypeChange(sel) {
 }
 
 function mathMode(btn,mode) { mathModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const p={solve:'Enter a math problem...',explain:'What concept to explain?',graph:'Describe the function...',practice:'What topic for practice?'}; document.getElementById('mathChatInput').placeholder=p[mode]||''; }
-
-/* ── Math Canvas Whiteboard ── */
-function toggleMathCanvas() {
-  var wrap = document.getElementById('mathCanvasWrap');
-  if (!wrap) return;
-  wrap.classList.toggle('open');
-  if (wrap.classList.contains('open')) initMathCanvas();
-}
-var _mathCanvasInited = false;
-function initMathCanvas() {
-  if (_mathCanvasInited) return;
-  _mathCanvasInited = true;
-  var canvas = document.getElementById('mathCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = 200;
-  ctx.strokeStyle = '#c8b88a';
-  ctx.lineWidth = 2;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  var drawing = false;
-  function getPos(e) {
-    var r = canvas.getBoundingClientRect();
-    var t = e.touches ? e.touches[0] : e;
-    return { x: t.clientX - r.left, y: t.clientY - r.top };
-  }
-  canvas.addEventListener('mousedown', function(e) { drawing = true; ctx.beginPath(); var p = getPos(e); ctx.moveTo(p.x, p.y); });
-  canvas.addEventListener('mousemove', function(e) { if (!drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
-  canvas.addEventListener('mouseup', function() { drawing = false; });
-  canvas.addEventListener('mouseleave', function() { drawing = false; });
-  canvas.addEventListener('touchstart', function(e) { e.preventDefault(); drawing = true; ctx.beginPath(); var p = getPos(e); ctx.moveTo(p.x, p.y); }, { passive: false });
-  canvas.addEventListener('touchmove', function(e) { e.preventDefault(); if (!drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }, { passive: false });
-  canvas.addEventListener('touchend', function() { drawing = false; });
-}
-function clearMathCanvas() {
-  var canvas = document.getElementById('mathCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-function submitCanvasToAI() {
-  var canvas = document.getElementById('mathCanvas');
-  if (!canvas) return;
-  var imageData = canvas.toDataURL('image/png');
-  var welcome = document.getElementById('mathWelcome');
-  if (welcome) welcome.classList.add('hidden');
-  appendImageMsg('mathMessages', imageData, 'sketch.png');
-  var vars = { mode: mathModeState, mathType: mathType, model: mathModel };
-  var ds = document.getElementById('mathDetailSelect');
-  vars.detail = ds ? ds.value : 'full';
-  streamAIResponse('mathMessages', 'I drew a math problem on the whiteboard. Please analyze my sketch and help me solve it step by step.', 'math', vars, 'math', imageData);
-  clearMathCanvas();
-}
 
 /* ── Scratch Pad (Math Tab) ── */
 var _scratchTool = 'pen';
