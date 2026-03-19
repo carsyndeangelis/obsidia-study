@@ -2343,7 +2343,7 @@
             <button class="scratch-tool-btn" onclick="clearScratchPad()">Clear</button>
           </div>
           <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas></div>
-          <button class="btn-gold scratch-attach" id="scratchAttachBtn" onclick="attachScratchpadToMathChat()">Attach to Chat</button>
+          <button class="btn-gold scratch-attach" id="scratchAttachBtn" onclick="attachScratchpadToMathChat()" disabled>Attach to Chat</button>
         </div>
       </div>
     </div>
@@ -3754,7 +3754,7 @@ function sendPageMsg(pg) {
 
   var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage[pg] && _pendingPasteImage[pg].length) ? _pendingPasteImage[pg].slice() : null;
   if (pastedImgs) { clearImageAttachmentPreview(pg); }
-  if (pg === 'math') { _currentScratchAttachment = null; var _sb = document.getElementById('scratchAttachBtn'); if (_sb) { _sb.textContent = 'Attach to Chat'; _sb.style.background = ''; _sb.style.borderColor = ''; } }
+  if (pg === 'math') { _currentScratchAttachment = null; var _sb = document.getElementById('scratchAttachBtn'); if (_sb) _sb.disabled = true; }
   streamAIResponse(msgContainer, text, pg, vars, pg, pastedImgs || undefined);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
@@ -3868,6 +3868,8 @@ function initScratchPad() {
     var p = getPos(e); ctx.moveTo(p.x, p.y);
     ctx.strokeStyle = _scratchTool === 'eraser' ? '#0e0e0e' : '#ffffff';
     ctx.lineWidth = _scratchTool === 'eraser' ? 18 : 2;
+    var attachBtn = document.getElementById('scratchAttachBtn');
+    if (attachBtn) attachBtn.disabled = false;
   }
   function moveDraw(e) { if (!drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }
   function endDraw() { drawing = false; }
@@ -3891,18 +3893,12 @@ function clearScratchPad() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   _currentScratchAttachment = null;
   var btn = document.getElementById('scratchAttachBtn');
-  if (btn) { btn.textContent = 'Attach to Chat'; btn.style.background = ''; btn.style.borderColor = ''; }
+  if (btn) btn.disabled = true;
 }
 function attachScratchpadToMathChat() {
   var canvas = document.getElementById('mathScratchPad');
   if (!canvas) return;
   var dataUrl = canvas.toDataURL('image/png');
-  var blank = document.createElement('canvas');
-  blank.width = canvas.width; blank.height = canvas.height;
-  if (canvas.toDataURL() === blank.toDataURL()) {
-    showToast('warning', '', 'Empty Scratch Pad', 'Draw something first before attaching.');
-    return;
-  }
   if (_currentScratchAttachment) {
     var index = _pendingPasteImage['math'] ? _pendingPasteImage['math'].indexOf(_currentScratchAttachment) : -1;
     if (index > -1) {
@@ -3915,8 +3911,6 @@ function attachScratchpadToMathChat() {
     showImageAttachmentPreview('math', dataUrl);
   }
   _currentScratchAttachment = dataUrl;
-  var btn = document.getElementById('scratchAttachBtn');
-  if (btn) { btn.textContent = 'Attached! (Click to update edits)'; btn.style.background = '#5a5040'; btn.style.borderColor = '#5a5040'; }
 }
 
 /* ── Global Image Attachment Preview (multi-image) ── */
