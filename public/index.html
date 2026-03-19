@@ -2008,7 +2008,8 @@
         <div class="slab-re slab-row" id="sre7"><div class="slab-rn">V.</div><div class="slab-rx"><b>Accessibility</b> &mdash; Toggle <b>Reduce Animations</b> in Settings to disable transitions and glow effects on older devices. Obsidia adapts to <b>you</b>.</div></div>
         <div class="slab-re slab-row" id="sre8"><div class="slab-rn">VI.</div><div class="slab-rx"><b>Triple-Provider Intelligence</b> &mdash; Obsidia routes each task to the best AI: <b>o3-mini</b> for pure math reasoning, <b>Claude 3.5 Sonnet</b> for vision &amp; essays, <b>GPT-4o</b> for grading &amp; test prep, and <b>Gemini 1.5 Pro</b> for lecture audio processing.</div></div>
         <div class="slab-re slab-row" id="sre9"><div class="slab-rn">VII.</div><div class="slab-rx"><b>Audio Workstation</b> &mdash; Open <b>Lecture Notes</b> to find two giant action cards: <b>Record Live Lecture</b> captures up to 5 hours of mic audio with a pulsating red glow, and <b>Upload Audio/Video</b> accepts any file. Both feed directly into Gemini 1.5 Pro for transcription and study material generation.</div></div>
-        <div class="slab-re slab-row" id="sre10"><div class="slab-rn">VIII.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
+        <div class="slab-re slab-row" id="sre10"><div class="slab-rn">VIII.</div><div class="slab-rx"><b>Omni-Class Quick Snap</b> &mdash; Type or paste an image into the <b>Home</b> chat box. A blazing-fast GPT-4o-mini classifier decides if it&rsquo;s math, essay, or general &mdash; then teleports your query to the correct specialist tab automatically. General questions get answered inline by Claude.</div></div>
+        <div class="slab-re slab-row" id="sre11"><div class="slab-rn">IX.</div><div class="slab-rx"><b>The Golden Rules</b> &mdash; Be specific in the chat, use the right tool for the job, and <b>ALWAYS</b> attach files (PDFs/Images) for context using the paperclip icon!</div></div>
         <div class="slab-seal"><div class="slab-seal-ring"><span class="slab-seal-o">O</span></div></div>
       </div></div>
     </div>
@@ -2423,6 +2424,24 @@
   </div>
 </div>
 
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE: OMNI (Every Class AI — routing destination)
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-omni">
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
+    <div class="sp-header">
+      <div class="sp-icon" style="background:rgba(201,168,76,0.12);color:var(--gold-bright);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+      <div class="sp-info"><h2 class="sp-title"><span class="gold-text">Every Class</span> AI</h2><p class="sp-subtitle">Ask anything — Obsidia routes to the best specialist or answers inline</p></div>
+      <span class="sp-model-badge" style="background:rgba(201,168,76,0.12);color:var(--gold-bright);border:1px solid rgba(201,168,76,0.25);">Omni Router &middot; All Models</span>
+    </div>
+    <div class="sp-chat-panel">
+      <div class="sp-messages" id="omniMessages" role="log" aria-live="polite"><div class="chat-welcome" id="omniWelcome"><h2 class="welcome-title">Every Class AI</h2><p class="welcome-sub">Your question is being classified and routed to the best AI specialist...</p></div></div>
+      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('omniFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="omniFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('omni',this)" /><textarea class="chat-textarea" id="omniChatInput" rows="1"></textarea><button class="chat-send" id="omniSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send</span><span class="chat-model-tag">OMNI ROUTER &middot; ALL MODELS</span></div></div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════
      PAGE: ADVANCED MATH (kept from original)
@@ -3779,7 +3798,7 @@ window.addEventListener('unhandledrejection', function(e) {
 ══════════════════════════════════════════════════════ */
 let currentPage = 'home';
 const inputStates = {};
-const allPages = ['home','math','essay','study','notes','doublecheck','grading','testprep','teacher','history','feedback','settings','achievements','smartscan','analytics','studygroups','themes','reminders'];
+const allPages = ['home','math','essay','study','notes','doublecheck','grading','testprep','teacher','history','feedback','settings','achievements','smartscan','analytics','studygroups','themes','reminders','omni'];
 allPages.forEach(p => inputStates[p] = '');
 
 function performHardRefresh() {
@@ -3983,12 +4002,29 @@ if (homeSendBtn) homeSendBtn.addEventListener('click', sendHomeMsg);
 
 function sendHomeMsg() {
   const text = homeChatInput.value.trim(); if (!text) return;
-  const welcome = document.getElementById('homeWelcome'); if (welcome) welcome.classList.add('hidden');
-  appendMsg('homeChatMessages','user',text);
-  homeChatInput.value=''; homeChatInput.style.height='auto'; homeSendBtn.disabled=true;
+  // Capture images before clearing
   var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage['home'] && _pendingPasteImage['home'].length) ? _pendingPasteImage['home'].slice() : null;
   if (pastedImgs) { clearImageAttachmentPreview('home'); }
-  streamAIResponse('homeChatMessages', text, 'general', {}, 'home', pastedImgs || undefined);
+  // Clear home input
+  homeChatInput.value=''; homeChatInput.style.height='auto'; homeSendBtn.disabled=true;
+  // Transfer images to omni page
+  if (pastedImgs) { _pendingPasteImage['omni'] = pastedImgs; }
+  // Stash text for omni to pick up
+  window._omniPendingText = text;
+  window._omniPendingImages = pastedImgs;
+  // Navigate to omni and fire
+  navigate('omni');
+  setTimeout(function() {
+    var omniInput = document.getElementById('omniChatInput');
+    if (omniInput) { omniInput.value = text; omniInput.dispatchEvent(new Event('input')); }
+    var welcome = document.getElementById('omniWelcome'); if (welcome) welcome.classList.add('hidden');
+    appendMsg('omniMessages', 'user', text);
+    if (pastedImgs && pastedImgs.length) { pastedImgs.forEach(function(src) { appendImageMsg('omniMessages', src, 'Attachment'); }); }
+    _pendingPasteImage['omni'] = [];
+    var omniIn = document.getElementById('omniChatInput'); if (omniIn) { omniIn.value = ''; omniIn.style.height = 'auto'; }
+    var omniBtn = document.getElementById('omniSendBtn'); if (omniBtn) omniBtn.disabled = true;
+    streamOmniRouter('omniMessages', text, pastedImgs || undefined);
+  }, 80);
 }
 function homeUseSuggestion(el) { homeChatInput.value=el.textContent; homeChatInput.dispatchEvent(new Event('input')); homeChatInput.focus(); }
 
@@ -5024,7 +5060,8 @@ const AI_PROVIDERS = {
   'testprep': { name: 'GPT-4o', color: '#10a37f', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 12 2.1 7.1"></path><path d="M12 12l9.9 4.9"></path></svg>' },
   'teacher': { name: 'Claude Sonnet 4', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>' },
   'study': { name: 'Claude Sonnet 4', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
-  'home': { name: 'Claude Sonnet 4', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' }
+  'home': { name: 'Claude Sonnet 4', color: '#d97757', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>' },
+  'omni': { name: 'Omni Router', color: '#c9a84c', logo: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>' }
 };
 function showAIThinking(pageId, hasImages) {
   var indicator = document.getElementById('aiThinkingIndicator');
@@ -5233,6 +5270,141 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
     typeMsg(containerId, 'ai', fallback);
     chatHistory[historyKey].push({ role: 'assistant', content: fallback });
     showAppError('The AI response failed to load.', 'This may be a network issue or the API key may not be configured. Please check your connection and try again.');
+  }
+}
+
+/* ── Omni-Class Router (classifies then routes or streams inline) ── */
+async function streamOmniRouter(containerId, message, imageData) {
+  showAIThinking('omni', false);
+  var typingEl = appendTypingTo(containerId);
+  if (typingEl._statusText) typingEl._statusText.textContent = 'Classifying your question...';
+
+  chatHistory['omni'].push({ role: 'user', content: message });
+
+  try {
+    var body = { message: message, page: 'omni', vars: {}, history: chatHistory['omni'].slice(-10), model: 'sonnet' };
+    var _profileCtx = getStudentProfileContext();
+    if (_profileCtx) { if (!body.vars) body.vars = {}; body.vars.studentProfile = _profileCtx; }
+    if (imageData && Array.isArray(imageData) && imageData.length) body.images = imageData;
+
+    var res = await fetch('/api/chat.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    // Check if it's a JSON route response (not SSE stream)
+    var contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      var json = await res.json();
+      typingEl.remove();
+      hideAIThinking();
+
+      if (json.action === 'route' && json.target) {
+        var targetNames = { math: 'Math AI', essay: 'Essay Writer' };
+        var targetName = targetNames[json.target] || json.target;
+        showToast('info', '\uD83D\uDE80', 'Routing', 'Sending to ' + targetName + '...');
+
+        // Clear the omni message we just added (it'll appear in the target tab)
+        var container = document.getElementById(containerId);
+        if (container) { container.innerHTML = ''; var w = document.getElementById('omniWelcome'); if (w) { w.classList.remove('hidden'); container.prepend(w); } }
+        chatHistory['omni'] = [];
+
+        // Navigate to the target tab
+        navigate(json.target);
+        setTimeout(function() {
+          // Transfer images
+          if (imageData && imageData.length) { _pendingPasteImage[json.target] = imageData; }
+          // Inject message and fire
+          var targetInput = document.getElementById(json.target + 'ChatInput');
+          if (targetInput) { targetInput.value = message; targetInput.dispatchEvent(new Event('input')); }
+          var targetWelcome = document.getElementById(json.target + 'Welcome'); if (targetWelcome) targetWelcome.classList.add('hidden');
+          appendMsg(json.target + 'Messages', 'user', message);
+          if (imageData && imageData.length) { imageData.forEach(function(src) { appendImageMsg(json.target + 'Messages', src, 'Attachment'); }); _pendingPasteImage[json.target] = []; }
+          var targetIn = document.getElementById(json.target + 'ChatInput'); if (targetIn) { targetIn.value = ''; targetIn.style.height = 'auto'; }
+          var targetBtn = document.getElementById(json.target + 'SendBtn'); if (targetBtn) targetBtn.disabled = true;
+
+          // Build vars for the target page
+          var vars = {};
+          if (json.target === 'math') { vars.mode = mathModeState || 'solve'; vars.mathType = mathType || 'algebra'; vars.detail = 'full'; }
+          if (json.target === 'essay') { vars.mode = essayModeState || 'draft'; var ht = document.getElementById('humanizerToggle'); vars.humanizer = ht ? ht.checked : false; var gs = document.getElementById('essayGradeSelect'); vars.grade = gs ? gs.value : '11th Grade'; }
+          streamAIResponse(json.target + 'Messages', message, json.target, vars, json.target, imageData || undefined);
+        }, 120);
+        return;
+      }
+      // Unexpected JSON — show as message
+      appendMsg(containerId, 'ai', json.error || 'Unexpected response');
+      return;
+    }
+
+    // SSE stream — "other" classification, inline response on omni page
+    if (!res.ok) {
+      typingEl.remove(); hideAIThinking();
+      var err = await res.json().catch(function() { return { error: 'Connection failed' }; });
+      appendMsg(containerId, 'ai', err.error || 'Something went wrong.');
+      return;
+    }
+
+    var timeStr = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    var msg = document.createElement('div'); msg.className = 'msg ai';
+    var av = document.createElement('div'); av.className = 'msg-avatar msg-avatar-ai'; av.setAttribute('aria-hidden','true'); av.textContent = 'O';
+    var bubble = document.createElement('div'); bubble.className = 'msg-bubble';
+    var time = document.createElement('div'); time.className = 'msg-time'; time.textContent = timeStr;
+    var actions = document.createElement('div'); actions.className = 'msg-actions';
+    var copyBtn = document.createElement('button'); copyBtn.className = 'msg-action-btn';
+    copyBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy';
+    actions.appendChild(copyBtn);
+    var wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;';
+    wrap.appendChild(bubble); wrap.appendChild(actions); wrap.appendChild(time);
+    msg.appendChild(av); msg.appendChild(wrap);
+    var container = document.getElementById(containerId);
+    var typingRemoved = false;
+
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var fullText = '';
+    var buffer = '';
+
+    while (true) {
+      var chunk = await reader.read();
+      if (chunk.done) break;
+      buffer += decoder.decode(chunk.value, { stream: true });
+      var lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (var li = 0; li < lines.length; li++) {
+        if (!lines[li].startsWith('data: ')) continue;
+        try {
+          var data = JSON.parse(lines[li].slice(6));
+          if (data.status) { if (typingEl._statusText) typingEl._statusText.textContent = data.status; continue; }
+          if (data.error) { if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); } bubble.textContent += '\n\n\u26a0 ' + data.error; break; }
+          if (data.done) break;
+          if (data.text) {
+            if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); }
+            fullText += data.text;
+            try { bubble.innerHTML = renderMarkdown(fullText); } catch(_) {}
+            container.scrollTop = container.scrollHeight;
+          }
+        } catch(e) {}
+      }
+    }
+    if (!typingRemoved) { typingEl.remove(); typingRemoved = true; container.appendChild(msg); }
+
+    copyBtn.onclick = function() {
+      navigator.clipboard.writeText(fullText).then(function() {
+        copyBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(function() { copyBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    };
+
+    chatHistory['omni'].push({ role: 'assistant', content: fullText });
+    msgCounts['omni'] = (msgCounts['omni'] || 0) + 1;
+    hideAIThinking();
+
+  } catch (err) {
+    hideAIThinking();
+    try { typingEl.remove(); } catch(_) {}
+    appendMsg(containerId, 'ai', 'Sorry, something went wrong. Please try again.');
   }
 }
 
@@ -6811,7 +6983,7 @@ async function loadRecentActivity() {
 /* ══════════════════════════════════════════════════════
    SIDEBAR — Navigation, Collapse, Drag Resize
 ══════════════════════════════════════════════════════ */
-var PAGE_NAMES = {home:'Home',math:'Math AI',essay:'Essay Writer',study:'Study Guide',notes:'Lecture Notes',doublecheck:'Double Check',grading:'Grading',testprep:'Test Prep',teacher:'Teacher Tools',smartscan:'Smart Scan',analytics:'Analytics',studygroups:'Study Groups',history:'History',achievements:'Achievements',feedback:'Feedback',settings:'Settings',themes:'Themes',reminders:'Reminders'};
+var PAGE_NAMES = {home:'Home',math:'Math AI',essay:'Essay Writer',study:'Study Guide',notes:'Lecture Notes',doublecheck:'Double Check',grading:'Grading',testprep:'Test Prep',teacher:'Teacher Tools',smartscan:'Smart Scan',analytics:'Analytics',studygroups:'Study Groups',history:'History',achievements:'Achievements',feedback:'Feedback',settings:'Settings',themes:'Themes',reminders:'Reminders',omni:'Every Class AI'};
 
 function sNav(pageId) {
   navigate(pageId);

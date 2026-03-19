@@ -307,7 +307,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Validate vars against allowlists to prevent prompt injection
-    const ALLOWED_PAGES = ['general','math','essay','study','notes','doublecheck','grading','testprep','teacher','admin_architect'];
+    const ALLOWED_PAGES = ['general','math','essay','study','notes','doublecheck','grading','testprep','teacher','admin_architect','omni'];
     const ALLOWED_MODES = ['solve','explain','graph','practice','draft','outline','thesis','proofread','transcribe','summarize','keypoints','questions','verify','sources','compare','bias','grade','rubric','feedback'];
     const ALLOWED_MATH_TYPES = ['algebra','geometry','trig','precalc','calculus','multivariable','linalg','diffeq','statistics','discrete'];
     const ALLOWED_SECTIONS = ['act-math','act-english','act-science','sat-math','sat-rw','strategy'];
@@ -332,8 +332,50 @@ module.exports = async function handler(req, res) {
     if (rv.systemOverride && typeof rv.systemOverride === 'string' && page === 'admin_architect') safeVars.systemOverride = rv.systemOverride.slice(0, 1000);
 
     const trimmedMessage = message.slice(0, 4000);
+
+    // ── Omni-Class Intelligent Router ──
+    // Classify the user's intent and either route to a specialist tab or answer inline
+    if (page === 'omni') {
+      const imageList = (Array.isArray(images) && images.length) ? images : (image && typeof image === 'string') ? [image] : [];
+      const hasImgs = imageList.some(img => typeof img === 'string' && img.startsWith('data:image/'));
+      const classifierPrompt = 'You are an intelligent classifier for an academic homework app. Review the user\'s text' + (hasImgs ? ' and attached image' : '') + '. Output EXACTLY ONE WORD from this list: math, essay, other. Rules: If it\'s a math/calculus/algebra/geometry/statistics problem or equation, return "math". If the user is asking to write, draft, proofread, or outline an essay or paragraph, return "essay". For everything else (history, science, general questions, coding, etc.), return "other".';
+
+      try {
+        // Fast classification via GPT-4o-mini
+        const classifierClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+        const classifierContent = [{ role: 'system', content: classifierPrompt }];
+        const userParts = [];
+        if (hasImgs) {
+          imageList.forEach(img => {
+            if (typeof img === 'string' && img.startsWith('data:image/')) {
+              userParts.push({ type: 'image_url', image_url: { url: img } });
+            }
+          });
+        }
+        userParts.push({ type: 'text', text: trimmedMessage });
+        classifierContent.push({ role: 'user', content: userParts });
+
+        const classification = await classifierClient.chat.completions.create({
+          model: 'gpt-4o-mini',
+          messages: classifierContent,
+          max_tokens: 5,
+          temperature: 0,
+        });
+
+        const label = (classification.choices?.[0]?.message?.content || 'other').trim().toLowerCase();
+
+        if (label === 'math' || label === 'essay') {
+          // Route to specialist tab — return JSON (not SSE)
+          return res.json({ action: 'route', target: label });
+        }
+      } catch (classifyErr) {
+        console.error('Omni classifier error, falling through to general:', classifyErr.message);
+      }
+      // "other" or classifier failure → fall through to general Claude response
+    }
+
     const safePage = ALLOWED_PAGES.includes(page) ? page : 'general';
-    const systemPrompt = SELF_VERIFY + '\n\n' + buildPrompt(safePage, safeVars);
+    const systemPrompt = SELF_VERIFY + '\n\n' + buildPrompt(safePage === 'omni' ? 'general' : safePage, safeVars);
 
     // Build conversation history
     const messages = [];
