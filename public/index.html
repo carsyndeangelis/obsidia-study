@@ -2527,7 +2527,7 @@
       <span class="sp-model-badge" style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);">Claude Sonnet &middot; Notes</span>
     </div>
     <div class="sp-chat-panel">
-      <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="notesMode(this,'transcribe')">Transcribe</button><button class="sp-tool-btn" onclick="notesMode(this,'summarize')">Summarize</button><button class="sp-tool-btn" onclick="notesMode(this,'keypoints')">Key Points</button><button class="sp-tool-btn" onclick="notesMode(this,'questions')">Generate Questions</button></div>
+      <div class="sp-toolbar"><button class="sp-tool-btn active" onclick="notesMode(this,'transcribe')">Transcribe</button><button class="sp-tool-btn" onclick="notesMode(this,'questions')">Generate Questions from Audio Recordings</button></div>
       <div class="sp-messages" id="notesMessages" role="log" aria-live="polite"><div class="chat-welcome" id="notesWelcome"><h2 class="welcome-title">Lecture Notes AI</h2><p class="welcome-sub">Upload audio/video or describe what was discussed.</p>
 <div id="lectureRecordingUI" style="margin-top:20px;text-align:center;">
 <div style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;">
@@ -4122,7 +4122,27 @@ document.addEventListener('paste', function(e) {
 });
 
 function essayMode(btn,mode) { essayModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); var input=document.getElementById('essayChatInput'); if(input) input.placeholder=window._globalChatPlaceholder||'How can I help you today?'; }
-function notesMode(btn,mode) { notesModeState=mode; btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); var input=document.getElementById('notesChatInput'); if(input) input.placeholder=window._globalChatPlaceholder||'How can I help you today?'; }
+function notesMode(btn,mode) {
+  notesModeState=mode;
+  btn.closest('.sp-toolbar').querySelectorAll('.sp-tool-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  var input=document.getElementById('notesChatInput');
+  if(input) input.placeholder=window._globalChatPlaceholder||'How can I help you today?';
+  var welcome = document.getElementById('notesWelcome');
+  var recUI = document.getElementById('lectureRecordingUI');
+  if (mode === 'questions') {
+    if (recUI) recUI.style.display = 'none';
+    if (welcome) {
+      welcome.innerHTML = '<h2 class="welcome-title">Generate Custom Quiz</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Select a previous lecture recording from your cloud library to instantly generate a custom quiz.</p><div style="max-width:440px;margin:0 auto;text-align:left;background:var(--black-panel);border:1px solid var(--black-border);padding:20px;border-radius:12px;"><label style="font-size:12px;font-weight:600;color:#8a8070;margin-bottom:8px;display:block;text-transform:uppercase;">Select Recording</label><select id="quizAudioSelect" style="width:100%;background:var(--black-input);border:1px solid var(--black-border);border-radius:8px;padding:12px;color:#e8e0cc;margin-bottom:16px;outline:none;font-family:var(--font-ui);"><option>Loading...</option></select><label style="font-size:12px;font-weight:600;color:#8a8070;margin-bottom:8px;display:block;text-transform:uppercase;">Number of Questions</label><div style="display:flex;gap:10px;"><input type="number" id="quizQuestionCount" placeholder="e.g. 10" min="1" max="50" style="flex:1;background:var(--black-input);border:1px solid var(--black-border);border-radius:8px;padding:12px;color:#e8e0cc;outline:none;font-family:var(--font-ui);"><button class="btn-gold" onclick="generateQuizFromSavedAudio()" style="padding:0 24px;border-radius:8px;font-weight:600;">Generate</button></div></div>';
+      populateQuizAudioDropdown();
+    }
+  } else {
+    if (welcome) {
+      welcome.innerHTML = '<h2 class="welcome-title">Lecture Notes AI</h2><p class="welcome-sub">Upload audio/video or describe what was discussed.</p>';
+      if (recUI) { welcome.appendChild(recUI); recUI.style.display = 'block'; }
+    }
+  }
+}
 
 /* ── Lecture Audio Recording Suite ── */
 let mediaRecorder;
@@ -4276,6 +4296,37 @@ async function deleteRecording(id, filePath, cardEl) {
     }
     if (typeof showToast === 'function') showToast('success', '', 'Deleted', 'Recording removed from cloud.');
   } catch(e) { console.error('Delete failed:', e); }
+}
+
+async function populateQuizAudioDropdown() {
+  var select = document.getElementById('quizAudioSelect');
+  if (!select) return;
+  if (!sbClient || !currentUser) { select.innerHTML = '<option disabled selected>Please sign in to view recordings.</option>'; return; }
+  try {
+    var { data, error } = await sbClient.from('recordings').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    if (error || !data || data.length === 0) { select.innerHTML = '<option disabled selected>No saved recordings found.</option>'; return; }
+    select.innerHTML = '<option value="" disabled selected>Select an audio recording...</option>';
+    data.forEach(function(rec) {
+      var d = new Date(rec.created_at);
+      var dateStr = d.toLocaleDateString('en-US', { year:'2-digit', month:'2-digit', day:'2-digit' }) + ' ' + d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+      select.innerHTML += '<option value="' + rec.url + '">' + dateStr + '</option>';
+    });
+  } catch(e) { console.error(e); }
+}
+
+function generateQuizFromSavedAudio() {
+  var select = document.getElementById('quizAudioSelect');
+  var countInput = document.getElementById('quizQuestionCount');
+  if (!select || !select.value) { if (typeof showToast === 'function') showToast('warning', '', 'Missing Audio', 'Please select a past recording to generate questions from.'); return; }
+  var quantity = parseInt(countInput.value) || 10;
+  if (typeof showImageAttachmentPreview === 'function') showImageAttachmentPreview('notes', select.value);
+  var chatInput = document.getElementById('notesChatInput');
+  if (chatInput) {
+    chatInput.value = 'Please write ' + quantity + ' questions based on this audio recording. If you cannot produce enough questions from the available audio data, please generate as many high-quality questions as you logically can based solely on the provided content without hallucinating extra details.';
+    chatInput.dispatchEvent(new Event('input'));
+    var sendBtn = document.getElementById('notesSendBtn');
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); var firstBtn = document.querySelector('#page-notes .sp-toolbar .sp-tool-btn'); if (firstBtn) firstBtn.click(); }
+  }
 }
 
 let studyMethod=null;
