@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { message, page, vars, history, image, model } = req.body;
+    const { message, page, vars, history, image, images, model } = req.body;
 
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'Message is required' });
@@ -86,22 +86,25 @@ module.exports = async function handler(req, res) {
       }
     }
 
-    // Build user message content (text + optional image)
+    // Build user message content (text + optional images)
     const userContent = [];
-    if (image && typeof image === 'string' && image.startsWith('data:image/')) {
-      // Extract base64 data and media type
-      const match = image.match(/^data:(image\/[a-z+]+);base64,(.+)$/i);
-      if (match) {
-        userContent.push({
-          type: 'image',
-          source: {
-            type: 'base64',
-            media_type: match[1],
-            data: match[2]
-          }
-        });
+    // Support both legacy single image and new multi-image array
+    const imageList = (Array.isArray(images) && images.length) ? images : (image && typeof image === 'string') ? [image] : [];
+    imageList.forEach(function(img) {
+      if (typeof img === 'string' && img.startsWith('data:image/')) {
+        const match = img.match(/^data:(image\/[a-z+]+);base64,(.+)$/i);
+        if (match) {
+          userContent.push({
+            type: 'image',
+            source: {
+              type: 'base64',
+              media_type: match[1],
+              data: match[2]
+            }
+          });
+        }
       }
-    }
+    });
     userContent.push({ type: 'text', text: trimmedMessage });
     messages.push({ role: 'user', content: userContent });
 

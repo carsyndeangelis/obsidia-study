@@ -1287,7 +1287,7 @@
       padding: 12px 16px 16px;
       border-top: 1px solid var(--black-border);
     }
-    .global-attachment-preview { display: flex; padding: 0 0 12px; animation: fadeSlideUp 0.2s ease forwards; }
+    .global-attachment-preview { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 0 12px; animation: fadeSlideUp 0.2s ease forwards; }
     .global-attachment-preview .preview-img-box { position: relative; display: inline-block; }
     .global-attachment-preview img { height: 64px; border-radius: 6px; border: 1px solid var(--black-border); background: var(--black-panel); box-shadow: 0 4px 12px rgba(0,0,0,0.5); object-fit: contain; }
     .global-attachment-preview .remove-btn { position: absolute; top: -6px; right: -6px; background: #f43f5e; color: #fff; border: 1px solid #7f1d1d; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.4); }
@@ -3693,7 +3693,7 @@ function handleDroppedFile(file) {
       if (typeof showImageAttachmentPreview === 'function') {
         showImageAttachmentPreview('home', ev.target.result);
       } else {
-        _pendingPasteImage['home'] = ev.target.result;
+        _pendingPasteImage['home'] = _pendingPasteImage['home'] || []; _pendingPasteImage['home'].push(ev.target.result);
       }
     };
     reader.readAsDataURL(file);
@@ -3716,9 +3716,9 @@ function sendHomeMsg() {
   const welcome = document.getElementById('homeWelcome'); if (welcome) welcome.classList.add('hidden');
   appendMsg('homeChatMessages','user',text);
   homeChatInput.value=''; homeChatInput.style.height='auto'; homeSendBtn.disabled=true;
-  var pastedImg = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage['home']) ? _pendingPasteImage['home'] : null;
-  if (pastedImg) { clearImageAttachmentPreview('home'); _pendingPasteImage['home'] = null; }
-  streamAIResponse('homeChatMessages', text, 'general', {}, 'home', pastedImg || undefined);
+  var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage['home'] && _pendingPasteImage['home'].length) ? _pendingPasteImage['home'].slice() : null;
+  if (pastedImgs) { clearImageAttachmentPreview('home'); }
+  streamAIResponse('homeChatMessages', text, 'general', {}, 'home', pastedImgs || undefined);
 }
 function homeUseSuggestion(el) { homeChatInput.value=el.textContent; homeChatInput.dispatchEvent(new Event('input')); homeChatInput.focus(); }
 
@@ -3752,10 +3752,10 @@ function sendPageMsg(pg) {
   if (pg==='testprep') vars.section = testSection || 'strategy';
   if (pg==='teacher') vars.tool = teacherTool || 'lesson';
 
-  var pastedImg = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage[pg]) ? _pendingPasteImage[pg] : null;
-  if (pastedImg) { clearImageAttachmentPreview(pg); _pendingPasteImage[pg] = null; }
+  var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage[pg] && _pendingPasteImage[pg].length) ? _pendingPasteImage[pg].slice() : null;
+  if (pastedImgs) { clearImageAttachmentPreview(pg); }
   if (pg === 'math' && typeof undoScratchpadAttachment === 'function') undoScratchpadAttachment();
-  streamAIResponse(msgContainer, text, pg, vars, pg, pastedImg || undefined);
+  streamAIResponse(msgContainer, text, pg, vars, pg, pastedImgs || undefined);
 }
 function spUseSuggestion(pg,el) { const input=document.getElementById(pg+'ChatInput'); input.value=el.textContent; input.dispatchEvent(new Event('input')); input.focus(); }
 
@@ -3778,7 +3778,7 @@ function handlePageAttach(pg, inputEl) {
     if (typeof showImageAttachmentPreview === 'function') {
       showImageAttachmentPreview(pg, dataUrl);
     } else {
-      _pendingPasteImage[pg] = dataUrl;
+      _pendingPasteImage[pg] = _pendingPasteImage[pg] || []; _pendingPasteImage[pg].push(dataUrl);
       var chatInput = document.getElementById(pg + 'ChatInput');
       if (chatInput) { chatInput.placeholder = 'Attachment added...'; chatInput.focus(); }
     }
@@ -3900,11 +3900,12 @@ function undoScratchpadAttachment() {
   if (btn) { btn.textContent = 'Attach to Chat'; btn.style.background = ''; btn.setAttribute('onclick', 'attachScratchpadToMathChat()'); }
 }
 
-/* ── Global Image Attachment Preview ── */
+/* ── Global Image Attachment Preview (multi-image) ── */
 function showImageAttachmentPreview(pageId, dataUrl) {
-  _pendingPasteImage[pageId] = dataUrl;
+  _pendingPasteImage[pageId] = _pendingPasteImage[pageId] || [];
+  _pendingPasteImage[pageId].push(dataUrl);
+
   var pageEl = document.getElementById('page-' + pageId);
-  // Home page has a different structure
   if (pageId === 'home') pageEl = document.querySelector('.home-chat-section') || document.getElementById('page-home');
   var wrap = pageEl ? pageEl.querySelector('.chat-input-wrap') : null;
   if (!wrap) return;
@@ -3913,24 +3914,51 @@ function showImageAttachmentPreview(pageId, dataUrl) {
   if (!previewEl) {
     previewEl = document.createElement('div');
     previewEl.className = 'global-attachment-preview';
-    previewEl.innerHTML = '<div class="preview-img-box"><img src="" alt="Pending attachment" /><button class="remove-btn" aria-label="Remove attachment">&times;</button></div>';
     var inputBox = wrap.querySelector('.chat-input-box');
     if (inputBox) wrap.insertBefore(previewEl, inputBox);
   }
   previewEl.style.display = 'flex';
-  previewEl.querySelector('img').src = dataUrl;
-  previewEl.querySelector('.remove-btn').onclick = function() { clearImageAttachmentPreview(pageId); };
+
+  var box = document.createElement('div');
+  box.className = 'preview-img-box';
+  var img = document.createElement('img');
+  img.src = dataUrl;
+  img.alt = 'Pending attachment';
+  var btn = document.createElement('button');
+  btn.className = 'remove-btn';
+  btn.setAttribute('aria-label', 'Remove attachment');
+  btn.innerHTML = '&times;';
+  btn.onclick = function() { removeSpecificAttachment(pageId, dataUrl, box); };
+  box.appendChild(img);
+  box.appendChild(btn);
+  previewEl.appendChild(box);
 
   var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
-  if (input) { input.placeholder = 'Image attached! Type a message and hit Enter...'; input.focus(); }
+  if (input) { input.placeholder = 'Image(s) attached! Type a message and hit Enter...'; input.focus(); }
 }
 
-function clearImageAttachmentPreview(pageId) {
-  _pendingPasteImage[pageId] = null;
+function removeSpecificAttachment(pageId, dataUrl, elementNode) {
+  if (_pendingPasteImage[pageId]) {
+    var index = _pendingPasteImage[pageId].indexOf(dataUrl);
+    if (index > -1) _pendingPasteImage[pageId].splice(index, 1);
+  }
+  if (elementNode) elementNode.remove();
   var pageEl = document.getElementById('page-' + pageId);
   if (pageId === 'home') pageEl = document.querySelector('.home-chat-section') || document.getElementById('page-home');
   var previewEl = pageEl ? pageEl.querySelector('.global-attachment-preview') : null;
-  if (previewEl) previewEl.style.display = 'none';
+  if (previewEl && previewEl.children.length === 0) {
+    previewEl.style.display = 'none';
+    var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
+    if (input) input.placeholder = '';
+  }
+}
+
+function clearImageAttachmentPreview(pageId) {
+  _pendingPasteImage[pageId] = [];
+  var pageEl = document.getElementById('page-' + pageId);
+  if (pageId === 'home') pageEl = document.querySelector('.home-chat-section') || document.getElementById('page-home');
+  var previewEl = pageEl ? pageEl.querySelector('.global-attachment-preview') : null;
+  if (previewEl) { previewEl.innerHTML = ''; previewEl.style.display = 'none'; }
 
   var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
   if (input) input.placeholder = '';
@@ -4404,6 +4432,12 @@ function ensureKatex() {
 async function streamAIResponse(containerId, message, page, vars, historyKey, imageData) {
   if (page === 'math' || page === 'study') { await ensureKatex(); }
   var container = document.getElementById(containerId);
+
+  // Display attached images in chat before typing indicator
+  if (imageData && Array.isArray(imageData) && imageData.length) {
+    imageData.forEach(function(src) { appendImageMsg(containerId, src, 'Attachment'); });
+  }
+
   var typingEl = appendTypingTo(containerId);
 
   chatHistory[historyKey].push({ role: 'user', content: message });
@@ -4412,7 +4446,7 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
     var body = { message: message, page: page, vars: vars, history: chatHistory[historyKey].slice(-10), model: vars.model || 'sonnet' };
     var _profileCtx = getStudentProfileContext();
     if (_profileCtx) { if (!body.vars) body.vars = {}; body.vars.studentProfile = _profileCtx; }
-    if (imageData) body.image = imageData;
+    if (imageData && Array.isArray(imageData) && imageData.length) body.images = imageData;
 
     var res = await fetch('/api/chat.js', {
       method: 'POST',
