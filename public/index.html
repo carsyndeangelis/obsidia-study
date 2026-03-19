@@ -2994,6 +2994,34 @@
           <div><div class="sandbox-label">Verbose AI Responses</div><div class="sandbox-sublabel">Increase max_tokens to 4000 for longer, more detailed answers</div></div>
           <label class="sp-toggle"><input type="checkbox" id="sandboxVerbose" onchange="saveSandboxPrefs()"><span class="sp-slider"></span></label>
         </div>
+
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--black-border);">
+          <div style="font-size:11px;font-weight:600;color:#a78bfa;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;">Access Management</div>
+          <p style="font-size:11px;color:#5a5040;margin-bottom:10px;">Grant sandbox access to friends instantly without touching source code.</p>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+            <input type="email" id="sandboxGrantEmail" placeholder="friend@gmail.com" style="flex:1;background:var(--black-deep);border:1px solid var(--black-border);border-radius:8px;padding:9px 12px;color:#e8e0cc;font-size:12px;font-family:var(--font-ui);outline:none;" />
+            <button class="btn-gold" onclick="grantSandboxAccess()" style="padding:9px 16px;font-size:12px;white-space:nowrap;">Grant Access</button>
+          </div>
+          <div id="sandboxGrantedList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        </div>
+
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--black-border);">
+          <div style="font-size:11px;font-weight:600;color:#f43f5e;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;">Performance Stress Test</div>
+          <p style="font-size:11px;color:#5a5040;margin-bottom:10px;">Fire an extreme prompt at any AI tab to stress-test API latency, token limits, and frontend rendering.</p>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="stressTestTab" style="flex:1;background:var(--black-deep);border:1px solid var(--black-border);border-radius:8px;padding:9px 12px;color:#e8e0cc;font-size:12px;font-family:var(--font-ui);outline:none;">
+              <option value="math">Math AI</option>
+              <option value="essay">Essay Writer</option>
+              <option value="notes">Lecture Notes</option>
+              <option value="doublecheck">Double Check</option>
+              <option value="grading">Grading</option>
+              <option value="testprep">Test Prep</option>
+              <option value="study">Study Guide</option>
+              <option value="teacher">Teacher Tools</option>
+            </select>
+            <button onclick="runStressTest()" style="padding:9px 20px;font-size:12px;font-weight:600;background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;cursor:pointer;font-family:var(--font-ui);transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='rgba(244,63,94,0.2)'" onmouseout="this.style.background='rgba(244,63,94,0.12)'">Launch Stress Test</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -5546,13 +5574,15 @@ async function onSignIn() {
       adminSection.classList.remove('visible');
     }
   } catch(e) {}
-  // Reveal Sandbox for testers (includes admins)
+  // Reveal Sandbox for testers (includes admins + dynamic whitelist)
   try {
     var sandboxEl = document.getElementById('sandboxSection');
     var email = currentUser && currentUser.email ? currentUser.email.toLowerCase() : '';
-    if (sandboxEl && (TESTER_EMAILS.includes(email) || ADMIN_EMAILS.includes(email))) {
+    var dynamicTesters = getDynamicTesters();
+    if (sandboxEl && (TESTER_EMAILS.includes(email) || ADMIN_EMAILS.includes(email) || dynamicTesters.includes(email))) {
       sandboxEl.classList.add('visible');
       loadSandboxPrefs();
+      renderGrantedList();
     } else if (sandboxEl) {
       sandboxEl.classList.remove('visible');
     }
@@ -6208,6 +6238,73 @@ function requestNotifyPermission() {
   } else {
     alert('Notifications not supported in this browser.');
   }
+}
+
+// ── Dynamic Tester Access Management ──
+function getDynamicTesters() {
+  try { return JSON.parse(localStorage.getItem('obsidia_dynamic_testers') || '[]'); } catch(e) { return []; }
+}
+function grantSandboxAccess() {
+  var input = document.getElementById('sandboxGrantEmail');
+  if (!input) return;
+  var email = input.value.trim().toLowerCase();
+  if (!email || !email.includes('@')) { showToast('error', '', 'Enter a valid email address'); return; }
+  var list = getDynamicTesters();
+  if (list.includes(email)) { showToast('info', '', email + ' already has access'); input.value = ''; return; }
+  list.push(email);
+  localStorage.setItem('obsidia_dynamic_testers', JSON.stringify(list));
+  input.value = '';
+  showToast('success', '', 'Sandbox access granted to ' + email);
+  renderGrantedList();
+}
+function revokeSandboxAccess(email) {
+  var list = getDynamicTesters().filter(function(e) { return e !== email; });
+  localStorage.setItem('obsidia_dynamic_testers', JSON.stringify(list));
+  renderGrantedList();
+  showToast('info', '', 'Access revoked for ' + email);
+}
+function renderGrantedList() {
+  var el = document.getElementById('sandboxGrantedList');
+  if (!el) return;
+  var list = getDynamicTesters();
+  if (list.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = list.map(function(e) {
+    return '<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:99px;padding:3px 10px 3px 12px;font-size:11px;color:#a78bfa;">' + e + '<button onclick="revokeSandboxAccess(\'' + e + '\')" style="background:none;border:none;color:#f43f5e;font-size:14px;cursor:pointer;padding:0 2px;line-height:1;">&times;</button></span>';
+  }).join('');
+}
+
+// ── Stress Test ──
+var STRESS_PROMPTS = {
+  math: 'Provide a 1,500-word step-by-step mathematically rigorous proof of Stokes\' Theorem using extreme LaTeX visual complexity. Include: the general statement with differential forms notation $$\\oint_{\\partial\\Omega} \\omega = \\int_{\\Omega} d\\omega$$, a complete proof outline with every intermediate step shown, parametric surface integrals with Jacobian matrices, curl computations in full component form, AND 5 progressively harder example problems (from Green\'s Theorem in 2D up to flux integrals in 3D). Use display math blocks, matrices, aligned equations, and boxed final answers for every single problem.',
+  essay: 'Write a 2,000-word argumentative essay analyzing whether artificial intelligence will fundamentally transform K-12 education within the next decade. Requirements: (1) A provocative thesis that takes a strong position, (2) At least 5 body paragraphs with distinct sub-arguments each supported by specific evidence, (3) A full counterargument paragraph that steelmans the opposition, (4) Varied sentence structure — alternate between 5-word punchy sentences and 40-word complex compound sentences, (5) Use exactly 3 rhetorical questions, 2 analogies, and 1 extended metaphor throughout, (6) Academic vocabulary appropriate for a college junior, (7) A conclusion that circles back to the opening hook.',
+  notes: 'Transcribe and organize the following simulated 90-minute advanced biochemistry lecture into comprehensive Cornell-method notes. Topics covered: (1) The complete citric acid cycle with all 8 enzymatic steps, substrates, products, and regulation points, (2) Oxidative phosphorylation with the electron transport chain complexes I-IV including redox potentials, (3) ATP synthase mechanism with rotational catalysis, (4) Integration of glycolysis, TCA, and ETC with net ATP yield calculations, (5) Metabolic regulation including allosteric effectors, covalent modification, and hormonal control. Include key terms in bold, formulas for every reaction, and generate 15 review questions.',
+  doublecheck: 'Fact-check the following complex claim with extreme rigor: "The Copenhagen interpretation of quantum mechanics has been definitively proven correct by the 2022 Nobel Prize experiments on Bell inequality violations, making all other interpretations like Many-Worlds and Pilot Wave theory scientifically invalid." Analyze every sub-claim independently. Rate confidence levels. Identify logical fallacies. Discuss what Bell tests actually proved vs. what they didn\'t. Compare at least 4 QM interpretations with their philosophical implications. Cite specific experiments by name.',
+  grading: 'Grade the following hypothetical AP English Literature essay response to the prompt "Analyze how Shakespeare uses dramatic irony in Othello to develop the theme of jealousy." The student wrote 800 words arguing that Iago\'s soliloquies create dramatic irony. Score using a 9-point AP rubric with: (1) Thesis sophistication (0-1), (2) Evidence and commentary (0-4), (3) Sophistication of thought (0-1), (4) Organization and coherence (0-1), (5) Writing quality (0-1). Provide line-level feedback on every paragraph, suggest specific revision examples, and explain what would elevate this from a 6 to a 9.',
+  testprep: 'Generate a complete 60-minute SAT Math practice section with 38 questions. Include: (1) 30 multiple-choice with 4 options each covering algebra, advanced math, problem-solving, and data analysis, (2) 8 grid-in student-produced response questions, (3) A realistic difficulty curve from easy to hard, (4) Full answer explanations for every single question showing both the textbook method and the fastest test-day shortcut, (5) Common trap answers identified for each MC question, (6) Time management recommendations per question cluster.',
+  study: 'Create an exhaustive study guide for AP US History covering the entire Period 5 (1844-1877). Include: (1) A hierarchical outline with Roman numerals for major topics, (2) 25 flashcard-worthy key terms with definitions, (3) A cause-and-effect chain linking Manifest Destiny → Mexican-American War → Compromise of 1850 → Kansas-Nebraska → Civil War → Reconstruction, (4) 3 DBQ-style document analysis exercises, (5) A 7-day spaced repetition study schedule, (6) 15 multiple-choice practice questions in AP format with explanations, (7) A comparison table of Reconstruction plans (Lincoln vs. Johnson vs. Radical Republicans).',
+  teacher: 'Create a complete differentiated 5-day unit plan for teaching quadratic functions to a heterogeneous Algebra 2 class. Include: (1) Measurable learning objectives aligned to CCSS.Math.Content.HSA.REI and HSF.IF standards for each day, (2) Detailed 50-minute lesson plans with I Do/We Do/You Do structure, (3) Bell-ringers and exit tickets for every day, (4) Three tiers of differentiation (below-level with graphic organizers, on-level, above-level with extension problems), (5) A summative assessment with 5 MC, 3 short-answer, and 1 extended response, (6) A 4-level rubric for the extended response, (7) Two parent communication email templates.'
+};
+
+function runStressTest() {
+  var select = document.getElementById('stressTestTab');
+  if (!select) return;
+  var tab = select.value;
+  var prompt = STRESS_PROMPTS[tab];
+  if (!prompt) { showToast('error', '', 'No stress test prompt for this tab'); return; }
+
+  // Navigate to the tab
+  navigate(tab);
+
+  // Inject prompt and fire after a short delay for page transition
+  setTimeout(function() {
+    var input = document.getElementById(tab + 'ChatInput');
+    if (!input) { showToast('error', '', 'Could not find chat input for ' + tab); return; }
+    input.value = prompt;
+    input.dispatchEvent(new Event('input'));
+    // Fire the send
+    setTimeout(function() { sendPageMsg(tab); }, 100);
+    showToast('success', '', 'Stress test launched on ' + (typeof PAGE_NAMES !== 'undefined' ? PAGE_NAMES[tab] : tab));
+  }, 400);
 }
 
 /* ══════════════════════════════════════════════════════
