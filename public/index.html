@@ -172,6 +172,12 @@
     /* ─── ADMIN PANEL ─────────────────────────────────────── */
     #adminPanelSection { display: none; }
     #adminPanelSection.visible { display: block; }
+    #sandboxSection { display: none; }
+    #sandboxSection.visible { display: block; }
+    .sandbox-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--black-border); }
+    .sandbox-toggle-row:last-child { border-bottom: none; }
+    .sandbox-label { font-size: 13px; font-weight: 500; color: #c8b88a; }
+    .sandbox-sublabel { font-size: 11px; color: #5a5040; margin-top: 2px; }
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
     .admin-btn { padding: 12px 14px; background: var(--black-card); border: 1px solid var(--black-border); border-radius: var(--radius-sm); color: #c8b88a; font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); text-align: left; }
     .admin-btn:hover { border-color: var(--gold-muted); background: var(--black-hover); }
@@ -2966,6 +2972,31 @@
       </div>
     </div>
 
+    <!-- Developer & Beta Tester Sandbox -->
+    <div id="sandboxSection">
+      <div class="settings-card" style="border:1px solid rgba(139,92,246,0.2);">
+        <div class="settings-card-title" style="color:#a78bfa;">Developer &amp; Beta Tester Sandbox</div>
+        <p style="font-size:11px;color:#5a5040;margin-bottom:16px;">Experimental features for authorized testers only. These toggles may be unstable or incomplete.</p>
+
+        <div class="sandbox-toggle-row">
+          <div><div class="sandbox-label">Experimental Math Engine</div><div class="sandbox-sublabel">Routes all math queries through an experimental multi-model pipeline</div></div>
+          <label class="sp-toggle"><input type="checkbox" id="sandboxMathEngine" onchange="saveSandboxPrefs()"><span class="sp-slider"></span></label>
+        </div>
+        <div class="sandbox-toggle-row">
+          <div><div class="sandbox-label">Show API Debug Logs</div><div class="sandbox-sublabel">Display provider name, latency, and token count in the browser console</div></div>
+          <label class="sp-toggle"><input type="checkbox" id="sandboxDebugLogs" onchange="saveSandboxPrefs()"><span class="sp-slider"></span></label>
+        </div>
+        <div class="sandbox-toggle-row">
+          <div><div class="sandbox-label">Extended Context Window</div><div class="sandbox-sublabel">Send up to 20 history messages instead of 10 for deeper conversations</div></div>
+          <label class="sp-toggle"><input type="checkbox" id="sandboxExtendedCtx" onchange="saveSandboxPrefs()"><span class="sp-slider"></span></label>
+        </div>
+        <div class="sandbox-toggle-row">
+          <div><div class="sandbox-label">Verbose AI Responses</div><div class="sandbox-sublabel">Increase max_tokens to 4000 for longer, more detailed answers</div></div>
+          <label class="sp-toggle"><input type="checkbox" id="sandboxVerbose" onchange="saveSandboxPrefs()"><span class="sp-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
     <!-- Developer Options (Admin Only) -->
     <div id="adminPanelSection">
       <div class="settings-card" style="border:1px solid rgba(201,168,76,0.18);">
@@ -5447,6 +5478,7 @@ let sbClient = null;
 let currentUser = null;
 let userProfile = null;
 const ADMIN_EMAILS = ['your.email@example.com', 'test@test.com'];
+const TESTER_EMAILS = ['carsyn@example.com', 'friend1@example.com', 'friend2@example.com'];
 
 function initSupabase() {
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) return;
@@ -5514,6 +5546,17 @@ async function onSignIn() {
       adminSection.classList.remove('visible');
     }
   } catch(e) {}
+  // Reveal Sandbox for testers (includes admins)
+  try {
+    var sandboxEl = document.getElementById('sandboxSection');
+    var email = currentUser && currentUser.email ? currentUser.email.toLowerCase() : '';
+    if (sandboxEl && (TESTER_EMAILS.includes(email) || ADMIN_EMAILS.includes(email))) {
+      sandboxEl.classList.add('visible');
+      loadSandboxPrefs();
+    } else if (sandboxEl) {
+      sandboxEl.classList.remove('visible');
+    }
+  } catch(e) {}
 }
 
 function onSignOut() {
@@ -5525,9 +5568,11 @@ function onSignOut() {
   // Hide header avatar
   var hAvatar = document.getElementById('headerUserAvatar');
   if (hAvatar) { hAvatar.style.display = 'none'; hAvatar.innerHTML = ''; }
-  // Hide Admin Panel on sign out
+  // Hide Admin Panel and Sandbox on sign out
   var adminSection = document.getElementById('adminPanelSection');
   if (adminSection) adminSection.classList.remove('visible');
+  var sandboxEl = document.getElementById('sandboxSection');
+  if (sandboxEl) sandboxEl.classList.remove('visible');
 }
 
 function updateAllChatPlaceholders(displayName) {
@@ -6168,6 +6213,30 @@ function requestNotifyPermission() {
 /* ══════════════════════════════════════════════════════
    SETTINGS — Save & Reset
 ══════════════════════════════════════════════════════ */
+// ── Sandbox Preferences ──
+function saveSandboxPrefs() {
+  try {
+    var prefs = {
+      mathEngine: document.getElementById('sandboxMathEngine')?.checked || false,
+      debugLogs: document.getElementById('sandboxDebugLogs')?.checked || false,
+      extendedCtx: document.getElementById('sandboxExtendedCtx')?.checked || false,
+      verbose: document.getElementById('sandboxVerbose')?.checked || false
+    };
+    localStorage.setItem('obs_sandbox_prefs', JSON.stringify(prefs));
+    window._sandboxPrefs = prefs;
+  } catch(e) {}
+}
+function loadSandboxPrefs() {
+  try {
+    var prefs = JSON.parse(localStorage.getItem('obs_sandbox_prefs') || '{}');
+    window._sandboxPrefs = prefs;
+    var me = document.getElementById('sandboxMathEngine'); if (me) me.checked = !!prefs.mathEngine;
+    var dl = document.getElementById('sandboxDebugLogs'); if (dl) dl.checked = !!prefs.debugLogs;
+    var ec = document.getElementById('sandboxExtendedCtx'); if (ec) ec.checked = !!prefs.extendedCtx;
+    var vb = document.getElementById('sandboxVerbose'); if (vb) vb.checked = !!prefs.verbose;
+  } catch(e) {}
+}
+
 function saveSettings() {
   // In production, this saves to Supabase
   const status = document.getElementById('settingsSaved');
