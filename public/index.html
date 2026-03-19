@@ -2393,9 +2393,9 @@
       </div>
       <div class="chat-input-wrap">
         <div class="chat-input-box">
-          <button class="chat-attach" onclick="document.getElementById('homeFileInput').click()" title="Attach image"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+          <button class="chat-attach" onclick="navigate('omni'); setTimeout(function(){document.getElementById('omniFileInput').click();}, 200);" title="Attach image"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
           <input type="file" id="homeFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('home',this)" />
-          <textarea class="chat-textarea" id="homeChatInput" rows="1" aria-label="Type your message"></textarea>
+          <textarea class="chat-textarea" id="homeChatInput" rows="1" aria-label="Type your message" onfocus="navigate('omni'); setTimeout(function(){var i=document.getElementById('omniChatInput'); if(i)i.focus();}, 150);"></textarea>
           <button class="chat-send" id="homeSendBtn" aria-label="Send message" disabled>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
