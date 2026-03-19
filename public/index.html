@@ -1499,6 +1499,7 @@
     .math-chat-row { display: flex; flex: 1; overflow: hidden; }
     .math-chat-column { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
     .math-scratch-column { width: 50%; border-left: 1px solid var(--black-border); background: var(--black-panel); display: flex; flex-direction: column; flex-shrink: 0; }
+    .math-scratch-column.fullscreen-scratch { position: fixed; top: 40px; left: 40px; right: 40px; bottom: 40px; width: auto !important; height: auto !important; z-index: 2000; border-radius: 16px; box-shadow: 0 20px 80px rgba(0,0,0,0.9); border: 1px solid var(--black-border); transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
     .scratch-info-details summary::-webkit-details-marker { display: none; }
     .scratch-info-details summary::after { content: ' \u25BC'; float: right; color: #5a5040; }
     .scratch-info-details[open] summary::after { content: ' \u25B2'; }
@@ -2342,7 +2343,7 @@
             <button class="scratch-tool-btn" id="scratchEraserBtn" onclick="setScratchTool('eraser')">Eraser</button>
             <button class="scratch-tool-btn" onclick="clearScratchPad()">Clear</button>
           </div>
-          <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas></div>
+          <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas><button class="expand-scratch-btn" onclick="toggleScratchFullscreen()" style="position:absolute;bottom:16px;right:16px;background:rgba(12,12,12,0.8);color:#8a8070;border:1px solid #272727;border-radius:6px;padding:8px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:0.2s;" onmouseover="this.style.color='#c8b88a';this.style.borderColor='rgba(201,168,76,0.3)'" onmouseout="this.style.color='#8a8070';this.style.borderColor='#272727'" aria-label="Toggle Fullscreen"><svg id="expandScratchIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button></div>
           <button class="btn-gold scratch-attach" id="scratchAttachBtn" onclick="attachScratchpadToMathChat()" disabled>Attach to Chat</button>
         </div>
       </div>
@@ -3916,6 +3917,17 @@ function setScratchTool(tool) {
   _scratchTool = tool;
   document.getElementById('scratchPenBtn').classList.toggle('active', tool === 'pen');
   document.getElementById('scratchEraserBtn').classList.toggle('active', tool === 'eraser');
+}
+function toggleScratchFullscreen() {
+  var col = document.querySelector('.math-scratch-column');
+  var icon = document.getElementById('expandScratchIcon');
+  if (!col) return;
+  col.classList.toggle('fullscreen-scratch');
+  if (col.classList.contains('fullscreen-scratch')) {
+    if (icon) icon.innerHTML = '<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>';
+  } else {
+    if (icon) icon.innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
+  }
 }
 function clearScratchPad() {
   var canvas = document.getElementById('mathScratchPad');
