@@ -1496,6 +1496,24 @@
       min-height: 300px; max-height: 440px;
     }
 
+    /* ─── MATH SCRATCH PAD ────────────────────────────────── */
+    .math-chat-row { display: flex; flex: 1; overflow: hidden; }
+    .math-chat-column { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+    .math-scratch-column { width: 300px; border-left: 1px solid var(--black-border); background: var(--black-panel); display: flex; flex-direction: column; flex-shrink: 0; }
+    .scratch-header { padding: 12px 14px; font-size: 12px; font-weight: 600; color: #c8b88a; border-bottom: 1px solid var(--black-border); display: flex; align-items: center; gap: 8px; letter-spacing: 0.04em; }
+    .scratch-header svg { width: 14px; height: 14px; color: var(--math-color); }
+    .scratch-tools { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-bottom: 1px solid var(--black-border); }
+    .scratch-tool-btn { font-size: 11px; font-family: var(--font-ui); font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--black-border); background: none; color: #6a6050; cursor: pointer; transition: var(--transition); }
+    .scratch-tool-btn:hover { border-color: var(--gold-muted); color: #c8b88a; }
+    .scratch-tool-btn.active { border-color: var(--math-color); color: var(--math-color); background: var(--math-subtle); }
+    .scratch-canvas-wrap { flex: 1; position: relative; overflow: hidden; background: #0e0e0e; }
+    .scratch-canvas-wrap canvas { display: block; width: 100%; height: 100%; cursor: crosshair; }
+    .scratch-attach { margin: 10px; padding: 10px; border-radius: 8px; }
+    @media (max-width: 900px) {
+      .math-chat-row { flex-direction: column; }
+      .math-scratch-column { width: 100%; height: 260px; border-left: none; border-top: 1px solid var(--black-border); }
+    }
+
     /* Study method grid */
     .method-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
@@ -2301,22 +2319,36 @@
         </select>
         <button class="sp-tool-btn" onclick="toggleMathCanvas()" id="mathCanvasToggle" style="margin-left:auto">&#x270F; Sketch</button>
       </div>
-      <div class="math-canvas-wrap" id="mathCanvasWrap">
-        <div class="math-canvas-toolbar">
-          <button onclick="clearMathCanvas()">Clear</button>
-          <button onclick="submitCanvasToAI()" style="border-color:var(--math-color);color:var(--math-color);">Send to AI</button>
-          <span style="margin-left:auto;font-size:10px;color:#5a5040;">Draw your problem</span>
+      <div class="math-chat-row">
+        <div class="math-chat-column">
+          <div class="math-canvas-wrap" id="mathCanvasWrap">
+            <div class="math-canvas-toolbar">
+              <button onclick="clearMathCanvas()">Clear</button>
+              <button onclick="submitCanvasToAI()" style="border-color:var(--math-color);color:var(--math-color);">Send to AI</button>
+              <span style="margin-left:auto;font-size:10px;color:#5a5040;">Draw your problem</span>
+            </div>
+            <canvas id="mathCanvas" width="800" height="200"></canvas>
+          </div>
+          <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
+            <div class="chat-welcome" id="mathWelcome">
+              <h2 class="welcome-title">Math AI</h2>
+              <p class="welcome-sub">Enter a math problem, equation, or concept. I'll provide detailed step-by-step solutions with explanations.</p>
+              <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('math',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion('math',this)">Explain derivatives</button></div>
+            </div>
+          </div>
+          <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
         </div>
-        <canvas id="mathCanvas" width="800" height="200"></canvas>
-      </div>
-      <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
-        <div class="chat-welcome" id="mathWelcome">
-          <h2 class="welcome-title">Math AI</h2>
-          <p class="welcome-sub">Enter a math problem, equation, or concept. I'll provide detailed step-by-step solutions with explanations.</p>
-          <div class="suggestion-chips"><button class="chip" onclick="spUseSuggestion('math',this)">Solve a quadratic</button><button class="chip" onclick="spUseSuggestion('math',this)">Explain derivatives</button></div>
+        <div class="math-scratch-column">
+          <div class="scratch-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Scratch Pad</div>
+          <div class="scratch-tools">
+            <button class="scratch-tool-btn active" id="scratchPenBtn" onclick="setScratchTool('pen')">Pen</button>
+            <button class="scratch-tool-btn" id="scratchEraserBtn" onclick="setScratchTool('eraser')">Eraser</button>
+            <button class="scratch-tool-btn" onclick="clearScratchPad()">Clear</button>
+          </div>
+          <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas></div>
+          <button class="btn-gold scratch-attach" onclick="attachScratchpadToMathChat()">Attach to Chat</button>
         </div>
       </div>
-      <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" placeholder="Enter a math problem or equation..." rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
     </div>
   </div>
 </div>
@@ -3529,6 +3561,8 @@ function navigate(pageId) {
 
       /* Refresh settings PIQ profile when entering settings */
       if (pageId === 'settings' && typeof piqLoadSettingsProfile === 'function') piqLoadSettingsProfile();
+      /* Init scratch pad when entering math */
+      if (pageId === 'math' && typeof initScratchPad === 'function') setTimeout(initScratchPad, 100);
 
       /* Restore input state */
       var nextInput = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
@@ -3856,6 +3890,83 @@ function submitCanvasToAI() {
   clearMathCanvas();
 }
 
+/* ── Scratch Pad (Math Tab) ── */
+var _scratchTool = 'pen';
+var _scratchInited = false;
+function initScratchPad() {
+  if (_scratchInited) return;
+  var canvas = document.getElementById('mathScratchPad');
+  if (!canvas) return;
+  _scratchInited = true;
+  var ctx = canvas.getContext('2d');
+  var wrap = canvas.parentElement;
+  function resize() {
+    var r = wrap.getBoundingClientRect();
+    var w = Math.round(r.width); var h = Math.round(r.height);
+    if (canvas.width !== w || canvas.height !== h) {
+      var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      canvas.width = w; canvas.height = h;
+      ctx.putImageData(imgData, 0, 0);
+    }
+  }
+  resize();
+  var ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : null;
+  if (ro) ro.observe(wrap);
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  var drawing = false;
+  function getPos(e) {
+    var r = canvas.getBoundingClientRect();
+    var t = e.touches ? e.touches[0] : e;
+    return { x: t.clientX - r.left, y: t.clientY - r.top };
+  }
+  function startDraw(e) {
+    drawing = true; ctx.beginPath();
+    var p = getPos(e); ctx.moveTo(p.x, p.y);
+    ctx.strokeStyle = _scratchTool === 'eraser' ? '#0e0e0e' : '#ffffff';
+    ctx.lineWidth = _scratchTool === 'eraser' ? 18 : 2;
+  }
+  function moveDraw(e) { if (!drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }
+  function endDraw() { drawing = false; }
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('mouseleave', endDraw);
+  canvas.addEventListener('touchstart', function(e) { e.preventDefault(); startDraw(e); }, { passive: false });
+  canvas.addEventListener('touchmove', function(e) { e.preventDefault(); moveDraw(e); }, { passive: false });
+  canvas.addEventListener('touchend', endDraw);
+}
+function setScratchTool(tool) {
+  _scratchTool = tool;
+  document.getElementById('scratchPenBtn').classList.toggle('active', tool === 'pen');
+  document.getElementById('scratchEraserBtn').classList.toggle('active', tool === 'eraser');
+}
+function clearScratchPad() {
+  var canvas = document.getElementById('mathScratchPad');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+function attachScratchpadToMathChat() {
+  var canvas = document.getElementById('mathScratchPad');
+  if (!canvas) return;
+  var dataUrl = canvas.toDataURL('image/png');
+  // Check if canvas is blank
+  var blank = document.createElement('canvas');
+  blank.width = canvas.width; blank.height = canvas.height;
+  if (canvas.toDataURL() === blank.toDataURL()) {
+    showToast('warning', '', 'Empty Scratch Pad', 'Draw something first before attaching.');
+    return;
+  }
+  var welcome = document.getElementById('mathWelcome');
+  if (welcome) welcome.classList.add('hidden');
+  appendImageMsg('mathMessages', dataUrl, 'scratchpad.png');
+  _pendingPasteImage['math'] = dataUrl;
+  var input = document.getElementById('mathChatInput');
+  if (input) { input.placeholder = 'Scratch pad attached! Type a message and press Enter to send...'; input.focus(); }
+}
 /* ── Desmos Graph Modal ── */
 var _desmosCalcInstance = null;
 function openDesmosModal() {
