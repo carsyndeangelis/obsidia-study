@@ -196,23 +196,6 @@
     .sandbox-toggle-row:last-child { border-bottom: none; }
     .sandbox-label { font-size: 13px; font-weight: 500; color: #c8b88a; }
     .sandbox-sublabel { font-size: 11px; color: #5a5040; margin-top: 2px; }
-    /* Force-mobile simulation mode */
-    .force-mobile-view .app-layout { max-width: 414px !important; margin: 0 auto !important; height: 100vh !important; border-left: 1px solid var(--black-border); border-right: 1px solid var(--black-border); box-shadow: 0 0 60px rgba(0,0,0,0.8); }
-    .force-mobile-view .sidebar { position: fixed !important; top: 0; left: 0; bottom: 0; width: 280px !important; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 200; }
-    .force-mobile-view .sidebar.mobile-open { transform: translateX(0); }
-    .force-mobile-view .edge-toggle-btn { display: none !important; }
-    .force-mobile-view .mob-btn { display: flex !important; }
-    .force-mobile-view .main-topbar-center { display: none; }
-    .force-mobile-view .slab-zone { display: none !important; }
-    .force-mobile-view .right-sidebar { display: none !important; }
-    .force-mobile-view .features { grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px 12px; }
-    .force-mobile-view .dashboard { grid-template-columns: 1fr; }
-    .force-mobile-view .stats-bar { grid-template-columns: 1fr 1fr; }
-    .force-mobile-view .msg-bubble { max-width: 90%; }
-    .force-mobile-view .sp-layout { padding: 16px 12px 100px; }
-    .force-mobile-view .chat-textarea { font-size: 15px; }
-    .force-mobile-view .audio-action-row { flex-direction: column; align-items: center; }
-    .force-mobile-view .audio-action-card { width: 90% !important; max-width: 300px; }
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
     .admin-btn { padding: 12px 14px; background: var(--black-card); border: 1px solid var(--black-border); border-radius: var(--radius-sm); color: #c8b88a; font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); text-align: left; }
     .admin-btn:hover { border-color: var(--gold-muted); background: var(--black-hover); }
@@ -589,7 +572,7 @@
     .landing-tier-period{font-size:12px;color:#5a5040;margin-bottom:16px}
     .landing-tier-list{text-align:left;font-size:12px;color:#8a8070;line-height:2}
     .landing-tier-cta{display:block;width:100%;padding:10px;margin-top:16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-display);border:none}
-    @media(max-width:768px){.landing-features,.landing-tiers{grid-template-columns:1fr}.landing-h1{font-size:32px}.td-tab-bar{flex-wrap:wrap}}
+    .is-mobile-device .landing-features,.is-mobile-device .landing-tiers{grid-template-columns:1fr}.is-mobile-device .landing-h1{font-size:32px}.is-mobile-device .td-tab-bar{flex-wrap:wrap}
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
     .main-panel{position:relative}
     .slab-zone{position:absolute;left:0;top:72px;bottom:0;width:44px;z-index:20;pointer-events:none}
@@ -644,7 +627,7 @@
     .slab-gc{position:absolute;z-index:1;writing-mode:vertical-rl;font-family:var(--font-display);font-size:11px;letter-spacing:8px;color:rgba(201,168,76,0.04);text-shadow:0 0 10px rgba(201,168,76,0.03)}
     .slab-hint{position:absolute;left:52px;top:50%;transform:translateY(-50%);font-size:10px;color:rgba(232,201,106,0.2);font-family:var(--font-display);font-style:italic;pointer-events:none;transition:opacity 0.3s;animation:slabHintPulse 2.5s ease-in-out infinite;white-space:nowrap}
     @keyframes slabHintPulse{0%,100%{opacity:0.1;text-shadow:0 0 8px rgba(201,168,76,0)}50%{opacity:0.4;text-shadow:0 0 12px rgba(201,168,76,0.2)}}
-    @media (max-width: 740px) { .slab-zone { display: none; } }
+    .is-mobile-device .slab-zone { display: none; }
 
     /* ─── PERF: Pause slab animations when not dragging ──── */
     .slab-stone * { animation-play-state: paused !important; }
@@ -658,13 +641,10 @@
     [data-theme="light"] .sidebar-head, [data-theme="light"] .sidebar-foot { border-color: #ddd8cc; }
     [data-theme="light"] .edge-toggle-btn { background: #f0ede6; border-color: #ddd8cc; color: #8a8070; }
     [data-theme="light"] .edge-toggle-btn:hover { background: #e8e0cc; color: #8a6a28; border-color: rgba(201,168,76,0.4); }
-    @media (max-width: 740px) {
-      .sidebar { position: fixed !important; top: 0; left: 0; bottom: 0; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 151; width: 260px !important; }
-      .sidebar.mobile-open { transform: translateX(0); }
-      .edge-toggle-btn { display: none; }
-      .mob-btn { display: flex !important; }
-    }
-    @media (min-width: 741px) { .mob-btn { display: none !important; } .sidebar-overlay { display: none; } }
+    /* Mobile sidebar — handled by .is-mobile-device in mobile.css */
+    /* Hide mob-btn and sidebar-overlay on desktop unless simulator active */
+    body:not(.is-mobile-device) .mob-btn { display: none !important; }
+    body:not(.is-mobile-device) .sidebar-overlay { display: none; }
     /* ─── RESET ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -1579,10 +1559,7 @@
       transition: background 0.2s ease;
     }
     .recording-stop-btn:hover { background: #e11d48; }
-    @media (max-width: 520px) {
-      .audio-action-row { flex-direction: column; align-items: center; }
-      .audio-action-card { width: 90%; max-width: 280px; }
-    }
+    /* Audio cards stack handled by .is-mobile-device in mobile.css */
 
     /* Math canvas whiteboard */
     #mathCanvas { display:block; width:100%; height:200px; cursor:crosshair; border-radius:0 0 8px 8px; touch-action:none; }
@@ -1829,22 +1806,20 @@
       .settings-grid { grid-template-columns: 1fr; }
       .dashboard { grid-template-columns: 1fr; }
     }
-    @media (max-width: 740px) {
-      nav { padding: 0 14px; }
-      .nav-tabs { display: none; }
-      .hamburger { display: flex; }
-      .dashboard { grid-template-columns: 1fr; }
-      .features { grid-template-columns: 1fr 1fr; padding: 16px 12px; }
-      .hero { padding: 28px 16px 20px; }
-      .sp-layout { padding: 16px 12px 32px; }
-      .stats-bar { grid-template-columns: 1fr 1fr; }
-      .nav-right .btn-ghost,
-      .nav-right .btn-gold { display: none; }
-    }
+    .is-mobile-device nav { padding: 0 14px; }
+    .is-mobile-device .nav-tabs { display: none; }
+    .is-mobile-device .hamburger { display: flex; }
+    .is-mobile-device .dashboard { grid-template-columns: 1fr; }
+    .is-mobile-device .features { grid-template-columns: 1fr 1fr; padding: 16px 12px; }
+    .is-mobile-device .hero { padding: 28px 16px 20px; }
+    .is-mobile-device .sp-layout { padding: 16px 12px 32px; }
+    .is-mobile-device .stats-bar { grid-template-columns: 1fr 1fr; }
+    .is-mobile-device .nav-right .btn-ghost,
+    .is-mobile-device .nav-right .btn-gold { display: none; }
     @media (max-width: 460px) {
-      .features { grid-template-columns: 1fr; }
-      .method-grid { grid-template-columns: 1fr 1fr; }
-      .stats-bar { grid-template-columns: 1fr; }
+      .is-mobile-device .features { grid-template-columns: 1fr; }
+      .is-mobile-device .method-grid { grid-template-columns: 1fr 1fr; }
+      .is-mobile-device .stats-bar { grid-template-columns: 1fr; }
     }
 
     /* ─── FOOTER (NEW) ─────────────────────────────────────── */
@@ -3162,7 +3137,7 @@
 
         <div class="sandbox-toggle-row">
           <div><div class="sandbox-label">Simulate Mobile Viewport</div><div class="sandbox-sublabel">Instantly force the entire app container into mobile constraints (414px)</div></div>
-          <label class="sp-toggle"><input type="checkbox" id="sandboxMobileSim" onchange="document.body.classList.toggle('force-mobile-view', this.checked); saveSandboxPrefs()"><span class="sp-slider"></span></label>
+          <label class="sp-toggle"><input type="checkbox" id="sandboxMobileSim" onchange="checkMobileState(); saveSandboxPrefs()"><span class="sp-slider"></span></label>
         </div>
         <div class="sandbox-toggle-row">
           <div><div class="sandbox-label">Experimental Math Engine</div><div class="sandbox-sublabel">Routes all math queries through an experimental multi-model pipeline</div></div>
@@ -6785,6 +6760,20 @@ function runStressTest() {
 /* ══════════════════════════════════════════════════════
    SETTINGS — Save & Reset
 ══════════════════════════════════════════════════════ */
+// ── Mobile Device Detection (.is-mobile-device architecture) ──
+function checkMobileState() {
+  var isActualPhone = window.innerWidth <= 768;
+  var simToggle = document.getElementById('sandboxMobileSim');
+  var isSimulated = simToggle ? simToggle.checked : false;
+  var isMobile = isActualPhone || isSimulated;
+  document.body.classList.toggle('is-mobile-device', isMobile);
+  document.body.classList.toggle('is-simulated', isSimulated && !isActualPhone);
+}
+window.addEventListener('resize', checkMobileState);
+document.addEventListener('DOMContentLoaded', checkMobileState);
+// Run immediately as well for scripts that load after DOM
+checkMobileState();
+
 // ── Sandbox Preferences ──
 function saveSandboxPrefs() {
   try {
@@ -6803,7 +6792,7 @@ function loadSandboxPrefs() {
   try {
     var prefs = JSON.parse(localStorage.getItem('obs_sandbox_prefs') || '{}');
     window._sandboxPrefs = prefs;
-    var ms = document.getElementById('sandboxMobileSim'); if (ms) { ms.checked = !!prefs.mobileSim; document.body.classList.toggle('force-mobile-view', !!prefs.mobileSim); }
+    var ms = document.getElementById('sandboxMobileSim'); if (ms) { ms.checked = !!prefs.mobileSim; } checkMobileState();
     var me = document.getElementById('sandboxMathEngine'); if (me) me.checked = !!prefs.mathEngine;
     var dl = document.getElementById('sandboxDebugLogs'); if (dl) dl.checked = !!prefs.debugLogs;
     var ec = document.getElementById('sandboxExtendedCtx'); if (ec) ec.checked = !!prefs.extendedCtx;

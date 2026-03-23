@@ -1,980 +1,990 @@
 /* ═══════════════════════════════════════════════════════════════════
    OBSIDIA STUDY — Mobile Phone Stylesheet
    ═══════════════════════════════════════════════════════════════════
-   This file controls the phone layout ONLY (max-width: 768px).
-   Edit this file to change the mobile experience without affecting desktop.
+   CLASS-BASED ARCHITECTURE: All mobile styles are triggered by the
+   `.is-mobile-device` class on <body>. This class is applied by JS
+   when either: (a) the viewport is ≤768px, or (b) the Sandbox
+   "Simulate Mobile Viewport" toggle is active.
+
+   This allows the desktop simulator to produce a TRUE mobile layout,
+   and lets you diverge mobile design without media-query limitations.
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ─── GLOBAL MOBILE OVERRIDES ─────────────────────────────────── */
-@media (max-width: 768px) {
-
-  /* Prevent horizontal overflow */
-  html, body {
-    overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
-  }
-
-  /* ─── APP LAYOUT ──────────────────────────────────────────── */
-  .app-layout {
-    flex-direction: column;
-    height: 100vh;
-    height: 100dvh; /* dynamic viewport for mobile browsers */
-  }
-
-  /* ─── SIDEBAR (off-canvas drawer) ─────────────────────────── */
-  .sidebar {
-    position: fixed !important;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 280px !important;
-    max-width: 85vw;
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 200;
-    box-shadow: none;
-  }
-  .sidebar.collapsed {
-    width: 280px !important;
-  }
-  .sidebar.collapsed .sb-i span,
-  .sidebar.collapsed .sidebar-section,
-  .sidebar.collapsed .sidebar-user {
-    display: block !important;
-    opacity: 1 !important;
-    width: auto !important;
-  }
-  .sidebar.collapsed .sidebar-head {
-    justify-content: flex-start !important;
-  }
-  .sidebar.mobile-open {
-    transform: translateX(0);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
-  }
-
-  .sidebar-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 199;
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
-  }
-  .sidebar-overlay.open {
-    display: block;
-  }
-
-  /* Hide the desktop collapse toggle on mobile */
-  .edge-toggle-btn {
-    display: none !important;
-  }
-
-  /* Bigger touch targets for nav items */
-  .sb-i {
-    min-height: 44px;
-    padding: 10px 16px !important;
-    font-size: 14px;
-  }
-  .sb-i svg {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-  }
-
-  .sidebar-section {
-    padding: 16px 16px 6px;
-    font-size: 10px;
-  }
-
-  .sidebar-foot {
-    padding: 12px 16px;
-    border-top: 1px solid var(--black-border);
-  }
-
-  /* ─── MAIN PANEL ──────────────────────────────────────────── */
-  .main-panel {
-    width: 100%;
-    min-width: 0;
-  }
-
-  /* ─── TOP BAR ─────────────────────────────────────────────── */
-  .main-topbar {
-    height: 56px;
-    padding: 0 12px;
-    gap: 8px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: var(--black-deep);
-    border-bottom: 1px solid var(--black-border);
-  }
-
-  .main-topbar-logo {
-    width: 32px !important;
-    height: 32px !important;
-  }
-
-  .main-topbar-brand {
-    font-size: 14px !important;
-  }
-
-  .main-topbar-center {
-    display: none; /* Hide tagline on mobile */
-  }
-
-  .main-topbar-right {
-    gap: 4px;
-    flex-shrink: 0;
-    align-items: center;
-    overflow: visible;
-  }
-
-  .main-topbar-right .mtb {
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-  }
-
-  .main-topbar-right .btn-gold {
-    font-size: 11px !important;
-    padding: 5px 10px !important;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* Show the mobile hamburger */
-  .mob-btn {
-    display: flex !important;
-    width: 36px;
-    height: 36px;
-  }
-
-  /* ─── RIGHT SIDEBAR ───────────────────────────────────────── */
-  .right-sidebar {
-    display: none !important;
-  }
-
-  /* ─── SLAB ZONE ───────────────────────────────────────────── */
-  .slab-zone {
-    display: none !important;
-  }
-
-  /* ─── MAIN SCROLL AREA ────────────────────────────────────── */
-  .main-scroll {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-
-  /* ─── HERO / HOME PAGE ────────────────────────────────────── */
-  .hero {
-    padding: 20px 16px 16px;
-  }
-  .hero-badge {
-    font-size: 9px;
-    padding: 3px 10px;
-  }
-  .hero-title {
-    font-size: 22px;
-  }
-  .hero-tagline {
-    font-size: 12px;
-  }
-
-  /* Stats bar — 2 columns on phone */
-  .stats-bar {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 0 16px;
-  }
-  .stat-card {
-    padding: 12px;
-  }
-  .stat-val {
-    font-size: 20px;
-  }
-  .stat-label {
-    font-size: 10px;
-  }
-
-  /* ─── FEATURE CARDS (tool grid) ───────────────────────────── */
-  .features {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding: 16px 12px;
-  }
-  .feature-card {
-    padding: 16px 12px;
-    border-radius: 12px;
-  }
-  .feature-icon {
-    font-size: 24px;
-    margin-bottom: 8px;
-  }
-  .feature-title {
-    font-size: 13px;
-  }
-  .feature-desc {
-    font-size: 10px;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* ─── DASHBOARD PANELS ────────────────────────────────────── */
-  .dashboard {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 12px;
-  }
-  .panel {
-    padding: 16px;
-    border-radius: 12px;
-  }
-  .panel-title {
-    font-size: 14px;
-  }
-
-  /* ─── CHAT INTERFACE ──────────────────────────────────────── */
-  .home-chat {
-    min-height: 0;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .chat-scroll {
-    flex: 1;
-    padding: 12px;
-  }
-
-  .msg {
-    gap: 8px;
-    max-width: 100%;
-  }
-  .msg-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
-  .msg-bubble {
-    max-width: min(calc(100vw - 90px), 90%);
-    padding: 10px 12px;
-    font-size: 13px;
-    line-height: 1.5;
-    border-radius: 14px;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-    overflow-x: hidden;
-  }
-  /* Prevent math/code from blowing out bubble width */
-  .msg-bubble pre,
-  .msg-bubble code,
-  .msg-bubble .katex-display {
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .msg.user .msg-bubble {
-    border-radius: 14px 14px 4px 14px;
-  }
-  .msg.ai .msg-bubble {
-    border-radius: 14px 14px 14px 4px;
-  }
-  .msg-time {
-    font-size: 9px;
-  }
-  .msg-actions {
-    gap: 4px;
-  }
-  .msg-actions button {
-    width: 28px;
-    height: 28px;
-  }
-  .msg-img-preview {
-    max-width: 200px;
-  }
-
-  /* Chat input area */
-  .chat-input-wrap {
-    padding: 8px 12px 12px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
-  }
-  .chat-input-box {
-    border-radius: 22px;
-    padding: 0 4px;
-  }
-  .chat-textarea {
-    font-size: 15px; /* prevent iOS zoom on focus */
-    padding: 10px 4px;
-    min-height: 20px;
-    max-height: 80px;
-  }
-  .chat-attach, .chat-send {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-  }
-  .chat-footer {
-    margin-top: 4px;
-    padding: 0 6px;
-  }
-  .chat-footer-hint {
-    font-size: 9px;
-  }
-
-  /* Suggestion chips */
-  .chip {
-    font-size: 12px;
-    padding: 8px 14px;
-  }
-  .home-suggestions {
-    padding: 8px 12px;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  /* Chat welcome state */
-  .chat-welcome {
-    padding: 24px 16px;
-  }
-  .chat-welcome h3 {
-    font-size: 18px;
-  }
-
-  /* ─── PAGE LAYOUTS (generic) ──────────────────────────────── */
-  .page {
-    padding: 0;
-  }
-
-  .sp-layout {
-    padding: 16px 12px 100px;
-  }
-  .sp-header {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .sp-header h2 {
-    font-size: 20px;
-  }
-  .sp-header p {
-    font-size: 12px;
-  }
-  .sp-model-badge {
-    font-size: 9px !important;
-    padding: 3px 8px !important;
-    white-space: nowrap;
-  }
-  .sp-messages {
-    max-height: none;
-    min-height: 200px;
-    padding: 14px 10px 6px;
-    overflow-x: hidden;
-  }
-  .sp-chat-panel .chat-input-wrap {
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
-  }
-  /* Back button touch target */
-  .sp-back {
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  /* ─── MATH PAGE ───────────────────────────────────────────── */
-  .math-mode-bar {
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 8px 12px;
-  }
-  .math-mode-btn {
-    font-size: 12px;
-    padding: 6px 12px;
-  }
-
-  /* ─── ESSAY PAGE ──────────────────────────────────────────── */
-  .essay-controls {
-    flex-direction: column;
-    gap: 8px;
-  }
-  .essay-controls select,
-  .essay-controls input {
-    width: 100%;
-    font-size: 14px;
-  }
-
-  /* ─── STUDY GUIDE & NOTES ─────────────────────────────────── */
-  .method-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .method-card {
-    padding: 14px;
-  }
-
-  /* Cornell notes — stack on mobile */
-  .cornell-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  /* ─── FLASHCARD DECK ──────────────────────────────────────── */
-  .fc-deck {
-    padding: 12px;
-  }
-  .fc-toolbar {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .fc-card-area {
-    min-height: 180px;
-  }
-  .fc-card-face {
-    padding: 20px 16px;
-    font-size: 15px;
-  }
-  .fc-nav {
-    gap: 8px;
-  }
-  .fc-nav-btn {
-    width: 44px;
-    height: 44px;
-  }
-  .fc-mastery-btns {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .fc-mastery-btns button {
-    flex: 1;
-    min-width: 80px;
-    padding: 10px 8px;
-    font-size: 12px;
-  }
-
-  /* ─── QUIZ ENGINE ─────────────────────────────────────────── */
-  .quiz-engine {
-    padding: 16px 12px;
-  }
-  .quiz-body {
-    font-size: 15px;
-  }
-  .quiz-option {
-    padding: 12px 14px;
-    font-size: 14px;
-    min-height: 44px;
-  }
-  .quiz-explain {
-    font-size: 13px;
-    padding: 12px;
-  }
-
-  /* ─── DROPZONE (file upload) ──────────────────────────────── */
-  .dropzone-panel {
-    padding: 12px;
-  }
-  .dropzone {
-    min-height: 160px;
-    padding: 24px 16px;
-  }
-  .dz-icon {
-    font-size: 32px;
-  }
-  .dz-title {
-    font-size: 14px;
-  }
-  .dz-hint {
-    font-size: 11px;
-  }
-
-  /* ─── DOUBLE CHECK ────────────────────────────────────────── */
-  .feature-split {
-    grid-template-columns: 1fr;
-  }
-  .feature-col-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* ─── GRADING ─────────────────────────────────────────────── */
-  .grading-layout {
-    flex-direction: column;
-  }
-  .grading-sidebar,
-  .grading-main {
-    width: 100%;
-  }
-
-  /* ─── TEST PREP ───────────────────────────────────────────── */
-  .tp-subject-bar {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .tp-subject-btn {
-    font-size: 12px;
-    padding: 8px 14px;
-  }
-
-  /* ─── TEACHER TOOLS ───────────────────────────────────────── */
-  .sp-tool-grid {
-    grid-template-columns: 1fr;
-  }
-  .sp-tool-btn {
-    padding: 16px;
-  }
-
-  /* ─── TEACHER DASHBOARD ───────────────────────────────────── */
-  .td-tab-bar {
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  .td-tab {
-    font-size: 12px;
-    padding: 8px 12px;
-  }
-
-  /* ─── SMART SCAN ──────────────────────────────────────────── */
-  .scan-preview img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* ─── ANALYTICS ───────────────────────────────────────────── */
-  .analytics-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .analytics-chart {
-    min-height: 180px;
-  }
-
-  /* ─── STUDY GROUPS ────────────────────────────────────────── */
-  .sg-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* ─── SETTINGS ────────────────────────────────────────────── */
-  .settings-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  .settings-card {
-    padding: 16px;
-  }
-  .settings-card label {
-    font-size: 13px;
-  }
-
-  /* ─── ACHIEVEMENTS ────────────────────────────────────────── */
-  .achievements-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .achievement-card {
-    padding: 14px 10px;
-  }
-
-  /* ─── THEMES ──────────────────────────────────────────────── */
-  .themes-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  /* ─── REMINDERS ───────────────────────────────────────────── */
-  .reminders-list {
-    padding: 12px;
-  }
-
-  /* ─── HISTORY ─────────────────────────────────────────────── */
-  .history-list {
-    padding: 12px;
-  }
-  .history-item {
-    padding: 12px;
-    font-size: 13px;
-  }
-
-  /* ─── FEEDBACK ────────────────────────────────────────────── */
-  .feedback-form {
-    padding: 16px 12px;
-  }
-  .feedback-form textarea {
-    font-size: 15px; /* prevent iOS zoom */
-  }
-
-  /* ─── MODALS & OVERLAYS ───────────────────────────────────── */
-  .auth-card {
-    width: 92vw !important;
-    max-width: 400px;
-    margin: 16px;
-    padding: 24px 20px;
-    border-radius: 16px;
-  }
-  .auth-card h2 {
-    font-size: 20px;
-  }
-  .auth-card input {
-    font-size: 15px; /* prevent iOS zoom */
-    padding: 12px 14px;
-  }
-
-  .onboarding-card {
-    width: 92vw !important;
-    max-width: 400px;
-    padding: 24px 20px;
-  }
-
-  .piq-card {
-    width: 92vw !important;
-    max-width: 420px;
-    padding: 24px 16px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-  .piq-card h2 {
-    font-size: 18px;
-  }
-  .piq-btn {
-    font-size: 14px;
-    padding: 12px 20px;
-    min-height: 44px;
-  }
-  .piq-option {
-    min-height: 44px;
-    padding: 10px 14px;
-    font-size: 13px;
-  }
-
-  .kb-panel {
-    width: 92vw !important;
-    max-width: 420px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .history-viewer-card {
-    width: 95vw !important;
-    max-height: 85vh;
-    padding: 16px;
-  }
-
-  /* Desmos modal */
-  #desmosModalOverlay .auth-card {
-    width: 95vw !important;
-    height: 80vh;
-  }
-
-  /* Error modal */
-  #errorModalOverlay .auth-card {
-    width: 90vw !important;
-  }
-
-  /* Paywall overlay */
-  .paywall-card {
-    width: 92vw !important;
-    max-width: 400px;
-    padding: 24px 20px;
-  }
-
-  /* ─── TOASTS ──────────────────────────────────────────────── */
-  .toast-container {
-    top: auto;
-    bottom: 16px;
-    right: 12px;
-    left: 12px;
-    align-items: stretch;
-  }
-  .toast {
-    width: 100%;
-    max-width: none;
-    font-size: 13px;
-  }
-
-  /* ─── LANDING PAGE ────────────────────────────────────────── */
-  .landing-hero {
-    min-height: 60vh;
-    padding: 32px 20px;
-  }
-  .landing-logo {
-    width: 60px;
-    height: 60px;
-  }
-  .landing-h1 {
-    font-size: 28px;
-  }
-  .landing-sub {
-    font-size: 14px;
-    margin-bottom: 24px;
-  }
-  .landing-cta,
-  .landing-cta-ghost {
-    padding: 12px 24px;
-    font-size: 14px;
-  }
-  .landing-cta-ghost {
-    margin-left: 8px !important;
-  }
-  .landing-features {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 32px 16px;
-  }
-  .landing-feat {
-    padding: 20px;
-  }
-  .landing-tiers {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 0 16px 32px;
-  }
-  .landing-tier {
-    padding: 24px 20px;
-  }
-
-  /* ─── NAV BAR (pre-app) ───────────────────────────────────── */
-  nav {
-    height: 56px;
-    padding: 0 12px;
-  }
-  .nav-tabs {
-    display: none;
-  }
-  .hamburger {
-    display: flex;
-  }
-  .nav-right .btn-ghost,
-  .nav-right .btn-gold {
-    font-size: 11px;
-    padding: 6px 12px;
-  }
-
-  /* ─── MOBILE DRAWER ───────────────────────────────────────── */
-  .mobile-drawer {
-    width: 280px;
-    max-width: 85vw;
-  }
-  .drawer-item {
-    min-height: 44px;
-    padding: 10px 20px;
-    font-size: 14px;
-  }
-
-  /* ─── FOOTER ──────────────────────────────────────────────── */
-  .site-footer {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-    padding: 16px 12px 24px;
-  }
-  .footer-kbd-hint {
-    display: none; /* Keyboard shortcuts hint not useful on phone */
-  }
-
-  .quotes-zone {
-    padding: 12px 16px 4px;
-  }
-  .quote-text {
-    font-size: 12px;
-  }
-
-  /* ─── AUDIO DASHBOARD (Lecture Notes) ─────────────────────── */
-  .audio-dashboard {
-    padding: 20px 12px;
-    gap: 18px;
-  }
-  .audio-dashboard-title {
-    font-size: 20px !important;
-  }
-  .audio-dashboard-sub {
-    font-size: 12px !important;
-    padding: 0 8px;
-  }
-  .audio-action-row {
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-    width: 100%;
-  }
-  .audio-action-card {
-    width: 90% !important;
-    max-width: 300px;
-    padding: 24px 20px 22px;
-  }
-
-  /* ─── RECORDING STRIP ─────────────────────────────────────── */
-  .recording-active-strip {
-    font-size: 12px;
-    padding: 8px 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  /* ─── PROGRESS RING ───────────────────────────────────────── */
-  .goal-ring-wrap {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  /* ─── XP BAR ──────────────────────────────────────────────── */
-  .xp-bar-wrap {
-    margin: 0 12px;
-  }
-
-  /* ─── ADMIN/SANDBOX (hidden on phone) ─────────────────────── */
-  #adminPanelSection,
-  #sandboxSection {
-    padding: 12px;
-  }
-
-  /* ─── GLOBAL ATTACHMENT PREVIEW ───────────────────────────── */
-  .global-attachment-preview img {
-    height: 48px;
-  }
-
-  /* ─── MATH CANVAS (whiteboard) ────────────────────────────── */
-  .math-canvas-wrap {
-    height: 250px;
-  }
-
-  /* ─── SMOOTH TOUCH SCROLLING ──────────────────────────────── */
-  .main-scroll,
-  .chat-scroll,
-  .sidebar-nav,
-  .piq-card {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* ─── HEADER USER AVATAR (prevent cut-off) ──────────────── */
-  #headerUserAvatar {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px;
-    min-height: 32px;
-    flex-shrink: 0 !important;
-    margin-left: 4px;
-    box-sizing: border-box;
-  }
-  #headerUserAvatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  /* ─── SIDEBAR AVATAR (prevent cut-off) ─────────────────── */
-  .sidebar-avatar {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px;
-    min-height: 30px;
-    flex-shrink: 0 !important;
-  }
-  .sidebar-foot {
-    flex-shrink: 0;
-    padding: 12px 16px;
-  }
-  .sidebar-user {
-    min-width: 0;
-    overflow: hidden;
-  }
-  .sidebar-user-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* ─── SIDEBAR SCROLLING (short phones) ─────────────────── */
-  .sidebar-nav {
-    overflow-y: auto;
-    flex: 1;
-    min-height: 0;
-    overscroll-behavior: contain;
-  }
-
-  /* ─── SAFE AREA (notched phones) ──────────────────────────── */
-  .main-topbar {
-    padding-top: env(safe-area-inset-top, 0);
-  }
-  .chat-input-wrap {
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
-  }
-
-  /* Last Update badge — respect safe area + don't overlap chat input */
-  #lastUpdateBadge {
-    bottom: calc(8px + env(safe-area-inset-bottom, 0)) !important;
-    right: 8px !important;
-    font-size: 8px !important;
-    padding: 4px 8px !important;
-    opacity: 0.7;
-  }
-
-  /* ─── ACTIVE STATES FOR TOUCH ─────────────────────────────── */
-  .sb-i:active,
-  .feature-card:active,
-  .chip:active,
-  .btn-gold:active,
-  .quiz-option:active {
-    opacity: 0.7;
-    transition: opacity 0.1s;
-  }
-
-  /* ─── DISABLE HOVER EFFECTS ON TOUCH ──────────────────────── */
-  @media (hover: none) {
-    .sb-i:hover {
-      background: none;
-    }
-    .feature-card:hover {
-      transform: none;
-      border-color: var(--black-border);
-    }
-    .chip:hover {
-      background: rgba(201, 168, 76, 0.08);
-    }
-  }
-
+body.is-mobile-device {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
-/* ─── EXTRA SMALL PHONES (≤ 380px) ──────────────────────────── */
+/* ─── PHONE FRAME (simulator only — on real phones body IS the frame) */
+body.is-mobile-device.is-simulated .app-layout {
+  max-width: 414px !important;
+  margin: 0 auto !important;
+  height: 100vh !important;
+  border-left: 1px solid var(--black-border);
+  border-right: 1px solid var(--black-border);
+  box-shadow: 0 0 60px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+/* ─── APP LAYOUT ──────────────────────────────────────────── */
+.is-mobile-device .app-layout {
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* ─── SIDEBAR (off-canvas drawer) ─────────────────────────── */
+.is-mobile-device .sidebar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px !important;
+  max-width: 85vw;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 200;
+  box-shadow: none;
+}
+.is-mobile-device .sidebar.collapsed {
+  width: 280px !important;
+}
+.is-mobile-device .sidebar.collapsed .sb-i span,
+.is-mobile-device .sidebar.collapsed .sidebar-section,
+.is-mobile-device .sidebar.collapsed .sidebar-user {
+  display: block !important;
+  opacity: 1 !important;
+  width: auto !important;
+}
+.is-mobile-device .sidebar.collapsed .sidebar-head {
+  justify-content: flex-start !important;
+}
+.is-mobile-device .sidebar.mobile-open {
+  transform: translateX(0);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+}
+
+.is-mobile-device .sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.is-mobile-device .sidebar-overlay.open {
+  display: block;
+}
+
+/* Hide the desktop collapse toggle on mobile */
+.is-mobile-device .edge-toggle-btn {
+  display: none !important;
+}
+
+/* Bigger touch targets for nav items */
+.is-mobile-device .sb-i {
+  min-height: 44px;
+  padding: 10px 16px !important;
+  font-size: 14px;
+}
+.is-mobile-device .sb-i svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.is-mobile-device .sidebar-section {
+  padding: 16px 16px 6px;
+  font-size: 10px;
+}
+
+.is-mobile-device .sidebar-foot {
+  padding: 12px 16px;
+  border-top: 1px solid var(--black-border);
+  flex-shrink: 0;
+}
+
+/* ─── MAIN PANEL ──────────────────────────────────────────── */
+.is-mobile-device .main-panel {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ─── TOP BAR ─────────────────────────────────────────────── */
+.is-mobile-device .main-topbar {
+  height: 56px;
+  padding: 0 12px;
+  padding-top: env(safe-area-inset-top, 0);
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--black-deep);
+  border-bottom: 1px solid var(--black-border);
+}
+
+.is-mobile-device .main-topbar-logo {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.is-mobile-device .main-topbar-brand {
+  font-size: 14px !important;
+}
+
+.is-mobile-device .main-topbar-center {
+  display: none; /* Hide tagline on mobile */
+}
+
+.is-mobile-device .main-topbar-right {
+  gap: 4px;
+  flex-shrink: 0;
+  align-items: center;
+  overflow: visible;
+}
+
+.is-mobile-device .main-topbar-right .mtb {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.is-mobile-device .main-topbar-right .btn-gold {
+  font-size: 11px !important;
+  padding: 5px 10px !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Show the mobile hamburger */
+.is-mobile-device .mob-btn {
+  display: flex !important;
+  width: 36px;
+  height: 36px;
+}
+
+/* ─── RIGHT SIDEBAR ───────────────────────────────────────── */
+.is-mobile-device .right-sidebar {
+  display: none !important;
+}
+
+/* ─── SLAB ZONE ───────────────────────────────────────────── */
+.is-mobile-device .slab-zone {
+  display: none !important;
+}
+
+/* ─── MAIN SCROLL AREA ────────────────────────────────────── */
+.is-mobile-device .main-scroll {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ─── HERO / HOME PAGE ────────────────────────────────────── */
+.is-mobile-device .hero {
+  padding: 20px 16px 16px;
+}
+.is-mobile-device .hero-badge {
+  font-size: 9px;
+  padding: 3px 10px;
+}
+.is-mobile-device .hero-title {
+  font-size: 22px;
+}
+.is-mobile-device .hero-tagline {
+  font-size: 12px;
+}
+
+/* Stats bar — 2 columns on phone */
+.is-mobile-device .stats-bar {
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 16px;
+}
+.is-mobile-device .stat-card {
+  padding: 12px;
+}
+.is-mobile-device .stat-val {
+  font-size: 20px;
+}
+.is-mobile-device .stat-label {
+  font-size: 10px;
+}
+
+/* ─── FEATURE CARDS (tool grid) ───────────────────────────── */
+.is-mobile-device .features {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 16px 12px;
+}
+.is-mobile-device .feature-card {
+  padding: 16px 12px;
+  border-radius: 12px;
+}
+.is-mobile-device .feature-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+.is-mobile-device .feature-title {
+  font-size: 13px;
+}
+.is-mobile-device .feature-desc {
+  font-size: 10px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── DASHBOARD PANELS ────────────────────────────────────── */
+.is-mobile-device .dashboard {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 12px;
+}
+.is-mobile-device .panel {
+  padding: 16px;
+  border-radius: 12px;
+}
+.is-mobile-device .panel-title {
+  font-size: 14px;
+}
+
+/* ─── CHAT INTERFACE ──────────────────────────────────────── */
+.is-mobile-device .home-chat {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.is-mobile-device .chat-scroll {
+  flex: 1;
+  padding: 12px;
+}
+
+.is-mobile-device .msg {
+  gap: 8px;
+  max-width: 100%;
+}
+.is-mobile-device .msg-avatar {
+  width: 28px;
+  height: 28px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.is-mobile-device .msg-bubble {
+  max-width: min(calc(100vw - 90px), 90%);
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  border-radius: 14px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  overflow-x: hidden;
+}
+/* Prevent math/code from blowing out bubble width */
+.is-mobile-device .msg-bubble pre,
+.is-mobile-device .msg-bubble code,
+.is-mobile-device .msg-bubble .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.is-mobile-device .msg.user .msg-bubble {
+  border-radius: 14px 14px 4px 14px;
+}
+.is-mobile-device .msg.ai .msg-bubble {
+  border-radius: 14px 14px 14px 4px;
+}
+.is-mobile-device .msg-time {
+  font-size: 9px;
+}
+.is-mobile-device .msg-actions {
+  gap: 4px;
+}
+.is-mobile-device .msg-actions button {
+  width: 28px;
+  height: 28px;
+}
+.is-mobile-device .msg-img-preview {
+  max-width: 200px;
+}
+
+/* Chat input area */
+.is-mobile-device .chat-input-wrap {
+  padding: 8px 12px 12px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+}
+.is-mobile-device .chat-input-box {
+  border-radius: 22px;
+  padding: 0 4px;
+}
+.is-mobile-device .chat-textarea {
+  font-size: 15px; /* prevent iOS zoom on focus */
+  padding: 10px 4px;
+  min-height: 20px;
+  max-height: 80px;
+}
+.is-mobile-device .chat-attach,
+.is-mobile-device .chat-send {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+}
+.is-mobile-device .chat-footer {
+  margin-top: 4px;
+  padding: 0 6px;
+}
+.is-mobile-device .chat-footer-hint {
+  font-size: 9px;
+}
+
+/* Suggestion chips */
+.is-mobile-device .chip {
+  font-size: 12px;
+  padding: 8px 14px;
+}
+.is-mobile-device .home-suggestions {
+  padding: 8px 12px;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Chat welcome state */
+.is-mobile-device .chat-welcome {
+  padding: 24px 16px;
+}
+.is-mobile-device .chat-welcome h3 {
+  font-size: 18px;
+}
+
+/* ─── PAGE LAYOUTS (generic) ──────────────────────────────── */
+.is-mobile-device .page {
+  padding: 0;
+}
+
+.is-mobile-device .sp-layout {
+  padding: 16px 12px 100px;
+}
+.is-mobile-device .sp-header {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.is-mobile-device .sp-header h2 {
+  font-size: 20px;
+}
+.is-mobile-device .sp-header p {
+  font-size: 12px;
+}
+.is-mobile-device .sp-model-badge {
+  font-size: 9px !important;
+  padding: 3px 8px !important;
+  white-space: nowrap;
+}
+.is-mobile-device .sp-messages {
+  max-height: none;
+  min-height: 200px;
+  padding: 14px 10px 6px;
+  overflow-x: hidden;
+}
+.is-mobile-device .sp-chat-panel .chat-input-wrap {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+}
+/* Back button touch target */
+.is-mobile-device .sp-back {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ─── MATH PAGE ───────────────────────────────────────────── */
+.is-mobile-device .math-mode-bar {
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+}
+.is-mobile-device .math-mode-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+/* ─── ESSAY PAGE ──────────────────────────────────────────── */
+.is-mobile-device .essay-controls {
+  flex-direction: column;
+  gap: 8px;
+}
+.is-mobile-device .essay-controls select,
+.is-mobile-device .essay-controls input {
+  width: 100%;
+  font-size: 14px;
+}
+
+/* ─── STUDY GUIDE & NOTES ─────────────────────────────────── */
+.is-mobile-device .method-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.is-mobile-device .method-card {
+  padding: 14px;
+}
+
+/* Cornell notes — stack on mobile */
+.is-mobile-device .cornell-grid {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+/* ─── FLASHCARD DECK ──────────────────────────────────────── */
+.is-mobile-device .fc-deck {
+  padding: 12px;
+}
+.is-mobile-device .fc-toolbar {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.is-mobile-device .fc-card-area {
+  min-height: 180px;
+}
+.is-mobile-device .fc-card-face {
+  padding: 20px 16px;
+  font-size: 15px;
+}
+.is-mobile-device .fc-nav {
+  gap: 8px;
+}
+.is-mobile-device .fc-nav-btn {
+  width: 44px;
+  height: 44px;
+}
+.is-mobile-device .fc-mastery-btns {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.is-mobile-device .fc-mastery-btns button {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 8px;
+  font-size: 12px;
+}
+
+/* ─── QUIZ ENGINE ─────────────────────────────────────────── */
+.is-mobile-device .quiz-engine {
+  padding: 16px 12px;
+}
+.is-mobile-device .quiz-body {
+  font-size: 15px;
+}
+.is-mobile-device .quiz-option {
+  padding: 12px 14px;
+  font-size: 14px;
+  min-height: 44px;
+}
+.is-mobile-device .quiz-explain {
+  font-size: 13px;
+  padding: 12px;
+}
+
+/* ─── DROPZONE (file upload) ──────────────────────────────── */
+.is-mobile-device .dropzone-panel {
+  padding: 12px;
+}
+.is-mobile-device .dropzone {
+  min-height: 160px;
+  padding: 24px 16px;
+}
+.is-mobile-device .dz-icon {
+  font-size: 32px;
+}
+.is-mobile-device .dz-title {
+  font-size: 14px;
+}
+.is-mobile-device .dz-hint {
+  font-size: 11px;
+}
+
+/* ─── DOUBLE CHECK ────────────────────────────────────────── */
+.is-mobile-device .feature-split {
+  grid-template-columns: 1fr;
+}
+.is-mobile-device .feature-col-grid {
+  grid-template-columns: 1fr;
+}
+
+/* ─── GRADING ─────────────────────────────────────────────── */
+.is-mobile-device .grading-layout {
+  flex-direction: column;
+}
+.is-mobile-device .grading-sidebar,
+.is-mobile-device .grading-main {
+  width: 100%;
+}
+
+/* ─── TEST PREP ───────────────────────────────────────────── */
+.is-mobile-device .tp-subject-bar {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.is-mobile-device .tp-subject-btn {
+  font-size: 12px;
+  padding: 8px 14px;
+}
+
+/* ─── TEACHER TOOLS ───────────────────────────────────────── */
+.is-mobile-device .sp-tool-grid {
+  grid-template-columns: 1fr;
+}
+.is-mobile-device .sp-tool-btn {
+  padding: 16px;
+}
+
+/* ─── TEACHER DASHBOARD ───────────────────────────────────── */
+.is-mobile-device .td-tab-bar {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.is-mobile-device .td-tab {
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+/* ─── SMART SCAN ──────────────────────────────────────────── */
+.is-mobile-device .scan-preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ─── ANALYTICS ───────────────────────────────────────────── */
+.is-mobile-device .analytics-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.is-mobile-device .analytics-chart {
+  min-height: 180px;
+}
+
+/* ─── STUDY GROUPS ────────────────────────────────────────── */
+.is-mobile-device .sg-grid {
+  grid-template-columns: 1fr;
+}
+
+/* ─── SETTINGS ────────────────────────────────────────────── */
+.is-mobile-device .settings-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.is-mobile-device .settings-card {
+  padding: 16px;
+}
+.is-mobile-device .settings-card label {
+  font-size: 13px;
+}
+
+/* ─── ACHIEVEMENTS ────────────────────────────────────────── */
+.is-mobile-device .achievements-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.is-mobile-device .achievement-card {
+  padding: 14px 10px;
+}
+
+/* ─── THEMES ──────────────────────────────────────────────── */
+.is-mobile-device .themes-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ─── REMINDERS ───────────────────────────────────────────── */
+.is-mobile-device .reminders-list {
+  padding: 12px;
+}
+
+/* ─── HISTORY ─────────────────────────────────────────────── */
+.is-mobile-device .history-list {
+  padding: 12px;
+}
+.is-mobile-device .history-item {
+  padding: 12px;
+  font-size: 13px;
+}
+
+/* ─── FEEDBACK ────────────────────────────────────────────── */
+.is-mobile-device .feedback-form {
+  padding: 16px 12px;
+}
+.is-mobile-device .feedback-form textarea {
+  font-size: 15px; /* prevent iOS zoom */
+}
+
+/* ─── MODALS & OVERLAYS ───────────────────────────────────── */
+.is-mobile-device .auth-card {
+  width: 92vw !important;
+  max-width: 400px;
+  margin: 16px;
+  padding: 24px 20px;
+  border-radius: 16px;
+}
+.is-mobile-device .auth-card h2 {
+  font-size: 20px;
+}
+.is-mobile-device .auth-card input {
+  font-size: 15px; /* prevent iOS zoom */
+  padding: 12px 14px;
+}
+
+.is-mobile-device .onboarding-card {
+  width: 92vw !important;
+  max-width: 400px;
+  padding: 24px 20px;
+}
+
+.is-mobile-device .piq-card {
+  width: 92vw !important;
+  max-width: 420px;
+  padding: 24px 16px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.is-mobile-device .piq-card h2 {
+  font-size: 18px;
+}
+.is-mobile-device .piq-btn {
+  font-size: 14px;
+  padding: 12px 20px;
+  min-height: 44px;
+}
+.is-mobile-device .piq-option {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.is-mobile-device .kb-panel {
+  width: 92vw !important;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.is-mobile-device .history-viewer-card {
+  width: 95vw !important;
+  max-height: 85vh;
+  padding: 16px;
+}
+
+/* Desmos modal */
+.is-mobile-device #desmosModalOverlay .auth-card {
+  width: 95vw !important;
+  height: 80vh;
+}
+
+/* Error modal */
+.is-mobile-device #errorModalOverlay .auth-card {
+  width: 90vw !important;
+}
+
+/* Paywall overlay */
+.is-mobile-device .paywall-card {
+  width: 92vw !important;
+  max-width: 400px;
+  padding: 24px 20px;
+}
+
+/* ─── TOASTS ──────────────────────────────────────────────── */
+.is-mobile-device .toast-container {
+  top: auto;
+  bottom: 16px;
+  right: 12px;
+  left: 12px;
+  align-items: stretch;
+}
+.is-mobile-device .toast {
+  width: 100%;
+  max-width: none;
+  font-size: 13px;
+}
+
+/* ─── LANDING PAGE ────────────────────────────────────────── */
+.is-mobile-device .landing-hero {
+  min-height: 60vh;
+  padding: 32px 20px;
+}
+.is-mobile-device .landing-logo {
+  width: 60px;
+  height: 60px;
+}
+.is-mobile-device .landing-h1 {
+  font-size: 28px;
+}
+.is-mobile-device .landing-sub {
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.is-mobile-device .landing-cta,
+.is-mobile-device .landing-cta-ghost {
+  padding: 12px 24px;
+  font-size: 14px;
+}
+.is-mobile-device .landing-cta-ghost {
+  margin-left: 8px !important;
+}
+.is-mobile-device .landing-features {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 32px 16px;
+}
+.is-mobile-device .landing-feat {
+  padding: 20px;
+}
+.is-mobile-device .landing-tiers {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 0 16px 32px;
+}
+.is-mobile-device .landing-tier {
+  padding: 24px 20px;
+}
+
+/* ─── NAV BAR (pre-app) ───────────────────────────────────── */
+.is-mobile-device nav {
+  height: 56px;
+  padding: 0 12px;
+}
+.is-mobile-device .nav-tabs {
+  display: none;
+}
+.is-mobile-device .hamburger {
+  display: flex;
+}
+.is-mobile-device .nav-right .btn-ghost,
+.is-mobile-device .nav-right .btn-gold {
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+/* ─── MOBILE DRAWER ───────────────────────────────────────── */
+.is-mobile-device .mobile-drawer {
+  width: 280px;
+  max-width: 85vw;
+}
+.is-mobile-device .drawer-item {
+  min-height: 44px;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+/* ─── FOOTER ──────────────────────────────────────────────── */
+.is-mobile-device .site-footer {
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+  padding: 16px 12px 24px;
+}
+.is-mobile-device .footer-kbd-hint {
+  display: none; /* Keyboard shortcuts hint not useful on phone */
+}
+
+.is-mobile-device .quotes-zone {
+  padding: 12px 16px 4px;
+}
+.is-mobile-device .quote-text {
+  font-size: 12px;
+}
+
+/* ─── AUDIO DASHBOARD (Lecture Notes) ─────────────────────── */
+.is-mobile-device .audio-dashboard {
+  padding: 20px 12px;
+  gap: 18px;
+}
+.is-mobile-device .audio-dashboard-title {
+  font-size: 20px !important;
+}
+.is-mobile-device .audio-dashboard-sub {
+  font-size: 12px !important;
+  padding: 0 8px;
+}
+.is-mobile-device .audio-action-row {
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+}
+.is-mobile-device .audio-action-card {
+  width: 90% !important;
+  max-width: 300px;
+  padding: 24px 20px 22px;
+}
+
+/* ─── RECORDING STRIP ─────────────────────────────────────── */
+.is-mobile-device .recording-active-strip {
+  font-size: 12px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ─── PROGRESS RING ───────────────────────────────────────── */
+.is-mobile-device .goal-ring-wrap {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ─── XP BAR ──────────────────────────────────────────────── */
+.is-mobile-device .xp-bar-wrap {
+  margin: 0 12px;
+}
+
+/* ─── ADMIN/SANDBOX ───────────────────────────────────────── */
+.is-mobile-device #adminPanelSection,
+.is-mobile-device #sandboxSection {
+  padding: 12px;
+}
+
+/* ─── GLOBAL ATTACHMENT PREVIEW ───────────────────────────── */
+.is-mobile-device .global-attachment-preview img {
+  height: 48px;
+}
+
+/* ─── MATH CANVAS (whiteboard) ────────────────────────────── */
+.is-mobile-device .math-canvas-wrap {
+  height: 250px;
+}
+
+/* ─── SMOOTH TOUCH SCROLLING ──────────────────────────────── */
+.is-mobile-device .main-scroll,
+.is-mobile-device .chat-scroll,
+.is-mobile-device .sidebar-nav,
+.is-mobile-device .piq-card {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── HEADER USER AVATAR (prevent cut-off) ──────────────── */
+.is-mobile-device #headerUserAvatar {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  min-height: 32px;
+  flex-shrink: 0 !important;
+  margin-left: 4px;
+  box-sizing: border-box;
+}
+.is-mobile-device #headerUserAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* ─── SIDEBAR AVATAR (prevent cut-off) ─────────────────── */
+.is-mobile-device .sidebar-avatar {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px;
+  min-height: 30px;
+  flex-shrink: 0 !important;
+}
+.is-mobile-device .sidebar-user {
+  min-width: 0;
+  overflow: hidden;
+}
+.is-mobile-device .sidebar-user-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── SIDEBAR SCROLLING (short phones) ─────────────────── */
+.is-mobile-device .sidebar-nav {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  overscroll-behavior: contain;
+}
+
+/* ─── SAFE AREA (notched phones) ──────────────────────────── */
+.is-mobile-device .chat-input-wrap {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+}
+
+/* Last Update badge — respect safe area + shrink on mobile */
+.is-mobile-device #lastUpdateBadge {
+  bottom: calc(8px + env(safe-area-inset-bottom, 0)) !important;
+  right: 8px !important;
+  font-size: 8px !important;
+  padding: 4px 8px !important;
+  opacity: 0.7;
+}
+
+/* ─── ACTIVE STATES FOR TOUCH ─────────────────────────────── */
+.is-mobile-device .sb-i:active,
+.is-mobile-device .feature-card:active,
+.is-mobile-device .chip:active,
+.is-mobile-device .btn-gold:active,
+.is-mobile-device .quiz-option:active {
+  opacity: 0.7;
+  transition: opacity 0.1s;
+}
+
+/* ─── DISABLE HOVER EFFECTS ON TOUCH ──────────────────────── */
+@media (hover: none) {
+  .is-mobile-device .sb-i:hover {
+    background: none;
+  }
+  .is-mobile-device .feature-card:hover {
+    transform: none;
+    border-color: var(--black-border);
+  }
+  .is-mobile-device .chip:hover {
+    background: rgba(201, 168, 76, 0.08);
+  }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════
+   EXTRA SMALL PHONES (≤ 380px real viewport only)
+   ═════════════════════════════════════════════════════════════════ */
 @media (max-width: 380px) {
-  .features {
+  .is-mobile-device .features {
     grid-template-columns: 1fr;
   }
-  .stats-bar {
+  .is-mobile-device .stats-bar {
     grid-template-columns: 1fr;
   }
-  .achievements-grid {
+  .is-mobile-device .achievements-grid {
     grid-template-columns: 1fr;
   }
-  .themes-grid {
+  .is-mobile-device .themes-grid {
     grid-template-columns: 1fr;
   }
-  .landing-h1 {
+  .is-mobile-device .landing-h1 {
     font-size: 24px;
   }
-  .landing-cta,
-  .landing-cta-ghost {
+  .is-mobile-device .landing-cta,
+  .is-mobile-device .landing-cta-ghost {
     padding: 10px 18px;
     font-size: 13px;
   }
-  .msg-bubble {
+  .is-mobile-device .msg-bubble {
     max-width: calc(100vw - 70px);
   }
-  .fc-mastery-btns {
+  .is-mobile-device .fc-mastery-btns {
     flex-direction: column;
   }
-  .fc-mastery-btns button {
+  .is-mobile-device .fc-mastery-btns button {
     width: 100%;
   }
 
   /* Hide non-essential topbar buttons to give avatar space */
-  .main-topbar-right .mtb[title="Shortcuts"] {
+  .is-mobile-device .main-topbar-right .mtb[title="Shortcuts"] {
     display: none;
   }
 
   /* Smaller avatar on tiny screens */
-  #headerUserAvatar {
+  .is-mobile-device #headerUserAvatar {
     width: 28px !important;
     height: 28px !important;
     min-width: 28px;
@@ -982,13 +992,13 @@
   }
 
   /* Last update badge even smaller */
-  #lastUpdateBadge {
+  .is-mobile-device #lastUpdateBadge {
     font-size: 7px !important;
     padding: 3px 6px !important;
   }
 
   /* Audio cards full width */
-  .audio-action-card {
+  .is-mobile-device .audio-action-card {
     width: 100% !important;
     max-width: none;
   }
