@@ -5977,6 +5977,7 @@ function authBackToEmail() {
 
 function continueAsGuest() {
   localStorage.setItem('obsidia_guest_mode', 'true');
+  hideLanding();
   closeAuth();
 }
 
@@ -5988,6 +5989,7 @@ async function signOut() {
 }
 
 async function onSignIn() {
+  localStorage.removeItem('obsidia_guest_mode');
   closeAuth();
   document.getElementById('navSignedOut').style.display = 'none';
   document.getElementById('navSignedIn').style.display = 'block';
@@ -6035,6 +6037,7 @@ async function onSignIn() {
 }
 
 function onSignOut() {
+  localStorage.removeItem('obsidia_guest_mode');
   document.getElementById('navSignedOut').style.display = '';
   document.getElementById('navSignedIn').style.display = 'none';
   // Reset header button
@@ -7703,7 +7706,7 @@ onSignOut = function() {
       }
     }
   } catch(e) { console.error('Session check failed:', e); }
-  if (!currentUser) { try { showLanding(); } catch(e) {} }
+  if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) { try { showLanding(); } catch(e) {} }
   try { loadDailyChallenge(); } catch(e) {}
 })();
 
