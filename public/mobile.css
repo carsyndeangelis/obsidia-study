@@ -125,16 +125,22 @@
 
   .main-topbar-right {
     gap: 4px;
+    flex-shrink: 0;
+    align-items: center;
+    overflow: visible;
   }
 
   .main-topbar-right .mtb {
     width: 36px;
     height: 36px;
+    flex-shrink: 0;
   }
 
   .main-topbar-right .btn-gold {
     font-size: 11px !important;
     padding: 5px 10px !important;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* Show the mobile hamburger */
@@ -254,12 +260,23 @@
     flex-shrink: 0;
   }
   .msg-bubble {
-    max-width: calc(100vw - 90px);
+    max-width: min(calc(100vw - 90px), 90%);
     padding: 10px 12px;
     font-size: 13px;
     line-height: 1.5;
     border-radius: 14px;
     word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    overflow-x: hidden;
+  }
+  /* Prevent math/code from blowing out bubble width */
+  .msg-bubble pre,
+  .msg-bubble code,
+  .msg-bubble .katex-display {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .msg.user .msg-bubble {
     border-radius: 14px 14px 4px 14px;
@@ -336,11 +353,34 @@
   .sp-layout {
     padding: 16px 12px 100px;
   }
+  .sp-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
   .sp-header h2 {
     font-size: 20px;
   }
   .sp-header p {
     font-size: 12px;
+  }
+  .sp-model-badge {
+    font-size: 9px !important;
+    padding: 3px 8px !important;
+    white-space: nowrap;
+  }
+  .sp-messages {
+    max-height: none;
+    min-height: 200px;
+    padding: 14px 10px 6px;
+    overflow-x: hidden;
+  }
+  .sp-chat-panel .chat-input-wrap {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+  }
+  /* Back button touch target */
+  .sp-back {
+    min-width: 44px;
+    min-height: 44px;
   }
 
   /* ─── MATH PAGE ───────────────────────────────────────────── */
@@ -738,21 +778,36 @@
   }
 
   /* ─── AUDIO DASHBOARD (Lecture Notes) ─────────────────────── */
+  .audio-dashboard {
+    padding: 20px 12px;
+    gap: 18px;
+  }
+  .audio-dashboard-title {
+    font-size: 20px !important;
+  }
+  .audio-dashboard-sub {
+    font-size: 12px !important;
+    padding: 0 8px;
+  }
   .audio-action-row {
     flex-direction: column;
-    gap: 10px;
-  }
-  .audio-action-card {
+    gap: 12px;
+    align-items: center;
     width: 100%;
   }
-  .audio-dashboard {
-    padding: 12px;
+  .audio-action-card {
+    width: 90% !important;
+    max-width: 300px;
+    padding: 24px 20px 22px;
   }
 
   /* ─── RECORDING STRIP ─────────────────────────────────────── */
   .recording-active-strip {
     font-size: 12px;
     padding: 8px 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
   }
 
   /* ─── PROGRESS RING ───────────────────────────────────────── */
@@ -791,12 +846,68 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* ─── HEADER USER AVATAR (prevent cut-off) ──────────────── */
+  #headerUserAvatar {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px;
+    min-height: 32px;
+    flex-shrink: 0 !important;
+    margin-left: 4px;
+    box-sizing: border-box;
+  }
+  #headerUserAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  /* ─── SIDEBAR AVATAR (prevent cut-off) ─────────────────── */
+  .sidebar-avatar {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px;
+    min-height: 30px;
+    flex-shrink: 0 !important;
+  }
+  .sidebar-foot {
+    flex-shrink: 0;
+    padding: 12px 16px;
+  }
+  .sidebar-user {
+    min-width: 0;
+    overflow: hidden;
+  }
+  .sidebar-user-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ─── SIDEBAR SCROLLING (short phones) ─────────────────── */
+  .sidebar-nav {
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    overscroll-behavior: contain;
+  }
+
   /* ─── SAFE AREA (notched phones) ──────────────────────────── */
   .main-topbar {
     padding-top: env(safe-area-inset-top, 0);
   }
   .chat-input-wrap {
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+  }
+
+  /* Last Update badge — respect safe area + don't overlap chat input */
+  #lastUpdateBadge {
+    bottom: calc(8px + env(safe-area-inset-bottom, 0)) !important;
+    right: 8px !important;
+    font-size: 8px !important;
+    padding: 4px 8px !important;
+    opacity: 0.7;
   }
 
   /* ─── ACTIVE STATES FOR TOUCH ─────────────────────────────── */
@@ -855,5 +966,30 @@
   }
   .fc-mastery-btns button {
     width: 100%;
+  }
+
+  /* Hide non-essential topbar buttons to give avatar space */
+  .main-topbar-right .mtb[title="Shortcuts"] {
+    display: none;
+  }
+
+  /* Smaller avatar on tiny screens */
+  #headerUserAvatar {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  /* Last update badge even smaller */
+  #lastUpdateBadge {
+    font-size: 7px !important;
+    padding: 3px 6px !important;
+  }
+
+  /* Audio cards full width */
+  .audio-action-card {
+    width: 100% !important;
+    max-width: none;
   }
 }
