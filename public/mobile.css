@@ -67,7 +67,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   left: 0;
   bottom: 0;
   width: 280px !important;
-  max-width: 85vw;
+  max-width: 85%;
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 200;
@@ -307,7 +307,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   flex-shrink: 0;
 }
 .is-mobile-device .msg-bubble {
-  max-width: min(calc(100vw - 90px), 90%);
+  max-width: 90%;
   padding: 10px 12px;
   font-size: 13px;
   line-height: 1.5;
@@ -652,7 +652,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 
 /* ─── MODALS & OVERLAYS ───────────────────────────────────── */
 .is-mobile-device .auth-card {
-  width: 92vw !important;
+  width: 92% !important;
   max-width: 400px;
   margin: 16px;
   padding: 24px 20px;
@@ -667,16 +667,16 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 }
 
 .is-mobile-device .onboarding-card {
-  width: 92vw !important;
+  width: 92% !important;
   max-width: 400px;
   padding: 24px 20px;
 }
 
 .is-mobile-device .piq-card {
-  width: 92vw !important;
+  width: 92% !important;
   max-width: 420px;
   padding: 24px 16px;
-  max-height: 90vh;
+  max-height: 90%;
   overflow-y: auto;
 }
 .is-mobile-device .piq-card h2 {
@@ -694,32 +694,32 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 }
 
 .is-mobile-device .kb-panel {
-  width: 92vw !important;
+  width: 92% !important;
   max-width: 420px;
-  max-height: 80vh;
+  max-height: 80%;
   overflow-y: auto;
 }
 
 .is-mobile-device .history-viewer-card {
-  width: 95vw !important;
-  max-height: 85vh;
+  width: 95% !important;
+  max-height: 85%;
   padding: 16px;
 }
 
 /* Desmos modal */
 .is-mobile-device #desmosModalOverlay .auth-card {
-  width: 95vw !important;
-  height: 80vh;
+  width: 95% !important;
+  height: 80%;
 }
 
 /* Error modal */
 .is-mobile-device #errorModalOverlay .auth-card {
-  width: 90vw !important;
+  width: 90% !important;
 }
 
 /* Paywall overlay */
 .is-mobile-device .paywall-card {
-  width: 92vw !important;
+  width: 92% !important;
   max-width: 400px;
   padding: 24px 20px;
 }
@@ -799,7 +799,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ─── MOBILE DRAWER ───────────────────────────────────────── */
 .is-mobile-device .mobile-drawer {
   width: 280px;
-  max-width: 85vw;
+  max-width: 85%;
 }
 .is-mobile-device .drawer-item {
   min-height: 44px;
@@ -997,7 +997,7 @@ body.is-mobile-device #lastUpdateBadge {
     font-size: 13px;
   }
   .is-mobile-device .msg-bubble {
-    max-width: calc(100vw - 70px);
+    max-width: calc(100% - 70px);
   }
   .is-mobile-device .fc-mastery-btns {
     flex-direction: column;

@@ -766,7 +766,7 @@
     .mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
     .mobile-drawer {
       position: fixed; top: 0; right: 0; bottom: 0; z-index: 151;
-      width: 280px; max-width: 80vw;
+      width: 280px; max-width: 80%;
       background: var(--black-panel);
       border-left: 1px solid var(--black-border);
       transform: translateX(100%);
@@ -3556,7 +3556,7 @@
      DESMOS GRAPH MODAL
 ══════════════════════════════════════════════════ -->
 <div class="auth-overlay" id="desmosModalOverlay" onclick="if(event.target===this)closeDesmosModal()" style="z-index:310;">
-  <div style="width:90vw;max-width:900px;height:80vh;background:var(--black-deep);border:1px solid var(--black-border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;">
+  <div style="width:90%;max-width:900px;height:80%;background:var(--black-deep);border:1px solid var(--black-border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--black-border);">
       <div style="font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--gold-bright);letter-spacing:0.06em;">Desmos Graphing Calculator</div>
       <button onclick="closeDesmosModal()" style="background:none;border:1px solid var(--black-border);color:#8a8070;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;">&times;</button>
@@ -7135,7 +7135,7 @@ function sNav(pageId) {
   document.querySelectorAll('.sb-i').forEach(function(b) { b.classList.toggle('active', b.dataset.page === pageId); });
   var t = document.getElementById('mainPageTitle');
   if (t) t.textContent = PAGE_NAMES[pageId] || pageId;
-  if (window.innerWidth < 741) toggleMobileSidebar();
+  if (window.innerWidth < 741 || document.body.classList.contains('is-mobile-device')) toggleMobileSidebar();
 }
 
 function toggleSidebarCollapse() {
