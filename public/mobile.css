@@ -1,0 +1,859 @@
+/* ═══════════════════════════════════════════════════════════════════
+   OBSIDIA STUDY — Mobile Phone Stylesheet
+   ═══════════════════════════════════════════════════════════════════
+   This file controls the phone layout ONLY (max-width: 768px).
+   Edit this file to change the mobile experience without affecting desktop.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── GLOBAL MOBILE OVERRIDES ─────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ─── APP LAYOUT ──────────────────────────────────────────── */
+  .app-layout {
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh; /* dynamic viewport for mobile browsers */
+  }
+
+  /* ─── SIDEBAR (off-canvas drawer) ─────────────────────────── */
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px !important;
+    max-width: 85vw;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+    box-shadow: none;
+  }
+  .sidebar.collapsed {
+    width: 280px !important;
+  }
+  .sidebar.collapsed .sb-i span,
+  .sidebar.collapsed .sidebar-section,
+  .sidebar.collapsed .sidebar-user {
+    display: block !important;
+    opacity: 1 !important;
+    width: auto !important;
+  }
+  .sidebar.collapsed .sidebar-head {
+    justify-content: flex-start !important;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+  .sidebar-overlay.open {
+    display: block;
+  }
+
+  /* Hide the desktop collapse toggle on mobile */
+  .edge-toggle-btn {
+    display: none !important;
+  }
+
+  /* Bigger touch targets for nav items */
+  .sb-i {
+    min-height: 44px;
+    padding: 10px 16px !important;
+    font-size: 14px;
+  }
+  .sb-i svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-section {
+    padding: 16px 16px 6px;
+    font-size: 10px;
+  }
+
+  .sidebar-foot {
+    padding: 12px 16px;
+    border-top: 1px solid var(--black-border);
+  }
+
+  /* ─── MAIN PANEL ──────────────────────────────────────────── */
+  .main-panel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* ─── TOP BAR ─────────────────────────────────────────────── */
+  .main-topbar {
+    height: 56px;
+    padding: 0 12px;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--black-deep);
+    border-bottom: 1px solid var(--black-border);
+  }
+
+  .main-topbar-logo {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .main-topbar-brand {
+    font-size: 14px !important;
+  }
+
+  .main-topbar-center {
+    display: none; /* Hide tagline on mobile */
+  }
+
+  .main-topbar-right {
+    gap: 4px;
+  }
+
+  .main-topbar-right .mtb {
+    width: 36px;
+    height: 36px;
+  }
+
+  .main-topbar-right .btn-gold {
+    font-size: 11px !important;
+    padding: 5px 10px !important;
+  }
+
+  /* Show the mobile hamburger */
+  .mob-btn {
+    display: flex !important;
+    width: 36px;
+    height: 36px;
+  }
+
+  /* ─── RIGHT SIDEBAR ───────────────────────────────────────── */
+  .right-sidebar {
+    display: none !important;
+  }
+
+  /* ─── SLAB ZONE ───────────────────────────────────────────── */
+  .slab-zone {
+    display: none !important;
+  }
+
+  /* ─── MAIN SCROLL AREA ────────────────────────────────────── */
+  .main-scroll {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* ─── HERO / HOME PAGE ────────────────────────────────────── */
+  .hero {
+    padding: 20px 16px 16px;
+  }
+  .hero-badge {
+    font-size: 9px;
+    padding: 3px 10px;
+  }
+  .hero-title {
+    font-size: 22px;
+  }
+  .hero-tagline {
+    font-size: 12px;
+  }
+
+  /* Stats bar — 2 columns on phone */
+  .stats-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 0 16px;
+  }
+  .stat-card {
+    padding: 12px;
+  }
+  .stat-val {
+    font-size: 20px;
+  }
+  .stat-label {
+    font-size: 10px;
+  }
+
+  /* ─── FEATURE CARDS (tool grid) ───────────────────────────── */
+  .features {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 16px 12px;
+  }
+  .feature-card {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+  .feature-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .feature-title {
+    font-size: 13px;
+  }
+  .feature-desc {
+    font-size: 10px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ─── DASHBOARD PANELS ────────────────────────────────────── */
+  .dashboard {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+  .panel {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  .panel-title {
+    font-size: 14px;
+  }
+
+  /* ─── CHAT INTERFACE ──────────────────────────────────────── */
+  .home-chat {
+    min-height: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-scroll {
+    flex: 1;
+    padding: 12px;
+  }
+
+  .msg {
+    gap: 8px;
+    max-width: 100%;
+  }
+  .msg-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .msg-bubble {
+    max-width: calc(100vw - 90px);
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-radius: 14px;
+    word-break: break-word;
+  }
+  .msg.user .msg-bubble {
+    border-radius: 14px 14px 4px 14px;
+  }
+  .msg.ai .msg-bubble {
+    border-radius: 14px 14px 14px 4px;
+  }
+  .msg-time {
+    font-size: 9px;
+  }
+  .msg-actions {
+    gap: 4px;
+  }
+  .msg-actions button {
+    width: 28px;
+    height: 28px;
+  }
+  .msg-img-preview {
+    max-width: 200px;
+  }
+
+  /* Chat input area */
+  .chat-input-wrap {
+    padding: 8px 12px 12px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+  }
+  .chat-input-box {
+    border-radius: 22px;
+    padding: 0 4px;
+  }
+  .chat-textarea {
+    font-size: 15px; /* prevent iOS zoom on focus */
+    padding: 10px 4px;
+    min-height: 20px;
+    max-height: 80px;
+  }
+  .chat-attach, .chat-send {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  .chat-footer {
+    margin-top: 4px;
+    padding: 0 6px;
+  }
+  .chat-footer-hint {
+    font-size: 9px;
+  }
+
+  /* Suggestion chips */
+  .chip {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+  .home-suggestions {
+    padding: 8px 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  /* Chat welcome state */
+  .chat-welcome {
+    padding: 24px 16px;
+  }
+  .chat-welcome h3 {
+    font-size: 18px;
+  }
+
+  /* ─── PAGE LAYOUTS (generic) ──────────────────────────────── */
+  .page {
+    padding: 0;
+  }
+
+  .sp-layout {
+    padding: 16px 12px 100px;
+  }
+  .sp-header h2 {
+    font-size: 20px;
+  }
+  .sp-header p {
+    font-size: 12px;
+  }
+
+  /* ─── MATH PAGE ───────────────────────────────────────────── */
+  .math-mode-bar {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+  }
+  .math-mode-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  /* ─── ESSAY PAGE ──────────────────────────────────────────── */
+  .essay-controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .essay-controls select,
+  .essay-controls input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  /* ─── STUDY GUIDE & NOTES ─────────────────────────────────── */
+  .method-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .method-card {
+    padding: 14px;
+  }
+
+  /* Cornell notes — stack on mobile */
+  .cornell-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* ─── FLASHCARD DECK ──────────────────────────────────────── */
+  .fc-deck {
+    padding: 12px;
+  }
+  .fc-toolbar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .fc-card-area {
+    min-height: 180px;
+  }
+  .fc-card-face {
+    padding: 20px 16px;
+    font-size: 15px;
+  }
+  .fc-nav {
+    gap: 8px;
+  }
+  .fc-nav-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .fc-mastery-btns {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .fc-mastery-btns button {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
+  /* ─── QUIZ ENGINE ─────────────────────────────────────────── */
+  .quiz-engine {
+    padding: 16px 12px;
+  }
+  .quiz-body {
+    font-size: 15px;
+  }
+  .quiz-option {
+    padding: 12px 14px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+  .quiz-explain {
+    font-size: 13px;
+    padding: 12px;
+  }
+
+  /* ─── DROPZONE (file upload) ──────────────────────────────── */
+  .dropzone-panel {
+    padding: 12px;
+  }
+  .dropzone {
+    min-height: 160px;
+    padding: 24px 16px;
+  }
+  .dz-icon {
+    font-size: 32px;
+  }
+  .dz-title {
+    font-size: 14px;
+  }
+  .dz-hint {
+    font-size: 11px;
+  }
+
+  /* ─── DOUBLE CHECK ────────────────────────────────────────── */
+  .feature-split {
+    grid-template-columns: 1fr;
+  }
+  .feature-col-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ─── GRADING ─────────────────────────────────────────────── */
+  .grading-layout {
+    flex-direction: column;
+  }
+  .grading-sidebar,
+  .grading-main {
+    width: 100%;
+  }
+
+  /* ─── TEST PREP ───────────────────────────────────────────── */
+  .tp-subject-bar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tp-subject-btn {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  /* ─── TEACHER TOOLS ───────────────────────────────────────── */
+  .sp-tool-grid {
+    grid-template-columns: 1fr;
+  }
+  .sp-tool-btn {
+    padding: 16px;
+  }
+
+  /* ─── TEACHER DASHBOARD ───────────────────────────────────── */
+  .td-tab-bar {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .td-tab {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  /* ─── SMART SCAN ──────────────────────────────────────────── */
+  .scan-preview img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ─── ANALYTICS ───────────────────────────────────────────── */
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .analytics-chart {
+    min-height: 180px;
+  }
+
+  /* ─── STUDY GROUPS ────────────────────────────────────────── */
+  .sg-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ─── SETTINGS ────────────────────────────────────────────── */
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .settings-card {
+    padding: 16px;
+  }
+  .settings-card label {
+    font-size: 13px;
+  }
+
+  /* ─── ACHIEVEMENTS ────────────────────────────────────────── */
+  .achievements-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .achievement-card {
+    padding: 14px 10px;
+  }
+
+  /* ─── THEMES ──────────────────────────────────────────────── */
+  .themes-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* ─── REMINDERS ───────────────────────────────────────────── */
+  .reminders-list {
+    padding: 12px;
+  }
+
+  /* ─── HISTORY ─────────────────────────────────────────────── */
+  .history-list {
+    padding: 12px;
+  }
+  .history-item {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  /* ─── FEEDBACK ────────────────────────────────────────────── */
+  .feedback-form {
+    padding: 16px 12px;
+  }
+  .feedback-form textarea {
+    font-size: 15px; /* prevent iOS zoom */
+  }
+
+  /* ─── MODALS & OVERLAYS ───────────────────────────────────── */
+  .auth-card {
+    width: 92vw !important;
+    max-width: 400px;
+    margin: 16px;
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+  .auth-card h2 {
+    font-size: 20px;
+  }
+  .auth-card input {
+    font-size: 15px; /* prevent iOS zoom */
+    padding: 12px 14px;
+  }
+
+  .onboarding-card {
+    width: 92vw !important;
+    max-width: 400px;
+    padding: 24px 20px;
+  }
+
+  .piq-card {
+    width: 92vw !important;
+    max-width: 420px;
+    padding: 24px 16px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .piq-card h2 {
+    font-size: 18px;
+  }
+  .piq-btn {
+    font-size: 14px;
+    padding: 12px 20px;
+    min-height: 44px;
+  }
+  .piq-option {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .kb-panel {
+    width: 92vw !important;
+    max-width: 420px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .history-viewer-card {
+    width: 95vw !important;
+    max-height: 85vh;
+    padding: 16px;
+  }
+
+  /* Desmos modal */
+  #desmosModalOverlay .auth-card {
+    width: 95vw !important;
+    height: 80vh;
+  }
+
+  /* Error modal */
+  #errorModalOverlay .auth-card {
+    width: 90vw !important;
+  }
+
+  /* Paywall overlay */
+  .paywall-card {
+    width: 92vw !important;
+    max-width: 400px;
+    padding: 24px 20px;
+  }
+
+  /* ─── TOASTS ──────────────────────────────────────────────── */
+  .toast-container {
+    top: auto;
+    bottom: 16px;
+    right: 12px;
+    left: 12px;
+    align-items: stretch;
+  }
+  .toast {
+    width: 100%;
+    max-width: none;
+    font-size: 13px;
+  }
+
+  /* ─── LANDING PAGE ────────────────────────────────────────── */
+  .landing-hero {
+    min-height: 60vh;
+    padding: 32px 20px;
+  }
+  .landing-logo {
+    width: 60px;
+    height: 60px;
+  }
+  .landing-h1 {
+    font-size: 28px;
+  }
+  .landing-sub {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .landing-cta,
+  .landing-cta-ghost {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  .landing-cta-ghost {
+    margin-left: 8px !important;
+  }
+  .landing-features {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 32px 16px;
+  }
+  .landing-feat {
+    padding: 20px;
+  }
+  .landing-tiers {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 16px 32px;
+  }
+  .landing-tier {
+    padding: 24px 20px;
+  }
+
+  /* ─── NAV BAR (pre-app) ───────────────────────────────────── */
+  nav {
+    height: 56px;
+    padding: 0 12px;
+  }
+  .nav-tabs {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .nav-right .btn-ghost,
+  .nav-right .btn-gold {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  /* ─── MOBILE DRAWER ───────────────────────────────────────── */
+  .mobile-drawer {
+    width: 280px;
+    max-width: 85vw;
+  }
+  .drawer-item {
+    min-height: 44px;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────────── */
+  .site-footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    padding: 16px 12px 24px;
+  }
+  .footer-kbd-hint {
+    display: none; /* Keyboard shortcuts hint not useful on phone */
+  }
+
+  .quotes-zone {
+    padding: 12px 16px 4px;
+  }
+  .quote-text {
+    font-size: 12px;
+  }
+
+  /* ─── AUDIO DASHBOARD (Lecture Notes) ─────────────────────── */
+  .audio-action-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .audio-action-card {
+    width: 100%;
+  }
+  .audio-dashboard {
+    padding: 12px;
+  }
+
+  /* ─── RECORDING STRIP ─────────────────────────────────────── */
+  .recording-active-strip {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  /* ─── PROGRESS RING ───────────────────────────────────────── */
+  .goal-ring-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* ─── XP BAR ──────────────────────────────────────────────── */
+  .xp-bar-wrap {
+    margin: 0 12px;
+  }
+
+  /* ─── ADMIN/SANDBOX (hidden on phone) ─────────────────────── */
+  #adminPanelSection,
+  #sandboxSection {
+    padding: 12px;
+  }
+
+  /* ─── GLOBAL ATTACHMENT PREVIEW ───────────────────────────── */
+  .global-attachment-preview img {
+    height: 48px;
+  }
+
+  /* ─── MATH CANVAS (whiteboard) ────────────────────────────── */
+  .math-canvas-wrap {
+    height: 250px;
+  }
+
+  /* ─── SMOOTH TOUCH SCROLLING ──────────────────────────────── */
+  .main-scroll,
+  .chat-scroll,
+  .sidebar-nav,
+  .piq-card {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ─── SAFE AREA (notched phones) ──────────────────────────── */
+  .main-topbar {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  .chat-input-wrap {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
+  }
+
+  /* ─── ACTIVE STATES FOR TOUCH ─────────────────────────────── */
+  .sb-i:active,
+  .feature-card:active,
+  .chip:active,
+  .btn-gold:active,
+  .quiz-option:active {
+    opacity: 0.7;
+    transition: opacity 0.1s;
+  }
+
+  /* ─── DISABLE HOVER EFFECTS ON TOUCH ──────────────────────── */
+  @media (hover: none) {
+    .sb-i:hover {
+      background: none;
+    }
+    .feature-card:hover {
+      transform: none;
+      border-color: var(--black-border);
+    }
+    .chip:hover {
+      background: rgba(201, 168, 76, 0.08);
+    }
+  }
+
+}
+
+/* ─── EXTRA SMALL PHONES (≤ 380px) ──────────────────────────── */
+@media (max-width: 380px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
+  .stats-bar {
+    grid-template-columns: 1fr;
+  }
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+  .themes-grid {
+    grid-template-columns: 1fr;
+  }
+  .landing-h1 {
+    font-size: 24px;
+  }
+  .landing-cta,
+  .landing-cta-ghost {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+  .msg-bubble {
+    max-width: calc(100vw - 70px);
+  }
+  .fc-mastery-btns {
+    flex-direction: column;
+  }
+  .fc-mastery-btns button {
+    width: 100%;
+  }
+}
