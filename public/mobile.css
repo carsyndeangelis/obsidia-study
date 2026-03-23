@@ -16,15 +16,39 @@ body.is-mobile-device {
   -webkit-text-size-adjust: 100%;
 }
 
-/* ─── PHONE FRAME (simulator only — on real phones body IS the frame) */
+/* ==== BEAUTIFUL iPHONE HARDWARE SIMULATOR ==== */
 body.is-mobile-device.is-simulated .app-layout {
-  max-width: 414px !important;
-  margin: 0 auto !important;
-  height: 100vh !important;
-  border-left: 1px solid var(--black-border);
-  border-right: 1px solid var(--black-border);
-  box-shadow: 0 0 60px rgba(0,0,0,0.8);
-  position: relative;
+  width: 393px !important;              /* Exact iPhone 14 Pro width */
+  height: 852px !important;             /* Exact iPhone 14 Pro height */
+  max-height: 94vh !important;          /* Prevents clipping on shorter laptops */
+
+  /* Force Dead-Center Positioning */
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+
+  /* CRITICAL: translate3d(0,0,0) forces position:fixed children
+     to anchor inside this container instead of the browser viewport */
+  transform: translate(-50%, -50%) translate3d(0,0,0) !important;
+
+  /* Iconic iPhone hardware curves and bezel shadow */
+  border: 12px solid #080808 !important;
+  border-radius: 48px !important;
+  outline: 1px solid #2a2a2a !important;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 40px rgba(201,168,76,0.08) !important;
+
+  /* Trap everything inside the rounded corners */
+  overflow: hidden !important;
+  margin: 0 !important;
+}
+
+/* Dim the desktop so the phone pops out in focus */
+body.is-mobile-device.is-simulated {
+  background: #000 !important;
+  overflow: hidden !important;
+}
+body.is-mobile-device.is-simulated::-webkit-scrollbar {
+  display: none !important;
 }
 
 /* ─── APP LAYOUT ──────────────────────────────────────────── */
@@ -38,7 +62,7 @@ body.is-mobile-device.is-simulated .app-layout {
 
 /* ─── SIDEBAR (off-canvas drawer) ─────────────────────────── */
 .is-mobile-device .sidebar {
-  position: absolute !important;
+  position: fixed !important;
   top: 0;
   left: 0;
   bottom: 0;
@@ -73,7 +97,7 @@ body.is-mobile-device.is-simulated .app-layout {
 
 .is-mobile-device .sidebar-overlay {
   display: none;
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 199;
