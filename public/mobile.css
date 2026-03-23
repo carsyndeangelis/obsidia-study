@@ -46,9 +46,13 @@ body.is-mobile-device.is-simulated .app-layout {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 200;
   box-shadow: none;
+  border-right: 1px solid var(--black-border);
+  margin: 0 !important;
+  flex-shrink: 0;
 }
 .is-mobile-device .sidebar.collapsed {
   width: 280px !important;
+  transform: translateX(-100%);
 }
 .is-mobile-device .sidebar.collapsed .sb-i span,
 .is-mobile-device .sidebar.collapsed .sidebar-section,
@@ -61,7 +65,7 @@ body.is-mobile-device.is-simulated .app-layout {
   justify-content: flex-start !important;
 }
 .is-mobile-device .sidebar.mobile-open {
-  transform: translateX(0);
+  transform: translateX(0) !important;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
 }
 
@@ -108,8 +112,10 @@ body.is-mobile-device.is-simulated .app-layout {
 
 /* ─── MAIN PANEL ──────────────────────────────────────────── */
 .is-mobile-device .main-panel {
-  width: 100%;
+  width: 100% !important;
   min-width: 0;
+  margin-left: 0 !important;
+  flex: 1;
 }
 
 /* ─── TOP BAR ─────────────────────────────────────────────── */

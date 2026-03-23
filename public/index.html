@@ -196,6 +196,8 @@
     .sandbox-toggle-row:last-child { border-bottom: none; }
     .sandbox-label { font-size: 13px; font-weight: 500; color: #c8b88a; }
     .sandbox-sublabel { font-size: 11px; color: #5a5040; margin-top: 2px; }
+    /* Hide "Simulate Mobile" toggle on actual hardware phones — no point simulating what you already are */
+    @media (max-width: 768px) { #sandboxMobileToggleRow { display: none !important; } }
     .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
     .admin-btn { padding: 12px 14px; background: var(--black-card); border: 1px solid var(--black-border); border-radius: var(--radius-sm); color: #c8b88a; font-family: var(--font-ui); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); text-align: left; }
     .admin-btn:hover { border-color: var(--gold-muted); background: var(--black-hover); }
@@ -3135,7 +3137,7 @@
         <div class="settings-card-title" style="color:#a78bfa;">Developer &amp; Beta Tester Sandbox</div>
         <p style="font-size:11px;color:#5a5040;margin-bottom:16px;">Experimental features for authorized testers only. These toggles may be unstable or incomplete.</p>
 
-        <div class="sandbox-toggle-row">
+        <div class="sandbox-toggle-row" id="sandboxMobileToggleRow">
           <div><div class="sandbox-label">Simulate Mobile Viewport</div><div class="sandbox-sublabel">Instantly force the entire app container into mobile constraints (414px)</div></div>
           <label class="sp-toggle"><input type="checkbox" id="sandboxMobileSim" onchange="checkMobileState(); saveSandboxPrefs()"><span class="sp-slider"></span></label>
         </div>
