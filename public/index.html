@@ -7763,6 +7763,6 @@ document.addEventListener('DOMContentLoaded', function() {
 navigate('home');
 </script>
 <div id="lastUpdateBadge" style="position:fixed;bottom:16px;right:16px;background:rgba(20,18,14,0.85);border:1px solid rgba(201,168,76,0.3);color:#c8b88a;font-family:var(--font-ui);font-size:10px;padding:6px 12px;border-radius:8px;z-index:99999;pointer-events:none;backdrop-filter:blur(12px);font-weight:600;letter-spacing:0.04em;display:flex;gap:6px;align-items:center;"></div>
-<script>document.getElementById('lastUpdateBadge').innerHTML='<span style="width:6px;height:6px;background:var(--gold-bright);border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span> Last Update: '+new Date(document.lastModified).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});</script>
+<script>!function(){var d=new Date(document.lastModified);document.getElementById('lastUpdateBadge').innerHTML='<span style="width:6px;height:6px;background:var(--gold-bright);border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span> Last Update: '+d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});}();</script>
 </body>
 </html>
