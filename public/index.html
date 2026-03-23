@@ -3531,8 +3531,16 @@
     </button>
     <div class="auth-divider"><span>or sign in with email</span></div>
     <div class="auth-email-form" id="authEmailForm">
-      <input type="email" class="auth-email-input" id="authEmailInput" placeholder="Enter your email address" autocomplete="email" onkeydown="if(event.key==='Enter')signInWithEmail()" />
-      <button class="auth-email-btn" id="authEmailBtn" onclick="signInWithEmail()">Send Magic Link</button>
+      <div id="authStepEmail">
+        <input type="email" class="auth-email-input" id="authEmailInput" placeholder="Enter your email address" autocomplete="email" onkeydown="if(event.key==='Enter')signInWithEmail()" />
+        <button class="auth-email-btn" id="authEmailBtn" onclick="signInWithEmail()">Send Verification Code</button>
+      </div>
+      <div id="authStepCode" style="display:none;">
+        <div style="font-size:12px;color:#c8b88a;margin-bottom:10px;">Enter the 6-digit code sent to <span id="authSentTo" style="color:var(--gold-bright);"></span></div>
+        <input type="text" class="auth-email-input" id="authCodeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="text-align:center;font-size:24px;letter-spacing:8px;font-weight:700;" onkeydown="if(event.key==='Enter')verifyEmailCode()" />
+        <button class="auth-email-btn" id="authVerifyBtn" onclick="verifyEmailCode()">Verify &amp; Sign In</button>
+        <button class="auth-skip" onclick="authBackToEmail()" style="margin-top:10px;display:block;width:100%;text-align:center;">Use a different email</button>
+      </div>
       <div class="auth-email-msg" id="authEmailMsg"></div>
     </div>
     <div class="auth-divider"><span>or</span></div>
@@ -5867,7 +5875,14 @@ function initSupabase() {
 /* ══════════════════════════════════════════════════════
    AUTH FUNCTIONS
 ══════════════════════════════════════════════════════ */
-function openAuth() { document.getElementById('authOverlay').classList.add('open'); }
+function openAuth() {
+  document.getElementById('authStepEmail').style.display = 'block';
+  document.getElementById('authStepCode').style.display = 'none';
+  document.getElementById('authEmailMsg').textContent = '';
+  document.getElementById('authEmailInput').value = '';
+  _authPendingEmail = '';
+  document.getElementById('authOverlay').classList.add('open');
+}
 function closeAuth() {
   document.getElementById('authOverlay').classList.remove('open');
   // Show PIQ for anonymous users who skip login
@@ -5882,6 +5897,8 @@ async function signInWithGoogle() {
   });
   if (error) console.error('Auth error:', error);
 }
+
+var _authPendingEmail = '';
 
 async function signInWithEmail() {
   if (!sbClient) { alert('Supabase not configured. Add your Supabase URL and anon key to the code.'); return; }
@@ -5899,19 +5916,63 @@ async function signInWithEmail() {
   msg.textContent = '';
   var { error } = await sbClient.auth.signInWithOtp({
     email: email,
-    options: { emailRedirectTo: window.location.origin }
+    options: { shouldCreateUser: true }
   });
   if (error) {
     msg.style.color = '#e05050';
     msg.textContent = error.message || 'Something went wrong. Please try again.';
     btn.disabled = false;
-    btn.textContent = 'Send Magic Link';
+    btn.textContent = 'Send Verification Code';
+  } else {
+    _authPendingEmail = email;
+    document.getElementById('authStepEmail').style.display = 'none';
+    document.getElementById('authStepCode').style.display = 'block';
+    document.getElementById('authSentTo').textContent = email;
+    document.getElementById('authCodeInput').value = '';
+    document.getElementById('authCodeInput').focus();
+    msg.style.color = '#c9a84c';
+    msg.textContent = 'Check your email for a 6-digit verification code.';
+    btn.disabled = false;
+    btn.textContent = 'Send Verification Code';
+  }
+}
+
+async function verifyEmailCode() {
+  var codeInput = document.getElementById('authCodeInput');
+  var btn = document.getElementById('authVerifyBtn');
+  var msg = document.getElementById('authEmailMsg');
+  var code = codeInput.value.trim();
+  if (!code || code.length !== 6) {
+    msg.style.color = '#e05050';
+    msg.textContent = 'Please enter the 6-digit code from your email.';
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Verifying...';
+  msg.textContent = '';
+  var { data, error } = await sbClient.auth.verifyOtp({
+    email: _authPendingEmail,
+    token: code,
+    type: 'email'
+  });
+  if (error) {
+    msg.style.color = '#e05050';
+    msg.textContent = error.message || 'Invalid code. Please try again.';
+    btn.disabled = false;
+    btn.textContent = 'Verify & Sign In';
   } else {
     msg.style.color = '#c9a84c';
-    msg.textContent = 'Check your inbox! We sent a sign-in link to ' + email;
-    btn.textContent = 'Link Sent';
-    setTimeout(function() { btn.disabled = false; btn.textContent = 'Resend Link'; }, 10000);
+    msg.textContent = 'Signed in successfully!';
+    currentUser = data.user;
+    onSignIn();
   }
+}
+
+function authBackToEmail() {
+  document.getElementById('authStepEmail').style.display = 'block';
+  document.getElementById('authStepCode').style.display = 'none';
+  document.getElementById('authEmailMsg').textContent = '';
+  _authPendingEmail = '';
 }
 
 function continueAsGuest() {
