@@ -942,9 +942,9 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
 }
 
-/* Eradicate the persistent desktop badge floating outside the mobile frame */
+/* Keep badge visible and on top inside the simulator frame */
 body.is-mobile-device #lastUpdateBadge {
-  display: none !important;
+  z-index: 9999 !important;
 }
 
 /* ─── ACTIVE STATES FOR TOUCH ─────────────────────────────── */
