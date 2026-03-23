@@ -442,6 +442,289 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   padding: 6px 12px;
 }
 
+/* ─── MATH SNAP (Mobile Camera Interface) ────────────────── */
+/* Default state on mobile: snap UI visible, desktop UI hidden.
+   When .math-snap-dismissed is added, roles swap. */
+.is-mobile-device .desktop-math-ui {
+  display: none !important;
+}
+.is-mobile-device.math-snap-dismissed .desktop-math-ui {
+  display: block !important;
+}
+.is-mobile-device .mobile-math-snap-ui {
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+.is-mobile-device.math-snap-dismissed .mobile-math-snap-ui {
+  display: none !important;
+}
+
+/* Top bar */
+.is-mobile-device .snap-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0));
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+  flex-shrink: 0;
+}
+.is-mobile-device .snap-back-btn {
+  background: none;
+  border: none;
+  color: #c8b88a;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.is-mobile-device .snap-title {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+.is-mobile-device .snap-skip-btn {
+  background: none;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: #c8b88a;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  min-height: 36px;
+}
+.is-mobile-device .snap-skip-btn:active {
+  background: rgba(201, 168, 76, 0.1);
+}
+
+/* Viewfinder */
+.is-mobile-device .snap-viewfinder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000 100%);
+  overflow: hidden;
+}
+
+/* Reticle */
+.is-mobile-device .snap-reticle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 2px solid rgba(201, 168, 76, 0.4);
+  border-radius: 12px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.is-mobile-device .snap-reticle-single {
+  width: 85%;
+  height: 140px;
+}
+.is-mobile-device .snap-reticle-multi {
+  width: 90%;
+  height: 75%;
+}
+
+/* Reticle corner brackets */
+.is-mobile-device .snap-reticle-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: #c9a84c;
+  border-style: solid;
+  border-width: 0;
+}
+.is-mobile-device .snap-rc-tl { top: -2px; left: -2px; border-top-width: 3px; border-left-width: 3px; border-radius: 8px 0 0 0; }
+.is-mobile-device .snap-rc-tr { top: -2px; right: -2px; border-top-width: 3px; border-right-width: 3px; border-radius: 0 8px 0 0; }
+.is-mobile-device .snap-rc-bl { bottom: -2px; left: -2px; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 8px; }
+.is-mobile-device .snap-rc-br { bottom: -2px; right: -2px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 8px 0; }
+
+/* Reticle label */
+.is-mobile-device .snap-reticle-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: rgba(201, 168, 76, 0.6);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Reticle glow animation */
+.is-mobile-device .snap-reticle {
+  animation: reticle-pulse 2.5s ease-in-out infinite;
+}
+@keyframes reticle-pulse {
+  0%, 100% { border-color: rgba(201, 168, 76, 0.35); box-shadow: 0 0 20px rgba(201, 168, 76, 0.05); }
+  50% { border-color: rgba(201, 168, 76, 0.6); box-shadow: 0 0 30px rgba(201, 168, 76, 0.12); }
+}
+
+/* Post-capture preview overlay */
+.is-mobile-device .snap-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 5;
+  padding: 20px;
+}
+.is-mobile-device .snap-preview-img {
+  max-width: 90%;
+  max-height: 55%;
+  border-radius: 12px;
+  border: 2px solid rgba(201, 168, 76, 0.3);
+  object-fit: contain;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+.is-mobile-device .snap-retake-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #aaa;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  min-height: 44px;
+}
+.is-mobile-device .snap-retake-btn:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+.is-mobile-device .snap-solve-btn {
+  background: linear-gradient(135deg, #c9a84c, #a8893a);
+  border: none;
+  color: #0c0c0c;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px 32px;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  min-height: 48px;
+  box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
+  letter-spacing: 0.02em;
+}
+.is-mobile-device .snap-solve-btn:active {
+  transform: scale(0.97);
+}
+
+/* Bottom dock */
+.is-mobile-device .snap-dock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  flex-shrink: 0;
+}
+.is-mobile-device .snap-dock-captured .snap-shutter,
+.is-mobile-device .snap-dock-captured .snap-mode-pills {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Mode pills */
+.is-mobile-device .snap-mode-pills {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 24px;
+  padding: 3px;
+}
+.is-mobile-device .snap-pill {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 36px;
+}
+.is-mobile-device .snap-pill-active {
+  background: rgba(201, 168, 76, 0.15);
+  color: #c9a84c;
+}
+
+/* Shutter button */
+.is-mobile-device .snap-shutter {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: none;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+.is-mobile-device .snap-shutter:active {
+  transform: scale(0.9);
+}
+.is-mobile-device .snap-shutter-ring {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  transition: background 0.15s ease;
+}
+.is-mobile-device .snap-shutter:active .snap-shutter-ring {
+  background: rgba(201, 168, 76, 0.8);
+}
+
+/* ─── MATH SNAP @media mirror (native hardware fallback) ── */
+@media (max-width: 768px) {
+  .is-mobile-device .desktop-math-ui {
+    display: none !important;
+  }
+  .is-mobile-device.math-snap-dismissed .desktop-math-ui {
+    display: block !important;
+  }
+  .is-mobile-device .mobile-math-snap-ui {
+    display: flex !important;
+  }
+  .is-mobile-device.math-snap-dismissed .mobile-math-snap-ui {
+    display: none !important;
+  }
+}
+
 /* ─── ESSAY PAGE ──────────────────────────────────────────── */
 .is-mobile-device .essay-controls {
   flex-direction: column;

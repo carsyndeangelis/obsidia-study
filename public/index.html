@@ -2462,6 +2462,48 @@
      PAGE: ADVANCED MATH (kept from original)
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math">
+  <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
+  <div class="mobile-math-snap-ui" style="display:none;">
+    <!-- Top bar -->
+    <div class="snap-topbar">
+      <button class="snap-back-btn" onclick="navigate('home')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <span class="snap-title">Math Snap</span>
+      <button class="snap-skip-btn" onclick="mathSnapGoToChat()">Math AI Page <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+    </div>
+
+    <!-- Viewfinder area -->
+    <div class="snap-viewfinder" id="snapViewfinder">
+      <div class="snap-reticle snap-reticle-single" id="snapReticle">
+        <div class="snap-reticle-corner snap-rc-tl"></div>
+        <div class="snap-reticle-corner snap-rc-tr"></div>
+        <div class="snap-reticle-corner snap-rc-bl"></div>
+        <div class="snap-reticle-corner snap-rc-br"></div>
+        <span class="snap-reticle-label">Aim at a math problem</span>
+      </div>
+
+      <!-- Post-capture preview (hidden by default) -->
+      <div class="snap-preview-overlay" id="snapPreviewOverlay" style="display:none;">
+        <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" />
+        <button class="snap-retake-btn" onclick="mathSnapRetake()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-11.36L3 10"/></svg> Retake</button>
+        <button class="snap-solve-btn" onclick="mathSnapSolve()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Solve This Problem</button>
+      </div>
+    </div>
+
+    <!-- Bottom dock -->
+    <div class="snap-dock">
+      <div class="snap-mode-pills">
+        <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')">Single Question</button>
+        <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')">Multiple Snaps</button>
+      </div>
+      <button class="snap-shutter" id="snapShutter" onclick="mathSnapCapture()">
+        <span class="snap-shutter-ring"></span>
+      </button>
+      <input type="file" id="mathSnapFileInput" accept="image/*" capture="environment" style="display:none" onchange="mathSnapHandleFile(this)" />
+    </div>
+  </div>
+
+  <!-- ═══ DESKTOP MATH UI (hidden on mobile) ═══ -->
+  <div class="desktop-math-ui">
   <div class="sp-layout">
     <button class="sp-back" onclick="navigate('home')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
@@ -2522,6 +2564,7 @@
       </div>
     </div>
   </div>
+  </div><!-- /.desktop-math-ui -->
 </div>
 
 <!-- ═══════════════════════════════════════════════════ PAGE: ESSAY ═══════════════════════════════════════════════════ -->
@@ -3883,6 +3926,10 @@ function navigate(pageId) {
       if (pageId === 'settings' && typeof loadUserRecordings === 'function') loadUserRecordings();
       /* Init scratch pad when entering math */
       if (pageId === 'math' && typeof initScratchPad === 'function') setTimeout(initScratchPad, 100);
+      /* Reset math snap state — always start at camera on mobile */
+      if (pageId === 'math') {
+        document.body.classList.remove('math-snap-dismissed');
+      }
 
       /* Restore input state */
       var nextInput = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
@@ -4196,6 +4243,97 @@ function startMathPractice() {
     var sendBtn = document.getElementById('mathSendBtn');
     if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
   }
+}
+
+/* ── Math Snap (Mobile Camera Interface) ── */
+var _mathSnapMode = 'single';
+var _mathSnapData = null;
+
+function mathSnapMode(mode) {
+  _mathSnapMode = mode;
+  var singleBtn = document.getElementById('snapPillSingle');
+  var multiBtn = document.getElementById('snapPillMulti');
+  var reticle = document.getElementById('snapReticle');
+  if (singleBtn && multiBtn) {
+    singleBtn.classList.toggle('snap-pill-active', mode === 'single');
+    multiBtn.classList.toggle('snap-pill-active', mode === 'multi');
+  }
+  if (reticle) {
+    reticle.classList.toggle('snap-reticle-single', mode === 'single');
+    reticle.classList.toggle('snap-reticle-multi', mode === 'multi');
+    var label = reticle.querySelector('.snap-reticle-label');
+    if (label) label.textContent = mode === 'single' ? 'Aim at a math problem' : 'Capture full page';
+  }
+}
+
+function mathSnapCapture() {
+  var input = document.getElementById('mathSnapFileInput');
+  if (input) input.click();
+}
+
+function mathSnapHandleFile(inputEl) {
+  if (!inputEl.files || !inputEl.files[0]) return;
+  var file = inputEl.files[0];
+  if (!file.type.startsWith('image/')) {
+    if (typeof showToast === 'function') showToast('warning', '', 'Invalid File', 'Please capture or select an image.');
+    inputEl.value = '';
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _mathSnapData = e.target.result;
+    var preview = document.getElementById('snapPreviewOverlay');
+    var img = document.getElementById('snapPreviewImg');
+    var reticle = document.getElementById('snapReticle');
+    if (img) img.src = _mathSnapData;
+    if (preview) preview.style.display = 'flex';
+    if (reticle) reticle.style.display = 'none';
+    // Hide shutter
+    var dock = document.querySelector('.snap-dock');
+    if (dock) dock.classList.add('snap-dock-captured');
+  };
+  reader.readAsDataURL(file);
+  inputEl.value = '';
+}
+
+function mathSnapRetake() {
+  _mathSnapData = null;
+  var preview = document.getElementById('snapPreviewOverlay');
+  var reticle = document.getElementById('snapReticle');
+  if (preview) preview.style.display = 'none';
+  if (reticle) reticle.style.display = 'flex';
+  var dock = document.querySelector('.snap-dock');
+  if (dock) dock.classList.remove('snap-dock-captured');
+}
+
+function mathSnapSolve() {
+  if (!_mathSnapData) return;
+  // Dismiss snap UI, show math chat via class toggle
+  document.body.classList.add('math-snap-dismissed');
+
+  // Attach the captured image to the math chat
+  showImageAttachmentPreview('math', _mathSnapData);
+
+  // Pre-fill prompt and send
+  var chatInput = document.getElementById('mathChatInput');
+  if (chatInput) {
+    chatInput.value = 'Solve this math problem. Show all steps.';
+    chatInput.dispatchEvent(new Event('input'));
+    var sendBtn = document.getElementById('mathSendBtn');
+    if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
+  }
+  _mathSnapData = null;
+}
+
+function mathSnapGoToChat() {
+  // Switch to the inner math chat directly
+  document.body.classList.add('math-snap-dismissed');
+}
+
+function mathSnapShowCamera() {
+  // Show camera UI, hide chat UI
+  document.body.classList.remove('math-snap-dismissed');
+  mathSnapRetake();
 }
 
 /* ── Scratch Pad (Math Tab) ── */
