@@ -474,6 +474,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   display: none !important;
 }
 
+/* Mobile math chat: hide desktop back, show camera-return button */
+.is-mobile-device #page-math .sp-back { display: none !important; }
+.is-mobile-device #page-math .math-chat-back-mobile { display: flex !important; }
+
 /* Top bar */
 .is-mobile-device .snap-topbar {
   display: flex;
@@ -766,6 +770,8 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   .is-mobile-device.math-snap-dismissed .mobile-math-snap-ui {
     display: none !important;
   }
+  #page-math .sp-back { display: none !important; }
+  #page-math .math-chat-back-mobile { display: flex !important; }
 }
 
 /* ─── ESSAY PAGE ──────────────────────────────────────────── */
