@@ -2376,11 +2376,16 @@
 
   <!-- ═══ DESKTOP MATH UI (hidden on mobile) ═══ -->
   <div class="desktop-math-ui">
-  <div class="sp-layout">
-    <button class="sp-back" onclick="navigateBack()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
-    <button class="math-chat-back-mobile" onclick="mathSnapShowCamera()" style="display:none; position:absolute; top:20px; left:20px; width:44px; height:44px; border-radius:50%; border:2px solid #c9a84c; color:#c9a84c; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; cursor:pointer; z-index:50; backdrop-filter:blur(4px);">
+  <!-- Mobile-only top bar (hidden on desktop) -->
+  <div class="math-mobile-topbar">
+    <button class="math-mobile-back" onclick="mathSnapShowCamera()">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px;"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
+    <span class="math-mobile-title">Math AI</span>
+    <div style="width:44px"></div>
+  </div>
+  <div class="sp-layout">
+    <button class="sp-back" onclick="navigateBack()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</button>
     <div class="sp-header">
       <div class="sp-icon" style="background:var(--math-subtle);color:var(--math-color);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
       <div class="sp-info">
@@ -2415,6 +2420,18 @@
           <option value="answer">Final Answer Only</option>
         </select>
       </div>
+      <!-- Mobile welcome + input (hidden on desktop via CSS) -->
+      <div class="math-mobile-welcome" id="mathMobileWelcome">
+        <div class="math-mobile-welcome-inner">
+          <h2 class="math-mobile-greeting">Hi <span id="mathMobileUserName">there</span>,</h2>
+          <p class="math-mobile-sub">What math can we solve today?</p>
+          <div class="math-mobile-suggestions">
+            <button class="math-suggest-pill" onclick="mobileMathSuggest('Solve this equation step by step')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg> Solve Equation</button>
+            <button class="math-suggest-pill" onclick="mobileMathSuggest('Graph this function and explain its behavior')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Graph a Function</button>
+            <button class="math-suggest-pill" onclick="mobileMathSuggest('Explain this concept simply')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Explain a Concept</button>
+          </div>
+        </div>
+      </div>
       <div class="math-chat-row">
         <div class="math-chat-column">
           <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
@@ -2435,6 +2452,37 @@
           </div>
           <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas><button class="expand-scratch-btn" onclick="toggleScratchFullscreen()" style="position:absolute;bottom:16px;right:16px;background:rgba(12,12,12,0.8);color:#8a8070;border:1px solid #272727;border-radius:6px;padding:8px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:0.2s;" onmouseover="this.style.color='#c8b88a';this.style.borderColor='rgba(201,168,76,0.3)'" onmouseout="this.style.color='#8a8070';this.style.borderColor='#272727'" aria-label="Toggle Fullscreen"><svg id="expandScratchIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button></div>
           <button class="btn-gold scratch-attach" id="scratchAttachBtn" onclick="attachScratchpadToMathChat()" disabled>Attach to Chat</button>
+        </div>
+      </div>
+      <!-- Mobile floating input bar (hidden on desktop) -->
+      <div class="math-mobile-input-bar" id="mathMobileInputBar">
+        <button class="math-tools-toggle" onclick="toggleMathToolsDrawer()" aria-label="Tools">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <textarea id="mathMobileChatInput" class="math-mobile-textarea" rows="1" placeholder="Ask Math AI..."></textarea>
+        <button class="math-mobile-send" id="mathMobileSendBtn" onclick="mobileMathSend()" aria-label="Send" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+      <!-- Mobile tools drawer (hidden on desktop) -->
+      <div class="math-tools-drawer" id="mathToolsDrawer">
+        <div class="math-tools-grid">
+          <button class="math-tool-item" onclick="openDesmosModal();toggleMathToolsDrawer()">
+            <div class="math-tool-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <span>Desmos</span>
+          </button>
+          <button class="math-tool-item" onclick="toggleScratchFullscreen();toggleMathToolsDrawer()">
+            <div class="math-tool-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <span>Scratch Pad</span>
+          </button>
+          <button class="math-tool-item" onclick="document.getElementById('mathFileInput').click();toggleMathToolsDrawer()">
+            <div class="math-tool-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <span>Upload Image</span>
+          </button>
+          <button class="math-tool-item" onclick="mathSnapShowCamera()">
+            <div class="math-tool-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+            <span>Camera Snap</span>
+          </button>
         </div>
       </div>
     </div>
@@ -4707,6 +4755,63 @@ function mathSnapShowCamera() {
   mathSnapStartCamera();
 }
 
+/* ── Mobile Math Chat UI ── */
+function toggleMathToolsDrawer() {
+  var d = document.getElementById('mathToolsDrawer');
+  if (d) d.classList.toggle('open');
+}
+
+function mobileMathSend() {
+  var mobileInput = document.getElementById('mathMobileChatInput');
+  var desktopInput = document.getElementById('mathChatInput');
+  var sendBtn = document.getElementById('mathSendBtn');
+  if (!mobileInput || !desktopInput || !mobileInput.value.trim()) return;
+  desktopInput.value = mobileInput.value;
+  desktopInput.dispatchEvent(new Event('input'));
+  mobileInput.value = '';
+  mobileInput.style.height = 'auto';
+  var mobileSend = document.getElementById('mathMobileSendBtn');
+  if (mobileSend) mobileSend.disabled = true;
+  if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
+  var welcome = document.getElementById('mathMobileWelcome');
+  if (welcome) welcome.style.display = 'none';
+}
+
+function mobileMathSuggest(text) {
+  var mobileInput = document.getElementById('mathMobileChatInput');
+  if (mobileInput) {
+    mobileInput.value = text;
+    mobileInput.dispatchEvent(new Event('input'));
+    mobileInput.focus();
+  }
+}
+
+(function() {
+  // Auto-resize and enable/disable send button for mobile math input
+  document.addEventListener('input', function(e) {
+    if (e.target.id === 'mathMobileChatInput') {
+      e.target.style.height = 'auto';
+      e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+      var btn = document.getElementById('mathMobileSendBtn');
+      if (btn) btn.disabled = !e.target.value.trim();
+    }
+  });
+  // Enter to send for mobile math input
+  document.addEventListener('keydown', function(e) {
+    if (e.target.id === 'mathMobileChatInput' && e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      mobileMathSend();
+    }
+  });
+  // Close tools drawer on outside tap
+  document.addEventListener('pointerdown', function(e) {
+    var drawer = document.getElementById('mathToolsDrawer');
+    if (drawer && drawer.classList.contains('open') && !drawer.contains(e.target) && !e.target.closest('.math-tools-toggle')) {
+      drawer.classList.remove('open');
+    }
+  });
+})();
+
 /* ── Scratch Pad (Math Tab) ── */
 var _scratchTool = 'pen';
 var _currentScratchAttachment = null;
@@ -6610,6 +6715,8 @@ function updateUIWithProfile(p) {
   }
   var sbName = document.getElementById('sbUserName');
   if (sbName) sbName.textContent = p.display_name || 'Student';
+  var mathMobileName = document.getElementById('mathMobileUserName');
+  if (mathMobileName) mathMobileName.textContent = (p.display_name || 'there').split(' ')[0];
   var sbSub = document.getElementById('sbUserSub');
   if (sbSub) sbSub.textContent = 'LVL ' + (p.level || 1) + ' \u00b7 ' + (p.current_streak || 0) + ' day streak';
 
