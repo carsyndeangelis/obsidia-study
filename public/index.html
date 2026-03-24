@@ -2575,6 +2575,15 @@
   </div><!-- /.desktop-math-ui -->
 </div>
 
+<!-- ═══════════════════════════════════════════════════ PAGE: CHAT (Math AI) ═══════════════════════════════════════════════════ -->
+<div class="page" id="page-chat">
+  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#fff; font-family:var(--font-ui);">
+    <h2 style="color:#c9a84c;">Math AI Chat</h2>
+    <p style="opacity:0.6;">(Chat interface under construction in Phase 2)</p>
+    <button onclick="navigate('math')" style="margin-top:20px; padding:10px 20px; background:#c9a84c; color:#000; border:none; border-radius:20px; cursor:pointer; font-family:var(--font-ui); font-weight:700;">Return to Camera</button>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════════ PAGE: ESSAY ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-essay">
   <div class="sp-layout">
@@ -3941,7 +3950,11 @@ function navigate(pageId) {
   if (curInput) inputStates[currentPage] = curInput.value;
   var currentEl = document.getElementById('page-' + currentPage);
   var nextEl = document.getElementById('page-' + pageId);
-  if (!nextEl) return;
+  if (!nextEl) {
+    console.error("Critical: Target page missing in DOM: " + pageId);
+    pageId = 'home';
+    nextEl = document.getElementById('page-home');
+  }
 
   /* ── Instant page swap with short leave animation ── */
   currentEl.classList.add('page-leaving');
@@ -3961,7 +3974,7 @@ function navigate(pageId) {
       } else {
         if (mainContent) {
           mainContent.style.removeProperty('overflow');
-          mainContent.style.setProperty('overflow-y', 'auto', 'important');
+          mainContent.style.removeProperty('overflow-y');
         }
         document.body.style.removeProperty('overflow');
         document.documentElement.style.removeProperty('overflow');
