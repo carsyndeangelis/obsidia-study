@@ -7441,6 +7441,7 @@ async function signOut() {
 async function onSignIn() {
   localStorage.removeItem('obsidia_guest_mode');
   closeAuth();
+  hideLanding();
   document.getElementById('navSignedOut').style.display = 'none';
   document.getElementById('navSignedIn').style.display = 'block';
   // Update header button
