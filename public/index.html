@@ -2481,8 +2481,10 @@
         <svg viewBox="0 0 34 34" fill="none" width="44" height="44"><defs><radialGradient id="shutterS" cx="37%" cy="31%" r="62%"><stop offset="0%" stop-color="#525252"/><stop offset="38%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#050505"/></radialGradient><linearGradient id="shutterR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="42%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="17" cy="16" r="12.5" fill="url(#shutterS)"/><ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#shutterR)" stroke-width="2" fill="none" opacity="0.6"/></svg>
       </button>
       <input type="file" id="mathSnapFileInput" accept="image/*" capture="environment" style="display:none" onchange="mathSnapHandleFile(this)" />
+      <input type="file" id="mathSnapGalleryInput" accept="image/*" style="display:none" onchange="mathSnapHandleGalleryUpload(this)" />
     </div>
-    <button class="snap-skip-btn" onclick="mathSnapGoToChat()" style="position:absolute; left:20px; bottom:20px; padding:8px 12px; background:rgba(0,0,0,0.6); border-radius:12px; color:#fff; border:1px solid #c9a84c; z-index:30; font-family:var(--font-ui); font-size:12px; font-weight:600; cursor:pointer;">Math AI Page <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
+    <button class="snap-upload-btn" onclick="mathSnapOpenGallery()" style="position:absolute; left:20px; bottom:20px; padding:8px 12px; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); border-radius:12px; color:#fff; border:1px solid rgba(201,168,76,0.5); z-index:30; font-family:var(--font-ui); font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Upload</button>
+    <button class="snap-skip-btn" onclick="mathSnapGoToChat()" style="position:absolute; right:20px; bottom:20px; padding:8px 12px; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); border-radius:12px; color:#fff; border:1px solid #c9a84c; z-index:30; font-family:var(--font-ui); font-size:12px; font-weight:600; cursor:pointer;">Math AI Page <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
   </div>
   <!-- Multi-Snap Review Album -->
   <div id="multiSnapFullscreen" style="display:none; position:absolute; inset:0; z-index:999; background:rgba(0,0,0,0.98); flex-direction:column; overflow:hidden;">
@@ -3834,6 +3836,8 @@
   New version available! <button onclick="updateApp()">Update Now</button>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6" async></script>
 <script>
@@ -4338,20 +4342,32 @@ function mathSnapCapture() {
       _multiSnapImages.push(frameData);
       renderMultiSnapGallery();
     } else {
-      // Single: freeze camera, show full preview
+      // Single: freeze camera, show full preview with crop
       _mathSnapData = frameData;
       var preview = document.getElementById('snapPreviewOverlay');
       var img = document.getElementById('snapPreviewImg');
       var reticle = document.getElementById('snapReticle');
       var dock = document.querySelector('.snap-dock');
       var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+      var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
 
       if (img) img.src = _mathSnapData;
       if (preview) preview.style.setProperty('display', 'flex', 'important');
       if (reticle) reticle.style.setProperty('display', 'none', 'important');
       if (dock) dock.style.setProperty('display', 'none', 'important');
       if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
+      if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
       mathSnapStopCamera();
+
+      // Initialize Cropper.js for precise crop
+      if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
+      setTimeout(function() {
+        if (typeof Cropper !== 'undefined') {
+          window.mathSnapCropper = new Cropper(document.getElementById('snapPreviewImg'), {
+            viewMode: 2, dragMode: 'crop', autoCropArea: 0.85, responsive: true, background: false
+          });
+        }
+      }, 100);
     }
   } else {
     // Ultimate fallback if WebRTC failed or testing on desktop PC
@@ -4550,28 +4566,47 @@ function mathSnapHandleFile(inputEl) {
     var preview = document.getElementById('snapPreviewOverlay');
     var img = document.getElementById('snapPreviewImg');
     var reticle = document.getElementById('snapReticle');
+    var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+    var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
     if (img) img.src = _mathSnapData;
     if (preview) preview.style.setProperty('display', 'flex', 'important');
     if (reticle) reticle.style.setProperty('display', 'none', 'important');
     var dock = document.querySelector('.snap-dock');
     if (dock) dock.style.setProperty('display', 'none', 'important');
+    if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
+    if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
+
+    // Init cropper for single capture
+    if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
+    setTimeout(function() {
+      if (typeof Cropper !== 'undefined') {
+        window.mathSnapCropper = new Cropper(document.getElementById('snapPreviewImg'), {
+          viewMode: 2, dragMode: 'crop', autoCropArea: 0.85, responsive: true, background: false
+        });
+      }
+    }, 100);
   };
   reader.readAsDataURL(file);
   inputEl.value = '';
 }
 
 function mathSnapRetake() {
+  // Destroy cropper immediately to free memory
+  if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
+
   _mathSnapData = null;
   _multiSnapImages = [];
   var preview = document.getElementById('snapPreviewOverlay');
   var reticle = document.getElementById('snapReticle');
   var dock = document.querySelector('.snap-dock');
   var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+  var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
 
   if (preview) preview.style.setProperty('display', 'none', 'important');
   if (_mathSnapMode === 'single' && reticle) reticle.style.setProperty('display', 'block', 'important');
   if (dock) dock.style.setProperty('display', 'flex', 'important');
-  if (skipBtn) skipBtn.style.setProperty('display', 'block', 'important');
+  if (skipBtn) skipBtn.style.setProperty('display', 'flex', 'important');
+  if (uploadBtn) uploadBtn.style.setProperty('display', 'flex', 'important');
 
   // Clean up gallery
   renderMultiSnapGallery();
@@ -4589,6 +4624,14 @@ function mathSnapRetake() {
 
 function mathSnapSolve() {
   if (!_mathSnapData) return;
+
+  // Export cropped canvas if cropper is active
+  if (window.mathSnapCropper) {
+    _mathSnapData = window.mathSnapCropper.getCroppedCanvas({ fillColor: '#fff' }).toDataURL('image/jpeg', 0.9);
+    window.mathSnapCropper.destroy();
+    window.mathSnapCropper = null;
+  }
+
   // Stop camera, dismiss snap UI, show math chat
   mathSnapStopCamera();
   document.body.classList.add('math-snap-dismissed');
@@ -4611,6 +4654,68 @@ function mathSnapGoToChat() {
   // Stop camera, switch to math chat
   mathSnapStopCamera();
   document.body.classList.add('math-snap-dismissed');
+}
+
+function mathSnapOpenGallery() {
+  var input = document.getElementById('mathSnapGalleryInput');
+  if (!input) return;
+  if (_mathSnapMode === 'multi') input.setAttribute('multiple', 'multiple');
+  else input.removeAttribute('multiple');
+  input.click();
+}
+
+function mathSnapHandleGalleryUpload(inputEl) {
+  if (!inputEl.files || !inputEl.files.length) return;
+
+  if (_mathSnapMode === 'multi') {
+    // Multi: push all selected files, keep camera running
+    var filesArr = Array.prototype.slice.call(inputEl.files);
+    var loaded = 0;
+    filesArr.forEach(function(file) {
+      if (!file.type.startsWith('image/')) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        _multiSnapImages.push(e.target.result);
+        loaded++;
+        if (loaded >= filesArr.length) renderMultiSnapGallery();
+      };
+      reader.readAsDataURL(file);
+    });
+  } else {
+    // Single: take first file, show preview with cropper
+    var file = inputEl.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      _mathSnapData = e.target.result;
+      var preview = document.getElementById('snapPreviewOverlay');
+      var img = document.getElementById('snapPreviewImg');
+      var reticle = document.getElementById('snapReticle');
+      var dock = document.querySelector('.snap-dock');
+      var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+      var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
+
+      if (img) img.src = _mathSnapData;
+      if (preview) preview.style.setProperty('display', 'flex', 'important');
+      if (reticle) reticle.style.setProperty('display', 'none', 'important');
+      if (dock) dock.style.setProperty('display', 'none', 'important');
+      if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
+      if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
+      mathSnapStopCamera();
+
+      // Init cropper
+      if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
+      setTimeout(function() {
+        if (typeof Cropper !== 'undefined') {
+          window.mathSnapCropper = new Cropper(document.getElementById('snapPreviewImg'), {
+            viewMode: 2, dragMode: 'crop', autoCropArea: 0.85, responsive: true, background: false
+          });
+        }
+      }, 100);
+    };
+    reader.readAsDataURL(file);
+  }
+  inputEl.value = '';
 }
 
 function mathSnapShowCamera() {
