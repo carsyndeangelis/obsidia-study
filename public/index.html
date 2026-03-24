@@ -1169,6 +1169,19 @@
     }
     .msg-bubble .katex-display { overflow-x: auto; overflow-y: visible; padding: 5px 0; }
     .msg-bubble .katex { padding-top: 2px; }
+    /* ── Step-by-step Accordions ── */
+    details.math-step { margin: 8px 0; border: 1px solid var(--black-border); border-radius: 10px; overflow: hidden; background: rgba(0,0,0,0.15); }
+    details.math-step + details.math-step { margin-top: 6px; }
+    .math-step-summary { display: flex; align-items: center; gap: 8px; padding: 10px 14px; cursor: pointer; list-style: none; user-select: none; font-size: 13px; font-weight: 600; color: #e8e0cc; transition: background 0.15s; }
+    .math-step-summary::-webkit-details-marker { display: none; }
+    .math-step-summary::marker { display: none; content: ''; }
+    .math-step-summary:hover { background: rgba(201,168,76,0.06); }
+    .math-step-num { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; padding: 2px 8px; border-radius: 12px; background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.08)); color: #c9a84c; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; white-space: nowrap; flex-shrink: 0; }
+    .math-step-title { flex: 1; min-width: 0; }
+    .math-step-chevron { flex-shrink: 0; color: #5a5040; transition: transform 0.2s ease; }
+    details.math-step[open] > .math-step-summary .math-step-chevron { transform: rotate(180deg); }
+    .math-step-body { padding: 4px 14px 12px; font-size: 13px; line-height: 1.65; color: #c8b88a; border-top: 1px solid rgba(201,168,76,0.08); }
+    .math-step-body .katex-display { margin: 8px 0; }
     .msg.ai .msg-bubble { background: var(--black-card); border: 1px solid var(--black-border); border-bottom-left-radius: 4px; }
     .msg.user { flex-direction: row-reverse; }
     .msg.user .msg-bubble { background: rgba(201,168,76,0.10); border: 1px solid rgba(201,168,76,0.22); border-bottom-right-radius: 4px; }
@@ -6070,6 +6083,14 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
       });
     };
 
+    // Auto-scroll when step accordions are toggled
+    var stepDetails = bubble.querySelectorAll('details.math-step');
+    stepDetails.forEach(function(det) {
+      det.addEventListener('toggle', function() {
+        setTimeout(function() { container.scrollTop = container.scrollHeight; }, 50);
+      });
+    });
+
     // Inject Desmos graphs into any desmos containers in this bubble
     if (typeof Desmos !== 'undefined') {
       var desmosEls = bubble.querySelectorAll('.desmos-calculator');
@@ -6551,6 +6572,19 @@ function renderMarkdown(text) {
     });
   }
 
+  // ── Step-by-step accordion: extract step headers before markdown formatting ──
+  var _steps = [];
+  // Match ### Step N: or ## Step N: headers
+  text = text.replace(/^(#{2,3})\s+(Step\s+\d+[.:]\s*.+)$/gm, function(m, hashes, title) {
+    _steps.push(title);
+    return '%%MATHSTEP' + (_steps.length - 1) + '%%';
+  });
+  // Match **Step N: title** as standalone line
+  text = text.replace(/^\*\*(Step\s+\d+[.:]\s*[^*]+)\*\*\s*$/gm, function(m, title) {
+    _steps.push(title);
+    return '%%MATHSTEP' + (_steps.length - 1) + '%%';
+  });
+
   text = text
     .replace(/`([^`]+)`/g, '<code style="background:var(--black-card);padding:1px 5px;border-radius:4px;font-size:12px;font-family:monospace;color:#c8b88a">$1</code>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#e8e0cc;font-weight:600">$1</strong>')
@@ -6561,6 +6595,30 @@ function renderMarkdown(text) {
     .replace(/^[-*] (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">\u2022 $1</div>')
     .replace(/^(\d+)\. (.+)$/gm, '<div style="padding-left:12px;margin:2px 0">$1. $2</div>')
     .replace(/\n/g, '<br>');
+
+  // ── Reassemble step accordions ──
+  if (_steps.length >= 2) {
+    var _parts = text.split(/%%MATHSTEP(\d+)%%/);
+    // _parts alternates: [beforeFirst, idx0, content0, idx1, content1, ...]
+    var _out = _parts[0];
+    for (var _si = 1; _si < _parts.length; _si += 2) {
+      var _idx = parseInt(_parts[_si]);
+      var _body = (_parts[_si + 1] || '').replace(/^(<br\s*\/?>)+/, '');
+      // Strip trailing <br> at the very end of body (before next step)
+      _body = _body.replace(/(<br\s*\/?>)+$/, '');
+      var _title = _steps[_idx] || '';
+      // Split "Step N: rest" into number badge + description
+      var _numMatch = _title.match(/^(Step\s+\d+)[.:]\s*(.*)/i);
+      var _num = _numMatch ? _numMatch[1] : 'Step';
+      var _desc = _numMatch ? _numMatch[2] : _title;
+      _out += '<details class="math-step" open><summary class="math-step-summary"><span class="math-step-num">' + _num + '</span>' + (_desc ? '<span class="math-step-title">' + _desc + '</span>' : '') + '<svg class="math-step-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></summary><div class="math-step-body">' + _body + '</div></details>';
+    }
+    text = _out;
+  } else if (_steps.length === 1) {
+    // Single step — just render as a styled header, no accordion
+    var _soloTitle = _steps[0];
+    text = text.replace('%%MATHSTEP0%%', '<div style="font-weight:600;color:#e8e0cc;margin:10px 0 4px;font-size:13px">' + _soloTitle + '</div>');
+  }
 
   // Restore code blocks
   codeBlocks.forEach(function(block, i) {

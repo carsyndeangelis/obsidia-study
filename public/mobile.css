@@ -330,6 +330,27 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
+/* Step accordion mobile overrides */
+.is-mobile-device details.math-step {
+  border-radius: 12px;
+  margin: 10px 0;
+}
+.is-mobile-device .math-step-summary {
+  min-height: 44px;
+  padding: 12px 14px;
+  gap: 10px;
+}
+.is-mobile-device .math-step-num {
+  font-size: 10px;
+  padding: 3px 10px;
+}
+.is-mobile-device .math-step-body {
+  padding: 6px 14px 14px;
+}
+.is-mobile-device .math-step-body .katex-display {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 .is-mobile-device .msg.user .msg-bubble {
   border-radius: 14px 14px 4px 14px;
 }
