@@ -1108,24 +1108,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .nav-tabs {
   display: none;
 }
-.is-mobile-device .hamburger {
-  display: flex;
-}
 .is-mobile-device .nav-right .btn-ghost,
 .is-mobile-device .nav-right .btn-gold {
   font-size: 11px;
   padding: 6px 12px;
-}
-
-/* ─── MOBILE DRAWER ───────────────────────────────────────── */
-.is-mobile-device .mobile-drawer {
-  width: 280px;
-  max-width: 85%;
-}
-.is-mobile-device .drawer-item {
-  min-height: 44px;
-  padding: 10px 20px;
-  font-size: 14px;
 }
 
 /* ─── FOOTER ──────────────────────────────────────────────── */

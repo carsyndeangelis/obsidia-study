@@ -421,7 +421,6 @@
     .main-scroll { flex: 1; overflow-y: auto; }
     main { padding-top: 0 !important; }
     nav[role="navigation"] { display: none !important; }
-    .mobile-drawer-overlay, .mobile-drawer { display: none !important; }
     .sidebar-overlay { position: fixed; inset: 0; z-index: 49; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
@@ -740,80 +739,6 @@
       
     }
 
-    /* ─── HAMBURGER MENU (mobile) ──────────────────────────── */
-    .hamburger {
-      display: none; width: 36px; height: 36px;
-      background: none; border: none; cursor: pointer;
-      flex-direction: column; align-items: center; justify-content: center; gap: 5px;
-      padding: 6px;
-    }
-    .hamburger span {
-      display: block; width: 20px; height: 2px;
-      background: #7a7060; border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); background: var(--gold-bright); }
-    .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--gold-bright); }
-
-    /* ─── MOBILE DRAWER ────────────────────────────────────── */
-    .mobile-drawer-overlay {
-      position: fixed; inset: 0; z-index: 150;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    .mobile-drawer-overlay.open { opacity: 1; pointer-events: auto; }
-    .mobile-drawer {
-      position: fixed; top: 0; right: 0; bottom: 0; z-index: 151;
-      width: 280px; max-width: 80%;
-      background: var(--black-panel);
-      border-left: 1px solid var(--black-border);
-      transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-      display: flex; flex-direction: column;
-      overflow-y: auto;
-    }
-    .mobile-drawer.open { transform: translateX(0); }
-    .drawer-header {
-      padding: 20px; border-bottom: 1px solid var(--black-border);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .drawer-avatar {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--font-display); font-size: 16px; font-weight: 700; color: #0a0a0a;
-    }
-    .drawer-user-name { font-weight: 600; font-size: 14px; color: #e8e0cc; }
-    .drawer-user-sub { font-size: 11px; color: #5a5040; }
-    .drawer-section-label {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.16em;
-      text-transform: uppercase; color: #3a342a;
-      padding: 16px 20px 6px;
-    }
-    .drawer-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 11px 20px; cursor: pointer;
-      color: #8a8070; font-size: 13px; font-weight: 500;
-      transition: var(--transition);
-      border: none; background: none; width: 100%;
-      text-align: left; font-family: var(--font-ui);
-    }
-    .drawer-item:hover { background: var(--gold-subtle); color: var(--gold-bright); }
-    .drawer-item svg { flex-shrink: 0; opacity: 0.6; }
-    .drawer-item:hover svg { opacity: 1; }
-    .drawer-streak {
-      margin: 12px 20px; padding: 14px;
-      background: var(--black-card); border: 1px solid var(--black-border);
-      border-radius: var(--radius-md);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .drawer-streak-flame { font-size: 24px; line-height: 1; }
-    .drawer-streak-info { flex: 1; }
-    .drawer-streak-days { font-weight: 600; font-size: 15px; color: var(--gold-bright); }
-    .drawer-streak-label { font-size: 10px; color: #5a5040; }
 
     /* ─── PAGE ROUTER ──────────────────────────────────────── */
     main { position: relative; z-index: 1; padding-top: 62px; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
@@ -1820,7 +1745,6 @@
     }
     .is-mobile-device nav { padding: 0 14px; }
     .is-mobile-device .nav-tabs { display: none; }
-    .is-mobile-device .hamburger { display: flex; }
     .is-mobile-device .dashboard { grid-template-columns: 1fr; }
     .is-mobile-device .features { grid-template-columns: 1fr 1fr; padding: 16px 12px; }
     .is-mobile-device .hero { padding: 28px 16px 20px; }
@@ -2071,98 +1995,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     MOBILE DRAWER
-══════════════════════════════════════════════════ -->
-<div class="mobile-drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
-<div class="mobile-drawer" id="mobileDrawer">
-  <div class="drawer-header">
-    <div class="drawer-avatar">S</div>
-    <div>
-      <div class="drawer-user-name">Student</div>
-      <div class="drawer-user-sub">Beta Access</div>
-    </div>
-  </div>
-  <div class="drawer-streak">
-    <span class="streak-flame" aria-hidden="true">&#x1F525;</span>
-    <div class="drawer-streak-info">
-      <div class="drawer-streak-days">7 Day Streak</div>
-      <div class="drawer-streak-label">Keep it going!</div>
-    </div>
-  </div>
-  <div class="drawer-section-label">AI Tools</div>
-  <button class="drawer-item" onclick="navigate('math');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-    Advanced Math
-  </button>
-  <button class="drawer-item" onclick="navigate('essay');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-    Essay Writer
-  </button>
-  <button class="drawer-item" onclick="navigate('study');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-    Study Guide
-  </button>
-  <button class="drawer-item" onclick="navigate('notes');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>
-    Lecture Notes
-  </button>
-  <div class="drawer-section-label">More</div>
-  <button class="drawer-item" onclick="navigate('doublecheck');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-    Double Check
-  </button>
-  <button class="drawer-item" onclick="navigate('grading');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-    Grading
-  </button>
-  <button class="drawer-item" onclick="navigate('testprep');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
-    ACT / SAT Prep
-  </button>
-  <button class="drawer-item" onclick="navigate('teacher');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-    Teacher Tools
-  </button>
-  <div class="drawer-section-label">Account</div>
-  <button class="drawer-item" onclick="navigate('history');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    History
-  </button>
-  <button class="drawer-item" onclick="navigate('achievements');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-    Achievements
-  </button>
-  <button class="drawer-item" onclick="navigate('analytics');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
-    Study Analytics
-  </button>
-  <button class="drawer-item" onclick="navigate('studygroups');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-    Study Groups
-  </button>
-  <button class="drawer-item" onclick="navigate('feedback');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-    Feedback
-  </button>
-  <div class="drawer-section-label">Customize</div>
-  <button class="drawer-item" onclick="navigate('themes');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.65 1.5-1.38 0-.36-.15-.69-.38-.94-.23-.26-.38-.58-.38-.94 0-.73.58-1.32 1.3-1.32H16c3.31 0 6-2.69 6-6 0-5.5-4.5-9.58-10-9.42z"/></svg>
-    Custom Themes
-  </button>
-  <button class="drawer-item" onclick="navigate('reminders');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-    Reminders
-  </button>
-  <button class="drawer-item" onclick="navigate('smartscan');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-    Smart Scan
-  </button>
-  <button class="drawer-item" onclick="navigate('settings');toggleDrawer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-    Settings
-  </button>
-</div>
 
 <!-- ══════════════════════════════════════════════════
      NAVIGATION
@@ -2221,9 +2053,6 @@
         </button>
       </div>
     </div>
-    <button class="hamburger" id="hamburgerBtn" onclick="toggleDrawer()" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </nav>
 
@@ -4024,19 +3853,6 @@ function navigate(pageId) {
       }, 0);
     });
   });
-}
-
-/* ══════════════════════════════════════════════════════
-   MOBILE DRAWER
-══════════════════════════════════════════════════════ */
-function toggleDrawer() {
-  const overlay = document.getElementById('drawerOverlay');
-  const drawer = document.getElementById('mobileDrawer');
-  const btn = document.getElementById('hamburgerBtn');
-  const isOpen = drawer.classList.contains('open');
-  overlay.classList.toggle('open', !isOpen);
-  drawer.classList.toggle('open', !isOpen);
-  btn.classList.toggle('open', !isOpen);
 }
 
 /* ══════════════════════════════════════════════════════
