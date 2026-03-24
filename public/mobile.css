@@ -131,6 +131,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 
 .is-mobile-device .sidebar-foot {
   padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0));
   border-top: 1px solid var(--black-border);
   flex-shrink: 0;
 }
@@ -488,12 +489,15 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .mobile-math-snap-ui {
   display: flex !important;
   flex-direction: column;
-  position: relative !important;
+  position: absolute !important;
+  top: 0; left: 0; right: 0; bottom: 0;
   width: 100% !important;
   height: 100% !important;
   min-height: calc(100% - 70px) !important;
   background: #000 !important;
   overflow: hidden;
+  z-index: 999;
+  touch-action: none;
 }
 .is-mobile-device.math-snap-dismissed .mobile-math-snap-ui {
   display: none !important;
@@ -521,13 +525,13 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* The flying image clone */
 .snap-fly-clone {
   position: fixed !important;
-  z-index: 9999 !important;
+  z-index: 500 !important;
   border-radius: 12px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
   object-fit: cover;
   pointer-events: none;
   transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, width, height, top, left, opacity, border-radius;
+  will-change: transform, opacity;
 }
 .snap-fly-clone.fly-to-target {
   border-radius: 8px;
@@ -561,9 +565,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   cursor: pointer; backdrop-filter: blur(4px);
 }
 
-/* Layout restructure — rigid flex chain + seamless solid-color design */
+/* Layout restructure — rigid flex chain + seamless solid-color design
+   NOTE: display is intentionally NOT set here — it's controlled by lines 482-487
+   (.is-mobile-device .desktop-math-ui { display:none } / .math-snap-dismissed variant) */
 .is-mobile-device .desktop-math-ui {
-  display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
   min-height: 0 !important;
@@ -1064,32 +1069,9 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   height: 44px;
 }
 
-/* ─── MATH SNAP @media mirror (native hardware fallback) ── */
-@media (max-width: 768px) {
-  .is-mobile-device .desktop-math-ui {
-    display: none !important;
-  }
-  .is-mobile-device.math-snap-dismissed .desktop-math-ui {
-    display: flex !important;
-  }
-  .is-mobile-device .mobile-math-snap-ui {
-    display: flex !important;
-  }
-  .is-mobile-device.math-snap-dismissed .mobile-math-snap-ui {
-    display: none !important;
-  }
-  /* Mobile math chat overhaul mirror */
-  .desktop-math-ui .sp-header { display: none !important; }
-  .desktop-math-ui .sp-toolbar { display: none !important; }
-  .desktop-math-ui .sp-back { display: none !important; }
-  .desktop-math-ui .math-scratch-column { display: none !important; }
-  .desktop-math-ui .chat-input-wrap { display: none !important; }
-  .desktop-math-ui .chat-welcome { display: none !important; }
-  .math-mobile-topbar { display: none !important; }
-  .math-mobile-welcome { display: flex !important; }
-  .math-mobile-input-bar { display: flex !important; }
-  .math-tools-drawer { display: block !important; }
-}
+/* @media mirror block REMOVED — all mobile styles are class-based via
+   .is-mobile-device, making the @media (max-width:768px) mirror redundant
+   and a source of specificity conflicts on native hardware. */
 
 /* ─── ESSAY PAGE ──────────────────────────────────────────── */
 .is-mobile-device .essay-controls {

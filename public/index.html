@@ -1185,6 +1185,9 @@
     .graph-cmd-badge { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0; padding: 8px 14px; border-radius: 10px; background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04)); border: 1px solid rgba(201,168,76,0.25); color: #c9a84c; font-size: 12px; font-weight: 600; font-family: var(--font-ui); cursor: default; }
     .graph-cmd-badge code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-size: 11px; color: #e0d6c2; font-family: monospace; }
     .graph-cmd-badge svg { flex-shrink: 0; color: #c9a84c; }
+    /* Hover states for scratch expand + stress test buttons (replaces inline onmouseover/onmouseout) */
+    .expand-scratch-btn:hover { color: #c8b88a !important; border-color: rgba(201,168,76,0.3) !important; }
+    .stress-test-btn:hover { background: rgba(244,63,94,0.2) !important; }
     .msg.ai .msg-bubble { background: var(--black-card); border: 1px solid var(--black-border); border-bottom-left-radius: 4px; }
     .msg.user { flex-direction: row-reverse; }
     .msg.user .msg-bubble { background: rgba(201,168,76,0.10); border: 1px solid rgba(201,168,76,0.22); border-bottom-right-radius: 4px; }
@@ -2345,7 +2348,7 @@
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math">
   <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
-  <div class="mobile-math-snap-ui" style="display:flex !important; position:absolute !important; top:0; left:0; right:0; bottom:0; width:100% !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; z-index:999 !important; touch-action:none !important;">
+  <div class="mobile-math-snap-ui">
     <button class="snap-back-btn" onclick="navigateBack()" style="position:absolute !important; top:20px !important; left:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid #c9a84c !important; color:#c9a84c !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px;"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
@@ -2478,7 +2481,7 @@
             <button class="scratch-tool-btn" id="scratchEraserBtn" onclick="setScratchTool('eraser')">Eraser</button>
             <button class="scratch-tool-btn" onclick="clearScratchPad()">Clear</button>
           </div>
-          <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas><button class="expand-scratch-btn" onclick="toggleScratchFullscreen()" style="position:absolute;bottom:16px;right:16px;background:rgba(12,12,12,0.8);color:#8a8070;border:1px solid #272727;border-radius:6px;padding:8px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:0.2s;" onmouseover="this.style.color='#c8b88a';this.style.borderColor='rgba(201,168,76,0.3)'" onmouseout="this.style.color='#8a8070';this.style.borderColor='#272727'" aria-label="Toggle Fullscreen"><svg id="expandScratchIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button></div>
+          <div class="scratch-canvas-wrap"><canvas id="mathScratchPad"></canvas><button class="expand-scratch-btn" onclick="toggleScratchFullscreen()" style="position:absolute;bottom:16px;right:16px;background:rgba(12,12,12,0.8);color:#8a8070;border:1px solid #272727;border-radius:6px;padding:8px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);transition:0.2s;" aria-label="Toggle Fullscreen"><svg id="expandScratchIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button></div>
           <button class="btn-gold scratch-attach" id="scratchAttachBtn" onclick="attachScratchpadToMathChat()" disabled>Attach to Chat</button>
         </div>
       </div>
@@ -2518,14 +2521,7 @@
   </div><!-- /.desktop-math-ui -->
 </div>
 
-<!-- ═══════════════════════════════════════════════════ PAGE: CHAT (Math AI) ═══════════════════════════════════════════════════ -->
-<div class="page" id="page-chat">
-  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#fff; font-family:var(--font-ui);">
-    <h2 style="color:#c9a84c;">Math AI Chat</h2>
-    <p style="opacity:0.6;">(Chat interface under construction in Phase 2)</p>
-    <button onclick="navigate('math')" style="margin-top:20px; padding:10px 20px; background:#c9a84c; color:#000; border:none; border-radius:20px; cursor:pointer; font-family:var(--font-ui); font-weight:700;">Return to Camera</button>
-  </div>
-</div>
+<!-- page-chat stub removed — chat is integrated into page-math -->
 
 <!-- ═══════════════════════════════════════════════════ PAGE: ESSAY ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-essay">
@@ -2884,7 +2880,7 @@
       </div>
     </div>
 
-    <div id="historyEmpty" style="display:none;text-align:center;padding:40px 20px;color:#5a5040">
+    <div id="historySearchEmpty" style="display:none;text-align:center;padding:40px 20px;color:#5a5040">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:#3a342a;margin-bottom:12px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <div style="font-size:13px;font-weight:500;margin-bottom:4px">No conversations found</div>
       <div style="font-size:12px">Try a different search or filter</div>
@@ -3190,7 +3186,7 @@
               <option value="study">Study Guide</option>
               <option value="teacher">Teacher Tools</option>
             </select>
-            <button onclick="runStressTest()" style="padding:9px 20px;font-size:12px;font-weight:600;background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;cursor:pointer;font-family:var(--font-ui);transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='rgba(244,63,94,0.2)'" onmouseout="this.style.background='rgba(244,63,94,0.12)'">Launch Stress Test</button>
+            <button onclick="runStressTest()" class="stress-test-btn" style="padding:9px 20px;font-size:12px;font-weight:600;background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.3);color:#f43f5e;border-radius:8px;cursor:pointer;font-family:var(--font-ui);transition:all 0.2s;white-space:nowrap;">Launch Stress Test</button>
           </div>
         </div>
       </div>
@@ -6885,12 +6881,14 @@ const TESTER_EMAILS = ['carsyndeangelis@gmail.com'];
 function initSupabase() {
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) return;
   sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  var _authReady = false;
   sbClient.auth.onAuthStateChange((event, session) => {
+    _authReady = true;
     if (session?.user) { currentUser = session.user; onSignIn(); }
     else { currentUser = null; userProfile = null; onSignOut(); }
   });
   sbClient.auth.getSession().then(({ data }) => {
-    if (data.session?.user) { currentUser = data.session.user; onSignIn(); }
+    if (!_authReady && data.session?.user) { currentUser = data.session.user; onSignIn(); }
   });
 }
 
@@ -7874,7 +7872,7 @@ function filterHistory() {
     item.style.display = show ? '' : 'none';
     if (show) anyVisible = true;
   });
-  var empty = document.getElementById('historyEmpty');
+  var empty = document.getElementById('historySearchEmpty');
   if (empty) empty.style.display = anyVisible ? 'none' : 'block';
 }
 function filterHistoryByTool(btn, tool) {
