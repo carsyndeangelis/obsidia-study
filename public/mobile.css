@@ -839,12 +839,14 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   padding: 20px;
 }
 .is-mobile-device .snap-preview-img {
-  max-width: 90%;
-  max-height: 55%;
-  border-radius: 12px;
-  border: 2px solid rgba(201, 168, 76, 0.3);
-  object-fit: contain;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 .is-mobile-device .snap-retake-btn {
   background: rgba(255, 255, 255, 0.08);
@@ -883,6 +885,54 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 }
 .is-mobile-device .snap-solve-btn:active {
   transform: scale(0.97);
+}
+
+/* ── Crop Tool ── */
+.is-mobile-device #snapCropWrap {
+  position: relative;
+  display: inline-block;
+  max-width: 92%;
+  max-height: calc(100% - 130px);
+  line-height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  touch-action: none;
+}
+.is-mobile-device #snapCropBox {
+  border: 2px solid rgba(201, 168, 76, 0.9);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
+}
+/* Corner handles — large touch target, small visual circle */
+.is-mobile-device .snap-crop-handle {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  z-index: 10;
+  cursor: pointer;
+  touch-action: none;
+}
+.is-mobile-device .snap-crop-handle::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px; height: 16px;
+  background: #c9a84c;
+  border-radius: 50%;
+  border: 2px solid #000;
+  box-shadow: 0 0 8px rgba(201, 168, 76, 0.5);
+}
+/* Edge midpoint handles — smaller */
+.is-mobile-device .snap-crop-edge::after {
+  width: 10px; height: 10px;
+}
+/* Crop hint text */
+.is-mobile-device .snap-crop-hint {
+  animation: cropHintFade 3s ease forwards;
+}
+@keyframes cropHintFade {
+  0%, 60% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* ── Bottom dock — absolute-anchored to bottom of viewfinder ── */

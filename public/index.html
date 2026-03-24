@@ -2343,9 +2343,25 @@
       </div>
       <div id="multiGalleryContainer" style="position:absolute; top:80px; right:20px; display:flex; flex-direction:row-reverse; gap:8px; z-index:15; flex-wrap:wrap; max-width:calc(100% - 40px);"></div>
       <div class="snap-preview-overlay" id="snapPreviewOverlay" style="display:none; position:absolute !important; inset:0 !important; z-index:10 !important; background:#000 !important; flex-direction:column !important; justify-content:center !important; align-items:center !important;">
-        <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:12px; box-shadow:0 0 30px rgba(0,0,0,0.8);" />
-        <button class="snap-retake-btn" onclick="mathSnapRetake()" style="position:absolute; top:20px; right:20px; padding:10px 20px; background:rgba(0,0,0,0.7); border-radius:24px; color:#c9a84c; font-family:var(--font-ui); font-size:14px; font-weight:700; border:1px solid #c9a84c; cursor:pointer; backdrop-filter:blur(4px); z-index:20;">Retake Picture</button>
-        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="margin-top:24px; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4); z-index:20; flex-shrink:0;">Attach to Math AI Chat</button>
+        <p class="snap-crop-hint" id="snapCropHint" style="position:absolute; top:18px; left:50%; transform:translateX(-50%); color:rgba(201,168,76,0.8); font-family:var(--font-ui); font-size:12px; font-weight:600; letter-spacing:0.06em; z-index:25; white-space:nowrap; pointer-events:none;">DRAG TO CROP</p>
+        <button class="snap-retake-btn" onclick="mathSnapRetake()" style="position:absolute; top:12px; right:16px; padding:10px 20px; background:rgba(0,0,0,0.7); border-radius:24px; color:#c9a84c; font-family:var(--font-ui); font-size:14px; font-weight:700; border:1px solid #c9a84c; cursor:pointer; backdrop-filter:blur(4px); z-index:25;">Retake</button>
+        <!-- Crop container — wraps image tightly so crop box coords map 1:1 to pixels -->
+        <div id="snapCropWrap" style="position:relative; display:inline-block; max-width:92%; max-height:calc(100% - 130px); line-height:0; overflow:hidden; border-radius:8px; touch-action:none;">
+          <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" style="display:block; max-width:100%; max-height:100%; width:auto; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none;" />
+          <!-- Crop box with dark overlay via box-shadow -->
+          <div id="snapCropBox" style="position:absolute; top:10%; left:10%; width:80%; height:80%; border:2px solid rgba(201,168,76,0.9); box-shadow:0 0 0 9999px rgba(0,0,0,0.55); cursor:move; touch-action:none; z-index:5;">
+            <div class="snap-crop-handle" data-handle="tl" style="position:absolute; top:-1px; left:-1px;"></div>
+            <div class="snap-crop-handle" data-handle="tr" style="position:absolute; top:-1px; right:-1px;"></div>
+            <div class="snap-crop-handle" data-handle="bl" style="position:absolute; bottom:-1px; left:-1px;"></div>
+            <div class="snap-crop-handle" data-handle="br" style="position:absolute; bottom:-1px; right:-1px;"></div>
+            <!-- Edge midpoint handles -->
+            <div class="snap-crop-handle snap-crop-edge" data-handle="tm" style="position:absolute; top:-1px; left:50%; transform:translateX(-50%);"></div>
+            <div class="snap-crop-handle snap-crop-edge" data-handle="bm" style="position:absolute; bottom:-1px; left:50%; transform:translateX(-50%);"></div>
+            <div class="snap-crop-handle snap-crop-edge" data-handle="ml" style="position:absolute; top:50%; left:-1px; transform:translateY(-50%);"></div>
+            <div class="snap-crop-handle snap-crop-edge" data-handle="mr" style="position:absolute; top:50%; right:-1px; transform:translateY(-50%);"></div>
+          </div>
+        </div>
+        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="margin-top:20px; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4); z-index:20; flex-shrink:0;">Attach to Math AI Chat</button>
       </div>
     </div>
     <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important; pointer-events:auto !important;">
@@ -3770,8 +3786,7 @@
   New version available! <button onclick="updateApp()">Update Now</button>
 </div>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+<!-- Cropper.js removed — replaced with native lightweight crop tool -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://www.desmos.com/api/v1.7/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6" async></script>
 <script>
@@ -4214,6 +4229,204 @@ var _multiSnapImages = [];
 var _mathSnapTorchOn = false;
 var _flashPressTimer = null;
 
+/* ── Native Crop Tool (replaces Cropper.js) ── */
+var _snapCrop = {
+  active: false,
+  box: null,        // DOM element
+  wrap: null,       // container element
+  drag: null,       // current drag state
+  MIN_SIZE: 40,     // minimum crop box dimension in px
+
+  init: function() {
+    var self = this;
+    self.box = document.getElementById('snapCropBox');
+    self.wrap = document.getElementById('snapCropWrap');
+    if (!self.box || !self.wrap) return;
+
+    // Wait for image to render so container has dimensions
+    var img = document.getElementById('snapPreviewImg');
+    if (!img) return;
+
+    var doInit = function() {
+      self.active = true;
+      // Reset crop box to 85% centered
+      var w = self.wrap.offsetWidth;
+      var h = self.wrap.offsetHeight;
+      if (w === 0 || h === 0) return;
+      var margin = 0.075; // 7.5% margin each side = 85% crop area
+      self.box.style.left = (margin * 100) + '%';
+      self.box.style.top = (margin * 100) + '%';
+      self.box.style.width = ((1 - margin * 2) * 100) + '%';
+      self.box.style.height = ((1 - margin * 2) * 100) + '%';
+      self._bind();
+    };
+
+    if (img.naturalWidth > 0 && self.wrap.offsetHeight > 0) {
+      doInit();
+    } else {
+      img.onload = function() { setTimeout(doInit, 50); };
+    }
+  },
+
+  destroy: function() {
+    this.active = false;
+    this._unbind();
+    this.drag = null;
+  },
+
+  /* Get cropped image as data URL */
+  getCroppedDataURL: function() {
+    if (!this.active || !this.box || !this.wrap) return null;
+    var img = document.getElementById('snapPreviewImg');
+    if (!img || !img.naturalWidth) return null;
+
+    var wrapW = this.wrap.offsetWidth;
+    var wrapH = this.wrap.offsetHeight;
+    if (wrapW === 0 || wrapH === 0) return null;
+
+    // Box position in pixels relative to wrap
+    var bx = this.box.offsetLeft;
+    var by = this.box.offsetTop;
+    var bw = this.box.offsetWidth;
+    var bh = this.box.offsetHeight;
+
+    // Scale to natural image dimensions
+    var sx = img.naturalWidth / wrapW;
+    var sy = img.naturalHeight / wrapH;
+    var cx = Math.round(bx * sx);
+    var cy = Math.round(by * sy);
+    var cw = Math.round(bw * sx);
+    var ch = Math.round(bh * sy);
+
+    // Clamp to image bounds
+    cx = Math.max(0, Math.min(cx, img.naturalWidth));
+    cy = Math.max(0, Math.min(cy, img.naturalHeight));
+    cw = Math.min(cw, img.naturalWidth - cx);
+    ch = Math.min(ch, img.naturalHeight - cy);
+    if (cw < 1 || ch < 1) return null;
+
+    var canvas = document.createElement('canvas');
+    canvas.width = cw;
+    canvas.height = ch;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.drawImage(img, cx, cy, cw, ch, 0, 0, cw, ch);
+    return canvas.toDataURL('image/jpeg', 0.9);
+  },
+
+  /* ── Touch / Mouse event wiring ── */
+  _onStart: null,
+  _onMove: null,
+  _onEnd: null,
+
+  _bind: function() {
+    var self = this;
+    self._onStart = function(e) { self._handleStart(e); };
+    self._onMove = function(e) { self._handleMove(e); };
+    self._onEnd = function(e) { self._handleEnd(e); };
+
+    self.wrap.addEventListener('mousedown', self._onStart, { passive: false });
+    self.wrap.addEventListener('touchstart', self._onStart, { passive: false });
+    window.addEventListener('mousemove', self._onMove, { passive: false });
+    window.addEventListener('touchmove', self._onMove, { passive: false });
+    window.addEventListener('mouseup', self._onEnd);
+    window.addEventListener('touchend', self._onEnd);
+    window.addEventListener('touchcancel', self._onEnd);
+  },
+
+  _unbind: function() {
+    if (this._onStart) {
+      if (this.wrap) {
+        this.wrap.removeEventListener('mousedown', this._onStart);
+        this.wrap.removeEventListener('touchstart', this._onStart);
+      }
+      window.removeEventListener('mousemove', this._onMove);
+      window.removeEventListener('touchmove', this._onMove);
+      window.removeEventListener('mouseup', this._onEnd);
+      window.removeEventListener('touchend', this._onEnd);
+      window.removeEventListener('touchcancel', this._onEnd);
+    }
+  },
+
+  _getXY: function(e) {
+    var t = e.touches ? e.touches[0] : e;
+    var r = this.wrap.getBoundingClientRect();
+    return { x: t.clientX - r.left, y: t.clientY - r.top };
+  },
+
+  _handleStart: function(e) {
+    if (!this.active) return;
+    var pos = this._getXY(e);
+    var box = this.box;
+    var bx = box.offsetLeft, by = box.offsetTop, bw = box.offsetWidth, bh = box.offsetHeight;
+
+    // Check if hit a handle first (larger touch target than visual)
+    var target = e.target;
+    if (target && target.dataset && target.dataset.handle) {
+      e.preventDefault();
+      this.drag = { type: 'handle', handle: target.dataset.handle, startX: pos.x, startY: pos.y, origLeft: bx, origTop: by, origWidth: bw, origHeight: bh };
+      return;
+    }
+
+    // Check if inside the crop box → move
+    if (pos.x >= bx && pos.x <= bx + bw && pos.y >= by && pos.y <= by + bh) {
+      e.preventDefault();
+      this.drag = { type: 'move', startX: pos.x, startY: pos.y, origLeft: bx, origTop: by, origWidth: bw, origHeight: bh };
+    }
+  },
+
+  _handleMove: function(e) {
+    if (!this.drag || !this.active) return;
+    e.preventDefault();
+    var pos = this._getXY(e);
+    var d = this.drag;
+    var dx = pos.x - d.startX;
+    var dy = pos.y - d.startY;
+    var maxW = this.wrap.offsetWidth;
+    var maxH = this.wrap.offsetHeight;
+    var min = this.MIN_SIZE;
+
+    if (d.type === 'move') {
+      var newL = Math.max(0, Math.min(d.origLeft + dx, maxW - d.origWidth));
+      var newT = Math.max(0, Math.min(d.origTop + dy, maxH - d.origHeight));
+      this.box.style.left = newL + 'px';
+      this.box.style.top = newT + 'px';
+      this.box.style.width = d.origWidth + 'px';
+      this.box.style.height = d.origHeight + 'px';
+    } else if (d.type === 'handle') {
+      var h = d.handle;
+      var nL = d.origLeft, nT = d.origTop, nW = d.origWidth, nH = d.origHeight;
+
+      // Horizontal resize
+      if (h === 'tl' || h === 'bl' || h === 'ml') {
+        nL = Math.max(0, Math.min(d.origLeft + dx, d.origLeft + d.origWidth - min));
+        nW = d.origWidth - (nL - d.origLeft);
+      }
+      if (h === 'tr' || h === 'br' || h === 'mr') {
+        nW = Math.max(min, Math.min(d.origWidth + dx, maxW - d.origLeft));
+      }
+      // Vertical resize
+      if (h === 'tl' || h === 'tr' || h === 'tm') {
+        nT = Math.max(0, Math.min(d.origTop + dy, d.origTop + d.origHeight - min));
+        nH = d.origHeight - (nT - d.origTop);
+      }
+      if (h === 'bl' || h === 'br' || h === 'bm') {
+        nH = Math.max(min, Math.min(d.origHeight + dy, maxH - d.origTop));
+      }
+
+      this.box.style.left = nL + 'px';
+      this.box.style.top = nT + 'px';
+      this.box.style.width = nW + 'px';
+      this.box.style.height = nH + 'px';
+    }
+  },
+
+  _handleEnd: function() {
+    this.drag = null;
+  }
+};
+
 function mathSnapStartCamera() {
   if (_mathSnapStream) return; // already running
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
@@ -4332,15 +4545,9 @@ function mathSnapCapture() {
       if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
       mathSnapStopCamera();
 
-      // Initialize Cropper.js for precise crop
-      if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
-      setTimeout(function() {
-        if (typeof Cropper !== 'undefined') {
-          window.mathSnapCropper = new Cropper(document.getElementById('snapPreviewImg'), {
-            viewMode: 2, dragMode: 'crop', autoCropArea: 0.85, responsive: true, background: false
-          });
-        }
-      }, 100);
+      // Initialize native crop tool
+      _snapCrop.destroy();
+      setTimeout(function() { _snapCrop.init(); }, 100);
     }
   } else {
     // Ultimate fallback if WebRTC failed or testing on desktop PC
@@ -4545,23 +4752,17 @@ function mathSnapHandleFile(inputEl) {
     if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
     if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
 
-    // Init cropper for single capture
-    if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
-    setTimeout(function() {
-      if (typeof Cropper !== 'undefined') {
-        window.mathSnapCropper = new Cropper(document.getElementById('snapPreviewImg'), {
-          viewMode: 2, dragMode: 'crop', autoCropArea: 0.85, responsive: true, background: false
-        });
-      }
-    }, 100);
+    // Init native crop tool
+    _snapCrop.destroy();
+    setTimeout(function() { _snapCrop.init(); }, 100);
   };
   reader.readAsDataURL(file);
   inputEl.value = '';
 }
 
 function mathSnapRetake() {
-  // Destroy cropper immediately to free memory
-  if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
+  // Destroy crop tool immediately to free memory
+  _snapCrop.destroy();
 
   _mathSnapData = null;
   _multiSnapImages = [];
@@ -4594,11 +4795,11 @@ function mathSnapRetake() {
 function mathSnapSolve() {
   if (!_mathSnapData) return;
 
-  // Export cropped canvas if cropper is active
-  if (window.mathSnapCropper) {
-    _mathSnapData = window.mathSnapCropper.getCroppedCanvas({ fillColor: '#fff' }).toDataURL('image/jpeg', 0.9);
-    window.mathSnapCropper.destroy();
-    window.mathSnapCropper = null;
+  // Export cropped image from native crop tool
+  if (_snapCrop.active) {
+    var cropped = _snapCrop.getCroppedDataURL();
+    if (cropped) _mathSnapData = cropped;
+    _snapCrop.destroy();
   }
 
   // Stop camera, dismiss snap UI, show math chat
@@ -4678,15 +4879,9 @@ function mathSnapHandleGalleryUpload(inputEl) {
       if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
       mathSnapStopCamera();
 
-      // Init cropper
-      if (window.mathSnapCropper) { window.mathSnapCropper.destroy(); window.mathSnapCropper = null; }
-      setTimeout(function() {
-        if (typeof Cropper !== 'undefined') {
-          window.mathSnapCropper = new Cropper(document.getElementById('snapPreviewImg'), {
-            viewMode: 2, dragMode: 'crop', autoCropArea: 0.85, responsive: true, background: false
-          });
-        }
-      }, 100);
+      // Init native crop tool
+      _snapCrop.destroy();
+      setTimeout(function() { _snapCrop.init(); }, 100);
     };
     reader.readAsDataURL(file);
   }
