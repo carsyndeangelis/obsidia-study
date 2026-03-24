@@ -751,7 +751,7 @@
       display: block; opacity: 1; transform: translateX(0);
     }
     #page-math.active {
-      display: flex; flex-direction: column; height: 100%;
+      display: flex !important; flex-direction: column !important; flex: 1 1 100% !important; width: 100% !important;
     }
     .page.page-leaving {
       display: block; opacity: 0; transform: translateX(-12px);
@@ -2304,7 +2304,7 @@
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math" style="height:100%; display:flex; flex-direction:column;">
   <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
-  <div class="mobile-math-snap-ui" style="display:none; position:relative !important; width:100% !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; touch-action:none !important;">
+  <div class="mobile-math-snap-ui" style="display:none; position:absolute !important; top:0; left:0; right:0; bottom:0; width:100% !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; z-index:999 !important; touch-action:none !important;">
     <button class="snap-back-btn" onclick="navigateBack()" style="position:absolute !important; top:20px !important; left:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid #c9a84c !important; color:#c9a84c !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px;"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
