@@ -889,6 +889,9 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(0.75); }
     }
+    .update-badge:hover, .update-badge:active, .update-badge:focus {
+      opacity: 1 !important;
+    }
     .hero-title {
       font-family: var(--font-display);
       font-size: clamp(32px, 4vw, 50px);
@@ -1904,7 +1907,7 @@
 <div class="app-layout">
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
 <div class="toast-container" id="toastContainer"></div>
-<div id="lastUpdateBadge" style="position:fixed;bottom:16px;right:16px;background:rgba(20,18,14,0.85);border:1px solid rgba(201,168,76,0.3);color:#c8b88a;font-family:var(--font-ui);font-size:10px;padding:6px 12px;border-radius:8px;z-index:99999;pointer-events:none;backdrop-filter:blur(12px);font-weight:600;letter-spacing:0.04em;display:flex;gap:6px;align-items:center;"></div>
+<div id="lastUpdateBadge" class="update-badge" style="position:fixed;bottom:16px;right:16px;background:rgba(20,18,14,0.85);border:1px solid rgba(201,168,76,0.3);color:#c8b88a;font-family:var(--font-ui);font-size:10px;padding:6px 12px;border-radius:8px;z-index:99999;pointer-events:auto;backdrop-filter:blur(12px);font-weight:600;letter-spacing:0.04em;display:flex;gap:6px;align-items:center;opacity:0.15;transition:opacity 0.3s ease;"></div>
 <script>!function(){var d=new Date(document.lastModified);document.getElementById('lastUpdateBadge').innerHTML='<span style="width:6px;height:6px;background:var(--gold-bright);border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span> Last Update: '+d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});}();</script>
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-head">
@@ -1988,8 +1991,6 @@
       <div class="main-topbar-tagline">"AI made by a student, for students"</div>
     </div>
     <div class="main-topbar-right">
-      <button class="mtb" onclick="toggleTheme()" title="Toggle theme"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
-      <button class="mtb" onclick="document.getElementById('quickSnapInput').click()" title="Quick Snap"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
       <button class="mtb" onclick="toggleKB()" title="Shortcuts"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6" y2="8"/></svg></button>
       <button class="btn-gold" onclick="openAuth()" style="font-size:11px;padding:6px 14px" id="sbSignInBtn">Sign In</button>
       <div id="headerUserAvatar" style="display:none;width:32px;height:32px;border-radius:50%;overflow:hidden;border:2px solid var(--gold-muted);cursor:pointer;flex-shrink:0" onclick="navigate('settings')" title="Profile"></div>
@@ -2175,13 +2176,6 @@
   </div>
 
   <div class="nav-right">
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle light/dark theme">
-      <svg class="moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-      <svg class="sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    </button>
-    <button class="quick-snap-btn" onclick="document.getElementById('quickSnapInput').click()" title="Quick Snap — Upload a photo" aria-label="Quick Snap">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-    </button>
     <!-- Signed out state -->
     <div id="navSignedOut">
       <button class="btn-ghost" onclick="openAuth()">Sign In</button>
@@ -2476,7 +2470,7 @@
       <div class="snap-preview-overlay" id="snapPreviewOverlay" style="display:none; position:absolute !important; inset:0 !important; z-index:10 !important; background:#000 !important; flex-direction:column !important; justify-content:center !important; align-items:center !important;">
         <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" style="max-width:90%; max-height:80%; object-fit:contain; border-radius:12px; box-shadow:0 0 30px rgba(0,0,0,0.8);" />
         <button class="snap-retake-btn" onclick="mathSnapRetake()" style="position:absolute; top:20px; right:20px; padding:10px 20px; background:rgba(0,0,0,0.7); border-radius:24px; color:#c9a84c; font-family:var(--font-ui); font-size:14px; font-weight:700; border:1px solid #c9a84c; cursor:pointer; backdrop-filter:blur(4px); z-index:20;">Retake Picture</button>
-        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%);">Attach to Math AI Chat</button>
+        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="margin-top:24px; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4); z-index:20; flex-shrink:0;">Attach to Math AI Chat</button>
       </div>
     </div>
     <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important;">
