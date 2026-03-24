@@ -440,6 +440,8 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
 }
 .is-mobile-device .math-mode-bar {
   flex-wrap: wrap;
@@ -458,7 +460,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   display: none !important;
 }
 .is-mobile-device.math-snap-dismissed .desktop-math-ui {
-  display: block !important;
+  display: flex !important;
 }
 .is-mobile-device .mobile-math-snap-ui {
   display: flex !important;
@@ -509,42 +511,51 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   letter-spacing: 0.04em;
 }
 
-/* Layout restructure */
+/* Layout restructure — rigid flex chain */
 .is-mobile-device .desktop-math-ui {
+  display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
 }
 .is-mobile-device .desktop-math-ui .sp-layout {
   display: flex !important; flex-direction: column !important;
-  flex: 1 !important; height: 100% !important;
+  flex: 1 !important; min-height: 0 !important;
   overflow: hidden !important; padding: 0 !important;
   border: none !important; background: transparent !important;
 }
 .is-mobile-device .desktop-math-ui .sp-chat-panel {
-  flex: 1 !important; overflow: hidden !important;
+  flex: 1 !important; min-height: 0 !important;
+  overflow: hidden !important;
   position: relative !important; display: flex !important;
   flex-direction: column !important;
   background: var(--black-deep, #080808) !important;
 }
 .is-mobile-device .desktop-math-ui .math-chat-row {
-  flex: 1 !important; overflow-y: auto !important;
+  flex: 1 !important; min-height: 0 !important;
+  overflow-y: auto !important;
   display: flex !important; flex-direction: column !important;
 }
 .is-mobile-device .desktop-math-ui .math-chat-column {
-  flex: 1 !important; display: flex !important;
+  flex: 1 !important; min-height: 0 !important;
+  display: flex !important;
   flex-direction: column !important;
 }
 .is-mobile-device .desktop-math-ui .sp-messages {
-  flex: 1 !important; padding: 16px !important;
-  padding-bottom: 100px !important;
+  flex: 1 !important; min-height: 0 !important;
+  padding: 16px !important;
+  overflow-y: auto !important;
 }
 
 /* Mobile welcome screen */
 .math-mobile-welcome { display: none; }
 .is-mobile-device .math-mobile-welcome {
   display: flex !important;
-  flex: 1; align-items: center; justify-content: center;
-  padding: 24px 20px 100px;
+  flex: 1; min-height: 0;
+  align-items: center; justify-content: center;
+  padding: 24px 20px;
+  overflow-y: auto;
 }
 .is-mobile-device .math-mobile-welcome-inner {
   text-align: center; max-width: 320px;
@@ -578,18 +589,19 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   border-color: rgba(201,168,76,0.3);
 }
 
-/* Floating input bar */
+/* Docked input bar (flex child, not absolute) */
 .math-mobile-input-bar { display: none; }
 .is-mobile-device .math-mobile-input-bar {
   display: flex !important;
-  position: absolute !important;
-  bottom: 16px; left: 12px; right: 12px;
+  flex-shrink: 0;
+  position: relative;
+  margin: 0 12px;
+  margin-bottom: calc(12px + env(safe-area-inset-bottom, 0));
   background: var(--black-panel, #141414);
   border: 1px solid var(--black-border, #1e1e1e);
   border-radius: 24px; padding: 6px;
   align-items: flex-end; gap: 4px;
   z-index: 20;
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
 }
 .is-mobile-device .math-tools-toggle {
   width: 40px; height: 40px; border-radius: 50%;
@@ -627,7 +639,8 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .math-tools-drawer {
   display: block !important;
   position: absolute !important;
-  bottom: 80px; left: 12px; right: 12px;
+  bottom: calc(72px + env(safe-area-inset-bottom, 0));
+  left: 12px; right: 12px;
   background: var(--black-panel, #141414);
   border: 1px solid var(--black-border, #1e1e1e);
   border-radius: 16px; padding: 16px;
@@ -948,7 +961,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
     display: none !important;
   }
   .is-mobile-device.math-snap-dismissed .desktop-math-ui {
-    display: block !important;
+    display: flex !important;
   }
   .is-mobile-device .mobile-math-snap-ui {
     display: flex !important;
