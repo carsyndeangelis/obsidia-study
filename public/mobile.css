@@ -1444,8 +1444,8 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 
 /* ─── LANDING PAGE ────────────────────────────────────────── */
 .is-mobile-device .landing-hero {
-  min-height: 60vh;
-  padding: 32px 20px;
+  height: 100%;
+  padding: 24px 20px;
 }
 .is-mobile-device .landing-logo {
   width: 60px;
@@ -1466,21 +1466,20 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .landing-cta-ghost {
   margin-left: 8px !important;
 }
-.is-mobile-device .landing-features {
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 32px 16px;
+
+/* ─── FEATURES POPUP (MOBILE) ────────────────────────────── */
+.is-mobile-device .features-popup-card {
+  width: 92% !important;
+  max-width: 380px;
+  padding: 28px 16px 20px;
+  max-height: 75vh;
 }
-.is-mobile-device .landing-feat {
-  padding: 20px;
-}
-.is-mobile-device .landing-tiers {
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 0 16px 32px;
-}
-.is-mobile-device .landing-tier {
-  padding: 24px 20px;
+.is-mobile-device .features-help-btn {
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
 }
 
 /* ─── NAV BAR (pre-app) ───────────────────────────────────── */

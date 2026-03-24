@@ -179,6 +179,36 @@
     }
     .pricing-popup-tier-desc { font-size: 12px; color: #6a6050; }
 
+    /* ─── FEATURES HELP BUTTON ─────────────────────────────── */
+    .features-help-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 200;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #e8c96a, #c9a84c);
+      color: #0a0a0a; border: none; cursor: pointer;
+      font-family: var(--font-display); font-size: 22px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .features-help-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(201,168,76,0.5); }
+    .features-popup-card {
+      background: var(--black-panel); border: 1px solid var(--black-border);
+      border-radius: 20px; padding: 32px 24px 24px;
+      max-width: 400px; width: 92%; text-align: center; position: relative;
+      transform: scale(0.95); transition: transform 0.3s ease;
+      max-height: 80vh; overflow-y: auto;
+    }
+    .auth-overlay.open .features-popup-card { transform: scale(1); }
+    .features-popup-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; text-align: left; }
+    .features-popup-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; background: var(--black-deep);
+      border: 1px solid var(--black-border); border-radius: 12px;
+    }
+    .features-popup-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+    .features-popup-name { font-size: 13px; font-weight: 600; color: #e8e0cc; margin-bottom: 2px; }
+    .features-popup-desc { font-size: 11px; color: #6a6050; line-height: 1.5; }
+
     /* ─── ONBOARDING MODAL ─────────────────────────────────── */
     .onboarding-overlay {
       position: fixed; inset: 0; z-index: 260;
@@ -584,8 +614,8 @@
     .tier-name{font-size:14px;font-weight:600;color:#e8e0cc;margin:8px 0 6px}
     .tier-feat{font-size:11px;color:#8a8070;line-height:1.8;text-align:left}
     /* --- LANDING PAGE --- */
-    .landing{display:none;position:fixed;inset:0;z-index:200;background:var(--black-deep);overflow-y:auto}.landing.visible{display:block}
-    .landing-hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
+    .landing{display:none;position:fixed;inset:0;z-index:200;background:var(--black-deep);overflow:hidden}.landing.visible{display:block}
+    .landing-hero{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
     .landing-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.06),transparent 70%);pointer-events:none}
     .landing-logo{width:80px;height:80px;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(201,168,76,0.3))}
     .landing-h1{font-family:var(--font-display);font-size:48px;font-weight:700;letter-spacing:0.06em;margin-bottom:8px}
@@ -606,7 +636,7 @@
     .landing-tier-period{font-size:12px;color:#5a5040;margin-bottom:16px}
     .landing-tier-list{text-align:left;font-size:12px;color:#8a8070;line-height:2}
     .landing-tier-cta{display:block;width:100%;padding:10px;margin-top:16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-display);border:none}
-    .is-mobile-device .landing-features,.is-mobile-device .landing-tiers{grid-template-columns:1fr}.is-mobile-device .landing-h1{font-size:32px}.is-mobile-device .td-tab-bar{flex-wrap:wrap}
+    .is-mobile-device .landing-h1{font-size:32px}.is-mobile-device .td-tab-bar{flex-wrap:wrap}
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
     .main-panel{position:relative}
     .slab-zone{position:absolute;left:0;top:72px;bottom:0;width:44px;z-index:20;pointer-events:none}
@@ -1873,18 +1903,7 @@
     <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center"><button class="landing-cta" onclick="getStartedFree()">Get Started Free</button><button class="landing-cta-ghost" onclick="openPricingPopup()">View Pricing</button></div>
     <div style="margin-top:16px"><button class="landing-cta-ghost" onclick="openAuth()" style="border-color:rgba(201,168,76,0.5);margin-left:0">Sign In</button></div>
   </div>
-  <div class="landing-features">
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F9EE;</div><div class="landing-feat-title">AI Math Tutor</div><div class="landing-feat-desc">Algebra through calculus with step-by-step LaTeX solutions. Switches to advanced model for complex topics.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F4DD;</div><div class="landing-feat-title">Essay Coach</div><div class="landing-feat-desc">Thesis building, outlining, drafting, proofreading. Grade-level calibrated with humanizer mode.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F9E0;</div><div class="landing-feat-title">Interactive Quizzes</div><div class="landing-feat-desc">AI-generated quizzes with instant feedback, scoring, and explanations. Track mastery over time.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F4F7;</div><div class="landing-feat-title">Homework Scanner</div><div class="landing-feat-desc">Photograph any problem. Claude Vision reads it and provides step-by-step help.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F3AF;</div><div class="landing-feat-title">ACT/SAT Prep</div><div class="landing-feat-desc">Real-format practice questions. Instant scoring. Strategy coaching. Score tracking.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F469;&#x200D;&#x1F3EB;</div><div class="landing-feat-title">Teacher Dashboard</div><div class="landing-feat-desc">Class management, assignments, student progress reports. Standards-aligned. FERPA ready.</div></div>
-  </div>
-  <div style="text-align:center;padding:40px 20px">
-    <div style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:16px;color:rgba(200,180,130,0.3);max-width:500px;margin:0 auto 8px">&#x201C;Built by a student who was tired of AI tools that don&#x2019;t understand homework.&#x201D;</div>
-    <div style="font-size:11px;color:#5a5040">&#x2014; Carsyn DeAngelis, Creator</div>
-  </div>
+  <button class="features-help-btn" onclick="openFeaturesPopup()" title="What can Obsidia do?">?</button>
 </div>
 <button id="exitSimulatorBtn" onclick="exitSimulatorMode()" style="position:fixed; top:40px; right:40px; z-index:999999; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border-radius:30px; border:none; cursor:pointer; display:none; box-shadow:0 0 30px rgba(201,168,76,0.3); transition: transform 0.2s ease;">
   Switch to Desktop
@@ -3582,6 +3601,18 @@
     </div>
 
     <button class="auth-skip" onclick="continueAsGuest()" style="margin-top:20px;">Continue as Guest</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     FEATURES POPUP (? button)
+══════════════════════════════════════════════════ -->
+<div class="auth-overlay" id="featuresOverlay" onclick="if(event.target===this)closeFeaturesPopup()" style="z-index:260;">
+  <div class="features-popup-card">
+    <button class="pricing-popup-close" onclick="closeFeaturesPopup()">&times;</button>
+    <div class="pricing-popup-title"><span class="gold-text">What Obsidia</span> Can Do</div>
+    <div class="pricing-popup-subtitle">Everything available in the app right now.</div>
+    <div class="features-popup-list" id="featuresPopupList"></div>
   </div>
 </div>
 
@@ -7257,6 +7288,35 @@ function openPricingPopup() {
 }
 function closePricingPopup() {
   document.getElementById('pricingOverlay').classList.remove('open');
+}
+
+/* ── Features Popup (? button) ─────────────────────────
+   UPDATE THIS ARRAY whenever features change.
+   The popup auto-renders from this single source of truth.
+──────────────────────────────────────────────────────── */
+var OBSIDIA_FEATURES = [
+  { icon: '\u{1F9EE}', name: 'AI Math Tutor', desc: 'Algebra through calculus with step-by-step LaTeX solutions. Switches to advanced model for complex topics.' },
+  { icon: '\u{1F4DD}', name: 'Essay Coach', desc: 'Thesis building, outlining, drafting, proofreading. Grade-level calibrated with humanizer mode.' },
+  { icon: '\u{1F9E0}', name: 'Interactive Quizzes', desc: 'AI-generated quizzes with instant feedback, scoring, and explanations. Track mastery over time.' },
+  { icon: '\u{1F4F7}', name: 'Homework Scanner', desc: 'Photograph any problem. Claude Vision reads it and provides step-by-step help.' },
+  { icon: '\u{1F3AF}', name: 'ACT/SAT Prep', desc: 'Real-format practice questions. Instant scoring. Strategy coaching. Score tracking.' },
+  { icon: '\u{1F469}\u{200D}\u{1F3EB}', name: 'Teacher Dashboard', desc: 'Class management, assignments, student progress reports. Standards-aligned. FERPA ready.' },
+  { icon: '\u{1F4DA}', name: 'Flashcard Decks', desc: 'Create, study, and master flashcards with spaced repetition. AI generates cards from any topic.' },
+  { icon: '\u{1F3A8}', name: 'Themes & XP', desc: 'Earn XP, unlock achievements, and customize your experience with dark/light themes.' }
+];
+
+function openFeaturesPopup() {
+  var list = document.getElementById('featuresPopupList');
+  list.innerHTML = OBSIDIA_FEATURES.map(function(f) {
+    return '<div class="features-popup-item">' +
+      '<div class="features-popup-icon">' + f.icon + '</div>' +
+      '<div><div class="features-popup-name">' + f.name + '</div>' +
+      '<div class="features-popup-desc">' + f.desc + '</div></div></div>';
+  }).join('');
+  document.getElementById('featuresOverlay').classList.add('open');
+}
+function closeFeaturesPopup() {
+  document.getElementById('featuresOverlay').classList.remove('open');
 }
 
 /* ── TEST: Get Started Free bypasses auth (remove before release) ── */
