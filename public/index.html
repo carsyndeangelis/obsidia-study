@@ -3931,9 +3931,9 @@ function navigate(pageId) {
           setTimeout(mathSnapStartCamera, 200);
         }
       }
-      /* Stop camera when leaving math page */
-      if (leavingPage === 'math' && typeof mathSnapStopCamera === 'function') {
-        mathSnapStopCamera();
+      /* Pause camera when leaving math page (keeps stream alive — no re-prompt) */
+      if (leavingPage === 'math' && typeof mathSnapPauseCamera === 'function') {
+        mathSnapPauseCamera();
       }
 
       /* Restore input state */
@@ -4444,15 +4444,22 @@ var _snapCrop = {
 };
 
 function mathSnapStartCamera() {
-  if (_mathSnapStream) return; // already running
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  var vid = document.getElementById('snapCameraFeed');
   // Hide main nav to maximize camera space
   var mainNav = document.querySelector('nav');
   if (mainNav) mainNav.style.setProperty('display', 'none', 'important');
+
+  // If we already have a cached stream that's still active, just reattach it
+  if (_mathSnapStream && _mathSnapStream.active) {
+    if (vid && vid.srcObject !== _mathSnapStream) vid.srcObject = _mathSnapStream;
+    if (vid && vid.paused) vid.play().catch(function(){});
+    return;
+  }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
   navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     .then(function(stream) {
       _mathSnapStream = stream;
-      var vid = document.getElementById('snapCameraFeed');
       if (vid) vid.srcObject = stream;
     })
     .catch(function(err) {
@@ -4461,6 +4468,25 @@ function mathSnapStartCamera() {
     });
 }
 
+/* Pause camera (detach from video) — keeps the stream alive so no re-prompt */
+function mathSnapPauseCamera() {
+  var vid = document.getElementById('snapCameraFeed');
+  if (vid) { try { vid.pause(); } catch(e) {} vid.srcObject = null; }
+  // Reset torch state and clear any pending flash timer
+  _mathSnapTorchOn = false;
+  if (_flashPressTimer) { clearTimeout(_flashPressTimer); _flashPressTimer = null; }
+  var flashBtn = document.getElementById('snapFlashlightBtn');
+  if (flashBtn) {
+    flashBtn.style.setProperty('background', 'rgba(0,0,0,0.5)', 'important');
+    flashBtn.style.setProperty('color', '#c9a84c', 'important');
+    flashBtn.style.setProperty('border-color', '#c9a84c', 'important');
+  }
+  // Restore main nav
+  var mainNav = document.querySelector('nav');
+  if (mainNav) mainNav.style.setProperty('display', 'flex', 'important');
+}
+
+/* Full stop — kills tracks, revokes permission. Only for true teardown. */
 function mathSnapStopCamera() {
   if (_mathSnapStream) {
     _mathSnapStream.getTracks().forEach(function(t) { t.stop(); });
@@ -4481,6 +4507,14 @@ function mathSnapStopCamera() {
   var mainNav = document.querySelector('nav');
   if (mainNav) mainNav.style.setProperty('display', 'flex', 'important');
 }
+
+/* Kill camera stream for real when the page unloads */
+window.addEventListener('beforeunload', function() {
+  if (_mathSnapStream) {
+    _mathSnapStream.getTracks().forEach(function(t) { t.stop(); });
+    _mathSnapStream = null;
+  }
+});
 
 function mathSnapMode(mode) {
   _mathSnapMode = mode;
@@ -4559,7 +4593,7 @@ function mathSnapCapture() {
       if (dock) dock.style.setProperty('display', 'none', 'important');
       if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
       if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
-      mathSnapStopCamera();
+      mathSnapPauseCamera();
 
       // Initialize native crop tool
       _snapCrop.destroy();
@@ -4725,7 +4759,7 @@ function closeMultiSnapViewer() {
 function mathSnapAttachAll() {
   if (_multiSnapImages.length === 0) return;
   closeMultiSnapViewer();
-  mathSnapStopCamera();
+  mathSnapPauseCamera();
   document.body.classList.add('math-snap-dismissed');
   var snapUI = document.querySelector('.mobile-math-snap-ui');
   if (snapUI) snapUI.style.display = 'none';
@@ -4819,7 +4853,7 @@ function mathSnapSolve() {
   }
 
   // Stop camera, dismiss snap UI, show math chat
-  mathSnapStopCamera();
+  mathSnapPauseCamera();
   document.body.classList.add('math-snap-dismissed');
   // Inline !important beats CSS !important, so hide via JS directly
   var snapUI = document.querySelector('.mobile-math-snap-ui');
@@ -4841,7 +4875,7 @@ function mathSnapSolve() {
 
 function mathSnapGoToChat() {
   // Stop camera, dismiss snap UI, show desktop math chat
-  mathSnapStopCamera();
+  mathSnapPauseCamera();
   document.body.classList.add('math-snap-dismissed');
   // Inline !important beats CSS !important, so hide via JS directly
   var snapUI = document.querySelector('.mobile-math-snap-ui');
@@ -4893,7 +4927,7 @@ function mathSnapHandleGalleryUpload(inputEl) {
       if (dock) dock.style.setProperty('display', 'none', 'important');
       if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
       if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
-      mathSnapStopCamera();
+      mathSnapPauseCamera();
 
       // Init native crop tool
       _snapCrop.destroy();
