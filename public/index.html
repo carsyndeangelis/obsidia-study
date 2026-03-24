@@ -2465,11 +2465,11 @@
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math">
   <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
-  <div class="mobile-math-snap-ui" style="display:none; position:relative !important; width:100% !important; min-height:calc(100vh - 65px) !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important;">
+  <div class="mobile-math-snap-ui" style="display:none; position:relative !important; width:100% !important; height:calc(100dvh - 65px) !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; touch-action:none !important;">
     <button class="snap-back-btn" onclick="navigateBack()" style="position:absolute !important; top:20px !important; left:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid #c9a84c !important; color:#c9a84c !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px;"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
-    <button id="snapFlashlightBtn" onpointerdown="mathSnapFlashPress()" onpointerup="mathSnapFlashRelease()" onpointerleave="mathSnapFlashRelease()" oncontextmenu="event.preventDefault()" style="position:absolute !important; top:20px !important; right:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid rgba(255,255,255,0.4) !important; color:#fff !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important; transition:transform 0.15s cubic-bezier(0.1, 0.7, 0.1, 1), background 0.2s ease, border-color 0.2s ease !important; touch-action:none !important; transform-origin:center !important;">
+    <button id="snapFlashlightBtn" onpointerdown="mathSnapFlashPress()" onpointerup="mathSnapFlashRelease()" onpointerleave="mathSnapFlashRelease()" oncontextmenu="event.preventDefault()" style="position:absolute !important; top:20px !important; right:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid #c9a84c !important; color:#c9a84c !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important; transition:transform 0.15s cubic-bezier(0.1, 0.7, 0.1, 1), background 0.2s ease, border-color 0.2s ease !important; touch-action:none !important; transform-origin:center !important;">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
     </button>
     <div class="snap-viewfinder" id="snapViewfinder" style="position:absolute !important; top:0 !important; left:0 !important; width:100% !important; height:100% !important; overflow:hidden !important; z-index:1 !important;">
@@ -3952,6 +3952,21 @@ function navigate(pageId) {
       nextEl.classList.add('active');
       currentPage = pageId;
 
+      // Annihilate scrollbars uniquely for the mobile Math Camera view
+      var mainContent = document.getElementById('mainContent');
+      if (pageId === 'math' && document.body.classList.contains('is-mobile-device')) {
+        if (mainContent) mainContent.style.setProperty('overflow', 'hidden', 'important');
+        document.body.style.setProperty('overflow', 'hidden', 'important');
+        document.documentElement.style.setProperty('overflow', 'hidden', 'important');
+      } else {
+        if (mainContent) {
+          mainContent.style.removeProperty('overflow');
+          mainContent.style.setProperty('overflow-y', 'auto', 'important');
+        }
+        document.body.style.removeProperty('overflow');
+        document.documentElement.style.removeProperty('overflow');
+      }
+
       /* Update browser history (makes Chrome/Safari back button work) */
       if (!_isNavigatingFromHistory) {
         history.pushState({ page: pageId }, '', '#' + pageId);
@@ -4331,8 +4346,8 @@ function mathSnapStopCamera() {
   var flashBtn = document.getElementById('snapFlashlightBtn');
   if (flashBtn) {
     flashBtn.style.setProperty('background', 'rgba(0,0,0,0.5)', 'important');
-    flashBtn.style.setProperty('color', '#fff', 'important');
-    flashBtn.style.setProperty('border-color', 'rgba(255,255,255,0.4)', 'important');
+    flashBtn.style.setProperty('color', '#c9a84c', 'important');
+    flashBtn.style.setProperty('border-color', '#c9a84c', 'important');
   }
   // Restore main nav
   var mainNav = document.querySelector('nav');
@@ -4809,8 +4824,8 @@ function mathSnapToggleFlash() {
         btn.style.setProperty('border-color', '#c9a84c', 'important');
       } else {
         btn.style.setProperty('background', 'rgba(0,0,0,0.5)', 'important');
-        btn.style.setProperty('color', '#fff', 'important');
-        btn.style.setProperty('border-color', 'rgba(255,255,255,0.4)', 'important');
+        btn.style.setProperty('color', '#c9a84c', 'important');
+        btn.style.setProperty('border-color', '#c9a84c', 'important');
       }
     }
   }).catch(function(err) {
