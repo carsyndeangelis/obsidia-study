@@ -4289,8 +4289,39 @@ function mathSnapMode(mode) {
 }
 
 function mathSnapCapture() {
-  var input = document.getElementById('mathSnapFileInput');
-  if (input) input.click();
+  var video = document.getElementById('snapCameraFeed');
+
+  // If video is actively streaming, extract a frame instantly
+  if (video && video.readyState >= 2) {
+    var canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    var ctx = canvas.getContext('2d');
+
+    // Draw the current video frame onto the invisible canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Extract the raw JPEG image data instantly
+    _mathSnapData = canvas.toDataURL('image/jpeg', 0.85);
+
+    // Switch UI to captured state
+    var preview = document.getElementById('snapPreviewOverlay');
+    var img = document.getElementById('snapPreviewImg');
+    var reticle = document.getElementById('snapReticle');
+    var dock = document.querySelector('.snap-dock');
+
+    if (img) img.src = _mathSnapData;
+    if (preview) preview.style.display = 'block';
+    if (reticle) reticle.style.display = 'none';
+    if (dock) dock.style.display = 'none';
+
+    // Stop the actual camera hardware to freeze the screen
+    mathSnapStopCamera();
+  } else {
+    // Ultimate fallback if WebRTC failed or testing on desktop PC
+    var input = document.getElementById('mathSnapFileInput');
+    if (input) input.click();
+  }
 }
 
 function mathSnapHandleFile(inputEl) {
@@ -4322,10 +4353,18 @@ function mathSnapRetake() {
   _mathSnapData = null;
   var preview = document.getElementById('snapPreviewOverlay');
   var reticle = document.getElementById('snapReticle');
-  if (preview) preview.style.display = 'none';
-  if (reticle) reticle.style.display = 'flex';
   var dock = document.querySelector('.snap-dock');
-  if (dock) dock.classList.remove('snap-dock-captured');
+
+  if (preview) preview.style.display = 'none';
+  if (reticle) reticle.style.display = 'block';
+  if (dock) dock.style.display = 'flex';
+
+  // Clean up the image tag to save device memory
+  var img = document.getElementById('snapPreviewImg');
+  if (img) img.src = '';
+
+  // Restart the camera feed hardware
+  mathSnapStartCamera();
 }
 
 function mathSnapSolve() {
