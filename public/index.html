@@ -7248,8 +7248,12 @@ function runStressTest() {
 function checkMobileState() {
   var isActualPhone = window.innerWidth <= 768;
   var simToggle = document.getElementById('sandboxMobileSim');
-  var isSimulated = simToggle ? simToggle.checked : false;
+
+  // Detect simulator from toggle OR from already-applied body class (survives race conditions)
+  var alreadySimulated = document.body.classList.contains('is-simulated');
+  var isSimulated = (simToggle ? simToggle.checked : false) || alreadySimulated;
   var isMobile = isActualPhone || isSimulated;
+
   document.body.classList.toggle('is-mobile-device', isMobile);
   document.body.classList.toggle('is-simulated', isSimulated && !isActualPhone);
 }
