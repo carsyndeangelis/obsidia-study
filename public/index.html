@@ -646,6 +646,8 @@
     /* Hide mob-btn and sidebar-overlay on desktop unless simulator active */
     body:not(.is-mobile-device) .mob-btn { display: none !important; }
     body:not(.is-mobile-device) .sidebar-overlay { display: none; }
+    /* Strictly isolate Mobile Math Camera from Desktop Math Chat view */
+    body:not(.is-mobile-device) .mobile-math-snap-ui { display: none !important; }
     /* ─── RESET ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; height: 100%; }
