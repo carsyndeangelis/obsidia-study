@@ -4759,23 +4759,26 @@ function closeMultiSnapViewer() {
 function mathSnapAttachAll() {
   if (_multiSnapImages.length === 0) return;
   closeMultiSnapViewer();
-  mathSnapPauseCamera();
-  document.body.classList.add('math-snap-dismissed');
-  var snapUI = document.querySelector('.mobile-math-snap-ui');
-  if (snapUI) snapUI.style.display = 'none';
-  for (var i = 0; i < _multiSnapImages.length; i++) {
-    showImageAttachmentPreview('math', _multiSnapImages[i]);
-  }
-  _multiSnapImages = [];
-  renderMultiSnapGallery();
-  // Pre-fill prompt
-  var chatInput = document.getElementById('mathChatInput');
-  if (chatInput) {
-    chatInput.value = 'Solve these math problems. Show all steps.';
-    chatInput.dispatchEvent(new Event('input'));
-    var sendBtn = document.getElementById('mathSendBtn');
-    if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
-  }
+  var images = _multiSnapImages.slice();
+
+  _snapTransition({
+    flyImage: null,
+    onMidpoint: function() {
+      for (var i = 0; i < images.length; i++) {
+        showImageAttachmentPreview('math', images[i]);
+      }
+      _multiSnapImages = [];
+      renderMultiSnapGallery();
+      // Pre-fill prompt
+      var chatInput = document.getElementById('mathChatInput');
+      if (chatInput) {
+        chatInput.value = 'Solve these math problems. Show all steps.';
+        chatInput.dispatchEvent(new Event('input'));
+        var sendBtn = document.getElementById('mathSendBtn');
+        if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
+      }
+    }
+  });
 }
 
 function mathSnapHandleFile(inputEl) {
@@ -4842,6 +4845,80 @@ function mathSnapRetake() {
   mathSnapStartCamera();
 }
 
+/* ── Animated camera→chat transition (Apple-style crossfade + image fly-down) ── */
+function _snapTransition(opts) {
+  // opts: { flyImage: element|null, onMidpoint: function, onDone: function }
+  var snapUI = document.querySelector('.mobile-math-snap-ui');
+  var chatUI = document.querySelector('.desktop-math-ui');
+  if (!snapUI || !document.body.classList.contains('is-mobile-device')) {
+    // Desktop / fallback — instant swap
+    mathSnapPauseCamera();
+    document.body.classList.add('math-snap-dismissed');
+    if (snapUI) snapUI.style.display = 'none';
+    if (opts.onMidpoint) opts.onMidpoint();
+    if (opts.onDone) opts.onDone();
+    return;
+  }
+
+  mathSnapPauseCamera();
+
+  // ── 1. Image fly-down clone ──
+  var clone = null;
+  if (opts.flyImage && opts.flyImage.naturalWidth) {
+    var srcRect = opts.flyImage.getBoundingClientRect();
+    var inputBar = document.querySelector('.math-mobile-input-bar');
+    var tgtRect = inputBar ? inputBar.getBoundingClientRect() : null;
+
+    clone = document.createElement('img');
+    clone.src = opts.flyImage.src;
+    clone.className = 'snap-fly-clone';
+    clone.style.top = srcRect.top + 'px';
+    clone.style.left = srcRect.left + 'px';
+    clone.style.width = srcRect.width + 'px';
+    clone.style.height = srcRect.height + 'px';
+    document.body.appendChild(clone);
+
+    // Force reflow then animate to target
+    clone.offsetHeight;
+    if (tgtRect) {
+      clone.classList.add('fly-to-target');
+      clone.style.top = (tgtRect.top + tgtRect.height / 2 - 24) + 'px';
+      clone.style.left = (tgtRect.left + tgtRect.width / 2 - 24) + 'px';
+      clone.style.width = '48px';
+      clone.style.height = '48px';
+    }
+  }
+
+  // ── 2. Crossfade: camera fades out, chat fades in ──
+  snapUI.classList.add('snap-exiting');
+  snapUI.style.opacity = '1';
+  snapUI.offsetHeight; // reflow
+  snapUI.style.opacity = '0';
+
+  // Pre-show chat with entering animation
+  document.body.classList.add('math-snap-dismissed');
+  if (chatUI) chatUI.classList.add('chat-entering');
+
+  // Fire midpoint callback (attach images, send messages, etc.)
+  if (opts.onMidpoint) opts.onMidpoint();
+
+  // ── 3. After transitions complete, clean up DOM ──
+  setTimeout(function() {
+    // Finalize snap UI hide
+    snapUI.classList.remove('snap-exiting');
+    snapUI.style.opacity = '';
+    snapUI.style.display = 'none';
+
+    // Clean chat entering class
+    if (chatUI) chatUI.classList.remove('chat-entering');
+
+    // Remove flying clone
+    if (clone && clone.parentNode) clone.parentNode.removeChild(clone);
+
+    if (opts.onDone) opts.onDone();
+  }, 500);
+}
+
 function mathSnapSolve() {
   if (!_mathSnapData) return;
 
@@ -4852,34 +4929,31 @@ function mathSnapSolve() {
     _snapCrop.destroy();
   }
 
-  // Stop camera, dismiss snap UI, show math chat
-  mathSnapPauseCamera();
-  document.body.classList.add('math-snap-dismissed');
-  // Inline !important beats CSS !important, so hide via JS directly
-  var snapUI = document.querySelector('.mobile-math-snap-ui');
-  if (snapUI) snapUI.style.display = 'none';
+  var capturedData = _mathSnapData;
+  var flyImg = document.getElementById('snapPreviewImg');
 
-  // Attach the captured image to the math chat
-  showImageAttachmentPreview('math', _mathSnapData);
-
-  // Pre-fill prompt and send
-  var chatInput = document.getElementById('mathChatInput');
-  if (chatInput) {
-    chatInput.value = 'Solve this math problem. Show all steps.';
-    chatInput.dispatchEvent(new Event('input'));
-    var sendBtn = document.getElementById('mathSendBtn');
-    if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
-  }
-  _mathSnapData = null;
+  _snapTransition({
+    flyImage: flyImg,
+    onMidpoint: function() {
+      // Attach the captured image to the math chat
+      showImageAttachmentPreview('math', capturedData);
+      // Pre-fill prompt and send
+      var chatInput = document.getElementById('mathChatInput');
+      if (chatInput) {
+        chatInput.value = 'Solve this math problem. Show all steps.';
+        chatInput.dispatchEvent(new Event('input'));
+        var sendBtn = document.getElementById('mathSendBtn');
+        if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
+      }
+    },
+    onDone: function() {
+      _mathSnapData = null;
+    }
+  });
 }
 
 function mathSnapGoToChat() {
-  // Stop camera, dismiss snap UI, show desktop math chat
-  mathSnapPauseCamera();
-  document.body.classList.add('math-snap-dismissed');
-  // Inline !important beats CSS !important, so hide via JS directly
-  var snapUI = document.querySelector('.mobile-math-snap-ui');
-  if (snapUI) snapUI.style.display = 'none';
+  _snapTransition({ flyImage: null });
 }
 
 function mathSnapOpenGallery() {

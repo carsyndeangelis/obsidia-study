@@ -499,6 +499,42 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   display: none !important;
 }
 
+/* ─── CAMERA → CHAT TRANSITION (Apple-style crossfade + fly-down) ── */
+
+/* During transition: both layers visible, stacked, animating opacity */
+.is-mobile-device .mobile-math-snap-ui.snap-exiting {
+  display: flex !important;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.is-mobile-device .desktop-math-ui.chat-entering {
+  display: flex !important;
+  opacity: 0;
+  animation: chatFadeIn 0.35s cubic-bezier(0.0, 0, 0.2, 1) 0.1s forwards;
+}
+@keyframes chatFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* The flying image clone */
+.snap-fly-clone {
+  position: fixed !important;
+  z-index: 9999 !important;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  object-fit: cover;
+  pointer-events: none;
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, width, height, top, left, opacity, border-radius;
+}
+.snap-fly-clone.fly-to-target {
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(201, 168, 76, 0.3);
+  opacity: 0.6;
+}
+
 /* ─── MOBILE MATH CHAT OVERHAUL (Gemini-style) ────────── */
 
 /* Hide desktop-only chrome on mobile */
