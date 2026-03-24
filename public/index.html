@@ -760,6 +760,17 @@
     #page-math.page-leaving {
       display: flex;
     }
+    /* ─── EXIT SIMULATOR BUTTON ──────────────────────────────── */
+    body.is-simulated #exitSimulatorBtn {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    #exitSimulatorBtn:hover {
+      transform: scale(1.05);
+    }
+
     /* ─── BREATHING LOGO ───────────────────────────────────── */
     @keyframes breathe {
       0%, 100% { transform: scale(1); }
@@ -1834,6 +1845,9 @@
     <div style="font-size:12px;color:#5a5040">&#x2014; Carsyn DeAngelis, Creator</div>
   </div>
 </div>
+<button id="exitSimulatorBtn" onclick="exitSimulatorMode()" style="position:fixed; top:40px; right:40px; z-index:999999; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border-radius:30px; border:none; cursor:pointer; display:none; box-shadow:0 0 30px rgba(201,168,76,0.3); transition: transform 0.2s ease;">
+  Switch to Desktop
+</button>
 <div class="app-layout">
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
 <div class="toast-container" id="toastContainer"></div>
@@ -7243,6 +7257,15 @@ window.addEventListener('resize', checkMobileState);
 document.addEventListener('DOMContentLoaded', checkMobileState);
 // Run immediately as well for scripts that load after DOM
 checkMobileState();
+
+function exitSimulatorMode() {
+  var simToggle = document.getElementById('sandboxMobileSim');
+  if (simToggle) {
+    simToggle.checked = false;
+    if (typeof checkMobileState === 'function') checkMobileState();
+    if (typeof saveSandboxPrefs === 'function') saveSandboxPrefs();
+  }
+}
 
 // ── Sandbox Preferences ──
 function saveSandboxPrefs() {
