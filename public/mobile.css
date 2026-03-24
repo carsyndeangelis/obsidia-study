@@ -717,8 +717,12 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   min-height: 36px;
 }
 .is-mobile-device .snap-pill-active {
-  background: rgba(201, 168, 76, 0.2);
-  color: #c9a84c;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+}
+.is-mobile-device .snap-pill:not(.snap-pill-active) {
+  background: transparent !important;
+  color: #888 !important;
 }
 
 /* Shutter button — premium gold Obsidia brand */
