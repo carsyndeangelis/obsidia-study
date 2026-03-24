@@ -1182,6 +1182,9 @@
     details.math-step[open] > .math-step-summary .math-step-chevron { transform: rotate(180deg); }
     .math-step-body { padding: 4px 14px 12px; font-size: 13px; line-height: 1.65; color: #c8b88a; border-top: 1px solid rgba(201,168,76,0.08); }
     .math-step-body .katex-display { margin: 8px 0; }
+    .graph-cmd-badge { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0; padding: 8px 14px; border-radius: 10px; background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04)); border: 1px solid rgba(201,168,76,0.25); color: #c9a84c; font-size: 12px; font-weight: 600; font-family: var(--font-ui); cursor: default; }
+    .graph-cmd-badge code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; font-size: 11px; color: #e0d6c2; font-family: monospace; }
+    .graph-cmd-badge svg { flex-shrink: 0; color: #c9a84c; }
     .msg.ai .msg-bubble { background: var(--black-card); border: 1px solid var(--black-border); border-bottom-left-radius: 4px; }
     .msg.user { flex-direction: row-reverse; }
     .msg.user .msg-bubble { background: rgba(201,168,76,0.10); border: 1px solid rgba(201,168,76,0.22); border-bottom-right-radius: 4px; }
@@ -1997,7 +2000,7 @@
         <div class="slab-re slab-title" id="sre0">Tome of Obsidia</div>
         <div class="slab-re slab-sub" id="sre1">Inscriptions for the Seeker</div>
         <div class="slab-re slab-divider" id="sre2"></div>
-        <div class="slab-re slab-row" id="sre3"><div class="slab-rn">I.</div><div class="slab-rx"><b>The Core Instruments</b> &mdash; <b>Math AI:</b> Conquer numbers. Solve, Explain, Graph, or Practice algebra to calculus. <b>Essay Writer:</b> Perfect your prose. Set your exact grade level (6th&ndash;Pro) and toggle the Humanizer. <b>Study &amp; Notes:</b> Map concepts or transcribe lectures instantly.</div></div>
+        <div class="slab-re slab-row" id="sre3"><div class="slab-rn">I.</div><div class="slab-rx"><b>The Core Instruments</b> &mdash; <b>Math AI:</b> Conquer numbers. Solve, Explain, Graph, or Practice algebra to calculus. The AI can auto-launch the Desmos graphing calculator and plot equations in real time. <b>Essay Writer:</b> Perfect your prose. Set your exact grade level (6th&ndash;Pro) and toggle the Humanizer. <b>Study &amp; Notes:</b> Map concepts or transcribe lectures instantly.</div></div>
         <div class="slab-re slab-row" id="sre4"><div class="slab-rn">II.</div><div class="slab-rx"><b>Verify &amp; Grade</b> &mdash; <b>Double Check:</b> Trust, but verify facts and cross-reference. <b>Grading:</b> Submit a rubric and let the AI score with detailed feedback. <b>Test Prep:</b> Train for ACTs and SATs with realistic problems.</div></div>
         <div class="slab-re slab-row" id="sre5"><div class="slab-rn">III.</div><div class="slab-rx"><b>Productivity</b> &mdash; <b>Smart Scan (Quick Snap):</b> Press <b>Q</b> to upload photos of textbooks or worksheets. <b>Analytics &amp; Streaks:</b> Track XP, master topics, and maintain your daily flame.</div></div>
         <div class="slab-re slab-row" id="sre6"><div class="slab-rn">IV.</div><div class="slab-rx"><b>Personal Intelligence</b> &mdash; Complete the one-time quiz so the AI knows your grade, state, classes, and learning style. Every answer becomes tailored to <b>your</b> exact curriculum.</div></div>
@@ -6091,6 +6094,39 @@ async function streamAIResponse(containerId, message, page, vars, historyKey, im
       });
     });
 
+    // ── [GRAPH: ...] → Auto-open Desmos modal and inject equations ──
+    var graphMatches = fullText.match(/\[GRAPH:\s*(.+?)\]/gi);
+    if (graphMatches && graphMatches.length > 0) {
+      var graphEquations = graphMatches.map(function(m) {
+        return m.replace(/^\[GRAPH:\s*/i, '').replace(/\]$/, '').trim();
+      });
+      // Open the Desmos modal with a slight delay so the UI settles
+      setTimeout(function() {
+        openDesmosModal();
+        // Wait for Desmos to initialize (openDesmosModal has its own 100ms delay)
+        setTimeout(function() {
+          if (!_desmosCalcInstance) return;
+          graphEquations.forEach(function(eq, i) {
+            try {
+              _desmosCalcInstance.setExpression({ id: 'ai_graph_' + i, latex: eq, color: i === 0 ? '#c9a84c' : undefined });
+            } catch(e) { console.warn('Desmos inject failed:', eq, e); }
+          });
+          // Fit the viewport to the plotted expressions
+          try {
+            var bounds = _desmosCalcInstance.graphpaperBounds;
+            if (bounds && bounds.mathCoordinates) {
+              _desmosCalcInstance.setMathBounds({
+                left: bounds.mathCoordinates.left * 1.2,
+                right: bounds.mathCoordinates.right * 1.2,
+                bottom: bounds.mathCoordinates.bottom * 1.2,
+                top: bounds.mathCoordinates.top * 1.2
+              });
+            }
+          } catch(e) {}
+        }, 350);
+      }, 200);
+    }
+
     // Inject Desmos graphs into any desmos containers in this bubble
     if (typeof Desmos !== 'undefined') {
       var desmosEls = bubble.querySelectorAll('.desmos-calculator');
@@ -6540,6 +6576,13 @@ function copyCodeBlock(btn) {
 
 /* ── Markdown Renderer with KaTeX Math ── */
 function renderMarkdown(text) {
+  // ── [GRAPH: ...] command tags → inline badge ──
+  var _graphCmds = [];
+  text = text.replace(/\[GRAPH:\s*(.+?)\]/gi, function(m, eq) {
+    _graphCmds.push(eq.trim());
+    return '%%GRAPHCMD' + (_graphCmds.length - 1) + '%%';
+  });
+
   // Protect code blocks and extract desmos graphs
   var codeBlocks = [];
   var desmosBlocks = [];
@@ -6628,6 +6671,11 @@ function renderMarkdown(text) {
   // Restore desmos blocks as live graph containers
   desmosBlocks.forEach(function(block, i) {
     text = text.replace('%%DESMOS' + i + '%%', '<div id="' + block.id + '" class="desmos-calculator" data-eq="' + block.equation.replace(/"/g, '&quot;') + '"></div>');
+  });
+
+  // Restore [GRAPH:] commands as inline badges
+  _graphCmds.forEach(function(eq, i) {
+    text = text.replace('%%GRAPHCMD' + i + '%%', '<span class="graph-cmd-badge" data-eq="' + eq.replace(/"/g, '&quot;') + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Graphed: <code>' + eq.replace(/</g,'&lt;') + '</code></span>');
   });
 
   // Formula hover cards — wrap recognized theorem names
