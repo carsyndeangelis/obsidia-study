@@ -3965,21 +3965,6 @@ function navigate(pageId) {
       nextEl.classList.add('active');
       currentPage = pageId;
 
-      // Annihilate scrollbars uniquely for the mobile Math Camera view
-      var mainContent = document.getElementById('mainContent');
-      if (pageId === 'math' && document.body.classList.contains('is-mobile-device')) {
-        if (mainContent) mainContent.style.setProperty('overflow', 'hidden', 'important');
-        document.body.style.setProperty('overflow', 'hidden', 'important');
-        document.documentElement.style.setProperty('overflow', 'hidden', 'important');
-      } else {
-        if (mainContent) {
-          mainContent.style.removeProperty('overflow');
-          mainContent.style.removeProperty('overflow-y');
-        }
-        document.body.style.removeProperty('overflow');
-        document.documentElement.style.removeProperty('overflow');
-      }
-
       /* Update browser history (makes Chrome/Safari back button work) */
       if (!_isNavigatingFromHistory) {
         history.pushState({ page: pageId }, '', '#' + pageId);
