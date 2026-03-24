@@ -144,6 +144,14 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   flex: 1;
 }
 
+/* Hide main topbar when math page is active (prevents bleed-through) */
+.is-mobile-device.math-page-active .main-topbar {
+  display: none !important;
+}
+.is-mobile-device.math-page-active .main-panel {
+  display: none !important;
+}
+
 /* ─── TOP BAR ─────────────────────────────────────────────── */
 .is-mobile-device .main-topbar {
   height: 56px;
@@ -393,6 +401,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   height: 40px;
   min-width: 40px;
 }
+/* Show camera button on mobile for quick photo capture */
+.is-mobile-device .chat-camera-btn {
+  display: flex !important;
+}
 .is-mobile-device .chat-footer {
   margin-top: 4px;
   padding: 0 6px;
@@ -466,6 +478,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   flex-direction: column !important;
   min-height: 0 !important;
   overflow: hidden !important;
+  background: var(--black-deep, #080808) !important;
 }
 .is-mobile-device .math-mode-bar {
   flex-wrap: wrap;
@@ -657,13 +670,14 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .math-mobile-input-bar { display: none; }
 .is-mobile-device .math-mobile-input-bar {
   display: flex !important;
+  flex-wrap: wrap;
   flex-shrink: 0;
   position: relative;
   margin: 0 12px;
   margin-bottom: calc(12px + env(safe-area-inset-bottom, 0));
   background: var(--black-panel, #141414);
-  border: 1px solid var(--black-border, #1e1e1e);
-  border-radius: 24px; padding: 6px;
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 20px; padding: 6px;
   align-items: flex-end; gap: 4px;
   z-index: 20;
 }
@@ -1000,14 +1014,18 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ── Bottom dock — absolute-anchored to bottom of viewfinder ── */
 .is-mobile-device .snap-dock {
   position: absolute !important;
-  bottom: 40px !important;
+  bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
   left: 0 !important;
   right: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 24px !important;
+  gap: 20px !important;
   z-index: 10 !important;
+}
+.is-mobile-device .snap-upload-btn,
+.is-mobile-device .snap-skip-btn {
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
 }
 .is-mobile-device .snap-dock-captured .snap-shutter,
 .is-mobile-device .snap-dock-captured .snap-mode-pills {
@@ -1018,24 +1036,25 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* Mode pills */
 .is-mobile-device .snap-mode-pills {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
-  border-radius: 24px;
-  padding: 3px;
+  border-radius: 18px;
+  padding: 2px;
 }
 .is-mobile-device .snap-pill {
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.5);
   font-family: var(--font-ui);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 6px 12px;
+  border-radius: 16px;
   cursor: pointer;
   transition: all 0.25s ease;
-  min-height: 36px;
+  min-height: unset;
+  white-space: nowrap;
 }
 .is-mobile-device .snap-pill-active {
   background: rgba(255, 255, 255, 0.2) !important;
@@ -1067,6 +1086,52 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .snap-shutter svg {
   width: 44px;
   height: 44px;
+}
+
+/* ── Video Capture Mode — Shutter States ── */
+.is-mobile-device .snap-shutter.snap-shutter-video {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35) !important;
+  transition: transform 0.15s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.is-mobile-device .snap-shutter.snap-shutter-video svg circle,
+.is-mobile-device .snap-shutter.snap-shutter-video svg ellipse {
+  stroke: #ef4444 !important;
+}
+.is-mobile-device .snap-shutter.snap-shutter-recording {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.6) !important;
+  transform: scale(1.08);
+  animation: shutterRecPulse 1.2s ease-in-out infinite;
+}
+@keyframes shutterRecPulse {
+  0%, 100% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.8); }
+}
+@keyframes recBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* ── Video Preview Overlay ── */
+.is-mobile-device #videoPreviewOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 20;
+  padding: 20px;
+}
+.is-mobile-device #videoPreviewPlayer {
+  border-radius: 12px;
+  max-width: 92%;
+  max-height: calc(100% - 160px);
+  background: #111;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
 /* @media mirror block REMOVED — all mobile styles are class-based via
@@ -1284,10 +1349,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ─── MODALS & OVERLAYS ───────────────────────────────────── */
 .is-mobile-device .auth-card {
   width: 92% !important;
-  max-width: 400px;
+  max-width: 360px;
   margin: 16px;
-  padding: 24px 20px;
-  border-radius: 16px;
+  padding: 32px 24px 28px;
+  border-radius: 20px;
 }
 .is-mobile-device .auth-card h2 {
   font-size: 20px;
@@ -1369,10 +1434,18 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   font-size: 13px;
 }
 
+/* ─── PRICING POPUP (MOBILE) ─────────────────────────────── */
+.is-mobile-device .pricing-popup-card {
+  width: 92% !important;
+  max-width: 360px;
+  padding: 32px 20px 24px;
+  border-radius: 20px;
+}
+
 /* ─── LANDING PAGE ────────────────────────────────────────── */
 .is-mobile-device .landing-hero {
-  min-height: 60vh;
-  padding: 32px 20px;
+  height: 100%;
+  padding: 24px 20px;
 }
 .is-mobile-device .landing-logo {
   width: 60px;
@@ -1393,21 +1466,20 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .landing-cta-ghost {
   margin-left: 8px !important;
 }
-.is-mobile-device .landing-features {
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 32px 16px;
+
+/* ─── FEATURES POPUP (MOBILE) ────────────────────────────── */
+.is-mobile-device .features-popup-card {
+  width: 92% !important;
+  max-width: 380px;
+  padding: 28px 16px 20px;
+  max-height: 75vh;
 }
-.is-mobile-device .landing-feat {
-  padding: 20px;
-}
-.is-mobile-device .landing-tiers {
-  grid-template-columns: 1fr;
-  gap: 12px;
-  padding: 0 16px 32px;
-}
-.is-mobile-device .landing-tier {
-  padding: 24px 20px;
+.is-mobile-device .features-help-btn {
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
 }
 
 /* ─── NAV BAR (pre-app) ───────────────────────────────────── */
@@ -1496,6 +1568,46 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ─── GLOBAL ATTACHMENT PREVIEW ───────────────────────────── */
 .is-mobile-device .global-attachment-preview img {
   height: 48px;
+}
+/* Attachment preview inside mobile math input bar */
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 6px 6px 2px;
+  width: 100%;
+  order: -1;
+}
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview .preview-img-box {
+  position: relative;
+  display: inline-block;
+}
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview img {
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  background: #0c0c0c;
+}
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview .remove-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #e53e3e;
+  color: #fff;
+  border: 2px solid #141414;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  padding: 0;
 }
 
 /* ─── MATH CANVAS (whiteboard) ────────────────────────────── */

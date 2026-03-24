@@ -106,45 +106,108 @@
     .auth-overlay.open { opacity: 1; pointer-events: auto; }
     .auth-card {
       background: var(--black-panel); border: 1px solid var(--black-border);
-      border-radius: var(--radius-lg); padding: 36px 32px;
-      max-width: 380px; width: 90%; text-align: center;
-      
+      border-radius: 20px; padding: 40px 32px 32px;
+      max-width: 360px; width: 90%; text-align: center;
       transform: scale(0.95); transition: transform 0.3s ease;
     }
     .auth-overlay.open .auth-card { transform: scale(1); }
-    .auth-logo { margin-bottom: 20px; }
-    .auth-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.04em; }
-    .auth-subtitle { font-size: 13px; color: #6a6050; margin-bottom: 24px; line-height: 1.5; }
+    .auth-logo { margin-bottom: 16px; }
+    .auth-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.04em; }
+    .auth-subtitle { font-size: 13px; color: #6a6050; margin-bottom: 28px; line-height: 1.5; }
     .google-btn {
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      width: 100%; padding: 12px 20px;
-      background: #ffffff; color: #333; border: 1px solid #ddd; border-radius: var(--radius-sm);
+      width: 100%; padding: 13px 20px;
+      background: #ffffff; color: #333; border: 1px solid #ddd; border-radius: 10px;
       font-family: var(--font-ui); font-size: 14px; font-weight: 500;
       cursor: pointer; transition: var(--transition);
     }
-    .google-btn:hover { background: #f5f5f5;  }
+    .google-btn:hover { background: #f5f5f5; }
     .auth-email-form { width: 100%; margin-top: 0; }
     .auth-email-input {
-      width: 100%; padding: 12px 16px; box-sizing: border-box;
-      background: rgba(255,255,255,0.06); color: #e0d6c2; border: 1px solid var(--black-border); border-radius: var(--radius-sm);
+      width: 100%; padding: 13px 16px; box-sizing: border-box;
+      background: rgba(255,255,255,0.05); color: #e0d6c2; border: 1px solid var(--black-border); border-radius: 10px;
       font-family: var(--font-ui); font-size: 14px; outline: none; transition: var(--transition);
     }
     .auth-email-input:focus { border-color: var(--gold-bright); }
     .auth-email-input::placeholder { color: #5a5040; }
     .auth-email-btn {
-      width: 100%; padding: 12px 20px; margin-top: 10px;
-      background: linear-gradient(135deg, #e8c96a, #c9a84c); color: #0a0a0a; border: none; border-radius: var(--radius-sm);
+      width: 100%; padding: 13px 20px; margin-top: 10px;
+      background: linear-gradient(135deg, #e8c96a, #c9a84c); color: #0a0a0a; border: none; border-radius: 10px;
       font-family: var(--font-ui); font-size: 14px; font-weight: 600;
       cursor: pointer; transition: var(--transition);
     }
     .auth-email-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(201,168,76,0.3); }
     .auth-email-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
     .auth-email-msg { font-size: 12px; margin-top: 10px; line-height: 1.5; }
-    .auth-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
-    .auth-divider span { font-size: 11px; color: #5a5040; flex-shrink: 0; }
+    .auth-divider { display: flex; align-items: center; gap: 12px; margin: 18px 0; }
+    .auth-divider span { font-size: 11px; color: #4a4030; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.08em; }
     .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--black-border); }
     .auth-skip { font-size: 12px; color: #5a5040; cursor: pointer; transition: var(--transition); background: none; border: none; font-family: var(--font-ui); }
     .auth-skip:hover { color: var(--gold-bright); }
+
+    /* ─── PRICING POPUP ───────────────────────────────────── */
+    .pricing-popup-card {
+      background: var(--black-panel); border: 1px solid var(--black-border);
+      border-radius: var(--radius-lg); padding: 36px 28px;
+      max-width: 420px; width: 92%; text-align: center; position: relative;
+      transform: scale(0.95); transition: transform 0.3s ease;
+    }
+    .auth-overlay.open .pricing-popup-card { transform: scale(1); }
+    .pricing-popup-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; color: #6a6050; font-size: 22px;
+      cursor: pointer; line-height: 1; padding: 4px;
+    }
+    .pricing-popup-close:hover { color: var(--gold-bright); }
+    .pricing-popup-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.04em; }
+    .pricing-popup-subtitle { font-size: 13px; color: #6a6050; margin-bottom: 24px; }
+    .pricing-popup-tiers { display: flex; flex-direction: column; gap: 12px; }
+    .pricing-popup-tier {
+      background: var(--black-deep); border: 1px solid var(--black-border);
+      border-radius: 12px; padding: 20px 16px; text-align: center;
+    }
+    .pricing-popup-tier.featured { border-color: var(--gold-muted); }
+    .pricing-popup-tier-name {
+      font-family: var(--font-display); font-size: 17px; font-weight: 700;
+      color: #e8e0cc; margin-bottom: 8px; letter-spacing: 0.04em;
+    }
+    .pricing-popup-tier-badge.wip {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      color: #0a0a0a; background: linear-gradient(135deg, #e8c96a, #c9a84c);
+      padding: 3px 12px; border-radius: 99px; letter-spacing: 0.06em;
+      font-family: var(--font-display); margin-bottom: 8px;
+    }
+    .pricing-popup-tier-desc { font-size: 12px; color: #6a6050; }
+
+    /* ─── FEATURES HELP BUTTON ─────────────────────────────── */
+    .features-help-btn {
+      position: fixed; bottom: 24px; right: 24px; z-index: 200;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #e8c96a, #c9a84c);
+      color: #0a0a0a; border: none; cursor: pointer;
+      font-family: var(--font-display); font-size: 22px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .features-help-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(201,168,76,0.5); }
+    .features-popup-card {
+      background: var(--black-panel); border: 1px solid var(--black-border);
+      border-radius: 20px; padding: 32px 24px 24px;
+      max-width: 400px; width: 92%; text-align: center; position: relative;
+      transform: scale(0.95); transition: transform 0.3s ease;
+      max-height: 80vh; overflow-y: auto;
+    }
+    .auth-overlay.open .features-popup-card { transform: scale(1); }
+    .features-popup-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; text-align: left; }
+    .features-popup-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px; background: var(--black-deep);
+      border: 1px solid var(--black-border); border-radius: 12px;
+    }
+    .features-popup-icon { font-size: 20px; flex-shrink: 0; line-height: 1.3; }
+    .features-popup-name { font-size: 13px; font-weight: 600; color: #e8e0cc; margin-bottom: 2px; }
+    .features-popup-desc { font-size: 11px; color: #6a6050; line-height: 1.5; }
 
     /* ─── ONBOARDING MODAL ─────────────────────────────────── */
     .onboarding-overlay {
@@ -551,8 +614,8 @@
     .tier-name{font-size:14px;font-weight:600;color:#e8e0cc;margin:8px 0 6px}
     .tier-feat{font-size:11px;color:#8a8070;line-height:1.8;text-align:left}
     /* --- LANDING PAGE --- */
-    .landing{display:none;position:fixed;inset:0;z-index:200;background:var(--black-deep);overflow-y:auto}.landing.visible{display:block}
-    .landing-hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
+    .landing{display:none;position:fixed;inset:0;z-index:200;background:var(--black-deep);overflow:hidden}.landing.visible{display:block}
+    .landing-hero{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative}
     .landing-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,0.06),transparent 70%);pointer-events:none}
     .landing-logo{width:80px;height:80px;margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(201,168,76,0.3))}
     .landing-h1{font-family:var(--font-display);font-size:48px;font-weight:700;letter-spacing:0.06em;margin-bottom:8px}
@@ -573,7 +636,7 @@
     .landing-tier-period{font-size:12px;color:#5a5040;margin-bottom:16px}
     .landing-tier-list{text-align:left;font-size:12px;color:#8a8070;line-height:2}
     .landing-tier-cta{display:block;width:100%;padding:10px;margin-top:16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font-display);border:none}
-    .is-mobile-device .landing-features,.is-mobile-device .landing-tiers{grid-template-columns:1fr}.is-mobile-device .landing-h1{font-size:32px}.is-mobile-device .td-tab-bar{flex-wrap:wrap}
+    .is-mobile-device .landing-h1{font-size:32px}.is-mobile-device .td-tab-bar{flex-wrap:wrap}
     /* ─── OBSIDIAN SLAB ──────────────────────────────────── */
     .main-panel{position:relative}
     .slab-zone{position:absolute;left:0;top:72px;bottom:0;width:44px;z-index:20;pointer-events:none}
@@ -1315,6 +1378,7 @@
       transition: 0.2s; padding: 0; flex-shrink: 0; border-radius: 50%;
     }
     .chat-attach:hover { color: var(--gold-bright); background: rgba(201,168,76,0.08); }
+    .chat-camera-btn { display: none; }
     .chat-send { color: #c8b88a; }
     .chat-send:hover { color: var(--gold-bright); transform: scale(1.06); }
     .chat-send:disabled { color: #3a342a; cursor: not-allowed; transform: none; opacity: 0.5; }
@@ -1836,42 +1900,15 @@
     <svg class="landing-logo" viewBox="0 0 100 100" fill="none"><defs><radialGradient id="lS" cx="32%" cy="30%" r="68%"><stop offset="0%" stop-color="#808080"/><stop offset="25%" stop-color="#383838"/><stop offset="60%" stop-color="#0c0c0c"/><stop offset="100%" stop-color="#040404"/></radialGradient><linearGradient id="lR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0d878"/><stop offset="35%" stop-color="#c9a84c"/><stop offset="65%" stop-color="#8a6a28"/><stop offset="100%" stop-color="#f0d878"/></linearGradient></defs><circle cx="50" cy="50" r="36" fill="url(#lS)"/><ellipse cx="50" cy="50" rx="45" ry="16" stroke="url(#lR)" stroke-width="5" fill="none" opacity="0.8"/></svg>
     <div class="landing-h1"><span class="gold-text">Obsidia</span> Study</div>
     <div class="landing-sub">AI-powered tutoring that adapts to every student. Math, writing, science, test prep &#8212; all backed by real curriculum standards.</div>
-    <div><button class="landing-cta" onclick="openAuth()">Get Started Free</button><button class="landing-cta-ghost" onclick="document.getElementById('lPricing').scrollIntoView({behavior:'smooth'})">View Pricing</button><button class="landing-cta-ghost" onclick="openAuth()" style="margin-left:12px;border-color:rgba(201,168,76,0.5)">Sign In</button></div>
-  </div>
-  <div class="landing-features">
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F9EE;</div><div class="landing-feat-title">AI Math Tutor</div><div class="landing-feat-desc">Algebra through calculus with step-by-step LaTeX solutions. Switches to advanced model for complex topics.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F4DD;</div><div class="landing-feat-title">Essay Coach</div><div class="landing-feat-desc">Thesis building, outlining, drafting, proofreading. Grade-level calibrated with humanizer mode.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F9E0;</div><div class="landing-feat-title">Interactive Quizzes</div><div class="landing-feat-desc">AI-generated quizzes with instant feedback, scoring, and explanations. Track mastery over time.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F4F7;</div><div class="landing-feat-title">Homework Scanner</div><div class="landing-feat-desc">Photograph any problem. Claude Vision reads it and provides step-by-step help.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F3AF;</div><div class="landing-feat-title">ACT/SAT Prep</div><div class="landing-feat-desc">Real-format practice questions. Instant scoring. Strategy coaching. Score tracking.</div></div>
-    <div class="landing-feat"><div class="landing-feat-icon">&#x1F469;&#x200D;&#x1F3EB;</div><div class="landing-feat-title">Teacher Dashboard</div><div class="landing-feat-desc">Class management, assignments, student progress reports. Standards-aligned. FERPA ready.</div></div>
-  </div>
-  <div style="text-align:center;padding:60px 20px" id="lPricing">
-    <div style="font-family:var(--font-display);font-size:28px;font-weight:700;margin-bottom:8px"><span class="gold-text">Simple</span> Pricing</div>
-    <div style="font-size:14px;color:#7a7060;margin-bottom:30px">Free for students. Powerful for schools.</div>
-    <div class="landing-tiers">
-      <div class="landing-tier">
-        <div class="landing-tier-name">Free</div><div class="landing-tier-price">$0</div><div class="landing-tier-period">forever</div>
-        <div class="landing-tier-list">&#x2713; 5 AI sessions per day<br>&#x2713; All 8 study tools<br>&#x2713; Basic flashcards &amp; quizzes<br>&#x2713; XP &amp; achievements<br>&#x2713; Dark/light themes</div>
-        <button class="landing-tier-cta" style="background:var(--black-card);color:#c8b88a;border:1px solid var(--black-border)" onclick="openAuth()">Sign Up Free</button>
-      </div>
-      <div class="landing-tier featured">
-        <div class="landing-tier-badge">MOST POPULAR</div>
-        <div class="landing-tier-name">Pro</div><div class="landing-tier-price">$12</div><div class="landing-tier-period">per month</div>
-        <div class="landing-tier-list">&#x2713; Unlimited AI sessions<br>&#x2713; Claude Opus for math<br>&#x2713; Homework scanning<br>&#x2713; PDF export<br>&#x2713; Spaced repetition<br>&#x2713; No ads</div>
-        <button class="landing-tier-cta" style="background:linear-gradient(135deg,#e8c96a,#c9a84c);color:#0a0a0a" onclick="openAuth()">Start Free Trial</button>
-      </div>
-      <div class="landing-tier">
-        <div class="landing-tier-name">School</div><div class="landing-tier-price">$75</div><div class="landing-tier-period">per seat / month</div>
-        <div class="landing-tier-list">&#x2713; Everything in Pro<br>&#x2713; Teacher dashboard<br>&#x2713; Class management<br>&#x2713; Assignments &amp; grading<br>&#x2713; Progress reports<br>&#x2713; Common Core aligned<br>&#x2713; SSO &amp; FERPA</div>
-        <button class="landing-tier-cta" style="background:var(--black-card);color:var(--gold-bright);border:1px solid var(--gold-muted)" onclick="window.location.href='mailto:carsyn@obsidia.ai?subject=School%20Plan'">Contact Sales</button>
-      </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center"><button class="landing-cta" onclick="getStartedFree()">Get Started Free</button><button class="landing-cta-ghost" onclick="openPricingPopup()">View Pricing</button></div>
+    <div style="margin-top:16px"><button class="landing-cta-ghost" onclick="openAuth()" style="border-color:rgba(201,168,76,0.5);margin-left:0">Sign In</button></div>
+    <div id="landingMobileToggle" style="margin-top:20px;display:flex;align-items:center;gap:10px;justify-content:center;">
+      <span style="font-size:12px;color:#8a7e6b;font-family:var(--font-ui);">Desktop</span>
+      <label class="sp-toggle"><input type="checkbox" id="landingMobileSim" onchange="syncMobileToggle(this.checked)"><span class="sp-slider"></span></label>
+      <span style="font-size:12px;color:#8a7e6b;font-family:var(--font-ui);">Mobile</span>
     </div>
   </div>
-  <div style="text-align:center;padding:40px 20px">
-    <div style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:20px;color:rgba(200,180,130,0.4);max-width:600px;margin:0 auto 12px">&#x201C;Built by a student who was tired of AI tools that don&#x2019;t understand homework.&#x201D;</div>
-    <div style="font-size:12px;color:#5a5040">&#x2014; Carsyn DeAngelis, Creator</div>
-  </div>
+  <button class="features-help-btn" onclick="openFeaturesPopup()" title="What can Obsidia do?">?</button>
 </div>
 <button id="exitSimulatorBtn" onclick="exitSimulatorMode()" style="position:fixed; top:40px; right:40px; z-index:999999; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border-radius:30px; border:none; cursor:pointer; display:none; box-shadow:0 0 30px rgba(201,168,76,0.3); transition: transform 0.2s ease;">
   Switch to Desktop
@@ -1923,7 +1960,6 @@
     <button class="sb-i" data-page="themes" onclick="sNav('themes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/></svg><span>Themes</span></button>
     <button class="sb-i" data-page="reminders" onclick="sNav('reminders')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span>Reminders</span></button>
     <div style="height:6px;"></div>
-    <button class="sb-i" onclick="performHardRefresh()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 102.6-6.4L21 8"/></svg><span>Hard Refresh</span></button>
   </div>
   <div class="sidebar-foot">
     <div class="sidebar-avatar" id="sbAvatar">S</div>
@@ -2384,9 +2420,10 @@
       </div>
     </div>
     <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important; pointer-events:auto !important;">
-      <div class="snap-mode-pills" style="display:flex; gap:12px; background:rgba(0,0,0,0.6); padding:4px; border-radius:30px;">
-        <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')" style="padding:10px 20px; border-radius:24px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-size:14px;">Single Question</button>
-        <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')" style="padding:10px 20px; border-radius:24px; border:none; background:transparent; color:#888; font-size:14px;">Multiple Snaps</button>
+      <div class="snap-mode-pills" style="display:flex; gap:2px; background:rgba(0,0,0,0.6); padding:3px; border-radius:20px;">
+        <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')" style="padding:6px 12px; border-radius:16px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-size:11px; font-weight:600; font-family:var(--font-ui); cursor:pointer; white-space:nowrap;">Single Question</button>
+        <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')" style="padding:6px 12px; border-radius:16px; border:none; background:transparent; color:#888; font-size:11px; font-weight:600; font-family:var(--font-ui); cursor:pointer; white-space:nowrap;">Multiple Snaps</button>
+        <button class="snap-pill" id="snapPillVideo" onclick="mathSnapMode('video')" style="padding:6px 12px; border-radius:16px; border:none; background:transparent; color:#888; font-size:11px; font-weight:600; font-family:var(--font-ui); cursor:pointer; white-space:nowrap;">Video Capture</button>
       </div>
       <button class="snap-shutter" id="snapShutter" onclick="mathSnapCapture()" style="width:76px !important; height:76px !important; background:#000 !important; border-radius:50% !important; border:3px solid #c9a84c !important; box-shadow:0 0 20px rgba(201,168,76,0.4) !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:12px !important; cursor:pointer;">
         <svg viewBox="0 0 34 34" fill="none" width="44" height="44"><defs><radialGradient id="shutterS" cx="37%" cy="31%" r="62%"><stop offset="0%" stop-color="#525252"/><stop offset="38%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#050505"/></radialGradient><linearGradient id="shutterR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="42%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="17" cy="16" r="12.5" fill="url(#shutterS)"/><ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#shutterR)" stroke-width="2" fill="none" opacity="0.6"/></svg>
@@ -2394,8 +2431,8 @@
       <input type="file" id="mathSnapFileInput" accept="image/*" capture="environment" style="display:none" onchange="mathSnapHandleFile(this)" />
       <input type="file" id="mathSnapGalleryInput" accept="image/*" style="display:none" onchange="mathSnapHandleGalleryUpload(this)" />
     </div>
-    <button class="snap-upload-btn" onclick="mathSnapOpenGallery()" style="position:absolute; left:12px; bottom:16px; width:110px; height:38px; display:flex; justify-content:center; align-items:center; gap:6px; padding:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); border-radius:20px; color:#fff; border:1px solid rgba(201,168,76,0.6); z-index:30; font-family:var(--font-ui); font-size:11px; font-weight:600; cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Upload</button>
-    <button class="snap-skip-btn" onclick="mathSnapGoToChat()" style="position:absolute; right:12px; bottom:16px; width:110px; height:38px; display:flex; justify-content:center; align-items:center; gap:6px; padding:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); border-radius:20px; color:#fff; border:1px solid #c9a84c; z-index:30; font-family:var(--font-ui); font-size:11px; font-weight:600; cursor:pointer;">Math AI <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg></button>
+    <button class="snap-upload-btn" onclick="mathSnapOpenGallery()" style="position:absolute; left:12px; bottom:calc(16px + env(safe-area-inset-bottom, 0px)); width:110px; height:38px; display:flex; justify-content:center; align-items:center; gap:6px; padding:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); border-radius:20px; color:#fff; border:1px solid rgba(201,168,76,0.6); z-index:30; font-family:var(--font-ui); font-size:11px; font-weight:600; cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Upload</button>
+    <button class="snap-skip-btn" onclick="mathSnapGoToChat()" style="position:absolute; right:12px; bottom:calc(16px + env(safe-area-inset-bottom, 0px)); width:110px; height:38px; display:flex; justify-content:center; align-items:center; gap:6px; padding:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); border-radius:20px; color:#fff; border:1px solid #c9a84c; z-index:30; font-family:var(--font-ui); font-size:11px; font-weight:600; cursor:pointer;">Math AI <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 6 15 12 9 18"/></svg></button>
   </div>
   <!-- Multi-Snap Review Album -->
   <div id="multiSnapFullscreen" style="display:none; position:absolute; inset:0; z-index:999; background:rgba(0,0,0,0.98); flex-direction:column; overflow:hidden;">
@@ -2407,6 +2444,19 @@
     <div style="padding:24px 20px; background:linear-gradient(transparent, #000 30%); display:flex; justify-content:center; align-items:center;">
       <button id="albumAttachAllBtn" onclick="mathSnapAttachAll()" style="display:none; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4);">Attach All Photos to Chat</button>
     </div>
+  </div>
+
+  <!-- Video Recording Timer (shown during hold-to-record) -->
+  <div id="videoRecordingIndicator" style="display:none; position:absolute; top:80px; left:50%; transform:translateX(-50%); z-index:25; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); border-radius:24px; padding:8px 20px; display:none; align-items:center; gap:10px; pointer-events:none;">
+    <span id="videoRecDot" style="width:12px; height:12px; border-radius:50%; background:#ef4444; animation:recBlink 1s ease-in-out infinite;"></span>
+    <span id="videoRecTimer" style="color:#fff; font-family:var(--font-ui); font-size:16px; font-weight:700; letter-spacing:0.04em; font-variant-numeric:tabular-nums;">0:00</span>
+  </div>
+
+  <!-- Video Preview Overlay -->
+  <div id="videoPreviewOverlay" style="display:none; position:absolute !important; inset:0 !important; z-index:20 !important; background:#000 !important; flex-direction:column !important; justify-content:center !important; align-items:center !important;">
+    <button id="videoRetakeBtn" onclick="mathVideoRetake()" style="position:absolute; top:12px; right:16px; padding:10px 20px; background:rgba(0,0,0,0.7); border-radius:24px; color:#c9a84c; font-family:var(--font-ui); font-size:14px; font-weight:700; border:1px solid #c9a84c; cursor:pointer; backdrop-filter:blur(4px); z-index:25;">Retake</button>
+    <video id="videoPreviewPlayer" playsinline controls style="max-width:92%; max-height:calc(100% - 160px); border-radius:12px; background:#111;"></video>
+    <button id="videoAttachBtn" onclick="mathVideoAttach()" style="margin-top:20px; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4); z-index:20; flex-shrink:0;">Attach Video to Math AI Chat</button>
   </div>
 
   <!-- ═══ DESKTOP MATH UI (hidden on mobile) ═══ -->
@@ -2468,7 +2518,7 @@
           <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
             <div class="chat-welcome" id="mathWelcome"><h2 class="welcome-title">Step-by-step Solutions</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Upload a photo of your math homework, a textbook equation, or a handwritten problem. I will instantly read the image and provide a highly detailed, step-by-step solution to help you find the correct answer.</p><div><button class="btn-gold" onclick="document.getElementById('mathCameraInput').click()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Take a Picture / Upload</button></div></div>
           </div>
-          <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><input type="file" id="mathCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
+          <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><button class="chat-attach chat-camera-btn" onclick="document.getElementById('mathCameraInput').click()" title="Take a photo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><input type="file" id="mathCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
         </div>
         <div class="math-scratch-column">
           <div class="scratch-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Scratch Pad</div>
@@ -3081,6 +3131,10 @@
           <div><div class="settings-label">Streak Reminders</div><div class="settings-sublabel">Get notified to keep your streak</div></div>
           <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" checked /><span class="sp-slider"></span></label>
         </div>
+        <div class="settings-row" id="settingsMobileToggleRow">
+          <div><div class="settings-label">Mobile View</div><div class="settings-sublabel">Switch to mobile layout (414px viewport)</div></div>
+          <label class="sp-toggle" style="margin-left:auto"><input type="checkbox" id="sandboxMobileSim" onchange="syncMobileToggle(this.checked)"><span class="sp-slider"></span></label>
+        </div>
       </div>
 
       <!-- Achievements Preview -->
@@ -3139,10 +3193,6 @@
         <div class="settings-card-title" style="color:#a78bfa;">Developer &amp; Beta Tester Sandbox</div>
         <p style="font-size:11px;color:#5a5040;margin-bottom:16px;">Experimental features for authorized testers only. These toggles may be unstable or incomplete.</p>
 
-        <div class="sandbox-toggle-row" id="sandboxMobileToggleRow">
-          <div><div class="sandbox-label">Simulate Mobile Viewport</div><div class="sandbox-sublabel">Instantly force the entire app container into mobile constraints (414px)</div></div>
-          <label class="sp-toggle"><input type="checkbox" id="sandboxMobileSim" onchange="checkMobileState(); saveSandboxPrefs()"><span class="sp-slider"></span></label>
-        </div>
         <div class="sandbox-toggle-row">
           <div><div class="sandbox-label">Experimental Math Engine</div><div class="sandbox-sublabel">Routes all math queries through an experimental multi-model pipeline</div></div>
           <label class="sp-toggle"><input type="checkbox" id="sandboxMathEngine" onchange="saveSandboxPrefs()"><span class="sp-slider"></span></label>
@@ -3222,8 +3272,11 @@
       <span id="settingsSaved" style="font-size:12px;color:var(--sci-color);display:none">&#10003; Settings saved successfully!</span>
       <button style="margin-left:auto;font-size:12px;color:#5a5040;background:none;border:none;cursor:pointer;font-family:var(--font-ui)" onclick="if(confirm('Reset all settings to defaults?'))resetSettings()">Reset to Defaults</button>
     </div>
-    <!-- Mobile-only Last Update Badge in Settings -->
-    <div id="lastUpdateBadgeMobile" style="margin:40px auto 20px; width:max-content; background:rgba(20,18,14,0.5); border:1px solid rgba(201,168,76,0.3); color:#c8b88a; font-family:var(--font-ui); font-size:11px; padding:8px 16px; border-radius:12px; display:none; gap:6px; align-items:center; font-weight:600; letter-spacing:0.04em;"></div>
+    <!-- Settings footer: version + hard refresh -->
+    <div style="margin-top:40px; padding:20px 0; border-top:1px solid var(--black-border); display:flex; flex-direction:column; align-items:center; gap:12px;">
+      <div id="lastUpdateBadgeMobile" style="width:max-content; background:rgba(20,18,14,0.5); border:1px solid rgba(201,168,76,0.15); color:#8a7e6a; font-family:var(--font-ui); font-size:11px; padding:8px 16px; border-radius:10px; display:none; gap:6px; align-items:center; font-weight:600; letter-spacing:0.04em;"></div>
+      <button onclick="performHardRefresh()" style="display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:none; border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:#5a5040; font-family:var(--font-ui); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 102.6-6.4L21 8"/></svg>Hard Refresh</button>
+    </div>
   </div>
 </div>
 
@@ -3526,30 +3579,73 @@
 <div class="auth-overlay" id="authOverlay" onclick="if(event.target===this)closeAuth()">
   <div class="auth-card">
     <div class="auth-logo">
-      <svg width="44" height="44" viewBox="0 0 54 54" fill="none"><defs><radialGradient id="aS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient><linearGradient id="aR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="27" cy="25" r="16" fill="url(#aS)"/><ellipse cx="27" cy="29" rx="20" ry="6" stroke="url(#aR)" stroke-width="2.4" fill="none" opacity="0.7"/></svg>
+      <svg width="38" height="38" viewBox="0 0 54 54" fill="none"><defs><radialGradient id="aS" cx="38%" cy="30%" r="62%"><stop offset="0%" stop-color="#505050"/><stop offset="30%" stop-color="#1c1c1c"/><stop offset="100%" stop-color="#060606"/></radialGradient><linearGradient id="aR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="40%" stop-color="#c9a84c"/><stop offset="70%" stop-color="#7a5e20"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="27" cy="25" r="16" fill="url(#aS)"/><ellipse cx="27" cy="29" rx="20" ry="6" stroke="url(#aR)" stroke-width="2.4" fill="none" opacity="0.7"/></svg>
     </div>
-    <div class="auth-title"><span class="gold-text">Welcome to Obsidia</span></div>
-    <div class="auth-subtitle">Sign in to save your progress, track your streak, and earn achievements.</div>
+    <div class="auth-title"><span class="gold-text">Sign In</span></div>
+    <div class="auth-subtitle">Save progress, track streaks, and earn achievements.</div>
+
     <button class="google-btn" onclick="signInWithGoogle()">
       <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       Continue with Google
     </button>
-    <div class="auth-divider"><span>or sign in with email</span></div>
+
+    <div class="auth-divider"><span>or</span></div>
+
     <div class="auth-email-form" id="authEmailForm">
       <div id="authStepEmail">
-        <input type="email" class="auth-email-input" id="authEmailInput" placeholder="Enter your email address" autocomplete="email" onkeydown="if(event.key==='Enter')signInWithEmail()" />
-        <button class="auth-email-btn" id="authEmailBtn" onclick="signInWithEmail()">Send Verification Code</button>
+        <input type="email" class="auth-email-input" id="authEmailInput" placeholder="Email address" autocomplete="email" onkeydown="if(event.key==='Enter')signInWithEmail()" />
+        <button class="auth-email-btn" id="authEmailBtn" onclick="signInWithEmail()">Continue with Email</button>
       </div>
       <div id="authStepCode" style="display:none;">
-        <div style="font-size:12px;color:#c8b88a;margin-bottom:10px;">Enter the 6-digit code sent to <span id="authSentTo" style="color:var(--gold-bright);"></span></div>
+        <div style="font-size:12px;color:#8a8070;margin-bottom:10px;">Code sent to <span id="authSentTo" style="color:var(--gold-bright);"></span></div>
         <input type="text" class="auth-email-input" id="authCodeInput" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code" style="text-align:center;font-size:24px;letter-spacing:8px;font-weight:700;" onkeydown="if(event.key==='Enter')verifyEmailCode()" />
         <button class="auth-email-btn" id="authVerifyBtn" onclick="verifyEmailCode()">Verify &amp; Sign In</button>
         <button class="auth-skip" onclick="authBackToEmail()" style="margin-top:10px;display:block;width:100%;text-align:center;">Use a different email</button>
       </div>
       <div class="auth-email-msg" id="authEmailMsg"></div>
     </div>
-    <div class="auth-divider"><span>or</span></div>
-    <button class="auth-skip" onclick="continueAsGuest()">Continue without signing in</button>
+
+    <button class="auth-skip" onclick="continueAsGuest()" style="margin-top:20px;">Continue as Guest</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     FEATURES POPUP (? button)
+══════════════════════════════════════════════════ -->
+<div class="auth-overlay" id="featuresOverlay" onclick="if(event.target===this)closeFeaturesPopup()" style="z-index:260;">
+  <div class="features-popup-card">
+    <button class="pricing-popup-close" onclick="closeFeaturesPopup()">&times;</button>
+    <div class="pricing-popup-title"><span class="gold-text">What Obsidia</span> Can Do</div>
+    <div class="pricing-popup-subtitle">Everything available in the app right now.</div>
+    <div class="features-popup-list" id="featuresPopupList"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     PRICING POPUP
+══════════════════════════════════════════════════ -->
+<div class="auth-overlay" id="pricingOverlay" onclick="if(event.target===this)closePricingPopup()" style="z-index:260;">
+  <div class="pricing-popup-card">
+    <button class="pricing-popup-close" onclick="closePricingPopup()">&times;</button>
+    <div class="pricing-popup-title"><span class="gold-text">Pricing</span> Plans</div>
+    <div class="pricing-popup-subtitle">Choose the plan that works for you.</div>
+    <div class="pricing-popup-tiers">
+      <div class="pricing-popup-tier">
+        <div class="pricing-popup-tier-name">Free</div>
+        <div class="pricing-popup-tier-badge wip">Work in Progress</div>
+        <div class="pricing-popup-tier-desc">Details coming soon.</div>
+      </div>
+      <div class="pricing-popup-tier featured">
+        <div class="pricing-popup-tier-name">Pro</div>
+        <div class="pricing-popup-tier-badge wip">Work in Progress</div>
+        <div class="pricing-popup-tier-desc">Details coming soon.</div>
+      </div>
+      <div class="pricing-popup-tier">
+        <div class="pricing-popup-tier-name">School</div>
+        <div class="pricing-popup-tier-badge wip">Work in Progress</div>
+        <div class="pricing-popup-tier-desc">Details coming soon.</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -3914,6 +4010,9 @@ function navigate(pageId) {
       if (pageId === 'settings' && typeof loadUserRecordings === 'function') loadUserRecordings();
       /* Init scratch pad when entering math */
       if (pageId === 'math' && typeof initScratchPad === 'function') setTimeout(initScratchPad, 100);
+      /* Hide main topbar on math page (mobile) to prevent bleed-through */
+      if (pageId === 'math') document.body.classList.add('math-page-active');
+      else document.body.classList.remove('math-page-active');
       /* Reset math snap state — always start at camera on mobile */
       if (pageId === 'math') {
         document.body.classList.remove('math-snap-dismissed');
@@ -4064,13 +4163,16 @@ function handleDroppedFile(file) {
 const homeChatInput = document.getElementById('homeChatInput');
 const homeSendBtn = document.getElementById('homeSendBtn');
 if (homeChatInput) {
-  homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; if(homeSendBtn) homeSendBtn.disabled=homeChatInput.value.trim()===''; });
+  homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; updateSendBtnState('home'); });
   homeChatInput.addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); if(homeSendBtn&&!homeSendBtn.disabled) sendHomeMsg(); } });
 }
 if (homeSendBtn) homeSendBtn.addEventListener('click', sendHomeMsg);
 
 function sendHomeMsg() {
-  const text = homeChatInput.value.trim(); if (!text) return;
+  var text = homeChatInput.value.trim();
+  var hasImages = _pendingPasteImage['home'] && _pendingPasteImage['home'].length > 0;
+  if (!text && !hasImages) return;
+  if (!text && hasImages) text = 'Please analyze the attached image and help me.';
   // Capture images before clearing
   var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage['home'] && _pendingPasteImage['home'].length) ? _pendingPasteImage['home'].slice() : null;
   if (pastedImgs) { clearImageAttachmentPreview('home'); }
@@ -4105,7 +4207,7 @@ pages.forEach(pg => {
   const input = document.getElementById(pg+'ChatInput');
   const btn = document.getElementById(pg+'SendBtn');
   if (!input||!btn) return;
-  input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; btn.disabled=input.value.trim()===''; });
+  input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; updateSendBtnState(pg); });
   input.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!btn.disabled)sendPageMsg(pg);} });
   btn.addEventListener('click', () => sendPageMsg(pg));
 });
@@ -4113,7 +4215,13 @@ pages.forEach(pg => {
 function sendPageMsg(pg) {
   var input = document.getElementById(pg+'ChatInput');
   var msgContainer = pg+'Messages';
-  var text = input.value.trim(); if (!text) return;
+  var text = input.value.trim();
+  var hasImages = _pendingPasteImage[pg] && _pendingPasteImage[pg].length > 0;
+  if (!text && !hasImages) return;
+  if (!text && hasImages) {
+    var hasVideo = _pendingPasteImage[pg] && _pendingPasteImage[pg].some(function(d) { return typeof d === 'string' && d.startsWith('data:video'); });
+    text = hasVideo ? 'Please analyze the attached video and help me step by step.' : 'Please analyze the attached image and help me step by step.';
+  }
   var welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
   appendMsg(msgContainer,'user',text);
   input.value=''; input.style.height='auto'; var sbtn = document.getElementById(pg+'SendBtn'); if(sbtn) sbtn.disabled=true;
@@ -4512,27 +4620,40 @@ window.addEventListener('beforeunload', function() {
   }
 });
 
+/* ── Video Capture variables ── */
+var _videoMediaRecorder = null;
+var _videoRecordedChunks = [];
+var _videoRecordedBlob = null;
+var _videoRecordedUrl = null;
+var _videoRecTimerInterval = null;
+var _videoRecStartTime = 0;
+var _videoIsRecording = false;
+
 function mathSnapMode(mode) {
   _mathSnapMode = mode;
   var singleBtn = document.getElementById('snapPillSingle');
   var multiBtn = document.getElementById('snapPillMulti');
+  var videoBtn = document.getElementById('snapPillVideo');
   var reticle = document.getElementById('snapReticle');
-  if (singleBtn && multiBtn) {
-    singleBtn.classList.toggle('snap-pill-active', mode === 'single');
-    multiBtn.classList.toggle('snap-pill-active', mode === 'multi');
-    // Enforce active/inactive pill styling
-    if (mode === 'single') {
-      singleBtn.style.background = 'rgba(255,255,255,0.2)';
-      singleBtn.style.color = '#fff';
-      multiBtn.style.background = 'transparent';
-      multiBtn.style.color = '#888';
-    } else {
-      multiBtn.style.background = 'rgba(255,255,255,0.2)';
-      multiBtn.style.color = '#fff';
-      singleBtn.style.background = 'transparent';
-      singleBtn.style.color = '#888';
-    }
+  var shutter = document.getElementById('snapShutter');
+  var allPills = [singleBtn, multiBtn, videoBtn];
+
+  // Reset all pills to inactive
+  allPills.forEach(function(btn) {
+    if (!btn) return;
+    btn.classList.remove('snap-pill-active');
+    btn.style.background = 'transparent';
+    btn.style.color = '#888';
+  });
+  // Activate current pill
+  var activeBtn = mode === 'single' ? singleBtn : mode === 'multi' ? multiBtn : videoBtn;
+  if (activeBtn) {
+    activeBtn.classList.add('snap-pill-active');
+    activeBtn.style.background = 'rgba(255,255,255,0.2)';
+    activeBtn.style.color = '#fff';
   }
+
+  // Reticle: single=targeting box, multi/video=none
   if (reticle) {
     if (mode === 'single') {
       reticle.style.setProperty('display', 'block', 'important');
@@ -4546,12 +4667,217 @@ function mathSnapMode(mode) {
     var label = reticle.querySelector('.snap-reticle-label');
     if (label) label.textContent = mode === 'single' ? 'Aim at a math problem' : 'Capture full page';
   }
-  // Seamlessly hide/show the Multi-Snap Album based on current mode
+
+  // Hide multi-snap gallery unless in multi mode
   var galleryStr = document.getElementById('multiGalleryContainer');
   if (galleryStr) {
-    if (mode === 'single') galleryStr.style.setProperty('display', 'none', 'important');
-    if (mode === 'multi') galleryStr.style.setProperty('display', 'flex', 'important');
+    galleryStr.style.setProperty('display', mode === 'multi' ? 'flex' : 'none', 'important');
   }
+
+  // Shutter button: in video mode, switch to hold-to-record (red ring)
+  if (shutter) {
+    if (mode === 'video') {
+      shutter.classList.add('snap-shutter-video');
+      shutter.removeAttribute('onclick');
+      shutter.addEventListener('pointerdown', _videoShutterDown);
+      shutter.addEventListener('pointerup', _videoShutterUp);
+      shutter.addEventListener('pointerleave', _videoShutterUp);
+      shutter.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    } else {
+      shutter.classList.remove('snap-shutter-video');
+      shutter.setAttribute('onclick', 'mathSnapCapture()');
+      shutter.removeEventListener('pointerdown', _videoShutterDown);
+      shutter.removeEventListener('pointerup', _videoShutterUp);
+      shutter.removeEventListener('pointerleave', _videoShutterUp);
+    }
+  }
+
+  // Hide video preview if switching away from video
+  if (mode !== 'video') {
+    var vp = document.getElementById('videoPreviewOverlay');
+    if (vp) vp.style.setProperty('display', 'none', 'important');
+    var ri = document.getElementById('videoRecordingIndicator');
+    if (ri) ri.style.setProperty('display', 'none', 'important');
+    mathVideoStopRecording(true);
+  }
+}
+
+/* ── Video hold-to-record shutter handlers ── */
+function _videoShutterDown(e) {
+  e.preventDefault();
+  if (_videoIsRecording) return;
+  mathVideoStartRecording();
+}
+
+function _videoShutterUp(e) {
+  e.preventDefault();
+  if (!_videoIsRecording) return;
+  mathVideoStopRecording(false);
+}
+
+function mathVideoStartRecording() {
+  if (!_mathSnapStream || !_mathSnapStream.active) {
+    mathSnapStartCamera();
+    setTimeout(mathVideoStartRecording, 300);
+    return;
+  }
+
+  _videoRecordedChunks = [];
+  _videoRecordedBlob = null;
+  if (_videoRecordedUrl) { URL.revokeObjectURL(_videoRecordedUrl); _videoRecordedUrl = null; }
+
+  var mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9'
+               : MediaRecorder.isTypeSupported('video/webm') ? 'video/webm'
+               : MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : '';
+
+  try {
+    _videoMediaRecorder = new MediaRecorder(_mathSnapStream, mimeType ? { mimeType: mimeType } : {});
+  } catch (err) {
+    console.warn('MediaRecorder failed:', err);
+    if (typeof showToast === 'function') showToast('error', '', 'Recording Error', 'Your browser does not support video recording.');
+    return;
+  }
+
+  _videoMediaRecorder.ondataavailable = function(e) {
+    if (e.data && e.data.size > 0) _videoRecordedChunks.push(e.data);
+  };
+
+  _videoMediaRecorder.onstop = function() {
+    _videoRecordedBlob = new Blob(_videoRecordedChunks, { type: _videoMediaRecorder.mimeType || 'video/webm' });
+    _videoRecordedUrl = URL.createObjectURL(_videoRecordedBlob);
+    _videoRecordedChunks = [];
+    mathVideoShowPreview();
+  };
+
+  _videoMediaRecorder.start(100); // collect data every 100ms
+  _videoIsRecording = true;
+  _videoRecStartTime = Date.now();
+
+  // Haptic feedback
+  if (navigator.vibrate) navigator.vibrate(25);
+
+  // Show recording indicator
+  var indicator = document.getElementById('videoRecordingIndicator');
+  if (indicator) indicator.style.setProperty('display', 'flex', 'important');
+
+  // Start timer display
+  var timerEl = document.getElementById('videoRecTimer');
+  _videoRecTimerInterval = setInterval(function() {
+    var elapsed = Math.floor((Date.now() - _videoRecStartTime) / 1000);
+    var mins = Math.floor(elapsed / 60);
+    var secs = elapsed % 60;
+    if (timerEl) timerEl.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }, 250);
+
+  // Pulse the shutter button red while recording
+  var shutter = document.getElementById('snapShutter');
+  if (shutter) shutter.classList.add('snap-shutter-recording');
+}
+
+function mathVideoStopRecording(discard) {
+  if (_videoRecTimerInterval) { clearInterval(_videoRecTimerInterval); _videoRecTimerInterval = null; }
+
+  var indicator = document.getElementById('videoRecordingIndicator');
+  if (indicator) indicator.style.setProperty('display', 'none', 'important');
+
+  var shutter = document.getElementById('snapShutter');
+  if (shutter) shutter.classList.remove('snap-shutter-recording');
+
+  if (!_videoIsRecording || !_videoMediaRecorder) { _videoIsRecording = false; return; }
+  _videoIsRecording = false;
+
+  if (discard) {
+    _videoMediaRecorder.ondataavailable = null;
+    _videoMediaRecorder.onstop = null;
+    try { _videoMediaRecorder.stop(); } catch(e) {}
+    _videoRecordedChunks = [];
+    return;
+  }
+
+  // Haptic feedback
+  if (navigator.vibrate) navigator.vibrate([15, 10, 15]);
+
+  try { _videoMediaRecorder.stop(); } catch(e) {}
+}
+
+function mathVideoShowPreview() {
+  if (!_videoRecordedUrl) return;
+
+  // Pause camera feed
+  mathSnapPauseCamera();
+
+  // Hide dock and other controls
+  var dock = document.querySelector('.snap-dock');
+  var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+  var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
+  if (dock) dock.style.setProperty('display', 'none', 'important');
+  if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
+  if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
+
+  // Show video preview overlay
+  var overlay = document.getElementById('videoPreviewOverlay');
+  var player = document.getElementById('videoPreviewPlayer');
+  if (player) {
+    player.src = _videoRecordedUrl;
+    player.load();
+  }
+  if (overlay) overlay.style.setProperty('display', 'flex', 'important');
+}
+
+function mathVideoRetake() {
+  // Clean up
+  var player = document.getElementById('videoPreviewPlayer');
+  if (player) { player.pause(); player.removeAttribute('src'); player.load(); }
+  if (_videoRecordedUrl) { URL.revokeObjectURL(_videoRecordedUrl); _videoRecordedUrl = null; }
+  _videoRecordedBlob = null;
+
+  // Hide video preview
+  var overlay = document.getElementById('videoPreviewOverlay');
+  if (overlay) overlay.style.setProperty('display', 'none', 'important');
+
+  // Restore dock and controls
+  var dock = document.querySelector('.snap-dock');
+  var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+  var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
+  if (dock) dock.style.setProperty('display', 'flex', 'important');
+  if (skipBtn) skipBtn.style.setProperty('display', 'flex', 'important');
+  if (uploadBtn) uploadBtn.style.setProperty('display', 'flex', 'important');
+
+  // Restart camera
+  mathSnapStartCamera();
+}
+
+function mathVideoAttach() {
+  if (!_videoRecordedBlob) return;
+
+  var player = document.getElementById('videoPreviewPlayer');
+  if (player) player.pause();
+
+  // Convert video blob to base64 data URL for chat attachment
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+
+    _snapTransition({
+      flyImage: null,
+      onMidpoint: function() {
+        showImageAttachmentPreview('math', dataUrl);
+        var chatInput = document.getElementById('mathChatInput');
+        if (chatInput) chatInput.focus();
+        var sendBtn = document.getElementById('mathSendBtn');
+        if (sendBtn) sendBtn.disabled = false;
+      },
+      onDone: function() {
+        // Clean up video state
+        var overlay = document.getElementById('videoPreviewOverlay');
+        if (overlay) overlay.style.setProperty('display', 'none', 'important');
+        if (player) { player.removeAttribute('src'); player.load(); }
+        if (_videoRecordedUrl) { URL.revokeObjectURL(_videoRecordedUrl); _videoRecordedUrl = null; }
+        _videoRecordedBlob = null;
+      }
+    });
+  };
+  reader.readAsDataURL(_videoRecordedBlob);
 }
 
 function mathSnapCapture() {
@@ -4765,14 +5091,12 @@ function mathSnapAttachAll() {
       }
       _multiSnapImages = [];
       renderMultiSnapGallery();
-      // Pre-fill prompt
+      // Focus chat so user can type their own message
       var chatInput = document.getElementById('mathChatInput');
-      if (chatInput) {
-        chatInput.value = 'Solve these math problems. Show all steps.';
-        chatInput.dispatchEvent(new Event('input'));
-        var sendBtn = document.getElementById('mathSendBtn');
-        if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
-      }
+      if (chatInput) chatInput.focus();
+      // Enable send button since images are attached
+      var sendBtn = document.getElementById('mathSendBtn');
+      if (sendBtn) sendBtn.disabled = false;
     }
   });
 }
@@ -4931,15 +5255,18 @@ function mathSnapSolve() {
   _snapTransition({
     flyImage: flyImg,
     onMidpoint: function() {
-      // Attach the captured image to the math chat
+      // Attach the captured image to the math chat (user types their own message)
       showImageAttachmentPreview('math', capturedData);
-      // Pre-fill prompt and send
-      var chatInput = document.getElementById('mathChatInput');
-      if (chatInput) {
-        chatInput.value = 'Solve this math problem. Show all steps.';
-        chatInput.dispatchEvent(new Event('input'));
+      var isMobile = document.body.classList.contains('is-mobile-device');
+      if (isMobile) {
+        // Don't focus on mobile — let user tap the input to open keyboard
+        var mobileSend = document.getElementById('mathMobileSendBtn');
+        if (mobileSend) mobileSend.disabled = false;
+      } else {
+        var chatInput = document.getElementById('mathChatInput');
+        if (chatInput) chatInput.focus();
         var sendBtn = document.getElementById('mathSendBtn');
-        if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
+        if (sendBtn) sendBtn.disabled = false;
       }
     },
     onDone: function() {
@@ -5076,13 +5403,22 @@ function mobileMathSend() {
   var mobileInput = document.getElementById('mathMobileChatInput');
   var desktopInput = document.getElementById('mathChatInput');
   var sendBtn = document.getElementById('mathSendBtn');
-  if (!mobileInput || !desktopInput || !mobileInput.value.trim()) return;
+  var hasText = mobileInput && mobileInput.value.trim();
+  var hasImages = _pendingPasteImage['math'] && _pendingPasteImage['math'].length > 0;
+  if (!mobileInput || !desktopInput || (!hasText && !hasImages)) return;
   desktopInput.value = mobileInput.value;
   desktopInput.dispatchEvent(new Event('input'));
   mobileInput.value = '';
   mobileInput.style.height = 'auto';
+  mobileInput.placeholder = 'Ask Math AI...';
   var mobileSend = document.getElementById('mathMobileSendBtn');
   if (mobileSend) mobileSend.disabled = true;
+  // Clear mobile attachment preview
+  var mobileBar = document.getElementById('mathMobileInputBar');
+  if (mobileBar) {
+    var preview = mobileBar.querySelector('.global-attachment-preview');
+    if (preview) preview.remove();
+  }
   if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
   var welcome = document.getElementById('mathMobileWelcome');
   if (welcome) welcome.style.display = 'none';
@@ -5239,25 +5575,40 @@ function showImageAttachmentPreview(pageId, dataUrl) {
   _pendingPasteImage[pageId] = _pendingPasteImage[pageId] || [];
   _pendingPasteImage[pageId].push(dataUrl);
 
-  var pageEl = document.getElementById('page-' + pageId);
-  if (pageId === 'home') pageEl = document.querySelector('.home-chat-section') || document.getElementById('page-home');
-  var wrap = pageEl ? pageEl.querySelector('.chat-input-wrap') : null;
+  var isMobile = document.body.classList.contains('is-mobile-device');
+
+  // On mobile math page, target the mobile input bar instead of the hidden desktop chat-input-wrap
+  var wrap;
+  if (isMobile && pageId === 'math') {
+    wrap = document.getElementById('mathMobileInputBar');
+  } else {
+    var pageEl = document.getElementById('page-' + pageId);
+    if (pageId === 'home') pageEl = document.querySelector('.home-chat-section') || document.getElementById('page-home');
+    wrap = pageEl ? pageEl.querySelector('.chat-input-wrap') : null;
+  }
   if (!wrap) return;
 
   var previewEl = wrap.querySelector('.global-attachment-preview');
   if (!previewEl) {
     previewEl = document.createElement('div');
     previewEl.className = 'global-attachment-preview';
-    var inputBox = wrap.querySelector('.chat-input-box');
-    if (inputBox) wrap.insertBefore(previewEl, inputBox);
+    if (isMobile && pageId === 'math') {
+      wrap.insertBefore(previewEl, wrap.firstChild);
+    } else {
+      var inputBox = wrap.querySelector('.chat-input-box');
+      if (inputBox) wrap.insertBefore(previewEl, inputBox);
+    }
   }
   previewEl.style.display = 'flex';
 
   var box = document.createElement('div');
   box.className = 'preview-img-box';
   var img = document.createElement('img');
-  var isAudio = dataUrl.startsWith('data:audio') || dataUrl.startsWith('data:video');
-  img.src = isAudio ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%23c8b88a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>' : dataUrl;
+  var isVideo = dataUrl.startsWith('data:video');
+  var isAudio = dataUrl.startsWith('data:audio') || isVideo;
+  img.src = isVideo ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%23c8b88a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>'
+       : isAudio ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%23c8b88a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
+       : dataUrl;
   img.style.objectFit = isAudio ? 'none' : 'contain';
   img.alt = 'Pending attachment';
   var btn = document.createElement('button');
@@ -5269,8 +5620,36 @@ function showImageAttachmentPreview(pageId, dataUrl) {
   box.appendChild(btn);
   previewEl.appendChild(box);
 
-  var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
-  if (input) { input.placeholder = 'Image(s) attached! Type a message and hit Enter...'; input.focus(); }
+  // Update the correct input based on mobile/desktop
+  if (isMobile && pageId === 'math') {
+    var mobileInput = document.getElementById('mathMobileChatInput');
+    if (mobileInput) mobileInput.placeholder = 'Image attached! Type a message...';
+    var mobileSend = document.getElementById('mathMobileSendBtn');
+    if (mobileSend) mobileSend.disabled = false;
+  } else {
+    var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
+    if (input) { input.placeholder = 'Image(s) attached! Type a message and hit Enter...'; if (!isMobile) input.focus(); }
+  }
+  updateSendBtnState(pageId);
+}
+
+/* ── Update send button state: enable if text OR images present ── */
+function updateSendBtnState(pageId) {
+  var btnId = (pageId === 'home') ? 'homeSendBtn' : (pageId + 'SendBtn');
+  var btn = document.getElementById(btnId);
+  var inputId = (pageId === 'home') ? 'homeChatInput' : (pageId + 'ChatInput');
+  var input = document.getElementById(inputId);
+  var hasText = input && input.value.trim().length > 0;
+  var hasImages = _pendingPasteImage[pageId] && _pendingPasteImage[pageId].length > 0;
+  var enabled = hasText || hasImages;
+  if (btn) btn.disabled = !enabled;
+  // Also update mobile send button for math page
+  if (pageId === 'math') {
+    var mobileSend = document.getElementById('mathMobileSendBtn');
+    var mobileInput = document.getElementById('mathMobileChatInput');
+    var mobileHasText = mobileInput && mobileInput.value.trim().length > 0;
+    if (mobileSend) mobileSend.disabled = !(mobileHasText || hasImages);
+  }
 }
 
 function removeSpecificAttachment(pageId, dataUrl, elementNode) {
@@ -5286,18 +5665,31 @@ function removeSpecificAttachment(pageId, dataUrl, elementNode) {
     previewEl.style.display = 'none';
     var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
     if (input) input.placeholder = '';
+    // Also reset mobile math input placeholder
+    if (pageId === 'math') {
+      var mobileInput = document.getElementById('mathMobileChatInput');
+      if (mobileInput) mobileInput.placeholder = 'Ask Math AI...';
+    }
   }
+  updateSendBtnState(pageId);
 }
 
 function clearImageAttachmentPreview(pageId) {
   _pendingPasteImage[pageId] = [];
+  // Clear all attachment previews (desktop and mobile)
   var pageEl = document.getElementById('page-' + pageId);
   if (pageId === 'home') pageEl = document.querySelector('.home-chat-section') || document.getElementById('page-home');
-  var previewEl = pageEl ? pageEl.querySelector('.global-attachment-preview') : null;
-  if (previewEl) { previewEl.innerHTML = ''; previewEl.style.display = 'none'; }
+  if (pageEl) {
+    var previews = pageEl.querySelectorAll('.global-attachment-preview');
+    previews.forEach(function(el) { el.innerHTML = ''; el.style.display = 'none'; });
+  }
 
   var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
   if (input) input.placeholder = '';
+  if (pageId === 'math') {
+    var mobileInput = document.getElementById('mathMobileChatInput');
+    if (mobileInput) mobileInput.placeholder = 'Ask Math AI...';
+  }
 }
 /* ── Desmos Graph Modal ── */
 var _desmosCalcInstance = null;
@@ -6878,23 +7270,104 @@ let userProfile = null;
 const ADMIN_EMAILS = ['your.email@example.com', 'test@test.com'];
 const TESTER_EMAILS = ['carsyndeangelis@gmail.com'];
 
+
 function initSupabase() {
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) return;
-  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  var _authReady = false;
+
+  // Detect OAuth redirect tokens BEFORE creating client
+  var _hasOAuthReturn = location.hash && (location.hash.includes('access_token') || location.hash.includes('error'));
+
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { detectSessionInUrl: true, flowType: 'implicit' }
+  });
+
+  var _signedIn = false;
+
   sbClient.auth.onAuthStateChange((event, session) => {
-    _authReady = true;
-    if (session?.user) { currentUser = session.user; onSignIn(); }
-    else { currentUser = null; userProfile = null; onSignOut(); }
+    if (session?.user) {
+      _signedIn = true;
+      currentUser = session.user;
+      onSignIn();
+    } else if (!_hasOAuthReturn) {
+      // Only call onSignOut if this is NOT an OAuth redirect —
+      // on OAuth redirect, INITIAL_SESSION fires null before the
+      // hash token is processed, so we must NOT show landing yet.
+      currentUser = null; userProfile = null;
+      onSignOut();
+    }
   });
-  sbClient.auth.getSession().then(({ data }) => {
-    if (!_authReady && data.session?.user) { currentUser = data.session.user; onSignIn(); }
-  });
+
+  // If this is an OAuth redirect, poll for the session that Supabase
+  // is extracting from the URL hash. The token exchange happens async
+  // inside createClient and can take a moment.
+  if (_hasOAuthReturn) {
+    var _pollCount = 0;
+    var _pollTimer = setInterval(function() {
+      _pollCount++;
+      sbClient.auth.getSession().then(function(result) {
+        var s = result.data && result.data.session;
+        if (s && s.user && !_signedIn) {
+          _signedIn = true;
+          currentUser = s.user;
+          clearInterval(_pollTimer);
+          onSignIn();
+          if (history.replaceState) history.replaceState(null, '', location.pathname);
+        }
+      });
+      if (_pollCount >= 20) {
+        clearInterval(_pollTimer);
+        if (!_signedIn) { currentUser = null; userProfile = null; onSignOut(); }
+      }
+    }, 250);
+  }
 }
 
 /* ══════════════════════════════════════════════════════
    AUTH FUNCTIONS
 ══════════════════════════════════════════════════════ */
+/* ── Pricing Popup ── */
+function openPricingPopup() {
+  document.getElementById('pricingOverlay').classList.add('open');
+}
+function closePricingPopup() {
+  document.getElementById('pricingOverlay').classList.remove('open');
+}
+
+/* ── Features Popup (? button) ─────────────────────────
+   UPDATE THIS ARRAY whenever features change.
+   The popup auto-renders from this single source of truth.
+──────────────────────────────────────────────────────── */
+var OBSIDIA_FEATURES = [
+  { icon: '\u{1F9EE}', name: 'AI Math Tutor', desc: 'Algebra through calculus with step-by-step LaTeX solutions. Switches to advanced model for complex topics.' },
+  { icon: '\u{1F4DD}', name: 'Essay Coach', desc: 'Thesis building, outlining, drafting, proofreading. Grade-level calibrated with humanizer mode.' },
+  { icon: '\u{1F9E0}', name: 'Interactive Quizzes', desc: 'AI-generated quizzes with instant feedback, scoring, and explanations. Track mastery over time.' },
+  { icon: '\u{1F4F7}', name: 'Homework Scanner', desc: 'Photograph any problem. Claude Vision reads it and provides step-by-step help.' },
+  { icon: '\u{1F3AF}', name: 'ACT/SAT Prep', desc: 'Real-format practice questions. Instant scoring. Strategy coaching. Score tracking.' },
+  { icon: '\u{1F469}\u{200D}\u{1F3EB}', name: 'Teacher Dashboard', desc: 'Class management, assignments, student progress reports. Standards-aligned. FERPA ready.' },
+  { icon: '\u{1F4DA}', name: 'Flashcard Decks', desc: 'Create, study, and master flashcards with spaced repetition. AI generates cards from any topic.' },
+  { icon: '\u{1F3A8}', name: 'Themes & XP', desc: 'Earn XP, unlock achievements, and customize your experience with dark/light themes.' }
+];
+
+function openFeaturesPopup() {
+  var list = document.getElementById('featuresPopupList');
+  list.innerHTML = OBSIDIA_FEATURES.map(function(f) {
+    return '<div class="features-popup-item">' +
+      '<div class="features-popup-icon">' + f.icon + '</div>' +
+      '<div><div class="features-popup-name">' + f.name + '</div>' +
+      '<div class="features-popup-desc">' + f.desc + '</div></div></div>';
+  }).join('');
+  document.getElementById('featuresOverlay').classList.add('open');
+}
+function closeFeaturesPopup() {
+  document.getElementById('featuresOverlay').classList.remove('open');
+}
+
+/* ── TEST: Get Started Free bypasses auth (remove before release) ── */
+function getStartedFree() {
+  localStorage.setItem('obsidia_guest_mode', 'true');
+  hideLanding();
+}
+
 function openAuth() {
   document.getElementById('authStepEmail').style.display = 'block';
   document.getElementById('authStepCode').style.display = 'none';
@@ -7011,6 +7484,7 @@ async function signOut() {
 async function onSignIn() {
   localStorage.removeItem('obsidia_guest_mode');
   closeAuth();
+  hideLanding();
   document.getElementById('navSignedOut').style.display = 'none';
   document.getElementById('navSignedIn').style.display = 'block';
   // Update header button
@@ -7692,11 +8166,25 @@ function handleScan(inputEl) {
   container.innerHTML = '';
   appendMsg('scanMessages', 'user', 'Scanning: ' + file.name);
   const typingEl = appendTypingTo('scanMessages');
-  setTimeout(() => {
-    typingEl.remove();
-    typeMsg('scanMessages', 'ai', 'I detected this appears to be a math problem. Routing to Math AI for step-by-step solution...');
-    setTimeout(() => navigate('math'), 2000);
-  }, 1500);
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var imageData = ev.target.result;
+    setTimeout(function() {
+      typingEl.remove();
+      typeMsg('scanMessages', 'ai', 'Image captured! Routing to Math AI — type your question and hit send.');
+      setTimeout(function() {
+        navigate('math');
+        setTimeout(function() {
+          showImageAttachmentPreview('math', imageData);
+          var mathInput = document.getElementById('mathChatInput');
+          if (mathInput) mathInput.focus();
+          var sendBtn = document.getElementById('mathSendBtn');
+          if (sendBtn) sendBtn.disabled = false;
+        }, 300);
+      }, 1500);
+    }, 1000);
+  };
+  reader.readAsDataURL(file);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -7801,13 +8289,17 @@ document.addEventListener('DOMContentLoaded', checkMobileState);
 // Run immediately as well for scripts that load after DOM
 checkMobileState();
 
+function syncMobileToggle(checked) {
+  var main = document.getElementById('sandboxMobileSim');
+  var landing = document.getElementById('landingMobileSim');
+  if (main) main.checked = checked;
+  if (landing) landing.checked = checked;
+  checkMobileState();
+  saveSandboxPrefs();
+}
+
 function exitSimulatorMode() {
-  var simToggle = document.getElementById('sandboxMobileSim');
-  if (simToggle) {
-    simToggle.checked = false;
-    if (typeof checkMobileState === 'function') checkMobileState();
-    if (typeof saveSandboxPrefs === 'function') saveSandboxPrefs();
-  }
+  syncMobileToggle(false);
 }
 
 // ── Sandbox Preferences ──
@@ -7828,7 +8320,9 @@ function loadSandboxPrefs() {
   try {
     var prefs = JSON.parse(localStorage.getItem('obs_sandbox_prefs') || '{}');
     window._sandboxPrefs = prefs;
-    var ms = document.getElementById('sandboxMobileSim'); if (ms) { ms.checked = !!prefs.mobileSim; } checkMobileState();
+    var ms = document.getElementById('sandboxMobileSim'); if (ms) { ms.checked = !!prefs.mobileSim; }
+    var ls = document.getElementById('landingMobileSim'); if (ls) { ls.checked = !!prefs.mobileSim; }
+    checkMobileState();
     var me = document.getElementById('sandboxMathEngine'); if (me) me.checked = !!prefs.mathEngine;
     var dl = document.getElementById('sandboxDebugLogs'); if (dl) dl.checked = !!prefs.debugLogs;
     var ec = document.getElementById('sandboxExtendedCtx'); if (ec) ec.checked = !!prefs.extendedCtx;
@@ -8504,12 +8998,15 @@ handleScan = function(inputEl) {
     var imageData = ev.target.result;
     setTimeout(function() {
       typingEl.remove();
-      typeMsg('scanMessages', 'ai', 'Detected content in your image. Routing to Math AI for analysis...');
+      typeMsg('scanMessages', 'ai', 'Image captured! Routing to Math AI — type your question and hit send.');
       setTimeout(function() {
         navigate('math');
         setTimeout(function() {
-          appendImageMsg('mathMessages', imageData, file.name);
-          streamAIResponse('mathMessages', 'I uploaded a photo of my homework. Please analyze what you see and help me solve it step by step.', 'math', { mode: mathModeState, mathType: mathType, model: mathModel }, 'math', imageData);
+          showImageAttachmentPreview('math', imageData);
+          var mathInput = document.getElementById('mathChatInput');
+          if (mathInput) mathInput.focus();
+          var sendBtn = document.getElementById('mathSendBtn');
+          if (sendBtn) sendBtn.disabled = false;
         }, 300);
       }, 1500);
     }, 1000);
@@ -8752,18 +9249,41 @@ onSignOut = function() {
 ══════════════════════════════════════════════════════ */
 // _navHook3 consolidated into main navigate()
 
-// Show landing if not signed in — wait for Supabase session check first
-(async function() {
-  try {
-    if (sbClient) {
-      var { data } = await sbClient.auth.getSession();
-      if (data && data.session && data.session.user) {
-        currentUser = data.session.user;
-      }
+// Show landing if not signed in — wait for Supabase auth to fully settle first.
+// After an OAuth redirect Supabase needs time to exchange the URL code for a
+// session, so we listen for the auth state change before deciding.
+(function() {
+  // If the URL has an OAuth token hash, do NOT show landing — let the
+  // poll in initSupabase handle sign-in.
+  var _isOAuthReturn = location.hash && location.hash.includes('access_token');
+
+  function decideLanding() {
+    if (_isOAuthReturn) {
+      try { loadDailyChallenge(); } catch(e) {}
+      return;
     }
-  } catch(e) { console.error('Session check failed:', e); }
-  if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) { try { showLanding(); } catch(e) {} }
-  try { loadDailyChallenge(); } catch(e) {}
+    if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) {
+      try { showLanding(); } catch(e) {}
+    }
+    try { loadDailyChallenge(); } catch(e) {}
+  }
+
+  if (!sbClient) { decideLanding(); return; }
+
+  var settled = false;
+  function settle() {
+    if (settled) return;
+    settled = true;
+    decideLanding();
+  }
+
+  var { data: { subscription } } = sbClient.auth.onAuthStateChange(function(event, session) {
+    if (session && session.user) { currentUser = session.user; }
+    settle();
+    subscription.unsubscribe();
+  });
+
+  setTimeout(settle, 3000);
 })();
 
 /* ── PERF: IntersectionObserver for stagger animations ── */
