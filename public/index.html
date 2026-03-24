@@ -748,6 +748,12 @@
       display: none; opacity: 0;
       transform: translateX(20px);
       transition: opacity 0.15s ease, transform 0.15s ease;
+      /* SPA internal container scrolling */
+      flex: 1;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     .page.active {
       display: block; opacity: 1; transform: translateX(0);
