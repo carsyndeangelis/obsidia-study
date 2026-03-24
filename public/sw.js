@@ -1,4 +1,4 @@
-const CACHE_NAME = 'obsidia-v7.0.1';
+const CACHE_NAME = 'obsidia-v7.2.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -33,7 +33,20 @@ self.addEventListener('fetch', event => {
     return event.respondWith(fetch(event.request));
   }
 
-  // Cache-first for static assets
+  // Network-first for HTML pages (ensures fresh content on deploy)
+  if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/') {
+    return event.respondWith(
+      fetch(event.request).then(response => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
+  }
+
+  // Cache-first for other static assets (CSS, JS, fonts, images)
   event.respondWith(
     caches.match(event.request).then(cached => {
       const fetchPromise = fetch(event.request).then(response => {
