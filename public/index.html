@@ -3843,6 +3843,9 @@ function navigate(pageId) {
       /* Reset math snap state — always start at camera on mobile */
       if (pageId === 'math') {
         document.body.classList.remove('math-snap-dismissed');
+        // Restore camera UI visibility (was hidden via JS to override inline !important)
+        var snapUI = document.querySelector('.mobile-math-snap-ui');
+        if (snapUI) snapUI.style.display = '';
         // Instantly wipe the previous frozen capture state every time the tab opens
         if (typeof mathSnapRetake === 'function') mathSnapRetake();
 
@@ -4454,6 +4457,8 @@ function mathSnapAttachAll() {
   closeMultiSnapViewer();
   mathSnapStopCamera();
   document.body.classList.add('math-snap-dismissed');
+  var snapUI = document.querySelector('.mobile-math-snap-ui');
+  if (snapUI) snapUI.style.display = 'none';
   for (var i = 0; i < _multiSnapImages.length; i++) {
     showImageAttachmentPreview('math', _multiSnapImages[i]);
   }
@@ -4552,6 +4557,9 @@ function mathSnapSolve() {
   // Stop camera, dismiss snap UI, show math chat
   mathSnapStopCamera();
   document.body.classList.add('math-snap-dismissed');
+  // Inline !important beats CSS !important, so hide via JS directly
+  var snapUI = document.querySelector('.mobile-math-snap-ui');
+  if (snapUI) snapUI.style.display = 'none';
 
   // Attach the captured image to the math chat
   showImageAttachmentPreview('math', _mathSnapData);
@@ -4568,9 +4576,12 @@ function mathSnapSolve() {
 }
 
 function mathSnapGoToChat() {
-  // Stop camera, switch to math chat
+  // Stop camera, dismiss snap UI, show desktop math chat
   mathSnapStopCamera();
   document.body.classList.add('math-snap-dismissed');
+  // Inline !important beats CSS !important, so hide via JS directly
+  var snapUI = document.querySelector('.mobile-math-snap-ui');
+  if (snapUI) snapUI.style.display = 'none';
 }
 
 function mathSnapOpenGallery() {
@@ -4686,6 +4697,9 @@ function mathSnapToggleFlash() {
 function mathSnapShowCamera() {
   // Show camera UI, hide chat UI
   document.body.classList.remove('math-snap-dismissed');
+  // Restore camera UI visibility (was hidden via JS to override inline !important)
+  var snapUI = document.querySelector('.mobile-math-snap-ui');
+  if (snapUI) snapUI.style.display = '';
   mathSnapRetake();
   mathSnapStartCamera();
 }
