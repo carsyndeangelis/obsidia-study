@@ -1073,6 +1073,52 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   height: 44px;
 }
 
+/* ── Video Capture Mode — Shutter States ── */
+.is-mobile-device .snap-shutter.snap-shutter-video {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35) !important;
+  transition: transform 0.15s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.is-mobile-device .snap-shutter.snap-shutter-video svg circle,
+.is-mobile-device .snap-shutter.snap-shutter-video svg ellipse {
+  stroke: #ef4444 !important;
+}
+.is-mobile-device .snap-shutter.snap-shutter-recording {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.6) !important;
+  transform: scale(1.08);
+  animation: shutterRecPulse 1.2s ease-in-out infinite;
+}
+@keyframes shutterRecPulse {
+  0%, 100% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.8); }
+}
+@keyframes recBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* ── Video Preview Overlay ── */
+.is-mobile-device #videoPreviewOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 20;
+  padding: 20px;
+}
+.is-mobile-device #videoPreviewPlayer {
+  border-radius: 12px;
+  max-width: 92%;
+  max-height: calc(100% - 160px);
+  background: #111;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
 /* @media mirror block REMOVED — all mobile styles are class-based via
    .is-mobile-device, making the @media (max-width:768px) mirror redundant
    and a source of specificity conflicts on native hardware. */

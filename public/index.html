@@ -2385,9 +2385,10 @@
       </div>
     </div>
     <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important; pointer-events:auto !important;">
-      <div class="snap-mode-pills" style="display:flex; gap:12px; background:rgba(0,0,0,0.6); padding:4px; border-radius:30px;">
-        <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')" style="padding:10px 20px; border-radius:24px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-size:14px;">Single Question</button>
-        <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')" style="padding:10px 20px; border-radius:24px; border:none; background:transparent; color:#888; font-size:14px;">Multiple Snaps</button>
+      <div class="snap-mode-pills" style="display:flex; gap:8px; background:rgba(0,0,0,0.6); padding:4px; border-radius:30px;">
+        <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')" style="padding:10px 16px; border-radius:24px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-size:13px; font-weight:600; font-family:var(--font-ui); cursor:pointer;">Single Question</button>
+        <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')" style="padding:10px 16px; border-radius:24px; border:none; background:transparent; color:#888; font-size:13px; font-weight:600; font-family:var(--font-ui); cursor:pointer;">Multiple Snaps</button>
+        <button class="snap-pill" id="snapPillVideo" onclick="mathSnapMode('video')" style="padding:10px 16px; border-radius:24px; border:none; background:transparent; color:#888; font-size:13px; font-weight:600; font-family:var(--font-ui); cursor:pointer;">Video Capture</button>
       </div>
       <button class="snap-shutter" id="snapShutter" onclick="mathSnapCapture()" style="width:76px !important; height:76px !important; background:#000 !important; border-radius:50% !important; border:3px solid #c9a84c !important; box-shadow:0 0 20px rgba(201,168,76,0.4) !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:12px !important; cursor:pointer;">
         <svg viewBox="0 0 34 34" fill="none" width="44" height="44"><defs><radialGradient id="shutterS" cx="37%" cy="31%" r="62%"><stop offset="0%" stop-color="#525252"/><stop offset="38%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#050505"/></radialGradient><linearGradient id="shutterR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="42%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="17" cy="16" r="12.5" fill="url(#shutterS)"/><ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#shutterR)" stroke-width="2" fill="none" opacity="0.6"/></svg>
@@ -2408,6 +2409,19 @@
     <div style="padding:24px 20px; background:linear-gradient(transparent, #000 30%); display:flex; justify-content:center; align-items:center;">
       <button id="albumAttachAllBtn" onclick="mathSnapAttachAll()" style="display:none; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4);">Attach All Photos to Chat</button>
     </div>
+  </div>
+
+  <!-- Video Recording Timer (shown during hold-to-record) -->
+  <div id="videoRecordingIndicator" style="display:none; position:absolute; top:80px; left:50%; transform:translateX(-50%); z-index:25; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); border-radius:24px; padding:8px 20px; display:none; align-items:center; gap:10px; pointer-events:none;">
+    <span id="videoRecDot" style="width:12px; height:12px; border-radius:50%; background:#ef4444; animation:recBlink 1s ease-in-out infinite;"></span>
+    <span id="videoRecTimer" style="color:#fff; font-family:var(--font-ui); font-size:16px; font-weight:700; letter-spacing:0.04em; font-variant-numeric:tabular-nums;">0:00</span>
+  </div>
+
+  <!-- Video Preview Overlay -->
+  <div id="videoPreviewOverlay" style="display:none; position:absolute !important; inset:0 !important; z-index:20 !important; background:#000 !important; flex-direction:column !important; justify-content:center !important; align-items:center !important;">
+    <button id="videoRetakeBtn" onclick="mathVideoRetake()" style="position:absolute; top:12px; right:16px; padding:10px 20px; background:rgba(0,0,0,0.7); border-radius:24px; color:#c9a84c; font-family:var(--font-ui); font-size:14px; font-weight:700; border:1px solid #c9a84c; cursor:pointer; backdrop-filter:blur(4px); z-index:25;">Retake</button>
+    <video id="videoPreviewPlayer" playsinline controls style="max-width:92%; max-height:calc(100% - 160px); border-radius:12px; background:#111;"></video>
+    <button id="videoAttachBtn" onclick="mathVideoAttach()" style="margin-top:20px; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4); z-index:20; flex-shrink:0;">Attach Video to Math AI Chat</button>
   </div>
 
   <!-- ═══ DESKTOP MATH UI (hidden on mobile) ═══ -->
@@ -4120,7 +4134,10 @@ function sendPageMsg(pg) {
   var text = input.value.trim();
   var hasImages = _pendingPasteImage[pg] && _pendingPasteImage[pg].length > 0;
   if (!text && !hasImages) return;
-  if (!text && hasImages) text = 'Please analyze the attached image and help me step by step.';
+  if (!text && hasImages) {
+    var hasVideo = _pendingPasteImage[pg] && _pendingPasteImage[pg].some(function(d) { return typeof d === 'string' && d.startsWith('data:video'); });
+    text = hasVideo ? 'Please analyze the attached video and help me step by step.' : 'Please analyze the attached image and help me step by step.';
+  }
   var welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
   appendMsg(msgContainer,'user',text);
   input.value=''; input.style.height='auto'; var sbtn = document.getElementById(pg+'SendBtn'); if(sbtn) sbtn.disabled=true;
@@ -4519,27 +4536,40 @@ window.addEventListener('beforeunload', function() {
   }
 });
 
+/* ── Video Capture variables ── */
+var _videoMediaRecorder = null;
+var _videoRecordedChunks = [];
+var _videoRecordedBlob = null;
+var _videoRecordedUrl = null;
+var _videoRecTimerInterval = null;
+var _videoRecStartTime = 0;
+var _videoIsRecording = false;
+
 function mathSnapMode(mode) {
   _mathSnapMode = mode;
   var singleBtn = document.getElementById('snapPillSingle');
   var multiBtn = document.getElementById('snapPillMulti');
+  var videoBtn = document.getElementById('snapPillVideo');
   var reticle = document.getElementById('snapReticle');
-  if (singleBtn && multiBtn) {
-    singleBtn.classList.toggle('snap-pill-active', mode === 'single');
-    multiBtn.classList.toggle('snap-pill-active', mode === 'multi');
-    // Enforce active/inactive pill styling
-    if (mode === 'single') {
-      singleBtn.style.background = 'rgba(255,255,255,0.2)';
-      singleBtn.style.color = '#fff';
-      multiBtn.style.background = 'transparent';
-      multiBtn.style.color = '#888';
-    } else {
-      multiBtn.style.background = 'rgba(255,255,255,0.2)';
-      multiBtn.style.color = '#fff';
-      singleBtn.style.background = 'transparent';
-      singleBtn.style.color = '#888';
-    }
+  var shutter = document.getElementById('snapShutter');
+  var allPills = [singleBtn, multiBtn, videoBtn];
+
+  // Reset all pills to inactive
+  allPills.forEach(function(btn) {
+    if (!btn) return;
+    btn.classList.remove('snap-pill-active');
+    btn.style.background = 'transparent';
+    btn.style.color = '#888';
+  });
+  // Activate current pill
+  var activeBtn = mode === 'single' ? singleBtn : mode === 'multi' ? multiBtn : videoBtn;
+  if (activeBtn) {
+    activeBtn.classList.add('snap-pill-active');
+    activeBtn.style.background = 'rgba(255,255,255,0.2)';
+    activeBtn.style.color = '#fff';
   }
+
+  // Reticle: single=targeting box, multi/video=none
   if (reticle) {
     if (mode === 'single') {
       reticle.style.setProperty('display', 'block', 'important');
@@ -4553,12 +4583,217 @@ function mathSnapMode(mode) {
     var label = reticle.querySelector('.snap-reticle-label');
     if (label) label.textContent = mode === 'single' ? 'Aim at a math problem' : 'Capture full page';
   }
-  // Seamlessly hide/show the Multi-Snap Album based on current mode
+
+  // Hide multi-snap gallery unless in multi mode
   var galleryStr = document.getElementById('multiGalleryContainer');
   if (galleryStr) {
-    if (mode === 'single') galleryStr.style.setProperty('display', 'none', 'important');
-    if (mode === 'multi') galleryStr.style.setProperty('display', 'flex', 'important');
+    galleryStr.style.setProperty('display', mode === 'multi' ? 'flex' : 'none', 'important');
   }
+
+  // Shutter button: in video mode, switch to hold-to-record (red ring)
+  if (shutter) {
+    if (mode === 'video') {
+      shutter.classList.add('snap-shutter-video');
+      shutter.removeAttribute('onclick');
+      shutter.addEventListener('pointerdown', _videoShutterDown);
+      shutter.addEventListener('pointerup', _videoShutterUp);
+      shutter.addEventListener('pointerleave', _videoShutterUp);
+      shutter.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+    } else {
+      shutter.classList.remove('snap-shutter-video');
+      shutter.setAttribute('onclick', 'mathSnapCapture()');
+      shutter.removeEventListener('pointerdown', _videoShutterDown);
+      shutter.removeEventListener('pointerup', _videoShutterUp);
+      shutter.removeEventListener('pointerleave', _videoShutterUp);
+    }
+  }
+
+  // Hide video preview if switching away from video
+  if (mode !== 'video') {
+    var vp = document.getElementById('videoPreviewOverlay');
+    if (vp) vp.style.setProperty('display', 'none', 'important');
+    var ri = document.getElementById('videoRecordingIndicator');
+    if (ri) ri.style.setProperty('display', 'none', 'important');
+    mathVideoStopRecording(true);
+  }
+}
+
+/* ── Video hold-to-record shutter handlers ── */
+function _videoShutterDown(e) {
+  e.preventDefault();
+  if (_videoIsRecording) return;
+  mathVideoStartRecording();
+}
+
+function _videoShutterUp(e) {
+  e.preventDefault();
+  if (!_videoIsRecording) return;
+  mathVideoStopRecording(false);
+}
+
+function mathVideoStartRecording() {
+  if (!_mathSnapStream || !_mathSnapStream.active) {
+    mathSnapStartCamera();
+    setTimeout(mathVideoStartRecording, 300);
+    return;
+  }
+
+  _videoRecordedChunks = [];
+  _videoRecordedBlob = null;
+  if (_videoRecordedUrl) { URL.revokeObjectURL(_videoRecordedUrl); _videoRecordedUrl = null; }
+
+  var mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9'
+               : MediaRecorder.isTypeSupported('video/webm') ? 'video/webm'
+               : MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' : '';
+
+  try {
+    _videoMediaRecorder = new MediaRecorder(_mathSnapStream, mimeType ? { mimeType: mimeType } : {});
+  } catch (err) {
+    console.warn('MediaRecorder failed:', err);
+    if (typeof showToast === 'function') showToast('error', '', 'Recording Error', 'Your browser does not support video recording.');
+    return;
+  }
+
+  _videoMediaRecorder.ondataavailable = function(e) {
+    if (e.data && e.data.size > 0) _videoRecordedChunks.push(e.data);
+  };
+
+  _videoMediaRecorder.onstop = function() {
+    _videoRecordedBlob = new Blob(_videoRecordedChunks, { type: _videoMediaRecorder.mimeType || 'video/webm' });
+    _videoRecordedUrl = URL.createObjectURL(_videoRecordedBlob);
+    _videoRecordedChunks = [];
+    mathVideoShowPreview();
+  };
+
+  _videoMediaRecorder.start(100); // collect data every 100ms
+  _videoIsRecording = true;
+  _videoRecStartTime = Date.now();
+
+  // Haptic feedback
+  if (navigator.vibrate) navigator.vibrate(25);
+
+  // Show recording indicator
+  var indicator = document.getElementById('videoRecordingIndicator');
+  if (indicator) indicator.style.setProperty('display', 'flex', 'important');
+
+  // Start timer display
+  var timerEl = document.getElementById('videoRecTimer');
+  _videoRecTimerInterval = setInterval(function() {
+    var elapsed = Math.floor((Date.now() - _videoRecStartTime) / 1000);
+    var mins = Math.floor(elapsed / 60);
+    var secs = elapsed % 60;
+    if (timerEl) timerEl.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }, 250);
+
+  // Pulse the shutter button red while recording
+  var shutter = document.getElementById('snapShutter');
+  if (shutter) shutter.classList.add('snap-shutter-recording');
+}
+
+function mathVideoStopRecording(discard) {
+  if (_videoRecTimerInterval) { clearInterval(_videoRecTimerInterval); _videoRecTimerInterval = null; }
+
+  var indicator = document.getElementById('videoRecordingIndicator');
+  if (indicator) indicator.style.setProperty('display', 'none', 'important');
+
+  var shutter = document.getElementById('snapShutter');
+  if (shutter) shutter.classList.remove('snap-shutter-recording');
+
+  if (!_videoIsRecording || !_videoMediaRecorder) { _videoIsRecording = false; return; }
+  _videoIsRecording = false;
+
+  if (discard) {
+    _videoMediaRecorder.ondataavailable = null;
+    _videoMediaRecorder.onstop = null;
+    try { _videoMediaRecorder.stop(); } catch(e) {}
+    _videoRecordedChunks = [];
+    return;
+  }
+
+  // Haptic feedback
+  if (navigator.vibrate) navigator.vibrate([15, 10, 15]);
+
+  try { _videoMediaRecorder.stop(); } catch(e) {}
+}
+
+function mathVideoShowPreview() {
+  if (!_videoRecordedUrl) return;
+
+  // Pause camera feed
+  mathSnapPauseCamera();
+
+  // Hide dock and other controls
+  var dock = document.querySelector('.snap-dock');
+  var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+  var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
+  if (dock) dock.style.setProperty('display', 'none', 'important');
+  if (skipBtn) skipBtn.style.setProperty('display', 'none', 'important');
+  if (uploadBtn) uploadBtn.style.setProperty('display', 'none', 'important');
+
+  // Show video preview overlay
+  var overlay = document.getElementById('videoPreviewOverlay');
+  var player = document.getElementById('videoPreviewPlayer');
+  if (player) {
+    player.src = _videoRecordedUrl;
+    player.load();
+  }
+  if (overlay) overlay.style.setProperty('display', 'flex', 'important');
+}
+
+function mathVideoRetake() {
+  // Clean up
+  var player = document.getElementById('videoPreviewPlayer');
+  if (player) { player.pause(); player.removeAttribute('src'); player.load(); }
+  if (_videoRecordedUrl) { URL.revokeObjectURL(_videoRecordedUrl); _videoRecordedUrl = null; }
+  _videoRecordedBlob = null;
+
+  // Hide video preview
+  var overlay = document.getElementById('videoPreviewOverlay');
+  if (overlay) overlay.style.setProperty('display', 'none', 'important');
+
+  // Restore dock and controls
+  var dock = document.querySelector('.snap-dock');
+  var skipBtn = document.querySelector('.mobile-math-snap-ui > .snap-skip-btn');
+  var uploadBtn = document.querySelector('.mobile-math-snap-ui > .snap-upload-btn');
+  if (dock) dock.style.setProperty('display', 'flex', 'important');
+  if (skipBtn) skipBtn.style.setProperty('display', 'flex', 'important');
+  if (uploadBtn) uploadBtn.style.setProperty('display', 'flex', 'important');
+
+  // Restart camera
+  mathSnapStartCamera();
+}
+
+function mathVideoAttach() {
+  if (!_videoRecordedBlob) return;
+
+  var player = document.getElementById('videoPreviewPlayer');
+  if (player) player.pause();
+
+  // Convert video blob to base64 data URL for chat attachment
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var dataUrl = e.target.result;
+
+    _snapTransition({
+      flyImage: null,
+      onMidpoint: function() {
+        showImageAttachmentPreview('math', dataUrl);
+        var chatInput = document.getElementById('mathChatInput');
+        if (chatInput) chatInput.focus();
+        var sendBtn = document.getElementById('mathSendBtn');
+        if (sendBtn) sendBtn.disabled = false;
+      },
+      onDone: function() {
+        // Clean up video state
+        var overlay = document.getElementById('videoPreviewOverlay');
+        if (overlay) overlay.style.setProperty('display', 'none', 'important');
+        if (player) { player.removeAttribute('src'); player.load(); }
+        if (_videoRecordedUrl) { URL.revokeObjectURL(_videoRecordedUrl); _videoRecordedUrl = null; }
+        _videoRecordedBlob = null;
+      }
+    });
+  };
+  reader.readAsDataURL(_videoRecordedBlob);
 }
 
 function mathSnapCapture() {
@@ -5258,8 +5493,11 @@ function showImageAttachmentPreview(pageId, dataUrl) {
   var box = document.createElement('div');
   box.className = 'preview-img-box';
   var img = document.createElement('img');
-  var isAudio = dataUrl.startsWith('data:audio') || dataUrl.startsWith('data:video');
-  img.src = isAudio ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%23c8b88a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>' : dataUrl;
+  var isVideo = dataUrl.startsWith('data:video');
+  var isAudio = dataUrl.startsWith('data:audio') || isVideo;
+  img.src = isVideo ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%23c8b88a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>'
+       : isAudio ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%23c8b88a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>'
+       : dataUrl;
   img.style.objectFit = isAudio ? 'none' : 'contain';
   img.alt = 'Pending attachment';
   var btn = document.createElement('button');

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'obsidia-v7.1.0';
+const CACHE_NAME = 'obsidia-v7.2.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
