@@ -1913,7 +1913,10 @@
 </aside>
 <div class="main-panel">
   <div class="main-topbar">
-    <button class="mtb mob-btn" onclick="toggleMobileSidebar()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <button class="mtb mob-btn" onclick="toggleMobileSidebar()">
+      <svg class="mob-btn-ham" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg class="mob-btn-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
     <div class="main-topbar-left" onclick="navigate('home')" style="cursor:pointer">
       <svg class="main-topbar-logo" viewBox="0 0 100 100" fill="none">
         <defs>
@@ -2323,7 +2326,7 @@
 <!-- ═══════════════════════════════════════════════════
      PAGE: ADVANCED MATH (kept from original)
 ═══════════════════════════════════════════════════ -->
-<div class="page" id="page-math" style="height:100%; display:flex; flex-direction:column;">
+<div class="page" id="page-math">
   <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
   <div class="mobile-math-snap-ui" style="display:flex !important; position:absolute !important; top:0; left:0; right:0; bottom:0; width:100% !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; z-index:999 !important; touch-action:none !important;">
     <button class="snap-back-btn" onclick="navigateBack()" style="position:absolute !important; top:20px !important; left:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid #c9a84c !important; color:#c9a84c !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important;">
