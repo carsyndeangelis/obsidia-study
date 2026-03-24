@@ -667,8 +667,8 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   margin: 0 12px;
   margin-bottom: calc(12px + env(safe-area-inset-bottom, 0));
   background: var(--black-panel, #141414);
-  border: 1px solid var(--black-border, #1e1e1e);
-  border-radius: 24px; padding: 6px;
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 20px; padding: 6px;
   align-items: flex-end; gap: 4px;
   z-index: 20;
 }
@@ -1005,14 +1005,18 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ── Bottom dock — absolute-anchored to bottom of viewfinder ── */
 .is-mobile-device .snap-dock {
   position: absolute !important;
-  bottom: 40px !important;
+  bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
   left: 0 !important;
   right: 0 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  gap: 24px !important;
+  gap: 20px !important;
   z-index: 10 !important;
+}
+.is-mobile-device .snap-upload-btn,
+.is-mobile-device .snap-skip-btn {
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
 }
 .is-mobile-device .snap-dock-captured .snap-shutter,
 .is-mobile-device .snap-dock-captured .snap-mode-pills {
@@ -1549,12 +1553,45 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .global-attachment-preview img {
   height: 48px;
 }
+/* Attachment preview inside mobile math input bar */
 .is-mobile-device .math-mobile-input-bar .global-attachment-preview {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  padding: 8px 8px 4px;
+  padding: 6px 6px 2px;
   width: 100%;
+  order: -1;
+}
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview .preview-img-box {
+  position: relative;
+  display: inline-block;
+}
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview img {
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  background: #0c0c0c;
+}
+.is-mobile-device .math-mobile-input-bar .global-attachment-preview .remove-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #e53e3e;
+  color: #fff;
+  border: 2px solid #141414;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  padding: 0;
 }
 
 /* ─── MATH CANVAS (whiteboard) ────────────────────────────── */
