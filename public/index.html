@@ -7282,21 +7282,66 @@ function _authDebug(msg) {
 
 function initSupabase() {
   if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) { _authDebug('initSupabase: SKIPPED (no URL or lib)'); return; }
-  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  _authDebug('initSupabase: client created');
+
+  // Detect OAuth redirect tokens BEFORE creating client
+  var _hasOAuthReturn = location.hash && (location.hash.includes('access_token') || location.hash.includes('error'));
+  _authDebug('initSupabase: hasOAuthReturn=' + _hasOAuthReturn);
   _authDebug('URL hash: ' + (location.hash ? location.hash.substring(0,80) : '(none)'));
-  _authDebug('URL search: ' + (location.search ? location.search.substring(0,80) : '(none)'));
-  var _authReady = false;
+
+  sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { detectSessionInUrl: true, flowType: 'implicit' }
+  });
+  _authDebug('initSupabase: client created');
+
+  var _signedIn = false;
+
   sbClient.auth.onAuthStateChange((event, session) => {
     _authDebug('onAuthStateChange: event=' + event + ' user=' + (session?.user?.email || 'null'));
-    _authReady = true;
-    if (session?.user) { currentUser = session.user; _authDebug('→ calling onSignIn'); onSignIn(); }
-    else { currentUser = null; userProfile = null; _authDebug('→ calling onSignOut'); onSignOut(); }
+    if (session?.user) {
+      _signedIn = true;
+      currentUser = session.user;
+      _authDebug('→ calling onSignIn');
+      onSignIn();
+    } else if (!_hasOAuthReturn) {
+      // Only call onSignOut if this is NOT an OAuth redirect —
+      // on OAuth redirect, INITIAL_SESSION fires null before the
+      // hash token is processed, so we must NOT show landing yet.
+      currentUser = null; userProfile = null;
+      _authDebug('→ calling onSignOut (no OAuth return)');
+      onSignOut();
+    } else {
+      _authDebug('→ SKIPPING onSignOut (OAuth return pending)');
+    }
   });
-  sbClient.auth.getSession().then(({ data }) => {
-    _authDebug('getSession: authReady=' + _authReady + ' user=' + (data.session?.user?.email || 'null'));
-    if (!_authReady && data.session?.user) { currentUser = data.session.user; _authDebug('→ calling onSignIn from getSession'); onSignIn(); }
-  });
+
+  // If this is an OAuth redirect, poll for the session that Supabase
+  // is extracting from the URL hash. The token exchange happens async
+  // inside createClient and can take a moment.
+  if (_hasOAuthReturn) {
+    _authDebug('OAuth return detected — polling for session');
+    var _pollCount = 0;
+    var _pollTimer = setInterval(function() {
+      _pollCount++;
+      sbClient.auth.getSession().then(function(result) {
+        var s = result.data && result.data.session;
+        _authDebug('poll #' + _pollCount + ': user=' + (s?.user?.email || 'null'));
+        if (s && s.user && !_signedIn) {
+          _signedIn = true;
+          currentUser = s.user;
+          clearInterval(_pollTimer);
+          _authDebug('→ poll success, calling onSignIn');
+          onSignIn();
+          // Clean hash from URL
+          if (history.replaceState) history.replaceState(null, '', location.pathname);
+        }
+      });
+      if (_pollCount >= 20) {
+        clearInterval(_pollTimer);
+        _authDebug('poll gave up after 20 attempts');
+        if (!_signedIn) { currentUser = null; userProfile = null; onSignOut(); }
+      }
+    }, 250);
+  }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -9227,8 +9272,18 @@ onSignOut = function() {
 // After an OAuth redirect Supabase needs time to exchange the URL code for a
 // session, so we listen for the auth state change before deciding.
 (function() {
+  // If the URL has an OAuth token hash, do NOT show landing — let the
+  // poll in initSupabase handle sign-in. Showing landing here would
+  // flash the landing page before the token is processed.
+  var _isOAuthReturn = location.hash && location.hash.includes('access_token');
+
   function decideLanding() {
-    _authDebug('decideLanding: currentUser=' + (currentUser?.email || 'null') + ' guest=' + localStorage.getItem('obsidia_guest_mode'));
+    _authDebug('decideLanding: currentUser=' + (currentUser?.email || 'null') + ' guest=' + localStorage.getItem('obsidia_guest_mode') + ' oauth=' + _isOAuthReturn);
+    if (_isOAuthReturn) {
+      _authDebug('decideLanding → SKIP (OAuth return in progress)');
+      try { loadDailyChallenge(); } catch(e) {}
+      return;
+    }
     if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) {
       _authDebug('decideLanding → showLanding()');
       try { showLanding(); } catch(e) {}
