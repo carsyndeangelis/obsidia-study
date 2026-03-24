@@ -531,13 +531,22 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   animation: reticle-pulse 2.5s ease-in-out infinite;
 }
 
-/* Single Question — centered slightly above middle for ergonomics */
+/* Single Question — white targeting box with dimmed camera behind */
 .is-mobile-device .snap-reticle-single {
+  position: absolute;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 85%;
-  height: 220px;
+  width: 90%;
+  height: 260px;
+  z-index: 5;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 16px !important;
+  background: transparent !important;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5) !important;
+}
+.is-mobile-device .snap-reticle-single .snap-reticle-corner {
+  display: none !important;
 }
 
 /* Multiple Snaps — subtle full-page frame, no heavy borders */
@@ -653,17 +662,14 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ── Bottom dock — absolute-anchored to bottom of viewfinder ── */
 .is-mobile-device .snap-dock {
   position: absolute;
-  bottom: 0;
+  bottom: 40px;
   left: 0;
   right: 0;
-  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  padding: 20px 20px;
-  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  gap: 24px;
+  z-index: 10;
 }
 .is-mobile-device .snap-dock-captured .snap-shutter,
 .is-mobile-device .snap-dock-captured .snap-mode-pills {
@@ -698,33 +704,27 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   color: #c9a84c;
 }
 
-/* Shutter button */
+/* Shutter button — premium gold Obsidia brand */
 .is-mobile-device .snap-shutter {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: none;
-  border: 4px solid rgba(255, 255, 255, 0.9);
-  padding: 4px;
-  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  background: #000 !important;
+  border-radius: 50% !important;
+  border: 3px solid #c9a84c !important;
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.4) !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 12px;
+  cursor: pointer;
   transition: transform 0.15s ease;
 }
 .is-mobile-device .snap-shutter:active {
   transform: scale(0.9);
 }
-.is-mobile-device .snap-shutter-ring {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  transition: background 0.15s ease;
-}
-.is-mobile-device .snap-shutter:active .snap-shutter-ring {
-  background: rgba(201, 168, 76, 0.8);
+.is-mobile-device .snap-shutter svg {
+  width: 44px;
+  height: 44px;
 }
 
 /* ─── MATH SNAP @media mirror (native hardware fallback) ── */
