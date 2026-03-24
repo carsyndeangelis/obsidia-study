@@ -2482,7 +2482,6 @@
       </div>
     </div>
     <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important;">
-      <button id="multiAttachAllBtn" onclick="mathSnapAttachAll()" style="display:none; padding:14px 28px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:15px; font-weight:800; border:none; border-radius:28px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4), 0 4px 16px rgba(0,0,0,0.4); letter-spacing:0.02em;">Attach All Photos to Chat</button>
       <div class="snap-mode-pills" style="display:flex; gap:12px; background:rgba(0,0,0,0.6); padding:4px; border-radius:30px;">
         <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')" style="padding:10px 20px; border-radius:24px; border:none; background:rgba(255,255,255,0.2); color:#fff; font-size:14px;">Single Question</button>
         <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')" style="padding:10px 20px; border-radius:24px; border:none; background:transparent; color:#888; font-size:14px;">Multiple Snaps</button>
@@ -2494,10 +2493,16 @@
     </div>
     <button class="snap-skip-btn" onclick="mathSnapGoToChat()" style="position:absolute; left:20px; bottom:20px; padding:8px 12px; background:rgba(0,0,0,0.6); border-radius:12px; color:#fff; border:1px solid #c9a84c; z-index:30; font-family:var(--font-ui); font-size:12px; font-weight:600; cursor:pointer;">Math AI Page <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
   </div>
-  <!-- Multi-Snap Fullscreen Viewer -->
-  <div id="multiSnapFullscreen" style="display:none; position:absolute; inset:0; z-index:999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center;">
-    <button onclick="closeMultiSnapViewer()" style="position:absolute; top:16px; right:16px; background:rgba(255,0,0,0.7); border:none; color:#fff; width:40px; height:40px; border-radius:50%; font-size:20px; font-weight:bold; cursor:pointer; z-index:1000;">✕</button>
-    <img id="multiSnapFullImg" style="max-width:90%; max-height:85%; object-fit:contain; border-radius:12px;" />
+  <!-- Multi-Snap Review Album -->
+  <div id="multiSnapFullscreen" style="display:none; position:absolute; inset:0; z-index:999; background:rgba(0,0,0,0.98); flex-direction:column; overflow:hidden;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 20px 10px;">
+      <span style="color:#fff; font-family:var(--font-ui); font-size:18px; font-weight:bold;">Review Scans</span>
+      <button onclick="closeMultiSnapViewer()" style="background:rgba(255,255,255,0.2); border:none; color:#fff; width:36px; height:36px; border-radius:50%; font-size:16px; cursor:pointer;">✕</button>
+    </div>
+    <div id="multiSnapGrid" style="flex-grow:1; overflow-y:auto; padding:20px; display:flex; flex-wrap:wrap; gap:20px; align-content:flex-start; justify-content:center;"></div>
+    <div style="padding:24px 20px; background:linear-gradient(transparent, #000 30%); display:flex; justify-content:center; align-items:center;">
+      <button id="albumAttachAllBtn" onclick="mathSnapAttachAll()" style="display:none; padding:16px 32px; background:linear-gradient(135deg, #c9a84c, #a8893a); color:#0c0c0c; font-family:var(--font-ui); font-size:16px; font-weight:800; border:none; border-radius:30px; cursor:pointer; box-shadow:0 0 24px rgba(201,168,76,0.4);">Attach All Photos to Chat</button>
+    </div>
   </div>
 
   <!-- ═══ DESKTOP MATH UI (hidden on mobile) ═══ -->
@@ -4341,9 +4346,6 @@ function mathSnapCapture() {
       // Multi-snap: push to array, keep camera running
       _multiSnapImages.push(frameData);
       renderMultiSnapGallery();
-      // Show/hide "Attach All" button
-      var attachBtn = document.getElementById('multiAttachAllBtn');
-      if (attachBtn) attachBtn.style.setProperty('display', 'block', 'important');
     } else {
       // Single: freeze camera, show full preview
       _mathSnapData = frameData;
@@ -4383,7 +4385,7 @@ function renderMultiSnapGallery() {
         var thumb = document.createElement('img');
         thumb.src = _multiSnapImages[idx];
         thumb.style.cssText = 'width:60px; height:60px; border-radius:12px; object-fit:cover; border:2px solid #fff; cursor:pointer;';
-        thumb.onclick = function() { openMultiSnapViewer(idx); };
+        thumb.onclick = function() { openMultiSnapViewer(); };
         var del = document.createElement('button');
         del.innerHTML = '✕';
         del.style.cssText = 'position:absolute; top:-6px; right:-6px; width:22px; height:22px; border-radius:50%; background:rgba(255,0,0,0.8); color:#fff; border:none; font-size:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1;';
@@ -4397,7 +4399,7 @@ function renderMultiSnapGallery() {
     // Collapsed album button with count badge
     var albumWrap = document.createElement('div');
     albumWrap.style.cssText = 'position:relative; width:60px; height:60px; cursor:pointer; flex-shrink:0;';
-    albumWrap.onclick = function() { openMultiSnapViewer(_multiSnapImages.length - 1); };
+    albumWrap.onclick = function() { openMultiSnapViewer(); };
     var albumThumb = document.createElement('img');
     albumThumb.src = _multiSnapImages[_multiSnapImages.length - 1];
     albumThumb.style.cssText = 'width:60px; height:60px; border-radius:12px; object-fit:cover; border:2px solid #fff;';
@@ -4413,19 +4415,108 @@ function renderMultiSnapGallery() {
 function deleteMultiSnap(index) {
   _multiSnapImages.splice(index, 1);
   renderMultiSnapGallery();
-  var attachBtn = document.getElementById('multiAttachAllBtn');
-  if (attachBtn) {
+  // If album viewer is open, re-render it
+  var viewer = document.getElementById('multiSnapFullscreen');
+  if (viewer && viewer.style.display === 'flex') {
     if (_multiSnapImages.length === 0) {
-      attachBtn.style.setProperty('display', 'none', 'important');
+      closeMultiSnapViewer();
+    } else {
+      openMultiSnapViewer();
     }
   }
 }
 
-function openMultiSnapViewer(index) {
+function openMultiSnapViewer() {
   var viewer = document.getElementById('multiSnapFullscreen');
-  var img = document.getElementById('multiSnapFullImg');
-  if (!viewer || !img) return;
-  img.src = _multiSnapImages[index] || '';
+  var grid = document.getElementById('multiSnapGrid');
+  var attachBtn = document.getElementById('albumAttachAllBtn');
+  if (!viewer || !grid) return;
+
+  grid.innerHTML = '';
+
+  _multiSnapImages.forEach(function(src, index) {
+    var itemObj = document.createElement('div');
+    itemObj.style.cssText = 'display:flex; flex-direction:column; align-items:center; width:40%; max-width:140px;';
+
+    // Page number label
+    var label = document.createElement('div');
+    label.style.cssText = 'color:#c9a84c; font-weight:bold; font-family:var(--font-ui); margin-bottom:8px; font-size:14px;';
+    label.innerText = 'Page ' + (index + 1);
+
+    // Image container
+    var imgWrap = document.createElement('div');
+    imgWrap.style.cssText = 'position:relative; width:100%; aspect-ratio:3/4;';
+
+    var img = document.createElement('img');
+    img.src = src;
+    img.style.cssText = 'width:100%; height:100%; object-fit:cover; border-radius:12px; border:2px solid #333;';
+
+    // Delete button
+    var delBtn = document.createElement('button');
+    delBtn.innerHTML = '✕';
+    delBtn.style.cssText = 'position:absolute; top:-10px; right:-10px; width:28px; height:28px; border-radius:50%; background:#ef4444; color:#fff; border:none; font-weight:bold; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.5);';
+    delBtn.onclick = (function(idx) {
+      return function() {
+        _multiSnapImages.splice(idx, 1);
+        openMultiSnapViewer();
+        renderMultiSnapGallery();
+      };
+    })(index);
+
+    imgWrap.appendChild(img);
+    imgWrap.appendChild(delBtn);
+
+    // Reorder arrows
+    var shiftWrap = document.createElement('div');
+    shiftWrap.style.cssText = 'display:flex; gap:16px; margin-top:12px;';
+
+    var leftBtn = document.createElement('button');
+    leftBtn.innerHTML = '◀';
+    leftBtn.style.cssText = 'background:rgba(255,255,255,0.1); border:none; color:#fff; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px;';
+    leftBtn.disabled = index === 0;
+    leftBtn.style.opacity = index === 0 ? '0.3' : '1';
+    leftBtn.onclick = (function(idx) {
+      return function() {
+        if (idx > 0) {
+          var temp = _multiSnapImages[idx];
+          _multiSnapImages[idx] = _multiSnapImages[idx - 1];
+          _multiSnapImages[idx - 1] = temp;
+          openMultiSnapViewer();
+          renderMultiSnapGallery();
+        }
+      };
+    })(index);
+
+    var rightBtn = document.createElement('button');
+    rightBtn.innerHTML = '▶';
+    rightBtn.style.cssText = 'background:rgba(255,255,255,0.1); border:none; color:#fff; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px;';
+    rightBtn.disabled = index === _multiSnapImages.length - 1;
+    rightBtn.style.opacity = index === _multiSnapImages.length - 1 ? '0.3' : '1';
+    rightBtn.onclick = (function(idx) {
+      return function() {
+        if (idx < _multiSnapImages.length - 1) {
+          var temp = _multiSnapImages[idx];
+          _multiSnapImages[idx] = _multiSnapImages[idx + 1];
+          _multiSnapImages[idx + 1] = temp;
+          openMultiSnapViewer();
+          renderMultiSnapGallery();
+        }
+      };
+    })(index);
+
+    shiftWrap.appendChild(leftBtn);
+    shiftWrap.appendChild(rightBtn);
+
+    itemObj.appendChild(label);
+    itemObj.appendChild(imgWrap);
+    itemObj.appendChild(shiftWrap);
+    grid.appendChild(itemObj);
+  });
+
+  if (attachBtn) {
+    attachBtn.style.setProperty('display', _multiSnapImages.length > 0 ? 'block' : 'none', 'important');
+  }
+
   viewer.style.setProperty('display', 'flex', 'important');
 }
 
@@ -4436,6 +4527,7 @@ function closeMultiSnapViewer() {
 
 function mathSnapAttachAll() {
   if (_multiSnapImages.length === 0) return;
+  closeMultiSnapViewer();
   mathSnapStopCamera();
   document.body.classList.add('math-snap-dismissed');
   for (var i = 0; i < _multiSnapImages.length; i++) {
@@ -4443,8 +4535,6 @@ function mathSnapAttachAll() {
   }
   _multiSnapImages = [];
   renderMultiSnapGallery();
-  var attachBtn = document.getElementById('multiAttachAllBtn');
-  if (attachBtn) attachBtn.style.setProperty('display', 'none', 'important');
   // Pre-fill prompt
   var chatInput = document.getElementById('mathChatInput');
   if (chatInput) {
@@ -4492,10 +4582,8 @@ function mathSnapRetake() {
   if (dock) dock.style.setProperty('display', 'flex', 'important');
   if (skipBtn) skipBtn.style.setProperty('display', 'block', 'important');
 
-  // Clean up gallery and attach button
+  // Clean up gallery
   renderMultiSnapGallery();
-  var attachBtn = document.getElementById('multiAttachAllBtn');
-  if (attachBtn) attachBtn.style.setProperty('display', 'none', 'important');
 
   // Clean up the image tag to save device memory
   var img = document.getElementById('snapPreviewImg');
