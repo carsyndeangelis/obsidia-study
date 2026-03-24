@@ -9200,18 +9200,40 @@ onSignOut = function() {
 ══════════════════════════════════════════════════════ */
 // _navHook3 consolidated into main navigate()
 
-// Show landing if not signed in — wait for Supabase session check first
-(async function() {
-  try {
-    if (sbClient) {
-      var { data } = await sbClient.auth.getSession();
-      if (data && data.session && data.session.user) {
-        currentUser = data.session.user;
-      }
+// Show landing if not signed in — wait for Supabase auth to fully settle first.
+// After an OAuth redirect Supabase needs time to exchange the URL code for a
+// session, so we listen for the auth state change before deciding.
+(function() {
+  function decideLanding() {
+    if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) {
+      try { showLanding(); } catch(e) {}
     }
-  } catch(e) { console.error('Session check failed:', e); }
-  if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) { try { showLanding(); } catch(e) {} }
-  try { loadDailyChallenge(); } catch(e) {}
+    try { loadDailyChallenge(); } catch(e) {}
+  }
+
+  if (!sbClient) { decideLanding(); return; }
+
+  // Give onAuthStateChange up to 3 seconds to fire (covers OAuth redirects).
+  // If it already fired (via initSupabase), currentUser will be set and we skip landing.
+  var settled = false;
+
+  function settle() {
+    if (settled) return;
+    settled = true;
+    decideLanding();
+  }
+
+  // Listen for the very first auth state change — this is the definitive answer
+  var { data: { subscription } } = sbClient.auth.onAuthStateChange(function(event, session) {
+    if (session && session.user) {
+      currentUser = session.user;
+    }
+    settle();
+    subscription.unsubscribe();
+  });
+
+  // Fallback: if onAuthStateChange never fires (no session at all), settle after timeout
+  setTimeout(settle, 3000);
 })();
 
 /* ── PERF: IntersectionObserver for stagger animations ── */
