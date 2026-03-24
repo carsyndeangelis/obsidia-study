@@ -1349,10 +1349,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 /* ─── MODALS & OVERLAYS ───────────────────────────────────── */
 .is-mobile-device .auth-card {
   width: 92% !important;
-  max-width: 400px;
+  max-width: 360px;
   margin: 16px;
-  padding: 24px 20px;
-  border-radius: 16px;
+  padding: 32px 24px 28px;
+  border-radius: 20px;
 }
 .is-mobile-device .auth-card h2 {
   font-size: 20px;
@@ -1432,6 +1432,14 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   width: 100%;
   max-width: none;
   font-size: 13px;
+}
+
+/* ─── PRICING POPUP (MOBILE) ─────────────────────────────── */
+.is-mobile-device .pricing-popup-card {
+  width: 92% !important;
+  max-width: 360px;
+  padding: 32px 20px 24px;
+  border-radius: 20px;
 }
 
 /* ─── LANDING PAGE ────────────────────────────────────────── */
