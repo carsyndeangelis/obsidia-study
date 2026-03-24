@@ -2476,8 +2476,8 @@
       </div>
       <div class="snap-preview-overlay" id="snapPreviewOverlay" style="display:none; position:absolute !important; inset:0 !important; z-index:10 !important; background:#000 !important;">
         <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" style="width:100%; height:100%; object-fit:contain;" />
-        <button class="snap-retake-btn" onclick="mathSnapRetake()" style="position:absolute; top:20px; left:20px;">Retake</button>
-        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%);">Solve This Problem</button>
+        <button class="snap-retake-btn" onclick="mathSnapRetake()" style="position:absolute; top:20px; left:20px;">Retake Picture</button>
+        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%);">Attach to Math AI Chat</button>
       </div>
     </div>
     <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important;">
@@ -3919,6 +3919,9 @@ function navigate(pageId) {
       /* Reset math snap state — always start at camera on mobile */
       if (pageId === 'math') {
         document.body.classList.remove('math-snap-dismissed');
+        // Instantly wipe the previous frozen capture state every time the tab opens
+        if (typeof mathSnapRetake === 'function') mathSnapRetake();
+
         if (document.body.classList.contains('is-mobile-device') && typeof mathSnapStartCamera === 'function') {
           setTimeout(mathSnapStartCamera, 200);
         }
@@ -4311,9 +4314,9 @@ function mathSnapCapture() {
     var dock = document.querySelector('.snap-dock');
 
     if (img) img.src = _mathSnapData;
-    if (preview) preview.style.display = 'block';
-    if (reticle) reticle.style.display = 'none';
-    if (dock) dock.style.display = 'none';
+    if (preview) preview.style.setProperty('display', 'block', 'important');
+    if (reticle) reticle.style.setProperty('display', 'none', 'important');
+    if (dock) dock.style.setProperty('display', 'none', 'important');
 
     // Stop the actual camera hardware to freeze the screen
     mathSnapStopCamera();
@@ -4339,11 +4342,10 @@ function mathSnapHandleFile(inputEl) {
     var img = document.getElementById('snapPreviewImg');
     var reticle = document.getElementById('snapReticle');
     if (img) img.src = _mathSnapData;
-    if (preview) preview.style.display = 'flex';
-    if (reticle) reticle.style.display = 'none';
-    // Hide shutter
+    if (preview) preview.style.setProperty('display', 'block', 'important');
+    if (reticle) reticle.style.setProperty('display', 'none', 'important');
     var dock = document.querySelector('.snap-dock');
-    if (dock) dock.classList.add('snap-dock-captured');
+    if (dock) dock.style.setProperty('display', 'none', 'important');
   };
   reader.readAsDataURL(file);
   inputEl.value = '';
@@ -4355,9 +4357,9 @@ function mathSnapRetake() {
   var reticle = document.getElementById('snapReticle');
   var dock = document.querySelector('.snap-dock');
 
-  if (preview) preview.style.display = 'none';
-  if (reticle) reticle.style.display = 'block';
-  if (dock) dock.style.display = 'flex';
+  if (preview) preview.style.setProperty('display', 'none', 'important');
+  if (reticle) reticle.style.setProperty('display', 'block', 'important');
+  if (dock) dock.style.setProperty('display', 'flex', 'important');
 
   // Clean up the image tag to save device memory
   var img = document.getElementById('snapPreviewImg');
