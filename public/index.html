@@ -1315,6 +1315,7 @@
       transition: 0.2s; padding: 0; flex-shrink: 0; border-radius: 50%;
     }
     .chat-attach:hover { color: var(--gold-bright); background: rgba(201,168,76,0.08); }
+    .chat-camera-btn { display: none; }
     .chat-send { color: #c8b88a; }
     .chat-send:hover { color: var(--gold-bright); transform: scale(1.06); }
     .chat-send:disabled { color: #3a342a; cursor: not-allowed; transform: none; opacity: 0.5; }
@@ -2468,7 +2469,7 @@
           <div class="sp-messages" id="mathMessages" role="log" aria-live="polite">
             <div class="chat-welcome" id="mathWelcome"><h2 class="welcome-title">Step-by-step Solutions</h2><p class="welcome-sub" style="max-width:480px;margin:0 auto 20px;line-height:1.6;">Upload a photo of your math homework, a textbook equation, or a handwritten problem. I will instantly read the image and provide a highly detailed, step-by-step solution to help you find the correct answer.</p><div><button class="btn-gold" onclick="document.getElementById('mathCameraInput').click()" style="padding:12px 24px;font-size:13px;display:inline-flex;align-items:center;gap:8px;border-radius:8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Take a Picture / Upload</button></div></div>
           </div>
-          <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><input type="file" id="mathCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
+          <div class="chat-input-wrap"><div class="chat-input-box"><button class="chat-attach" onclick="document.getElementById('mathFileInput').click()" title="Attach file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button><button class="chat-attach chat-camera-btn" onclick="document.getElementById('mathCameraInput').click()" title="Take a photo"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></button><input type="file" id="mathFileInput" accept="image/*,application/pdf" style="display:none" onchange="handlePageAttach('math',this)" /><input type="file" id="mathCameraInput" accept="image/*" capture="environment" style="display:none" onchange="handlePageAttach('math',this)" /><textarea class="chat-textarea" id="mathChatInput" rows="1"></textarea><button class="chat-send" id="mathSendBtn" aria-label="Send" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div><div class="chat-footer"><span class="chat-footer-hint">Enter to send &middot; Shift+Enter for new line</span><span class="chat-model-tag" id="mathModelTag">MATH AI &middot; CLAUDE SONNET</span></div></div>
         </div>
         <div class="math-scratch-column">
           <div class="scratch-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Scratch Pad</div>
@@ -4064,13 +4065,16 @@ function handleDroppedFile(file) {
 const homeChatInput = document.getElementById('homeChatInput');
 const homeSendBtn = document.getElementById('homeSendBtn');
 if (homeChatInput) {
-  homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; if(homeSendBtn) homeSendBtn.disabled=homeChatInput.value.trim()===''; });
+  homeChatInput.addEventListener('input', () => { homeChatInput.style.height='auto'; homeChatInput.style.height=Math.min(homeChatInput.scrollHeight,100)+'px'; updateSendBtnState('home'); });
   homeChatInput.addEventListener('keydown', e => { if (e.key==='Enter'&&!e.shiftKey) { e.preventDefault(); if(homeSendBtn&&!homeSendBtn.disabled) sendHomeMsg(); } });
 }
 if (homeSendBtn) homeSendBtn.addEventListener('click', sendHomeMsg);
 
 function sendHomeMsg() {
-  const text = homeChatInput.value.trim(); if (!text) return;
+  var text = homeChatInput.value.trim();
+  var hasImages = _pendingPasteImage['home'] && _pendingPasteImage['home'].length > 0;
+  if (!text && !hasImages) return;
+  if (!text && hasImages) text = 'Please analyze the attached image and help me.';
   // Capture images before clearing
   var pastedImgs = (typeof _pendingPasteImage !== 'undefined' && _pendingPasteImage['home'] && _pendingPasteImage['home'].length) ? _pendingPasteImage['home'].slice() : null;
   if (pastedImgs) { clearImageAttachmentPreview('home'); }
@@ -4105,7 +4109,7 @@ pages.forEach(pg => {
   const input = document.getElementById(pg+'ChatInput');
   const btn = document.getElementById(pg+'SendBtn');
   if (!input||!btn) return;
-  input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; btn.disabled=input.value.trim()===''; });
+  input.addEventListener('input', () => { input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,100)+'px'; updateSendBtnState(pg); });
   input.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();if(!btn.disabled)sendPageMsg(pg);} });
   btn.addEventListener('click', () => sendPageMsg(pg));
 });
@@ -4113,7 +4117,10 @@ pages.forEach(pg => {
 function sendPageMsg(pg) {
   var input = document.getElementById(pg+'ChatInput');
   var msgContainer = pg+'Messages';
-  var text = input.value.trim(); if (!text) return;
+  var text = input.value.trim();
+  var hasImages = _pendingPasteImage[pg] && _pendingPasteImage[pg].length > 0;
+  if (!text && !hasImages) return;
+  if (!text && hasImages) text = 'Please analyze the attached image and help me step by step.';
   var welcome = document.getElementById(pg+'Welcome'); if(welcome) welcome.classList.add('hidden');
   appendMsg(msgContainer,'user',text);
   input.value=''; input.style.height='auto'; var sbtn = document.getElementById(pg+'SendBtn'); if(sbtn) sbtn.disabled=true;
@@ -4765,14 +4772,12 @@ function mathSnapAttachAll() {
       }
       _multiSnapImages = [];
       renderMultiSnapGallery();
-      // Pre-fill prompt
+      // Focus chat so user can type their own message
       var chatInput = document.getElementById('mathChatInput');
-      if (chatInput) {
-        chatInput.value = 'Solve these math problems. Show all steps.';
-        chatInput.dispatchEvent(new Event('input'));
-        var sendBtn = document.getElementById('mathSendBtn');
-        if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
-      }
+      if (chatInput) chatInput.focus();
+      // Enable send button since images are attached
+      var sendBtn = document.getElementById('mathSendBtn');
+      if (sendBtn) sendBtn.disabled = false;
     }
   });
 }
@@ -4931,16 +4936,13 @@ function mathSnapSolve() {
   _snapTransition({
     flyImage: flyImg,
     onMidpoint: function() {
-      // Attach the captured image to the math chat
+      // Attach the captured image to the math chat (user types their own message)
       showImageAttachmentPreview('math', capturedData);
-      // Pre-fill prompt and send
       var chatInput = document.getElementById('mathChatInput');
-      if (chatInput) {
-        chatInput.value = 'Solve this math problem. Show all steps.';
-        chatInput.dispatchEvent(new Event('input'));
-        var sendBtn = document.getElementById('mathSendBtn');
-        if (sendBtn) { sendBtn.disabled = false; sendBtn.click(); }
-      }
+      if (chatInput) chatInput.focus();
+      // Enable send button since image is attached
+      var sendBtn = document.getElementById('mathSendBtn');
+      if (sendBtn) sendBtn.disabled = false;
     },
     onDone: function() {
       _mathSnapData = null;
@@ -5271,6 +5273,19 @@ function showImageAttachmentPreview(pageId, dataUrl) {
 
   var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
   if (input) { input.placeholder = 'Image(s) attached! Type a message and hit Enter...'; input.focus(); }
+  updateSendBtnState(pageId);
+}
+
+/* ── Update send button state: enable if text OR images present ── */
+function updateSendBtnState(pageId) {
+  var btnId = (pageId === 'home') ? 'homeSendBtn' : (pageId + 'SendBtn');
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
+  var inputId = (pageId === 'home') ? 'homeChatInput' : (pageId + 'ChatInput');
+  var input = document.getElementById(inputId);
+  var hasText = input && input.value.trim().length > 0;
+  var hasImages = _pendingPasteImage[pageId] && _pendingPasteImage[pageId].length > 0;
+  btn.disabled = !(hasText || hasImages);
 }
 
 function removeSpecificAttachment(pageId, dataUrl, elementNode) {
@@ -5287,6 +5302,7 @@ function removeSpecificAttachment(pageId, dataUrl, elementNode) {
     var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
     if (input) input.placeholder = '';
   }
+  updateSendBtnState(pageId);
 }
 
 function clearImageAttachmentPreview(pageId) {
@@ -7692,11 +7708,25 @@ function handleScan(inputEl) {
   container.innerHTML = '';
   appendMsg('scanMessages', 'user', 'Scanning: ' + file.name);
   const typingEl = appendTypingTo('scanMessages');
-  setTimeout(() => {
-    typingEl.remove();
-    typeMsg('scanMessages', 'ai', 'I detected this appears to be a math problem. Routing to Math AI for step-by-step solution...');
-    setTimeout(() => navigate('math'), 2000);
-  }, 1500);
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var imageData = ev.target.result;
+    setTimeout(function() {
+      typingEl.remove();
+      typeMsg('scanMessages', 'ai', 'Image captured! Routing to Math AI — type your question and hit send.');
+      setTimeout(function() {
+        navigate('math');
+        setTimeout(function() {
+          showImageAttachmentPreview('math', imageData);
+          var mathInput = document.getElementById('mathChatInput');
+          if (mathInput) mathInput.focus();
+          var sendBtn = document.getElementById('mathSendBtn');
+          if (sendBtn) sendBtn.disabled = false;
+        }, 300);
+      }, 1500);
+    }, 1000);
+  };
+  reader.readAsDataURL(file);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -8504,12 +8534,15 @@ handleScan = function(inputEl) {
     var imageData = ev.target.result;
     setTimeout(function() {
       typingEl.remove();
-      typeMsg('scanMessages', 'ai', 'Detected content in your image. Routing to Math AI for analysis...');
+      typeMsg('scanMessages', 'ai', 'Image captured! Routing to Math AI — type your question and hit send.');
       setTimeout(function() {
         navigate('math');
         setTimeout(function() {
-          appendImageMsg('mathMessages', imageData, file.name);
-          streamAIResponse('mathMessages', 'I uploaded a photo of my homework. Please analyze what you see and help me solve it step by step.', 'math', { mode: mathModeState, mathType: mathType, model: mathModel }, 'math', imageData);
+          showImageAttachmentPreview('math', imageData);
+          var mathInput = document.getElementById('mathChatInput');
+          if (mathInput) mathInput.focus();
+          var sendBtn = document.getElementById('mathSendBtn');
+          if (sendBtn) sendBtn.disabled = false;
         }, 300);
       }, 1500);
     }, 1000);

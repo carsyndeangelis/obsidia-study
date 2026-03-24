@@ -393,6 +393,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   height: 40px;
   min-width: 40px;
 }
+/* Show camera button on mobile for quick photo capture */
+.is-mobile-device .chat-camera-btn {
+  display: flex !important;
+}
 .is-mobile-device .chat-footer {
   margin-top: 4px;
   padding: 0 6px;
