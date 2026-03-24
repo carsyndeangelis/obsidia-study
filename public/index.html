@@ -2463,59 +2463,32 @@
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math">
   <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
-  <div class="mobile-math-snap-ui" style="display:none;">
-    <!-- Top bar -->
-    <div class="snap-topbar">
+  <div class="mobile-math-snap-ui" style="display:none; position:relative !important; width:100% !important; min-height:calc(100vh - 65px) !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important;">
+    <div class="snap-topbar" style="position:relative; z-index:20;">
       <button class="snap-back-btn" onclick="navigate('home')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
       <span class="snap-title">Math Snap</span>
       <button class="snap-skip-btn" onclick="mathSnapGoToChat()">Math AI Page <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"/></svg></button>
     </div>
-
-    <!-- Viewfinder area (live camera behind overlays) -->
-    <div class="snap-viewfinder" id="snapViewfinder">
-      <video id="snapCameraFeed" autoplay playsinline muted></video>
-
-      <div class="snap-reticle snap-reticle-single" id="snapReticle">
-        <div class="snap-reticle-corner snap-rc-tl"></div>
-        <div class="snap-reticle-corner snap-rc-tr"></div>
-        <div class="snap-reticle-corner snap-rc-bl"></div>
-        <div class="snap-reticle-corner snap-rc-br"></div>
-        <span class="snap-reticle-label">Aim at a math problem</span>
+    <div class="snap-viewfinder" id="snapViewfinder" style="position:absolute !important; top:0 !important; left:0 !important; width:100% !important; height:100% !important; overflow:hidden !important; z-index:1 !important;">
+      <video id="snapCameraFeed" autoplay playsinline muted style="position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; object-fit:cover !important; z-index:0 !important; background:#000 !important;"></video>
+      <div class="snap-reticle snap-reticle-single" id="snapReticle" style="position:absolute !important; top:40% !important; left:50% !important; transform:translate(-50%, -50%) !important; width:90% !important; height:260px !important; z-index:5 !important; border:2px solid rgba(255,255,255,0.9) !important; border-radius:16px !important; background:transparent !important; box-shadow:0 0 0 9999px rgba(0,0,0,0.5) !important;">
+        <span class="snap-reticle-label" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,0.6); font-family:var(--font-ui); font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; white-space:nowrap;">Aim at a math problem</span>
       </div>
-
-      <!-- Post-capture preview (hidden by default) -->
-      <div class="snap-preview-overlay" id="snapPreviewOverlay" style="display:none;">
-        <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" />
-        <button class="snap-retake-btn" onclick="mathSnapRetake()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 105.64-11.36L3 10"/></svg> Retake</button>
-        <button class="snap-solve-btn" onclick="mathSnapSolve()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Solve This Problem</button>
+      <div class="snap-preview-overlay" id="snapPreviewOverlay" style="display:none; position:absolute !important; inset:0 !important; z-index:10 !important; background:#000 !important;">
+        <img class="snap-preview-img" id="snapPreviewImg" alt="Captured problem" style="width:100%; height:100%; object-fit:contain;" />
+        <button class="snap-retake-btn" onclick="mathSnapRetake()" style="position:absolute; top:20px; left:20px;">Retake</button>
+        <button class="snap-solve-btn" onclick="mathSnapSolve()" style="position:absolute; bottom:40px; left:50%; transform:translateX(-50%);">Solve This Problem</button>
       </div>
-
-      <!-- Bottom dock (absolute inside viewfinder) -->
-      <div class="snap-dock">
-        <div class="snap-mode-pills">
-          <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')">Single Question</button>
-          <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')">Multiple Snaps</button>
-        </div>
-        <button class="snap-shutter" id="snapShutter" onclick="mathSnapCapture()">
-          <svg viewBox="0 0 34 34" fill="none" width="44" height="44">
-            <defs>
-              <radialGradient id="shutterS" cx="37%" cy="31%" r="62%">
-                <stop offset="0%" stop-color="#525252"/>
-                <stop offset="38%" stop-color="#1a1a1a"/>
-                <stop offset="100%" stop-color="#050505"/>
-              </radialGradient>
-              <linearGradient id="shutterR" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#e8c96a"/>
-                <stop offset="42%" stop-color="#c9a84c"/>
-                <stop offset="100%" stop-color="#c9a84c"/>
-              </linearGradient>
-            </defs>
-            <circle cx="17" cy="16" r="12.5" fill="url(#shutterS)"/>
-            <ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#shutterR)" stroke-width="2" fill="none" opacity="0.6"/>
-          </svg>
-        </button>
-        <input type="file" id="mathSnapFileInput" accept="image/*" capture="environment" style="display:none" onchange="mathSnapHandleFile(this)" />
+    </div>
+    <div class="snap-dock" style="position:absolute !important; bottom:40px !important; left:0 !important; right:0 !important; display:flex !important; flex-direction:column !important; align-items:center !important; gap:24px !important; z-index:20 !important;">
+      <div class="snap-mode-pills" style="display:flex; gap:12px; background:rgba(0,0,0,0.6); padding:4px; border-radius:30px;">
+        <button class="snap-pill snap-pill-active" id="snapPillSingle" onclick="mathSnapMode('single')" style="padding:10px 20px; border-radius:24px; border:none; background:#333; color:#fff; font-size:14px;">Single Question</button>
+        <button class="snap-pill" id="snapPillMulti" onclick="mathSnapMode('multi')" style="padding:10px 20px; border-radius:24px; border:none; background:transparent; color:#888; font-size:14px;">Multiple Snaps</button>
       </div>
+      <button class="snap-shutter" id="snapShutter" onclick="mathSnapCapture()" style="width:76px !important; height:76px !important; background:#000 !important; border-radius:50% !important; border:3px solid #c9a84c !important; box-shadow:0 0 20px rgba(201,168,76,0.4) !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:12px !important; cursor:pointer;">
+        <svg viewBox="0 0 34 34" fill="none" width="44" height="44"><defs><radialGradient id="shutterS" cx="37%" cy="31%" r="62%"><stop offset="0%" stop-color="#525252"/><stop offset="38%" stop-color="#1a1a1a"/><stop offset="100%" stop-color="#050505"/></radialGradient><linearGradient id="shutterR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8c96a"/><stop offset="42%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#c9a84c"/></linearGradient></defs><circle cx="17" cy="16" r="12.5" fill="url(#shutterS)"/><ellipse cx="17" cy="18" rx="15" ry="4.7" stroke="url(#shutterR)" stroke-width="2" fill="none" opacity="0.6"/></svg>
+      </button>
+      <input type="file" id="mathSnapFileInput" accept="image/*" capture="environment" style="display:none" onchange="mathSnapHandleFile(this)" />
     </div>
   </div>
 
