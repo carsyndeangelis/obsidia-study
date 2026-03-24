@@ -196,6 +196,10 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   height: 36px;
 }
 
+.is-mobile-device .mob-btn-x { display: none; }
+.is-mobile-device .sidebar-overlay.open ~ .main-panel .mob-btn-ham { display: none !important; }
+.is-mobile-device .sidebar-overlay.open ~ .main-panel .mob-btn-x { display: block !important; }
+
 /* ─── RIGHT SIDEBAR ───────────────────────────────────────── */
 .is-mobile-device .right-sidebar {
   display: none !important;
@@ -431,7 +435,8 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 }
 
 /* ─── MATH PAGE ───────────────────────────────────────────── */
-.is-mobile-device #page-math {
+.is-mobile-device #page-math { display: none !important; }
+.is-mobile-device #page-math.active {
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
