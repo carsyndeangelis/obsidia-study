@@ -144,6 +144,14 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   flex: 1;
 }
 
+/* Hide main topbar when math page is active (prevents bleed-through) */
+.is-mobile-device.math-page-active .main-topbar {
+  display: none !important;
+}
+.is-mobile-device.math-page-active .main-panel {
+  display: none !important;
+}
+
 /* ─── TOP BAR ─────────────────────────────────────────────── */
 .is-mobile-device .main-topbar {
   height: 56px;
@@ -470,6 +478,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   flex-direction: column !important;
   min-height: 0 !important;
   overflow: hidden !important;
+  background: var(--black-deep, #080808) !important;
 }
 .is-mobile-device .math-mode-bar {
   flex-wrap: wrap;

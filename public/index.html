@@ -3929,6 +3929,9 @@ function navigate(pageId) {
       if (pageId === 'settings' && typeof loadUserRecordings === 'function') loadUserRecordings();
       /* Init scratch pad when entering math */
       if (pageId === 'math' && typeof initScratchPad === 'function') setTimeout(initScratchPad, 100);
+      /* Hide main topbar on math page (mobile) to prevent bleed-through */
+      if (pageId === 'math') document.body.classList.add('math-page-active');
+      else document.body.classList.remove('math-page-active');
       /* Reset math snap state — always start at camera on mobile */
       if (pageId === 'math') {
         document.body.classList.remove('math-snap-dismissed');
@@ -5175,8 +5178,7 @@ function mathSnapSolve() {
       showImageAttachmentPreview('math', capturedData);
       var isMobile = document.body.classList.contains('is-mobile-device');
       if (isMobile) {
-        var mobileInput = document.getElementById('mathMobileChatInput');
-        if (mobileInput) mobileInput.focus();
+        // Don't focus on mobile — let user tap the input to open keyboard
         var mobileSend = document.getElementById('mathMobileSendBtn');
         if (mobileSend) mobileSend.disabled = false;
       } else {
@@ -5540,12 +5542,12 @@ function showImageAttachmentPreview(pageId, dataUrl) {
   // Update the correct input based on mobile/desktop
   if (isMobile && pageId === 'math') {
     var mobileInput = document.getElementById('mathMobileChatInput');
-    if (mobileInput) { mobileInput.placeholder = 'Image attached! Type a message...'; mobileInput.focus(); }
+    if (mobileInput) mobileInput.placeholder = 'Image attached! Type a message...';
     var mobileSend = document.getElementById('mathMobileSendBtn');
     if (mobileSend) mobileSend.disabled = false;
   } else {
     var input = document.getElementById(pageId + 'ChatInput') || document.getElementById('homeChatInput');
-    if (input) { input.placeholder = 'Image(s) attached! Type a message and hit Enter...'; input.focus(); }
+    if (input) { input.placeholder = 'Image(s) attached! Type a message and hit Enter...'; if (!isMobile) input.focus(); }
   }
   updateSendBtnState(pageId);
 }
