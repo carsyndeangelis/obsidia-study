@@ -7265,17 +7265,37 @@ let userProfile = null;
 const ADMIN_EMAILS = ['your.email@example.com', 'test@test.com'];
 const TESTER_EMAILS = ['carsyndeangelis@gmail.com'];
 
+/* ── DEBUG: Temporary visual auth logger (REMOVE BEFORE RELEASE) ── */
+var _authDebugLog = [];
+function _authDebug(msg) {
+  var t = new Date().toLocaleTimeString() + '.' + String(Date.now() % 1000).padStart(3,'0');
+  _authDebugLog.push(t + ' — ' + msg);
+  var el = document.getElementById('authDebugPanel');
+  if (el) el.innerHTML = _authDebugLog.map(function(l){return '<div>'+l+'</div>';}).join('');
+}
+(function(){
+  var d = document.createElement('div');
+  d.id = 'authDebugPanel';
+  d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:999999;background:rgba(0,0,0,0.92);color:#0f0;font-family:monospace;font-size:10px;padding:8px 10px;max-height:35vh;overflow-y:auto;pointer-events:auto;border-top:2px solid #0f0;';
+  document.body.appendChild(d);
+})();
+
 function initSupabase() {
-  if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) return;
+  if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || !window.supabase) { _authDebug('initSupabase: SKIPPED (no URL or lib)'); return; }
   sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  _authDebug('initSupabase: client created');
+  _authDebug('URL hash: ' + (location.hash ? location.hash.substring(0,80) : '(none)'));
+  _authDebug('URL search: ' + (location.search ? location.search.substring(0,80) : '(none)'));
   var _authReady = false;
   sbClient.auth.onAuthStateChange((event, session) => {
+    _authDebug('onAuthStateChange: event=' + event + ' user=' + (session?.user?.email || 'null'));
     _authReady = true;
-    if (session?.user) { currentUser = session.user; onSignIn(); }
-    else { currentUser = null; userProfile = null; onSignOut(); }
+    if (session?.user) { currentUser = session.user; _authDebug('→ calling onSignIn'); onSignIn(); }
+    else { currentUser = null; userProfile = null; _authDebug('→ calling onSignOut'); onSignOut(); }
   });
   sbClient.auth.getSession().then(({ data }) => {
-    if (!_authReady && data.session?.user) { currentUser = data.session.user; onSignIn(); }
+    _authDebug('getSession: authReady=' + _authReady + ' user=' + (data.session?.user?.email || 'null'));
+    if (!_authReady && data.session?.user) { currentUser = data.session.user; _authDebug('→ calling onSignIn from getSession'); onSignIn(); }
   });
 }
 
@@ -9185,12 +9205,15 @@ async function loadStudentAssignments() {
 ══════════════════════════════════════════════════════ */
 var _origOnSignIn = onSignIn;
 onSignIn = function(user) {
+  _authDebug('HOOK onSignIn wrapper called');
   _origOnSignIn(user);
   hideLanding();
+  _authDebug('HOOK hideLanding done, landing visible=' + document.getElementById('landingPage')?.classList.contains('visible'));
 };
 
 var _origOnSignOut = onSignOut;
 onSignOut = function() {
+  _authDebug('HOOK onSignOut wrapper → showLanding');
   _origOnSignOut();
   showLanding();
 };
@@ -9205,26 +9228,29 @@ onSignOut = function() {
 // session, so we listen for the auth state change before deciding.
 (function() {
   function decideLanding() {
+    _authDebug('decideLanding: currentUser=' + (currentUser?.email || 'null') + ' guest=' + localStorage.getItem('obsidia_guest_mode'));
     if (!currentUser && !localStorage.getItem('obsidia_guest_mode')) {
+      _authDebug('decideLanding → showLanding()');
       try { showLanding(); } catch(e) {}
+    } else {
+      _authDebug('decideLanding → SKIP (user exists or guest)');
     }
     try { loadDailyChallenge(); } catch(e) {}
   }
 
-  if (!sbClient) { decideLanding(); return; }
+  if (!sbClient) { _authDebug('IIFE: no sbClient'); decideLanding(); return; }
 
-  // Give onAuthStateChange up to 3 seconds to fire (covers OAuth redirects).
-  // If it already fired (via initSupabase), currentUser will be set and we skip landing.
   var settled = false;
 
   function settle() {
     if (settled) return;
     settled = true;
+    _authDebug('IIFE settle()');
     decideLanding();
   }
 
-  // Listen for the very first auth state change — this is the definitive answer
   var { data: { subscription } } = sbClient.auth.onAuthStateChange(function(event, session) {
+    _authDebug('IIFE listener: event=' + event + ' user=' + (session?.user?.email || 'null'));
     if (session && session.user) {
       currentUser = session.user;
     }
@@ -9232,8 +9258,7 @@ onSignOut = function() {
     subscription.unsubscribe();
   });
 
-  // Fallback: if onAuthStateChange never fires (no session at all), settle after timeout
-  setTimeout(settle, 3000);
+  setTimeout(function() { _authDebug('IIFE timeout (3s)'); settle(); }, 3000);
 })();
 
 /* ── PERF: IntersectionObserver for stagger animations ── */
