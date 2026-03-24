@@ -1924,7 +1924,6 @@
     <button class="sb-i" data-page="themes" onclick="sNav('themes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/></svg><span>Themes</span></button>
     <button class="sb-i" data-page="reminders" onclick="sNav('reminders')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span>Reminders</span></button>
     <div style="height:6px;"></div>
-    <button class="sb-i" onclick="performHardRefresh()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 102.6-6.4L21 8"/></svg><span>Hard Refresh</span></button>
   </div>
   <div class="sidebar-foot">
     <div class="sidebar-avatar" id="sbAvatar">S</div>
@@ -3237,8 +3236,11 @@
       <span id="settingsSaved" style="font-size:12px;color:var(--sci-color);display:none">&#10003; Settings saved successfully!</span>
       <button style="margin-left:auto;font-size:12px;color:#5a5040;background:none;border:none;cursor:pointer;font-family:var(--font-ui)" onclick="if(confirm('Reset all settings to defaults?'))resetSettings()">Reset to Defaults</button>
     </div>
-    <!-- Mobile-only Last Update Badge in Settings -->
-    <div id="lastUpdateBadgeMobile" style="margin:40px auto 20px; width:max-content; background:rgba(20,18,14,0.5); border:1px solid rgba(201,168,76,0.3); color:#c8b88a; font-family:var(--font-ui); font-size:11px; padding:8px 16px; border-radius:12px; display:none; gap:6px; align-items:center; font-weight:600; letter-spacing:0.04em;"></div>
+    <!-- Settings footer: version + hard refresh -->
+    <div style="margin-top:40px; padding:20px 0; border-top:1px solid var(--black-border); display:flex; flex-direction:column; align-items:center; gap:12px;">
+      <div id="lastUpdateBadgeMobile" style="width:max-content; background:rgba(20,18,14,0.5); border:1px solid rgba(201,168,76,0.15); color:#8a7e6a; font-family:var(--font-ui); font-size:11px; padding:8px 16px; border-radius:10px; display:none; gap:6px; align-items:center; font-weight:600; letter-spacing:0.04em;"></div>
+      <button onclick="performHardRefresh()" style="display:inline-flex; align-items:center; gap:6px; padding:8px 20px; background:none; border:1px solid rgba(255,255,255,0.08); border-radius:10px; color:#5a5040; font-family:var(--font-ui); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 102.6-6.4L21 8"/></svg>Hard Refresh</button>
+    </div>
   </div>
 </div>
 
