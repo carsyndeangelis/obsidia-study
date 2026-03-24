@@ -377,7 +377,7 @@
 
     /* ─── SIDEBAR ──────────────────────────────────────────── */
     body { overflow: hidden; }
-    .app-layout { display: flex; height: 100vh; overflow: hidden; }
+    .app-layout { display: flex; height: 100%; overflow: hidden; }
     .sidebar { width: 240px; background: #0c0c0c; border-right: 1px solid #1e1e1e; display: flex; flex-direction: column; flex-shrink: 0; position: relative; z-index: 50; }
     .sidebar.collapsed { width: 60px; }
     .sidebar-head { padding: 14px 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1e1e1e; min-height: 56px; }
@@ -649,11 +649,12 @@
     body:not(.is-mobile-device) .sidebar-overlay { display: none; }
     /* ─── RESET ─────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; height: 100%; }
     body {
       font-family: var(--font-ui);
       background: var(--black-deep);
       color: #e8e0cc;
+      height: 100%;
       min-height: 100vh;
       overflow-x: hidden;
       line-height: 1.5;
@@ -2465,7 +2466,7 @@
 ═══════════════════════════════════════════════════ -->
 <div class="page" id="page-math">
   <!-- ═══ MOBILE CAMERA SNAP UI (hidden on desktop) ═══ -->
-  <div class="mobile-math-snap-ui" style="display:none; position:relative !important; width:100% !important; height:calc(100dvh - 65px) !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; touch-action:none !important;">
+  <div class="mobile-math-snap-ui" style="display:none; position:relative !important; width:100% !important; height:100% !important; flex-grow:1 !important; background:#000 !important; overflow:hidden !important; touch-action:none !important;">
     <button class="snap-back-btn" onclick="navigateBack()" style="position:absolute !important; top:20px !important; left:20px !important; width:44px !important; height:44px !important; border-radius:50% !important; border:2px solid #c9a84c !important; color:#c9a84c !important; background:rgba(0,0,0,0.5) !important; display:flex !important; align-items:center !important; justify-content:center !important; cursor:pointer !important; z-index:50 !important; backdrop-filter:blur(4px) !important;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px;"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
