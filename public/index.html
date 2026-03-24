@@ -1920,9 +1920,12 @@
   var d=new Date(document.lastModified);
   var htmlText='<span style="width:6px;height:6px;background:var(--gold-bright);border-radius:50%;animation:pulse 2s infinite;display:inline-block;"></span> Last Update: '+d.toLocaleDateString([],{month:'short',day:'numeric',year:'numeric'})+' at '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
   var el1=document.getElementById('lastUpdateBadge');
-  var el2=document.getElementById('lastUpdateBadgeMobile');
   if(el1) el1.innerHTML=htmlText;
-  if(el2) el2.innerHTML=htmlText;
+  // Mobile badge lives further down in DOM — populate after parse completes
+  document.addEventListener('DOMContentLoaded',function(){
+    var el2=document.getElementById('lastUpdateBadgeMobile');
+    if(el2) el2.innerHTML=htmlText;
+  });
 }();
 </script>
 <aside class="sidebar" id="sidebar">
