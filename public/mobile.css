@@ -513,41 +513,63 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   background: rgba(201, 168, 76, 0.1);
 }
 
-/* Viewfinder */
+/* Viewfinder — fills entire snap UI, camera feed sits behind */
 .is-mobile-device .snap-viewfinder {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000 100%);
+  background: #000;
   overflow: hidden;
 }
 
-/* Reticle */
+/* ── Reticle (absolute-positioned over live camera feed) ── */
 .is-mobile-device .snap-reticle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  position: absolute;
+  z-index: 5;
   border: 2px solid rgba(201, 168, 76, 0.4);
   border-radius: 12px;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: reticle-pulse 2.5s ease-in-out infinite;
 }
+
+/* Single Question — centered slightly above middle for ergonomics */
 .is-mobile-device .snap-reticle-single {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 85%;
-  height: 140px;
+  height: 220px;
 }
+
+/* Multiple Snaps — subtle full-page frame, no heavy borders */
 .is-mobile-device .snap-reticle-multi {
-  width: 90%;
-  height: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  height: 80%;
+  border: none !important;
+  box-shadow: none !important;
+}
+.is-mobile-device .snap-reticle-multi .snap-reticle-corner {
+  display: none !important;
+}
+.is-mobile-device .snap-reticle-multi .snap-reticle-label {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes reticle-pulse {
+  0%, 100% { border-color: rgba(201, 168, 76, 0.35); box-shadow: 0 0 20px rgba(201, 168, 76, 0.05); }
+  50% { border-color: rgba(201, 168, 76, 0.6); box-shadow: 0 0 30px rgba(201, 168, 76, 0.12); }
 }
 
 /* Reticle corner brackets */
 .is-mobile-device .snap-reticle-corner {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-color: #c9a84c;
   border-style: solid;
   border-width: 0;
@@ -565,15 +587,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-weight: 600;
-}
-
-/* Reticle glow animation */
-.is-mobile-device .snap-reticle {
-  animation: reticle-pulse 2.5s ease-in-out infinite;
-}
-@keyframes reticle-pulse {
-  0%, 100% { border-color: rgba(201, 168, 76, 0.35); box-shadow: 0 0 20px rgba(201, 168, 76, 0.05); }
-  50% { border-color: rgba(201, 168, 76, 0.6); box-shadow: 0 0 30px rgba(201, 168, 76, 0.12); }
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* Post-capture preview overlay */
@@ -586,7 +600,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  z-index: 5;
+  z-index: 15;
   padding: 20px;
 }
 .is-mobile-device .snap-preview-img {
@@ -636,17 +650,20 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   transform: scale(0.97);
 }
 
-/* Bottom dock */
+/* ── Bottom dock — absolute-anchored to bottom of viewfinder ── */
 .is-mobile-device .snap-dock {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
-  flex-shrink: 0;
+  gap: 20px;
+  padding: 20px 20px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0));
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
 }
 .is-mobile-device .snap-dock-captured .snap-shutter,
 .is-mobile-device .snap-dock-captured .snap-mode-pills {
@@ -658,14 +675,15 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
 .is-mobile-device .snap-mode-pills {
   display: flex;
   gap: 4px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
   border-radius: 24px;
   padding: 3px;
 }
 .is-mobile-device .snap-pill {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
   font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 600;
@@ -676,7 +694,7 @@ body.is-mobile-device.is-simulated::-webkit-scrollbar {
   min-height: 36px;
 }
 .is-mobile-device .snap-pill-active {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(201, 168, 76, 0.2);
   color: #c9a84c;
 }
 
